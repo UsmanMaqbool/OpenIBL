@@ -1,6 +1,6 @@
 #!/bin/sh
 PYTHON=${PYTHON:-"python"}
-GPUS=4
+GPUS=1
 
 DATASET=pitts
 SCALE=30k
