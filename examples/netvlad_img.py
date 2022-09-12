@@ -277,7 +277,7 @@ if __name__ == '__main__':
     parser.add_argument('--eval-step', type=int, default=1)
     parser.add_argument('--rerank', action='store_true',
                         help="evaluation only")
-    parser.add_argument('--epochs', type=int, default=10)
+    parser.add_argument('--epochs', type=int, default=6)
     parser.add_argument('--iters', type=int, default=0)
     parser.add_argument('--seed', type=int, default=43)
     parser.add_argument('--deterministic', action='store_true')
