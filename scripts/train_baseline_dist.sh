@@ -1,6 +1,6 @@
 #!/bin/sh
-PYTHON=${PYTHON:-"python"}
-GPUS=4
+PYTHON=${PYTHON:-"python3"}
+GPUS=1
 
 DATASET=pitts
 SCALE=30k
@@ -23,7 +23,7 @@ do
         break;
     fi
 done
-
+PORT = 6010
 $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
 examples/netvlad_img.py --launcher pytorch --tcp-port ${PORT} \
   -d ${DATASET} --scale ${SCALE} \
