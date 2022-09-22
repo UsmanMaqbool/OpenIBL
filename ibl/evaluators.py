@@ -33,7 +33,7 @@ def extract_cnn_feature(model, inputs, vlad=True, gpu=None):
         outputs = F.normalize(outputs, p=2, dim=-1)
     return outputs
 
-def extract_features(model, data_loader, dataset, print_freq=10,
+def extract_features(model, data_loader, dataset, print_freq=100,
                 vlad=True, pca=None, gpu=None, sync_gather=False):
     model.eval()
     batch_time = AverageMeter()
