@@ -214,7 +214,7 @@ def main_worker(args):
         print("Performing PCA reduction on the best model:")
     model.load_state_dict(load_checkpoint(osp.join(args.logs_dir, 'model_best.pth.tar'))['state_dict'])
     pca_parameters_path = osp.join(args.logs_dir, 'pca_params_model_best.h5')
-    pca = PCA(args.features, (not args.nowhiten), pca_parameters_path)
+    pca = PCA(args.features, args.nowhiten, pca_parameters_path)
     dict_f = extract_features(model, train_extract_loader, sorted(list(set(dataset.q_train) | set(dataset.db_train))),
                                 vlad=args.vlad, gpu=args.gpu, sync_gather=args.sync_gather)
     features = list(dict_f.values())
@@ -265,7 +265,7 @@ if __name__ == '__main__':
     parser.add_argument('--sync-gather', action='store_true')
     parser.add_argument('--features', type=int, default=4096)
     # optimizer
-    parser.add_argument('--lr', type=float, default=0.0001,
+    parser.add_argument('--lr', type=float, default=0.001,
                         help="learning rate of new parameters, for pretrained ")
     parser.add_argument('--momentum', type=float, default=0.9)
     parser.add_argument('--weight-decay', type=float, default=0.001)
@@ -279,9 +279,9 @@ if __name__ == '__main__':
                         help="evaluation only")
     parser.add_argument('--epochs', type=int, default=6)
     parser.add_argument('--iters', type=int, default=0)
-    parser.add_argument('--seed', type=int, default=43)
+    parser.add_argument('--seed', type=int, default=123)
     parser.add_argument('--deterministic', action='store_true')
-    parser.add_argument('--print-freq', type=int, default=10)
+    parser.add_argument('--print-freq', type=int, default=500)
     parser.add_argument('--margin', type=float, default=0.1, help='margin for the triplet loss with batch hard')
     # path
     working_dir = osp.dirname(osp.abspath(__file__))
