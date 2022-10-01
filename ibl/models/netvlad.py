@@ -264,7 +264,7 @@ class EmbedNet(nn.Module):
         # vlad = torch.add(node_features_list,vlad)
 
 
-        return pool_x, vlad_x
+        return pool_x, vlad_x.view(-1,32768)
 
 class EmbedNetPCA(nn.Module):
     def __init__(self, base_model, net_vlad, dim=4096):
