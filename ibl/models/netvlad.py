@@ -5,6 +5,146 @@ import torch.nn.functional as F
 import numpy as np
 import copy
 
+
+# graphsage
+import torch.nn.init as init
+#### graphsage     
+class NeighborAggregator(nn.Module):
+    def __init__(self, input_dim, output_dim,
+                 use_bias=True, aggr_method="mean"):
+        """Aggregate node neighbors
+        Args:
+            input_dim: the dimension of the input feature
+            output_dim: the dimension of the output feature
+            use_bias: whether to use bias (default: {False})
+            aggr_method: neighbor aggregation method (default: {mean})
+        """
+        super(NeighborAggregator, self).__init__()
+        self.input_dim = input_dim
+        self.output_dim = output_dim
+        self.use_bias = use_bias
+        self.aggr_method = aggr_method
+        self.weight = nn.Parameter(torch.Tensor(input_dim, output_dim))
+        if self.use_bias:
+            self.bias = nn.Parameter(torch.Tensor(self.output_dim))
+        self.reset_parameters()
+    
+    def reset_parameters(self):
+        init.kaiming_uniform_(self.weight)
+        if self.use_bias:
+            init.zeros_(self.bias)
+
+    def forward(self, neighbor_feature):
+       # print(neighbor_feature.shape)
+        if self.aggr_method == "mean":
+            aggr_neighbor = neighbor_feature.mean(dim=1)
+        elif self.aggr_method == "sum":
+            aggr_neighbor = neighbor_feature.sum(dim=1)
+        elif self.aggr_method == "max":
+            aggr_neighbor = neighbor_feature.max(dim=1)
+        else:
+            raise ValueError("Unknown aggr type, expected sum, max, or mean, but got {}"
+                             .format(self.aggr_method))
+        # print(aggr_neighbor.shape)
+        neighbor_hidden = torch.matmul(aggr_neighbor, self.weight)
+        if self.use_bias:
+            neighbor_hidden += self.bias
+
+        return neighbor_hidden
+
+    def extra_repr(self):
+        return 'in_features={}, out_features={}, aggr_method={}'.format(
+            self.input_dim, self.output_dim, self.aggr_method)
+    
+
+class SageGCN(nn.Module):
+    def __init__(self, input_dim, hidden_dim,
+                 activation=F.gelu,
+                 aggr_neighbor_method="mean",
+                 aggr_hidden_method="concat"):
+        """SageGCN layer definition
+        # firstworking with mean and concat
+        Args:
+            input_dim: the dimension of the input feature
+            hidden_dim: dimension of hidden layer features,
+                When aggr_hidden_method=sum, the output dimension is hidden_dim
+                When aggr_hidden_method=concat, the output dimension is hidden_dim*2
+            activation: activation function
+            aggr_neighbor_method: neighbor feature aggregation method, ["mean", "sum", "max"]
+            aggr_hidden_method: update method of node features, ["sum", "concat"]
+        """
+        super(SageGCN, self).__init__()
+        assert aggr_neighbor_method in ["mean", "sum", "max"]
+        assert aggr_hidden_method in ["sum", "concat"]
+        self.input_dim = input_dim
+        self.hidden_dim = hidden_dim
+        self.aggr_neighbor_method = aggr_neighbor_method
+        self.aggr_hidden_method = aggr_hidden_method
+        self.activation = activation
+        self.aggregator = NeighborAggregator(input_dim, hidden_dim,
+                                             aggr_method=aggr_neighbor_method)
+        self.weight = nn.Parameter(torch.Tensor(input_dim, hidden_dim))
+        self.reset_parameters()
+    
+    def reset_parameters(self):
+        init.kaiming_uniform_(self.weight)
+
+    def forward(self, src_node_features, neighbor_node_features):
+        neighbor_hidden = self.aggregator(neighbor_node_features)
+        self_hidden = torch.matmul(src_node_features, self.weight) #[192,4,4096], [4096,4096]
+        
+        if self.aggr_hidden_method == "sum":
+            hidden = self_hidden + neighbor_hidden   #[192,4096]
+        elif self.aggr_hidden_method == "concat":
+            hidden = torch.cat([self_hidden, neighbor_hidden], dim=1)
+        else:
+            raise ValueError("Expected sum or concat, got {}"
+                             .format(self.aggr_hidden))
+        if self.activation:
+            return self.activation(hidden)
+        else:
+            return hidden
+
+    def extra_repr(self):
+        output_dim = self.hidden_dim if self.aggr_hidden_method == "sum" else self.hidden_dim * 2
+        return 'in_features={}, out_features={}, aggr_hidden_method={}'.format(
+            self.input_dim, output_dim, self.aggr_hidden_method)
+
+
+class GraphSage(nn.Module):
+    def __init__(self, input_dim, hidden_dim,
+                 num_neighbors_list):
+        super(GraphSage, self).__init__()
+        self.input_dim = input_dim #1433
+        self.hidden_dim = hidden_dim #[128, 7]
+        self.num_neighbors_list = num_neighbors_list #[10, 10]
+        self.num_layers = len(num_neighbors_list)  #2
+        self.gcn = nn.ModuleList()
+        self.gcn.append(SageGCN(input_dim, hidden_dim[0])) # (1433, 128)
+        for index in range(0, len(hidden_dim) - 2):
+            self.gcn.append(SageGCN(hidden_dim[index], hidden_dim[index+1])) #128, 7
+        self.gcn.append(SageGCN(hidden_dim[-2], hidden_dim[-1], activation=None))
+
+    def forward(self, node_features_list):
+        hidden = node_features_list
+        for l in range(self.num_layers):
+            next_hidden = []
+            gcn = self.gcn[l]
+            for hop in range(self.num_layers - l):
+                src_node_features = hidden[hop]
+                src_node_num = len(src_node_features)
+                neighbor_node_features = hidden[hop + 1] \
+                    .view((src_node_num, self.num_neighbors_list[hop], -1))
+                h = gcn(src_node_features, neighbor_node_features)
+                next_hidden.append(h)
+            hidden = next_hidden
+        return hidden[0]
+
+    def extra_repr(self):
+        return 'in_features={}, num_neighbors_list={}'.format(
+            self.input_dim, self.num_neighbors_list
+        )
+   
 class NetVLAD(nn.Module):
     """NetVLAD layer implementation"""
 
@@ -30,6 +170,10 @@ class NetVLAD(nn.Module):
 
         self.clsts = None
         self.traindescs = None
+        
+
+
+
 
     def _init_params(self):
         clstsAssign = self.clsts / np.linalg.norm(self.clsts, axis=1, keepdims=True)
@@ -65,6 +209,19 @@ class EmbedNet(nn.Module):
         super(EmbedNet, self).__init__()
         self.base_model = base_model
         self.net_vlad = net_vlad
+        
+        #graph
+        # self.graph = nn.Conv1d(128, 64, kernel_size=3, bias=vladv2)
+        self.input_dim = 8192
+        self.hidden_dim = [4096, 4096]
+        self.num_neighbors_list = 5
+        self.num_layers = 2
+        
+        self.gcn = nn.ModuleList()
+        self.gcn.append(SageGCN(self.input_dim, self.hidden_dim[0])) # (4096, 4096)
+        for index in range(0, len(self.hidden_dim) - 2):
+            self.gcn.append(SageGCN(self.hidden_dim[index], self.hidden_dim[index+1])) #128, 7
+        self.gcn.append(SageGCN(self.hidden_dim[-2], self.hidden_dim[-1], activation=None))
 
     def _init_params(self):
         self.base_model._init_params()
@@ -72,12 +229,40 @@ class EmbedNet(nn.Module):
 
     def forward(self, x):
         pool_x, x = self.base_model(x)
-        vlad_x = self.net_vlad(x)
+        
+        N, C, H, W = x.shape
+        bb_x = [[0,0,W,H], [0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H], [int(W/4), int(H/4), int(3*W/4),int(3*H/4)]]
+        
+        node_features_list = []
+        
+        for i in range(len(bb_x)):
+            
+            x_cropped = x[:, : ,bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
 
-        # [IMPORTANT] normalize
-        vlad_x = F.normalize(vlad_x, p=2, dim=2)  # intra-normalization
-        vlad_x = vlad_x.view(x.size(0), -1)  # flatten
-        vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
+            vlad_x = self.net_vlad(x_cropped)
+            # [IMPORTANT] normalize
+            vlad_x = F.normalize(vlad_x, p=2, dim=2)  # intra-normalization
+            vlad_x = vlad_x.view(x.size(0), -1)  # flatten
+            vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
+            
+            vlad_x = vlad_x.view(-1,8192)
+            
+            # print(vlad_x.shape)
+            if (i == 0):
+                node_features_list = vlad_x #[8,4096]
+            elif (i == 1):
+                neighborsFeat = vlad_x.unsqueeze(1)
+            else:
+                neighborsFeat = torch.concat([neighborsFeat, vlad_x.unsqueeze(1)],1)   
+
+        ## Graphsage
+        gcn = self.gcn[0]
+        # print(node_features_list.shape)
+        # print(neighborsFeat.view(-1,4096).shape)
+        vlad_x = gcn(node_features_list, neighborsFeat)
+        # neighborsFeat = []
+        # vlad = torch.add(node_features_list,vlad)
+
 
         return pool_x, vlad_x
 
