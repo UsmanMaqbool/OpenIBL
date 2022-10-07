@@ -213,8 +213,8 @@ class EmbedNet(nn.Module):
         
         #graph
         # self.graph = nn.Conv1d(128, 64, kernel_size=3, bias=vladv2)
-        self.input_dim = 4096
-        self.hidden_dim = [2048, 2048]  #2048 4096 8192 16384
+        self.input_dim = 512
+        self.hidden_dim = [256, 256]  #2048 4096 8192 16384
         self.num_neighbors_list = 5
         self.num_layers = 2
         
@@ -232,6 +232,8 @@ class EmbedNet(nn.Module):
         pool_x, x = self.base_model(x)
         
         N, C, H, W = x.shape
+        #print(x.shape) : 32,512,30,40
+        
         # bb_x = [[0,0,W,H], [0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H], [int(W/4), int(H/4), int(3*W/4),int(3*H/4)]]
         bb_x = [[int(W/4), int(H/4), int(3*W/4),int(3*H/4)], [0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H], [0,0,W,H]]
         node_features_list = []
@@ -241,46 +243,35 @@ class EmbedNet(nn.Module):
             x_cropped = x[:, : ,bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
 
             vlad_x = self.net_vlad(x_cropped)
-            # [IMPORTANT] normalize
-            vlad_x = F.normalize(vlad_x, p=2, dim=2)  # intra-normalization
-            vlad_x = vlad_x.view(x.size(0), -1)  # flatten
-            # vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
             
-            subfeat_size = int(vlad_x.shape[1]/self.input_dim)
-            gcndim = int(self.input_dim)
+            
+            #subfeat_size = int(vlad_x.shape[1]/self.input_dim)
+            #gcndim = int(self.input_dim)
             # print('vlad_x',vlad_x.shape,' self.input_dim ', self.input_dim, ' total: ', subfeat_size)
 
             # vlad_x = vlad_x.view(-1,8192)
             
             # print(vlad_x.shape)
             if (i == 0):
-                node_features_list = vlad_x #[8,4096]
+                node_features_list = vlad_x #[32,64,512]
             elif (i == 1):
                 neighborsFeat = vlad_x.unsqueeze(1)
             else:
                 neighborsFeat = torch.concat([neighborsFeat, vlad_x.unsqueeze(1)],1)   
 
         ## Graphsage
-        gcn = self.gcn[0]        
-        # vlad = []
+        gcn = self.gcn[0]
+        # print(node_features_list.shape)
+        # print(neighborsFeat.view(-1,4096).shape)
+        vlad_x = gcn(node_features_list, neighborsFeat)
+        # neighborsFeat = []
+        # vlad = torch.add(node_features_list,vlad)
 
-        for j in range(subfeat_size): 
-            # print('i*self.input_dim ', int(i*self.input_dim), 'i*self.input_dim+self.input_dim ', int(i*self.input_dim+self.input_dim-1))    
-            # print(node_features_list.shape)
-            # print(neighborsFeat.view(-1,4096).shape)
-            # print('i*gcndim ', i*gcndim, ' i*gcndim+gcndim-1 ', i*gcndim+gcndim-1)
-
-            vlad_x = gcn(node_features_list[:,j*gcndim:j*gcndim+gcndim], neighborsFeat[:,:,j*gcndim:j*gcndim+gcndim])
-            # neighborsFeat = []
-            # vlad = torch.add(node_features_list,vlad_x)
-            if (j==0):
-                vlad = vlad_x;
-            else:
-                vlad = torch.concat([vlad, vlad_x],1) 
-            # print('j', j,', j*gcndim ', j*gcndim, ', j*gcndim+gcndim ', j*gcndim+gcndim,', vlad ', vlad.shape, ' vlad_x ', vlad_x.shape)
-
-        vlad_x = F.normalize(vlad, p=2, dim=1)  # L2 normalize    
-
+        # [IMPORTANT] normalize
+        vlad_x = F.normalize(vlad_x, p=2, dim=2)  # intra-normalization
+        vlad_x = vlad_x.view(x.size(0), -1)  # flatten
+        vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
+        
         return pool_x, vlad_x
 
 class EmbedNetPCA(nn.Module):
