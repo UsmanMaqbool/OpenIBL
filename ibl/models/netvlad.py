@@ -244,7 +244,7 @@ class EmbedNet(nn.Module):
             # [IMPORTANT] normalize
             vlad_x = F.normalize(vlad_x, p=2, dim=2)  # intra-normalization
             vlad_x = vlad_x.view(x.size(0), -1)  # flatten
-            vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
+            # vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
             
             subfeat_size = int(vlad_x.shape[1]/self.input_dim)
             gcndim = int(self.input_dim)
@@ -279,9 +279,9 @@ class EmbedNet(nn.Module):
                 vlad = torch.concat([vlad, vlad_x],1) 
             # print('j', j,', j*gcndim ', j*gcndim, ', j*gcndim+gcndim ', j*gcndim+gcndim,', vlad ', vlad.shape, ' vlad_x ', vlad_x.shape)
 
-            
+        vlad_x = F.normalize(vlad, p=2, dim=1)  # L2 normalize    
 
-        return pool_x, vlad
+        return pool_x, vlad_x
 
 class EmbedNetPCA(nn.Module):
     def __init__(self, base_model, net_vlad, dim=4096):
