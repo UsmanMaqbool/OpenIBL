@@ -60,8 +60,8 @@ class NeighborAggregator(nn.Module):
 class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
-                 aggr_neighbor_method="sum",
-                 aggr_hidden_method="concat"):
+                 aggr_neighbor_method="mean",
+                 aggr_hidden_method="sum"):
         """SageGCN layer definition
         # firstworking with mean and concat
         Args:
@@ -214,7 +214,7 @@ class EmbedNet(nn.Module):
         #graph
         # self.graph = nn.Conv1d(128, 64, kernel_size=3, bias=vladv2)
         self.input_dim = 512
-        self.hidden_dim = [256, 256]  #2048 4096 8192 16384
+        self.hidden_dim = [512, 512]  #2048 4096 8192 16384
         self.num_neighbors_list = 5
         self.num_layers = 2
         
@@ -234,8 +234,8 @@ class EmbedNet(nn.Module):
         N, C, H, W = x.shape
         #print(x.shape) : 32,512,30,40
         
-        # bb_x = [[0,0,W,H], [0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H], [int(W/4), int(H/4), int(3*W/4),int(3*H/4)]]
-        bb_x = [[int(W/4), int(H/4), int(3*W/4),int(3*H/4)], [0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H], [0,0,W,H]]
+        bb_x = [[0,0,W,H], [0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H], [int(W/4), int(H/4), int(3*W/4),int(3*H/4)]]
+        # bb_x = [[int(W/4), int(H/4), int(3*W/4),int(3*H/4)], [0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H], [0,0,W,H]]
         node_features_list = []
         
         for i in range(len(bb_x)):
