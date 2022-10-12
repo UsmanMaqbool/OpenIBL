@@ -211,8 +211,12 @@ class EmbedNet(nn.Module):
         self.net_vlad = net_vlad
         
         #graph
-        self.graph = GraphSage(input_dim=8192, hidden_dim=[8192, 8192],
-                  num_neighbors_list=[4, 3])
+        self.input_dim = 8192
+        self.hidden_dim = [8192, 8192]
+        self.num_neighbors_list = [4, 3]
+        
+        self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
+                  num_neighbors_list=self.num_neighbors_list)
 
     def _init_params(self):
         self.base_model._init_params()
@@ -250,7 +254,7 @@ class EmbedNet(nn.Module):
             vlad_x = F.normalize(vlad_x, p=2, dim=2)  # intra-normalization
             vlad_x = vlad_x.view(x.size(0), -1)  # flatten
             vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
-            aa = vlad_x.shape #32, 32768
+            # aa = vlad_x.shape #32, 32768
             vlad_x = vlad_x.view(-1,8192)
             
             neighborsFeat.append(vlad_x)
