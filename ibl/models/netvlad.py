@@ -11,7 +11,7 @@ import torch.nn.init as init
 #### graphsage     
 class NeighborAggregator(nn.Module):
     def __init__(self, input_dim, output_dim,
-                 use_bias=True, aggr_method="mean"):
+                 use_bias=False, aggr_method="mean"):
         """Aggregate node neighbors
         Args:
             input_dim: the dimension of the input feature
@@ -91,7 +91,6 @@ class SageGCN(nn.Module):
 
     def forward(self, src_node_features, neighbor_node_features):
         neighbor_hidden = self.aggregator(neighbor_node_features)
-        # print('shape1 ',src_node_features.shape, ', shape2 ', self.weight.shape)
         self_hidden = torch.matmul(src_node_features, self.weight) #[192,4,4096], [4096,4096]
         
         if self.aggr_hidden_method == "sum":
@@ -212,17 +211,12 @@ class EmbedNet(nn.Module):
         self.net_vlad = net_vlad
         
         #graph
-        # self.graph = nn.Conv1d(128, 64, kernel_size=3, bias=vladv2)
-        self.input_dim = 512
-        self.hidden_dim = [512, 512]  #2048 4096 8192 16384
-        self.num_neighbors_list = 5
-        self.num_layers = 2
+        self.input_dim = 8192
+        self.hidden_dim = [8192, 8192]
+        self.num_neighbors_list = [4, 3]
         
-        self.gcn = nn.ModuleList()
-        self.gcn.append(SageGCN(self.input_dim, self.hidden_dim[0])) # (4096, 4096)
-        for index in range(0, len(self.hidden_dim) - 2):
-            self.gcn.append(SageGCN(self.hidden_dim[index], self.hidden_dim[index+1])) #128, 7
-        self.gcn.append(SageGCN(self.hidden_dim[-2], self.hidden_dim[-1], activation=None))
+        self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
+                  num_neighbors_list=self.num_neighbors_list)
 
     def _init_params(self):
         self.base_model._init_params()
@@ -232,47 +226,62 @@ class EmbedNet(nn.Module):
         pool_x, x = self.base_model(x)
         
         N, C, H, W = x.shape
-        #print(x.shape) : 32,512,30,40
+        bb_x = [[0,0,W,H],                                  #0 
+                [0, 0, int(2*W/3),H],                       #1 
+                [int(W/3), 0, W,H],                         #2
+                [0, 0, W,int(2*H/3)],                       #3
+                [0,int(H/3), W,H],                          #4
+                [int(2*W/3),0 , W, int(H/3)],               #5
+                [int(2*W/3), int(H/3), W, int(2*H/3)],      #6
+                [int(2*W/3),int(2*H/3), W, H],              #7
+                [0, 0 , int(W/3), int(H/3)],                #8 
+                [0,int(H/3) , int(W/3), int(2*H/3)],        #9
+                [0,int(2*H/3), int(W/3), H],                #10 
+                [int(W/3),0 , int(2*W/3), int(H/3)],        #12
+                [int(W/3),int(2*H/3), int(2*W/3), H]       #11
+                ] 
+                #      [int(W/3),int(H/3), int(2*W/3), int(2*H/3)] #13
         
-        bb_x = [[0,0,W,H], [0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H], [int(W/4), int(H/4), int(3*W/4),int(3*H/4)]]
-        # bb_x = [[int(W/4), int(H/4), int(3*W/4),int(3*H/4)], [0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H], [0,0,W,H]]
         node_features_list = []
-        
+        neighborsFeat = []
+                
         for i in range(len(bb_x)):
             
             x_cropped = x[:, : ,bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
 
             vlad_x = self.net_vlad(x_cropped)
+            # [IMPORTANT] normalize
+            vlad_x = F.normalize(vlad_x, p=2, dim=2)  # intra-normalization
+            vlad_x = vlad_x.view(x.size(0), -1)  # flatten
+            vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
+            # aa = vlad_x.shape #32, 32768
+            vlad_x = vlad_x.view(-1,8192)
             
-            
-            #subfeat_size = int(vlad_x.shape[1]/self.input_dim)
-            #gcndim = int(self.input_dim)
-            # print('vlad_x',vlad_x.shape,' self.input_dim ', self.input_dim, ' total: ', subfeat_size)
+            neighborsFeat.append(vlad_x)
 
-            # vlad_x = vlad_x.view(-1,8192)
-            
-            # print(vlad_x.shape)
-            if (i == 0):
-                node_features_list = vlad_x #[32,64,512]
-            elif (i == 1):
-                neighborsFeat = vlad_x.unsqueeze(1)
-            else:
-                neighborsFeat = torch.concat([neighborsFeat, vlad_x.unsqueeze(1)],1)   
 
-        ## Graphsage
-        gcn = self.gcn[0]
-        # print(node_features_list.shape)
-        # print(neighborsFeat.view(-1,4096).shape)
-        vlad_x = gcn(node_features_list, neighborsFeat)
-        # neighborsFeat = []
-        # vlad = torch.add(node_features_list,vlad)
-
-        # [IMPORTANT] normalize
-        vlad_x = F.normalize(vlad_x, p=2, dim=2)  # intra-normalization
-        vlad_x = vlad_x.view(x.size(0), -1)  # flatten
-        vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
+        node_features_list.append(neighborsFeat[0])
+        node_features_list.append(torch.concat(neighborsFeat[1:5],0))
+        node_features_list.append(torch.concat(neighborsFeat[5:8],0))
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[13]],0)
+        node_features_list[2] = torch.concat([node_features_list[2],torch.concat(neighborsFeat[8:11],0)],0)
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[13]],0)
+        node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[10]],0)
+        node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[11]],0)
+        node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[7]],0)
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[13]],0)
+        node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[8]],0)
+        node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[12]],0)
+        node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[5]],0)
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[13]],0)
         
-        return pool_x, vlad_x
+        # print(node_features_list[0].shape,node_features_list[1].shape,node_features_list[2].shape) 
+        
+        neighborsFeat = []
+        ## Graphsage
+        gvlad = self.graph(node_features_list)
+        
+        return pool_x, gvlad.view(-1,32768)
 
 class EmbedNetPCA(nn.Module):
     def __init__(self, base_model, net_vlad, dim=4096):
