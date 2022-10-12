@@ -105,7 +105,7 @@ def get_model(args):
 
     model.cuda(args.gpu)
     model = nn.parallel.DistributedDataParallel(
-                model, device_ids=[args.gpu], output_device=args.gpu, find_unused_parameters=True
+                model, device_ids=[args.gpu], output_device=args.gpu, find_unused_parameters=False
             )
     return model
 

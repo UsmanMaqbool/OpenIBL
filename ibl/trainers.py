@@ -70,7 +70,8 @@ class Trainer(object):
     def _forward(self, inputs, vlad, loss_type):
         B, N, C, H, W = inputs.size()
         inputs = inputs.view(-1, C, H, W)
-
+        aa = self.model(inputs)
+        print(aa.shape)
         outputs_pool, outputs_vlad = self.model(inputs)
         if (not vlad):
             # adopt VLAD layer for feature aggregation

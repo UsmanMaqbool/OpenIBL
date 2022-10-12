@@ -211,15 +211,8 @@ class EmbedNet(nn.Module):
         self.net_vlad = net_vlad
         
         #graph
-        self.input_dim = 8192
-        self.hidden_dim = [8192, 8192]
-        self.num_neighbors_list = [4, 3]
-        self.num_layers = len(self.num_neighbors_list)
-        self.gcn = nn.ModuleList()
-        self.gcn.append(SageGCN(self.input_dim, self.hidden_dim[0]))
-        for index in range(0, len(self.hidden_dim) - 2):
-            self.gcn.append(SageGCN(self.hidden_dim[index], self.hidden_dim[index+1]))
-        self.gcn.append(SageGCN(self.hidden_dim[-2], self.hidden_dim[-1], activation=None))
+        self.graph = GraphSage(input_dim=8192, hidden_dim=[8192, 8192],
+                  num_neighbors_list=[4, 3])
 
     def _init_params(self):
         self.base_model._init_params()
@@ -257,7 +250,7 @@ class EmbedNet(nn.Module):
             vlad_x = F.normalize(vlad_x, p=2, dim=2)  # intra-normalization
             vlad_x = vlad_x.view(x.size(0), -1)  # flatten
             vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
-            
+            aa = vlad_x.shape #32, 32768
             vlad_x = vlad_x.view(-1,8192)
             
             neighborsFeat.append(vlad_x)
@@ -279,29 +272,12 @@ class EmbedNet(nn.Module):
         # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[13]],0)
         
         # print(node_features_list[0].shape,node_features_list[1].shape,node_features_list[2].shape) 
-        x_flatten = []
-        vlad = []
+        
         neighborsFeat = []
         ## Graphsage
-        # print('  l  ', ' hop  ', '  src_node_features  ', '  neighbor_node_features  ', '  h  ', '    ')
-
-        hidden = node_features_list
-        for l in range(self.num_layers):             #     l [0,1]  hop
-            next_hidden = []                         #     0        0 [ 0,1]  
-            gcn = self.gcn[l]                        #     0        1 [ 0,1] 
-            for hop in range(self.num_layers - l):   #     1        0 
-                src_node_features = hidden[hop]
-                src_node_num = len(src_node_features)
-                neighbor_node_features = hidden[hop + 1] \
-                    .view((src_node_num, self.num_neighbors_list[hop], -1)) 
-                # print(src_node_features.shape,neighbor_node_features.shape) 
-                h = gcn(src_node_features, neighbor_node_features)
-                next_hidden.append(h)
-                # print(l,' ', hop  ,'  ',  src_node_features.shape  ,'  ' , neighbor_node_features.shape  ,'  ' , h.shape)
-
-            hidden = next_hidden
+        hidden = self.graph(node_features_list)
         
-        return hidden[0].view(-1,32768)
+        return hidden.view(-1,32768)
 
 class EmbedNetPCA(nn.Module):
     def __init__(self, base_model, net_vlad, dim=4096):
