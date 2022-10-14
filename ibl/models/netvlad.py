@@ -223,7 +223,7 @@ class EmbedNet(nn.Module):
         #graph
         self.input_dim = 8192
         self.hidden_dim = [4096, 4096]
-        self.num_neighbors_list = [4, 1]
+        self.num_neighbors_list = [4]
         
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
                   num_neighbors_list=self.num_neighbors_list)
@@ -237,15 +237,20 @@ class EmbedNet(nn.Module):
         
         N, C, H, W = x.shape
         bb_x = [[0,0,W,H],                                  #0 
-                [0, 0, int(2*W/3),H],                       #1 
-                [int(W/3), 0, W,H],                         #2
-                [0, 0, W,int(2*H/3)],                       #3
-                [0,int(H/3), W,H],                          #4
-                [int(2*W/3),0 , W, H],
-                [0, 0 , int(W/3),  H],
-                [0,int(2*H/3), W, H] ,
-                [0, 0, W, int(H/3)]
-                # [int(2*W/3),0 , W, int(H/3)],               #5
+                [0, 0, int(W/2),int(H/2)],                       #1 
+                [int(W/2), 0, W,int(H/2)],
+                [0, int(H/2), int(W/2),H],
+                [int(W/2),int(H/2), W, H]
+                
+                
+                # [int(W/3), 0, W,H],                         #2
+                # [0, 0, W,int(2*H/3)],                       #3
+                # [0,int(H/3), W,H],                          #4
+                # [int(2*W/3),0 , W, H],
+                # [0, 0 , int(W/3),  H],
+                # [0,int(2*H/3), W, H] ,
+                # [0, 0, W, int(H/3)]
+                # # [int(2*W/3),0 , W, int(H/3)],               #5
                 # [int(2*W/3), int(H/3), W, int(2*H/3)],      #6
                 # [int(2*W/3),int(2*H/3), W, H],              #7
                 # [0, 0 , int(W/3), int(H/3)],                #8 
@@ -276,7 +281,7 @@ class EmbedNet(nn.Module):
 
         node_features_list.append(neighborsFeat[0])
         node_features_list.append(torch.concat(neighborsFeat[1:5],0))
-        node_features_list.append(torch.concat(neighborsFeat[5:9],0))
+        # node_features_list.append(torch.concat(neighborsFeat[5:9],0))
         # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[13]],0)
        
         # print(node_features_list[0].shape,node_features_list[1].shape,node_features_list[2].shape) 
