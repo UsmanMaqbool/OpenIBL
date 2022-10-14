@@ -24,7 +24,9 @@ class NeighborAggregator(nn.Module):
         self.output_dim = output_dim
         self.use_bias = use_bias
         self.aggr_method = aggr_method
-        self.weight = nn.Parameter(torch.Tensor(input_dim, output_dim))
+        # self.weight = nn.Parameter(torch.Tensor(input_dim, output_dim))
+        self.weight = nn.Parameter(torch.Tensor(8192, 4096))
+        
         if self.use_bias:
             self.bias = nn.Parameter(torch.Tensor(self.output_dim))
         self.reset_parameters()
@@ -46,6 +48,8 @@ class NeighborAggregator(nn.Module):
             raise ValueError("Unknown aggr type, expected sum, max, or mean, but got {}"
                              .format(self.aggr_method))
         # print(aggr_neighbor.shape)
+        # print('aggr_neighbor : ', aggr_neighbor.shape, ' self.weight : ', self.weight.shape)
+
         neighbor_hidden = torch.matmul(aggr_neighbor, self.weight)
         if self.use_bias:
             neighbor_hidden += self.bias
@@ -61,7 +65,7 @@ class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
                  aggr_neighbor_method="mean",
-                 aggr_hidden_method="sum"):
+                 aggr_hidden_method="concat"):
         """SageGCN layer definition
         # firstworking with mean and concat
         Args:
@@ -83,7 +87,9 @@ class SageGCN(nn.Module):
         self.activation = activation
         self.aggregator = NeighborAggregator(input_dim, hidden_dim,
                                              aggr_method=aggr_neighbor_method)
-        self.weight = nn.Parameter(torch.Tensor(input_dim, hidden_dim))
+        # self.weight = nn.Parameter(torch.Tensor(input_dim, hidden_dim))
+        # self.weight = nn.Parameter(torch.Tensor(input_dim, output_dim))
+        self.weight = nn.Parameter(torch.Tensor(8192, 4096))
         self.reset_parameters()
     
     def reset_parameters(self):
@@ -127,6 +133,8 @@ class GraphSage(nn.Module):
 
     def forward(self, node_features_list):
         hidden = node_features_list
+        # print('  l  ', ' hop  ', '  src_node_features  ', '  neighbor_node_features  ', '  h  ', '    ')
+
         for l in range(self.num_layers):
             next_hidden = []
             gcn = self.gcn[l]
@@ -135,7 +143,9 @@ class GraphSage(nn.Module):
                 src_node_num = len(src_node_features)
                 neighbor_node_features = hidden[hop + 1] \
                     .view((src_node_num, self.num_neighbors_list[hop], -1))
+                # print(l,' ', hop  ,'  ',  src_node_features.shape  ,'  ' , neighbor_node_features.shape)
                 h = gcn(src_node_features, neighbor_node_features)
+                # print(h.shape)
                 next_hidden.append(h)
             hidden = next_hidden
         return hidden[0]
@@ -212,8 +222,8 @@ class EmbedNet(nn.Module):
         
         #graph
         self.input_dim = 8192
-        self.hidden_dim = [8192, 8192]
-        self.num_neighbors_list = [4, 3]
+        self.hidden_dim = [4096, 4096]
+        self.num_neighbors_list = [4, 1]
         
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
                   num_neighbors_list=self.num_neighbors_list)
@@ -231,14 +241,18 @@ class EmbedNet(nn.Module):
                 [int(W/3), 0, W,H],                         #2
                 [0, 0, W,int(2*H/3)],                       #3
                 [0,int(H/3), W,H],                          #4
-                [int(2*W/3),0 , W, int(H/3)],               #5
-                [int(2*W/3), int(H/3), W, int(2*H/3)],      #6
-                [int(2*W/3),int(2*H/3), W, H],              #7
-                [0, 0 , int(W/3), int(H/3)],                #8 
-                [0,int(H/3) , int(W/3), int(2*H/3)],        #9
-                [0,int(2*H/3), int(W/3), H],                #10 
-                [int(W/3),0 , int(2*W/3), int(H/3)],        #12
-                [int(W/3),int(2*H/3), int(2*W/3), H]       #11
+                [int(2*W/3),0 , W, H],
+                [0, 0 , int(W/3),  H],
+                [0,int(2*H/3), W, H] ,
+                [0, 0, W, int(H/3)]
+                # [int(2*W/3),0 , W, int(H/3)],               #5
+                # [int(2*W/3), int(H/3), W, int(2*H/3)],      #6
+                # [int(2*W/3),int(2*H/3), W, H],              #7
+                # [0, 0 , int(W/3), int(H/3)],                #8 
+                # [0,int(H/3) , int(W/3), int(2*H/3)],        #9
+                # [0,int(2*H/3), int(W/3), H],                #10 
+                # [int(W/3),0 , int(2*W/3), int(H/3)],        #12
+                # [int(W/3),int(2*H/3), int(2*W/3), H]       #11
                 ] 
                 #      [int(W/3),int(H/3), int(2*W/3), int(2*H/3)] #13
         
@@ -262,19 +276,9 @@ class EmbedNet(nn.Module):
 
         node_features_list.append(neighborsFeat[0])
         node_features_list.append(torch.concat(neighborsFeat[1:5],0))
-        node_features_list.append(torch.concat(neighborsFeat[5:8],0))
+        node_features_list.append(torch.concat(neighborsFeat[5:9],0))
         # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[13]],0)
-        node_features_list[2] = torch.concat([node_features_list[2],torch.concat(neighborsFeat[8:11],0)],0)
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[13]],0)
-        node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[10]],0)
-        node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[11]],0)
-        node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[7]],0)
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[13]],0)
-        node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[8]],0)
-        node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[12]],0)
-        node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[5]],0)
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[13]],0)
-        
+       
         # print(node_features_list[0].shape,node_features_list[1].shape,node_features_list[2].shape) 
         
         neighborsFeat = []
