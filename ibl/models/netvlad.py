@@ -25,7 +25,7 @@ class NeighborAggregator(nn.Module):
         self.use_bias = use_bias
         self.aggr_method = aggr_method
         # self.weight = nn.Parameter(torch.Tensor(input_dim, output_dim))
-        self.weight = nn.Parameter(torch.Tensor(8192, 4096))
+        self.weight = nn.Parameter(torch.Tensor(4096, 4096))
         
         if self.use_bias:
             self.bias = nn.Parameter(torch.Tensor(self.output_dim))
@@ -65,7 +65,7 @@ class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
                  aggr_neighbor_method="mean",
-                 aggr_hidden_method="concat"):
+                 aggr_hidden_method="sum"):
         """SageGCN layer definition
         # firstworking with mean and concat
         Args:
@@ -89,7 +89,7 @@ class SageGCN(nn.Module):
                                              aggr_method=aggr_neighbor_method)
         # self.weight = nn.Parameter(torch.Tensor(input_dim, hidden_dim))
         # self.weight = nn.Parameter(torch.Tensor(input_dim, output_dim))
-        self.weight = nn.Parameter(torch.Tensor(8192, 4096))
+        self.weight = nn.Parameter(torch.Tensor(4096, 4096))
         self.reset_parameters()
     
     def reset_parameters(self):
@@ -221,7 +221,7 @@ class EmbedNet(nn.Module):
         self.net_vlad = net_vlad
         
         #graph
-        self.input_dim = 8192
+        self.input_dim = 4096
         self.hidden_dim = [4096, 4096]
         self.num_neighbors_list = [4]
         
@@ -274,7 +274,7 @@ class EmbedNet(nn.Module):
             vlad_x = vlad_x.view(x.size(0), -1)  # flatten
             vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
             # aa = vlad_x.shape #32, 32768
-            vlad_x = vlad_x.view(-1,8192)
+            vlad_x = vlad_x.view(-1,4096)
             
             neighborsFeat.append(vlad_x)
 
