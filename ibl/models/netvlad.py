@@ -25,7 +25,7 @@ class NeighborAggregator(nn.Module):
         self.use_bias = use_bias
         self.aggr_method = aggr_method
         # self.weight = nn.Parameter(torch.Tensor(input_dim, output_dim))
-        self.weight = nn.Parameter(torch.Tensor(4096, 4096))
+        self.weight = nn.Parameter(torch.Tensor(8192, 4096))
         
         if self.use_bias:
             self.bias = nn.Parameter(torch.Tensor(self.output_dim))
@@ -65,7 +65,7 @@ class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
                  aggr_neighbor_method="mean",
-                 aggr_hidden_method="sum"):
+                 aggr_hidden_method="concat"):
         """SageGCN layer definition
         # firstworking with mean and concat
         Args:
@@ -87,9 +87,9 @@ class SageGCN(nn.Module):
         self.activation = activation
         self.aggregator = NeighborAggregator(input_dim, hidden_dim,
                                              aggr_method=aggr_neighbor_method)
-        # self.weight = nn.Parameter(torch.Tensor(input_dim, hidden_dim))
+        self.weight = nn.Parameter(torch.Tensor(input_dim, hidden_dim))
         # self.weight = nn.Parameter(torch.Tensor(input_dim, output_dim))
-        self.weight = nn.Parameter(torch.Tensor(4096, 4096))
+        # self.weight = nn.Parameter(torch.Tensor(8192, 4096))
         self.reset_parameters()
     
     def reset_parameters(self):
@@ -221,7 +221,7 @@ class EmbedNet(nn.Module):
         self.net_vlad = net_vlad
         
         #graph
-        self.input_dim = 4096
+        self.input_dim = 8192
         self.hidden_dim = [4096, 4096]
         self.num_neighbors_list = [4]
         
@@ -236,30 +236,33 @@ class EmbedNet(nn.Module):
         pool_x, x = self.base_model(x)
         
         N, C, H, W = x.shape
-        bb_x = [[0,0,W,H],                                  #0 
-                [0, 0, int(W/2),int(H/2)],                       #1 
-                [int(W/2), 0, W,int(H/2)],
-                [0, int(H/2), int(W/2),H],
-                [int(W/2),int(H/2), W, H]
+        # bb_x = [[0,0,W,H],                                  #0 
+        #         [0, 0, int(W/2),int(H/2)],                       #1 
+        #         [int(W/2), 0, W,int(H/2)],
+        #         [0, int(H/2), int(W/2),H],
+        #         [int(W/2),int(H/2), W, H]
                 
                 
-                # [int(W/3), 0, W,H],                         #2
-                # [0, 0, W,int(2*H/3)],                       #3
-                # [0,int(H/3), W,H],                          #4
-                # [int(2*W/3),0 , W, H],
-                # [0, 0 , int(W/3),  H],
-                # [0,int(2*H/3), W, H] ,
-                # [0, 0, W, int(H/3)]
-                # # [int(2*W/3),0 , W, int(H/3)],               #5
-                # [int(2*W/3), int(H/3), W, int(2*H/3)],      #6
-                # [int(2*W/3),int(2*H/3), W, H],              #7
-                # [0, 0 , int(W/3), int(H/3)],                #8 
-                # [0,int(H/3) , int(W/3), int(2*H/3)],        #9
-                # [0,int(2*H/3), int(W/3), H],                #10 
-                # [int(W/3),0 , int(2*W/3), int(H/3)],        #12
-                # [int(W/3),int(2*H/3), int(2*W/3), H]       #11
-                ] 
-                #      [int(W/3),int(H/3), int(2*W/3), int(2*H/3)] #13
+        #         # [int(W/3), 0, W,H],                         #2
+        #         # [0, 0, W,int(2*H/3)],                       #3
+        #         # [0,int(H/3), W,H],                          #4
+        #         # [int(2*W/3),0 , W, H],
+        #         # [0, 0 , int(W/3),  H],
+        #         # [0,int(2*H/3), W, H] ,
+        #         # [0, 0, W, int(H/3)]
+        #         # # [int(2*W/3),0 , W, int(H/3)],               #5
+        #         # [int(2*W/3), int(H/3), W, int(2*H/3)],      #6
+        #         # [int(2*W/3),int(2*H/3), W, H],              #7
+        #         # [0, 0 , int(W/3), int(H/3)],                #8 
+        #         # [0,int(H/3) , int(W/3), int(2*H/3)],        #9
+        #         # [0,int(2*H/3), int(W/3), H],                #10 
+        #         # [int(W/3),0 , int(2*W/3), int(H/3)],        #12
+        #         # [int(W/3),int(2*H/3), int(2*W/3), H]       #11
+        #         ] 
+        #         #      [int(W/3),int(H/3), int(2*W/3), int(2*H/3)] #13
+        
+        bb_x = [[0,0,W,H], [0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H], [int(W/4), int(H/4), int(3*W/4),int(3*H/4)]]
+
         
         node_features_list = []
         neighborsFeat = []
@@ -274,7 +277,7 @@ class EmbedNet(nn.Module):
             vlad_x = vlad_x.view(x.size(0), -1)  # flatten
             vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
             # aa = vlad_x.shape #32, 32768
-            vlad_x = vlad_x.view(-1,4096)
+            vlad_x = vlad_x.view(-1,8192)
             
             neighborsFeat.append(vlad_x)
 
