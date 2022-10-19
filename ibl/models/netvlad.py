@@ -11,7 +11,7 @@ import torch.nn.init as init
 #### graphsage     
 class NeighborAggregator(nn.Module):
     def __init__(self, input_dim, output_dim,
-                 use_bias=False, aggr_method="mean"):
+                  use_bias=False, aggr_method="mean"):
         """Aggregate node neighbors
         Args:
             input_dim: the dimension of the input feature
@@ -24,8 +24,8 @@ class NeighborAggregator(nn.Module):
         self.output_dim = output_dim
         self.use_bias = use_bias
         self.aggr_method = aggr_method
-        # self.weight = nn.Parameter(torch.Tensor(input_dim, output_dim))
-        self.weight = nn.Parameter(torch.Tensor(8192, 4096))
+        self.weight = nn.Parameter(torch.Tensor(input_dim, output_dim))
+        # self.weight = nn.Parameter(torch.Tensor(8192, 4096))
         
         if self.use_bias:
             self.bias = nn.Parameter(torch.Tensor(self.output_dim))
@@ -65,7 +65,7 @@ class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
                  aggr_neighbor_method="mean",
-                 aggr_hidden_method="concat"):
+                 aggr_hidden_method="sum"):
         """SageGCN layer definition
         # firstworking with mean and concat
         Args:
@@ -145,7 +145,7 @@ class GraphSage(nn.Module):
                     .view((src_node_num, self.num_neighbors_list[hop], -1))
                 # print(l,' ', hop  ,'  ',  src_node_features.shape  ,'  ' , neighbor_node_features.shape)
                 h = gcn(src_node_features, neighbor_node_features)
-                # print(h.shape)
+                # print("hop", hop,'  ',  src_node_features.shape  ,'  ' , neighbor_node_features.shape)
                 next_hidden.append(h)
             hidden = next_hidden
         return hidden[0]
@@ -221,7 +221,7 @@ class EmbedNet(nn.Module):
         self.net_vlad = net_vlad
         
         #graph
-        self.input_dim = 8192
+        self.input_dim = 4096
         self.hidden_dim = [4096, 4096]
         self.num_neighbors_list = [4]
         
@@ -261,7 +261,13 @@ class EmbedNet(nn.Module):
         #         ] 
         #         #      [int(W/3),int(H/3), int(2*W/3), int(2*H/3)] #13
         
-        bb_x = [[0,0,W,H], [0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H], [int(W/4), int(H/4), int(3*W/4),int(3*H/4)]]
+        # bb_x = [[0,0,W,H], 
+        #         [0, 0, int(W/3),H], 
+        #         [0, 0, W,int(H/3)], 
+        #         [int(2*W/3), 0, W,H], 
+        #         [0, int(2*H/3), W,H], 
+        #         [int(W/4), int(H/4), int(3*W/4),int(3*H/4)]]
+        bb_x = [[0,0,W,H], [0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H]]
 
         
         node_features_list = []
@@ -277,7 +283,7 @@ class EmbedNet(nn.Module):
             vlad_x = vlad_x.view(x.size(0), -1)  # flatten
             vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
             # aa = vlad_x.shape #32, 32768
-            vlad_x = vlad_x.view(-1,8192)
+            vlad_x = vlad_x.view(-1,4096) # 8192
             
             neighborsFeat.append(vlad_x)
 
