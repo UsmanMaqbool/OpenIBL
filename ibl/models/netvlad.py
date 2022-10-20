@@ -223,7 +223,7 @@ class EmbedNet(nn.Module):
         #graph
         self.input_dim = 4096
         self.hidden_dim = [4096, 4096]
-        self.num_neighbors_list = [4]
+        self.num_neighbors_list = [1,4]
         
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
                   num_neighbors_list=self.num_neighbors_list)
@@ -267,7 +267,7 @@ class EmbedNet(nn.Module):
         #         [int(2*W/3), 0, W,H], 
         #         [0, int(2*H/3), W,H], 
         #         [int(W/4), int(H/4), int(3*W/4),int(3*H/4)]]
-        bb_x = [[0,0,W,H], [0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H]]
+        bb_x = [[0,0,W,H],  [int(W/4), int(H/4), int(3*W/4),int(3*H/4)], [0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H]]
 
         
         node_features_list = []
@@ -289,7 +289,8 @@ class EmbedNet(nn.Module):
 
 
         node_features_list.append(neighborsFeat[0])
-        node_features_list.append(torch.concat(neighborsFeat[1:5],0))
+        node_features_list.append(neighborsFeat[1])
+        node_features_list.append(torch.concat(neighborsFeat[2:6],0))
         # node_features_list.append(torch.concat(neighborsFeat[5:9],0))
         # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[13]],0)
        
