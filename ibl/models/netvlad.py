@@ -1,3 +1,4 @@
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -11,8 +12,9 @@ import torch.nn.init as init
 #### graphsage     
 class NeighborAggregator(nn.Module):
     def __init__(self, input_dim, output_dim,
-                  use_bias=False, aggr_method="mean"):
+                 use_bias=False, aggr_method="mean"):
         """Aggregate node neighbors
+
         Args:
             input_dim: the dimension of the input feature
             output_dim: the dimension of the output feature
@@ -25,8 +27,6 @@ class NeighborAggregator(nn.Module):
         self.use_bias = use_bias
         self.aggr_method = aggr_method
         self.weight = nn.Parameter(torch.Tensor(input_dim, output_dim))
-        # self.weight = nn.Parameter(torch.Tensor(8192, 4096))
-        
         if self.use_bias:
             self.bias = nn.Parameter(torch.Tensor(self.output_dim))
         self.reset_parameters()
@@ -48,8 +48,6 @@ class NeighborAggregator(nn.Module):
             raise ValueError("Unknown aggr type, expected sum, max, or mean, but got {}"
                              .format(self.aggr_method))
         # print(aggr_neighbor.shape)
-        # print('aggr_neighbor : ', aggr_neighbor.shape, ' self.weight : ', self.weight.shape)
-
         neighbor_hidden = torch.matmul(aggr_neighbor, self.weight)
         if self.use_bias:
             neighbor_hidden += self.bias
@@ -65,7 +63,7 @@ class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
                  aggr_neighbor_method="mean",
-                 aggr_hidden_method="sum"):
+                 aggr_hidden_method="concat"):
         """SageGCN layer definition
         # firstworking with mean and concat
         Args:
@@ -88,8 +86,6 @@ class SageGCN(nn.Module):
         self.aggregator = NeighborAggregator(input_dim, hidden_dim,
                                              aggr_method=aggr_neighbor_method)
         self.weight = nn.Parameter(torch.Tensor(input_dim, hidden_dim))
-        # self.weight = nn.Parameter(torch.Tensor(input_dim, output_dim))
-        # self.weight = nn.Parameter(torch.Tensor(8192, 4096))
         self.reset_parameters()
     
     def reset_parameters(self):
@@ -97,10 +93,10 @@ class SageGCN(nn.Module):
 
     def forward(self, src_node_features, neighbor_node_features):
         neighbor_hidden = self.aggregator(neighbor_node_features)
-        self_hidden = torch.matmul(src_node_features, self.weight) #[192,4,4096], [4096,4096]
+        self_hidden = torch.matmul(src_node_features, self.weight)
         
         if self.aggr_hidden_method == "sum":
-            hidden = self_hidden + neighbor_hidden   #[192,4096]
+            hidden = self_hidden + neighbor_hidden
         elif self.aggr_hidden_method == "concat":
             hidden = torch.cat([self_hidden, neighbor_hidden], dim=1)
         else:
@@ -111,10 +107,59 @@ class SageGCN(nn.Module):
         else:
             return hidden
 
-    def extra_repr(self):
-        output_dim = self.hidden_dim if self.aggr_hidden_method == "sum" else self.hidden_dim * 2
-        return 'in_features={}, out_features={}, aggr_hidden_method={}'.format(
-            self.input_dim, output_dim, self.aggr_hidden_method)
+# class SageGCN(nn.Module):
+#     def __init__(self, input_dim, hidden_dim,
+#                  activation=F.gelu,
+#                  aggr_neighbor_method="mean",
+#                  aggr_hidden_method="concat"):
+#         """SageGCN layer definition
+#         # firstworking with mean and concat
+#         Args:
+#             input_dim: the dimension of the input feature
+#             hidden_dim: dimension of hidden layer features,
+#                 When aggr_hidden_method=sum, the output dimension is hidden_dim
+#                 When aggr_hidden_method=concat, the output dimension is hidden_dim*2
+#             activation: activation function
+#             aggr_neighbor_method: neighbor feature aggregation method, ["mean", "sum", "max"]
+#             aggr_hidden_method: update method of node features, ["sum", "concat"]
+#         """
+#         super(SageGCN, self).__init__()
+#         assert aggr_neighbor_method in ["mean", "sum", "max"]
+#         assert aggr_hidden_method in ["sum", "concat"]
+#         self.input_dim = input_dim
+#         self.hidden_dim = hidden_dim
+#         self.aggr_neighbor_method = aggr_neighbor_method
+#         self.aggr_hidden_method = aggr_hidden_method
+#         self.activation = activation
+#         self.aggregator = NeighborAggregator(input_dim, hidden_dim,
+#                                              aggr_method=aggr_neighbor_method)
+#         self.weight = nn.Parameter(torch.Tensor(input_dim, hidden_dim))
+#         self.reset_parameters()
+    
+#     def reset_parameters(self):
+#         init.kaiming_uniform_(self.weight)
+
+#     def forward(self, src_node_features, neighbor_node_features):
+#         neighbor_hidden = self.aggregator(neighbor_node_features)
+#         self_hidden = torch.matmul(src_node_features, self.weight)
+        
+#         if self.aggr_hidden_method == "sum":
+#             hidden = self_hidden + neighbor_hidden
+#         elif self.aggr_hidden_method == "concat":
+#             hidden = torch.cat([self_hidden, neighbor_hidden], dim=1)
+#         else:
+#             raise ValueError("Expected sum or concat, got {}"
+#                              .format(self.aggr_hidden))
+#         if self.activation:
+#             return self.activation(hidden)
+#         else:
+#             return hidden
+
+#     def extra_repr(self):
+#         output_dim = self.hidden_dim if self.aggr_hidden_method == "sum" else self.hidden_dim * 2
+#         return 'in_features={}, out_features={}, aggr_hidden_method={}'.format(
+#             self.input_dim, output_dim, self.aggr_hidden_method)
+
 
 
 class GraphSage(nn.Module):
@@ -221,9 +266,9 @@ class EmbedNet(nn.Module):
         self.net_vlad = net_vlad
         
         #graph
-        self.input_dim = 4096
+        self.input_dim = 8192
         self.hidden_dim = [4096, 4096]
-        self.num_neighbors_list = [1,4]
+        self.num_neighbors_list = [4]
         
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
                   num_neighbors_list=self.num_neighbors_list)
@@ -261,13 +306,15 @@ class EmbedNet(nn.Module):
         #         ] 
         #         #      [int(W/3),int(H/3), int(2*W/3), int(2*H/3)] #13
         
-        # bb_x = [[0,0,W,H], 
-        #         [0, 0, int(W/3),H], 
-        #         [0, 0, W,int(H/3)], 
-        #         [int(2*W/3), 0, W,H], 
-        #         [0, int(2*H/3), W,H], 
-        #         [int(W/4), int(H/4), int(3*W/4),int(3*H/4)]]
-        bb_x = [[0,0,W,H],  [int(W/4), int(H/4), int(3*W/4),int(3*H/4)], [0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H]]
+        bb_x = [[0, 0, int(W/3),H], 
+                [0, 0, W,int(H/3)], 
+                [int(2*W/3), 0, W,H], 
+                [0, int(2*H/3), W,H], 
+                [int(W/4), int(H/4), int(3*W/4),int(3*H/4)],
+                [0,0,W,H]]
+        
+        
+        #bb_x = [[int(W/4), int(H/4), int(3*W/4),int(3*H/4)], [0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H], [0,0,W,H]]
 
         
         node_features_list = []
@@ -283,14 +330,12 @@ class EmbedNet(nn.Module):
             vlad_x = vlad_x.view(x.size(0), -1)  # flatten
             vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
             # aa = vlad_x.shape #32, 32768
-            vlad_x = vlad_x.view(-1,4096) # 8192
+            vlad_x = vlad_x.view(-1,8192) # 8192
             
             neighborsFeat.append(vlad_x)
 
-
-        node_features_list.append(neighborsFeat[0])
-        node_features_list.append(neighborsFeat[1])
-        node_features_list.append(torch.concat(neighborsFeat[2:6],0))
+        node_features_list.append(neighborsFeat[5])
+        node_features_list.append(torch.concat(neighborsFeat[0:4],0))
         # node_features_list.append(torch.concat(neighborsFeat[5:9],0))
         # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[13]],0)
        
@@ -299,6 +344,9 @@ class EmbedNet(nn.Module):
         neighborsFeat = []
         ## Graphsage
         gvlad = self.graph(node_features_list)
+
+        gvlad = torch.add(gvlad,vlad_x)
+
         
         return pool_x, gvlad.view(-1,32768)
 
