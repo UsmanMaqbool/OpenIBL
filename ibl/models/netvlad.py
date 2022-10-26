@@ -107,61 +107,6 @@ class SageGCN(nn.Module):
         else:
             return hidden
 
-# class SageGCN(nn.Module):
-#     def __init__(self, input_dim, hidden_dim,
-#                  activation=F.gelu,
-#                  aggr_neighbor_method="mean",
-#                  aggr_hidden_method="concat"):
-#         """SageGCN layer definition
-#         # firstworking with mean and concat
-#         Args:
-#             input_dim: the dimension of the input feature
-#             hidden_dim: dimension of hidden layer features,
-#                 When aggr_hidden_method=sum, the output dimension is hidden_dim
-#                 When aggr_hidden_method=concat, the output dimension is hidden_dim*2
-#             activation: activation function
-#             aggr_neighbor_method: neighbor feature aggregation method, ["mean", "sum", "max"]
-#             aggr_hidden_method: update method of node features, ["sum", "concat"]
-#         """
-#         super(SageGCN, self).__init__()
-#         assert aggr_neighbor_method in ["mean", "sum", "max"]
-#         assert aggr_hidden_method in ["sum", "concat"]
-#         self.input_dim = input_dim
-#         self.hidden_dim = hidden_dim
-#         self.aggr_neighbor_method = aggr_neighbor_method
-#         self.aggr_hidden_method = aggr_hidden_method
-#         self.activation = activation
-#         self.aggregator = NeighborAggregator(input_dim, hidden_dim,
-#                                              aggr_method=aggr_neighbor_method)
-#         self.weight = nn.Parameter(torch.Tensor(input_dim, hidden_dim))
-#         self.reset_parameters()
-    
-#     def reset_parameters(self):
-#         init.kaiming_uniform_(self.weight)
-
-#     def forward(self, src_node_features, neighbor_node_features):
-#         neighbor_hidden = self.aggregator(neighbor_node_features)
-#         self_hidden = torch.matmul(src_node_features, self.weight)
-        
-#         if self.aggr_hidden_method == "sum":
-#             hidden = self_hidden + neighbor_hidden
-#         elif self.aggr_hidden_method == "concat":
-#             hidden = torch.cat([self_hidden, neighbor_hidden], dim=1)
-#         else:
-#             raise ValueError("Expected sum or concat, got {}"
-#                              .format(self.aggr_hidden))
-#         if self.activation:
-#             return self.activation(hidden)
-#         else:
-#             return hidden
-
-#     def extra_repr(self):
-#         output_dim = self.hidden_dim if self.aggr_hidden_method == "sum" else self.hidden_dim * 2
-#         return 'in_features={}, out_features={}, aggr_hidden_method={}'.format(
-#             self.input_dim, output_dim, self.aggr_hidden_method)
-
-
-
 class GraphSage(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  num_neighbors_list):
