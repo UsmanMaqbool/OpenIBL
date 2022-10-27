@@ -1,11 +1,10 @@
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
 import numpy as np
 import copy
-
+import code
 
 # graphsage
 import torch.nn.init as init
@@ -122,7 +121,15 @@ class GraphSage(nn.Module):
         self.gcn.append(SageGCN(hidden_dim[-2], hidden_dim[-1], activation=None))
 
     def forward(self, node_features_list):
+
+     
+
         hidden = node_features_list
+        # code.interact(local=locals())
+        subfeat_size = int(hidden[0].shape[1]/self.input_dim)
+        gcndim = int(self.input_dim) 
+        
+        # print('subfeat_size ', subfeat_size)
         # print('  l  ', ' hop  ', '  src_node_features  ', '  neighbor_node_features  ', '  h  ', '    ')
 
         for l in range(self.num_layers):
@@ -134,7 +141,17 @@ class GraphSage(nn.Module):
                 neighbor_node_features = hidden[hop + 1] \
                     .view((src_node_num, self.num_neighbors_list[hop], -1))
                 # print(l,' ', hop  ,'  ',  src_node_features.shape  ,'  ' , neighbor_node_features.shape)
-                h = gcn(src_node_features, neighbor_node_features)
+                
+                # splitting the i/p
+                #h = gcn(src_node_features, neighbor_node_features)
+                for j in range(subfeat_size): 
+                    h_x = gcn(src_node_features[:,j*gcndim:j*gcndim+gcndim], neighbor_node_features[:,:,j*gcndim:j*gcndim+gcndim])
+                    # neighborsFeat = []
+                    if (j==0):
+                        h = h_x;
+                    else:
+                        h = torch.concat([h, h_x],1) 
+                        
                 # print("hop", hop,'  ',  src_node_features.shape  ,'  ' , neighbor_node_features.shape)
                 next_hidden.append(h)
             hidden = next_hidden
@@ -211,8 +228,8 @@ class EmbedNet(nn.Module):
         self.net_vlad = net_vlad
         
         #graph
-        self.input_dim = 8192
-        self.hidden_dim = [4096, 4096]
+        self.input_dim = 16384
+        self.hidden_dim = [8192, 8192]
         self.num_neighbors_list = [4]
         
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
@@ -275,7 +292,7 @@ class EmbedNet(nn.Module):
             vlad_x = vlad_x.view(x.size(0), -1)  # flatten
             vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
             # aa = vlad_x.shape #32, 32768
-            vlad_x = vlad_x.view(-1,8192) # 8192
+            #vlad_x = vlad_x.view(-1,8192) # 8192
             
             neighborsFeat.append(vlad_x)
 
@@ -286,7 +303,10 @@ class EmbedNet(nn.Module):
        
         # print(node_features_list[0].shape,node_features_list[1].shape,node_features_list[2].shape) 
         
+        
         neighborsFeat = []
+        #vlad_x = []
+        
         ## Graphsage
         gvlad = self.graph(node_features_list)
 
