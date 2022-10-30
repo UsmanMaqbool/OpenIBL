@@ -294,8 +294,8 @@ class EmbedNet(nn.Module):
             neighborsFeat.append(vlad_x)
 
         node_features_list.append(neighborsFeat[8])
-        node_features_list.append(torch.concat(neighborsFeat[0:3],0))
         node_features_list.append(torch.concat(neighborsFeat[4:7],0))
+        node_features_list.append(torch.concat(neighborsFeat[0:3],0))
         
         # node_features_list.append(neighborsFeat[4])
         # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[4]],0)
