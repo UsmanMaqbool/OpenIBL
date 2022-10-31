@@ -46,7 +46,7 @@ class NeighborAggregator(nn.Module):
         else:
             raise ValueError("Unknown aggr type, expected sum, max, or mean, but got {}"
                              .format(self.aggr_method))
-        # print(aggr_neighbor.shape)
+        # print(aggr_neighbor.shape,self.weight.shape)
         neighbor_hidden = torch.matmul(aggr_neighbor, self.weight)
         if self.use_bias:
             neighbor_hidden += self.bias
@@ -62,7 +62,7 @@ class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
                  aggr_neighbor_method="mean",
-                 aggr_hidden_method="sum"):
+                 aggr_hidden_method="concat"):
         """SageGCN layer definition
         # firstworking with mean and concat
         Args:
@@ -92,6 +92,8 @@ class SageGCN(nn.Module):
 
     def forward(self, src_node_features, neighbor_node_features):
         neighbor_hidden = self.aggregator(neighbor_node_features)
+        
+        # print('src_node_features', neighbor_node_features.shape, src_node_features.shape, self.weight.shape)
         self_hidden = torch.matmul(src_node_features, self.weight)
         
         if self.aggr_hidden_method == "sum":
@@ -119,11 +121,10 @@ class GraphSage(nn.Module):
         for index in range(0, len(hidden_dim) - 2):
             self.gcn.append(SageGCN(hidden_dim[index], hidden_dim[index+1])) #128, 7
         self.gcn.append(SageGCN(hidden_dim[-2], hidden_dim[-1], activation=None))
+        
+
 
     def forward(self, node_features_list):
-
-     
-
         hidden = node_features_list
         # code.interact(local=locals())
         subfeat_size = int(hidden[0].shape[1]/self.input_dim)
@@ -152,9 +153,10 @@ class GraphSage(nn.Module):
                     else:
                         h = torch.concat([h, h_x],1) 
                         
-                # print("hop", hop,'  ',  src_node_features.shape  ,'  ' , neighbor_node_features.shape)
+                # print("hop", hop,'  ',  h.shape)
                 next_hidden.append(h)
             hidden = next_hidden
+        # print("hidden", ' ',  hidden[0].shape)    
         return hidden[0]
 
     def extra_repr(self):
@@ -229,7 +231,7 @@ class EmbedNet(nn.Module):
         
         #graph
         self.input_dim = 8192
-        self.hidden_dim = [8192, 8192]
+        self.hidden_dim = [8192, 4096]
         self.num_neighbors_list = [3,1]
         
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
@@ -294,8 +296,10 @@ class EmbedNet(nn.Module):
             neighborsFeat.append(vlad_x)
 
         node_features_list.append(neighborsFeat[8])
-        node_features_list.append(torch.concat(neighborsFeat[4:7],0))
         node_features_list.append(torch.concat(neighborsFeat[0:3],0))
+        node_features_list.append(torch.concat(neighborsFeat[4:7],0))
+
+
         
         # node_features_list.append(neighborsFeat[4])
         # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[4]],0)
