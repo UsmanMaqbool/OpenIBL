@@ -46,7 +46,7 @@ class NeighborAggregator(nn.Module):
         else:
             raise ValueError("Unknown aggr type, expected sum, max, or mean, but got {}"
                              .format(self.aggr_method))
-        # print(aggr_neighbor.shape)
+        # print(aggr_neighbor.shape,self.weight.shape)
         neighbor_hidden = torch.matmul(aggr_neighbor, self.weight)
         if self.use_bias:
             neighbor_hidden += self.bias
@@ -62,7 +62,7 @@ class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
                  aggr_neighbor_method="mean",
-                 aggr_hidden_method="concat"):
+                 aggr_hidden_method="sum"):
         """SageGCN layer definition
         # firstworking with mean and concat
         Args:
@@ -92,6 +92,8 @@ class SageGCN(nn.Module):
 
     def forward(self, src_node_features, neighbor_node_features):
         neighbor_hidden = self.aggregator(neighbor_node_features)
+        
+        # print('src_node_features', neighbor_node_features.shape, src_node_features.shape, self.weight.shape)
         self_hidden = torch.matmul(src_node_features, self.weight)
         
         if self.aggr_hidden_method == "sum":
@@ -119,11 +121,10 @@ class GraphSage(nn.Module):
         for index in range(0, len(hidden_dim) - 2):
             self.gcn.append(SageGCN(hidden_dim[index], hidden_dim[index+1])) #128, 7
         self.gcn.append(SageGCN(hidden_dim[-2], hidden_dim[-1], activation=None))
+        
+
 
     def forward(self, node_features_list):
-
-     
-
         hidden = node_features_list
         # code.interact(local=locals())
         subfeat_size = int(hidden[0].shape[1]/self.input_dim)
@@ -138,6 +139,7 @@ class GraphSage(nn.Module):
             for hop in range(self.num_layers - l):
                 src_node_features = hidden[hop]
                 src_node_num = len(src_node_features)
+                # print('neighbor_node_features ', hidden[hop + 1].shape  ,' / ',  src_node_num, self.num_neighbors_list[hop], '-1')
                 neighbor_node_features = hidden[hop + 1] \
                     .view((src_node_num, self.num_neighbors_list[hop], -1))
                 # print(l,' ', hop  ,'  ',  src_node_features.shape  ,'  ' , neighbor_node_features.shape)
@@ -152,9 +154,10 @@ class GraphSage(nn.Module):
                     else:
                         h = torch.concat([h, h_x],1) 
                         
-                # print("hop", hop,'  ',  src_node_features.shape  ,'  ' , neighbor_node_features.shape)
+                # print("hop", hop,'  ',  h.shape)
                 next_hidden.append(h)
             hidden = next_hidden
+        # print("hidden", ' ',  hidden[0].shape)    
         return hidden[0]
 
     def extra_repr(self):
@@ -228,9 +231,9 @@ class EmbedNet(nn.Module):
         self.net_vlad = net_vlad
         
         #graph
-        self.input_dim = 8192 #16384
-        self.hidden_dim = [4096, 4096]
-        self.num_neighbors_list = [4]
+        self.input_dim = 8192
+        self.hidden_dim = [8192, 4096]
+        self.num_neighbors_list = [3]#,2]
         
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
                   num_neighbors_list=self.num_neighbors_list)
@@ -243,6 +246,11 @@ class EmbedNet(nn.Module):
         pool_x, x = self.base_model(x)
         
         N, C, H, W = x.shape
+        
+        node_features_list = []
+        neighborsFeat = []
+
+
         # bb_x = [[0,0,W,H],                                  #0 
         #         [0, 0, int(W/2),int(H/2)],                       #1 
         #         [int(W/2), 0, W,int(H/2)],
@@ -268,19 +276,23 @@ class EmbedNet(nn.Module):
         #         ] 
         #         #      [int(W/3),int(H/3), int(2*W/3), int(2*H/3)] #13
         
-        bb_x = [[0, 0, int(W/3),H], 
-                [0, 0, W,int(H/3)], 
-                [int(2*W/3), 0, W,H], 
-                [0, int(2*H/3), W,H], 
-                [int(W/4), int(H/4), int(3*W/4),int(3*H/4)],
-                [0,0,W,H]]
+        # bb_x = [[0, 0, int(W/3),H], 
+        #         [0, 0, W,int(H/3)], 
+        #         [int(2*W/3), 0, W,H], 
+        #         [0, int(2*H/3), W,H], 
+        #         [int(W/4), int(H/4), int(3*W/4),int(3*H/4)],
+        #         [0,0,W,H]]
         
         
         #bb_x = [[int(W/4), int(H/4), int(3*W/4),int(3*H/4)], [0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H], [0,0,W,H]]
 
-        
-        node_features_list = []
-        neighborsFeat = []
+
+          
+        bb_x = [[0, 0, int(W/2),H], 
+            [0, 0, W,int(H/2)], 
+            [int(W/2), 0, W,H], 
+            [0, int(H/2), W,H], 
+            [0,0,W,H]]      
                 
         for i in range(len(bb_x)):
             
@@ -296,10 +308,24 @@ class EmbedNet(nn.Module):
             
             neighborsFeat.append(vlad_x)
 
-        node_features_list.append(neighborsFeat[5])
-        node_features_list.append(torch.concat(neighborsFeat[0:4],0))
-        # node_features_list.append(torch.concat(neighborsFeat[5:9],0))
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[13]],0)
+        node_features_list.append(neighborsFeat[4])
+        node_features_list.append(torch.concat(neighborsFeat[0:3],0))
+        
+        # node_features_list.append(neighborsFeat[1])
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[2]],0)
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[3]],0)
+
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[0]],0)
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[2]],0)
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[3]],0)
+        
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[0]],0)
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[1]],0)
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[3]],0)
+       
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[0]],0)   
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[1]],0)   
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[2]],0)   
        
         # print(node_features_list[0].shape,node_features_list[1].shape,node_features_list[2].shape) 
         
