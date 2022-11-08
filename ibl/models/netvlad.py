@@ -61,8 +61,8 @@ class NeighborAggregator(nn.Module):
 class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
-                 aggr_neighbor_method="sum",
-                 aggr_hidden_method="concat"):
+                 aggr_neighbor_method="mean",
+                 aggr_hidden_method="sum"):
         """SageGCN layer definition
         # firstworking with mean and concat
         Args:
@@ -232,8 +232,8 @@ class EmbedNet(nn.Module):
         
         #graph
         self.input_dim = 8192
-        self.hidden_dim = [4096, 4096]
-        self.num_neighbors_list = [3]#,2]
+        self.hidden_dim = [8192, 8192]
+        self.num_neighbors_list = [3,1]#,2]
         
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
                   num_neighbors_list=self.num_neighbors_list)
@@ -288,16 +288,21 @@ class EmbedNet(nn.Module):
 
 
           
-        bb_x = [[0, 0, int(2*W/3),int(2*H/3)], 
-            [int(W/3), 0, W,int(2*H/3)], 
-            [0, int(H/3), int(2*W/3),H], 
-            [int(W/3), int(H/3), W,H],
-            [0,0,W,H]#,
-            # [0, 0, int(W/2),int(H/2)], 
-            # [int(W/2),0 , W, int(H/2)], 
-            # [0, int(H/2), int(W/2),H], 
-            # [int(W/2), int(H/2), W,H]
-            ]      
+        # bb_x = [[0, 0, int(2*W/3),int(2*H/3)], 
+        #     [int(W/3), 0, W,int(2*H/3)], 
+        #     [0, int(H/3), int(2*W/3),H], 
+        #     [int(W/3), int(H/3), W,H],
+        #     [0,0,W,H]#,
+        #     # [0, 0, int(W/2),int(H/2)], 
+        #     # [int(W/2),0 , W, int(H/2)], 
+        #     # [0, int(H/2), int(W/2),H], 
+        #     # [int(W/2), int(H/2), W,H]
+        #     ]  
+        
+        bb_x = [[0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H], 
+                [int(W/2), 0, W, H], [0, 0, int(W/2), H], [0, int(H/2), W, H], [0, 0, W, int(H/2)],
+                [0,0,W,H]]
+            
                 
         for i in range(len(bb_x)):
             
@@ -313,7 +318,8 @@ class EmbedNet(nn.Module):
             
             neighborsFeat.append(vlad_x)
 
-        node_features_list.append(neighborsFeat[4])
+        node_features_list.append(neighborsFeat[8])
+        node_features_list.append(torch.concat(neighborsFeat[4:7],0))
         node_features_list.append(torch.concat(neighborsFeat[0:3],0))
         
         # node_features_list.append(neighborsFeat[6])
