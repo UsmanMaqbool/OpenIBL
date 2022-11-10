@@ -62,7 +62,7 @@ class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
                  aggr_neighbor_method="mean",
-                 aggr_hidden_method="sum"):
+                 aggr_hidden_method="concat"):
         """SageGCN layer definition
         # firstworking with mean and concat
         Args:
@@ -232,7 +232,7 @@ class EmbedNet(nn.Module):
         
         #graph
         self.input_dim = 8192
-        self.hidden_dim = [8192, 8192]
+        self.hidden_dim = [8192, 4096]
         self.num_neighbors_list = [3,1]#,2]
         
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
@@ -319,9 +319,9 @@ class EmbedNet(nn.Module):
             neighborsFeat.append(vlad_x)
 
         node_features_list.append(neighborsFeat[8])
-        node_features_list.append(torch.concat(neighborsFeat[4:7],0))
         node_features_list.append(torch.concat(neighborsFeat[0:3],0))
-        
+        node_features_list.append(torch.concat(neighborsFeat[4:7],0))
+                
         # node_features_list.append(neighborsFeat[6])
         # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[7]],0)
         # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[8]],0)
@@ -347,10 +347,14 @@ class EmbedNet(nn.Module):
         ## Graphsage
         gvlad = self.graph(node_features_list)
         
+        #gvlad = F.normalize(gvlad, p=2, dim=1)  # L2 normalize
+
 
         gvlad = torch.add(gvlad,vlad_x)
-
+        
         gvlad = F.normalize(gvlad, p=2, dim=1)  # L2 normalize
+
+
 
         return pool_x, gvlad.view(-1,32768)
 
