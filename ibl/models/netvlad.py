@@ -11,7 +11,7 @@ import torch.nn.init as init
 #### graphsage     
 class NeighborAggregator(nn.Module):
     def __init__(self, input_dim, output_dim,
-                 use_bias=False, aggr_method="mean"):
+                 use_bias=True, aggr_method="mean"):
         """Aggregate node neighbors
 
         Args:
@@ -62,7 +62,7 @@ class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
                  aggr_neighbor_method="mean",
-                 aggr_hidden_method="concat"):
+                 aggr_hidden_method="sum"):
         """SageGCN layer definition
         # firstworking with mean and concat
         Args:
@@ -232,7 +232,7 @@ class EmbedNet(nn.Module):
         
         #graph
         self.input_dim = 8192
-        self.hidden_dim = [8192, 4096]
+        self.hidden_dim = [8192, 8192]
         self.num_neighbors_list = [3,1]#,2]
         
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
