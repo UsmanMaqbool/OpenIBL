@@ -47,6 +47,13 @@ class NeighborAggregator(nn.Module):
             raise ValueError("Unknown aggr type, expected sum, max, or mean, but got {}"
                              .format(self.aggr_method))
         # print(aggr_neighbor.shape,self.weight.shape)
+        ## normalize
+        
+        
+        
+        aggr_neighbor = F.normalize(aggr_neighbor, p=2, dim=1)  # L2 normalize
+        # print(aggr_neighbor.shape,self.weight.shape)
+        
         neighbor_hidden = torch.matmul(aggr_neighbor, self.weight)
         if self.use_bias:
             neighbor_hidden += self.bias
@@ -62,7 +69,7 @@ class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
                  aggr_neighbor_method="mean",
-                 aggr_hidden_method="sum"):
+                 aggr_hidden_method="concat"):
         """SageGCN layer definition
         # firstworking with mean and concat
         Args:
@@ -98,11 +105,16 @@ class SageGCN(nn.Module):
         
         if self.aggr_hidden_method == "sum":
             hidden = self_hidden + neighbor_hidden
+            hidden = F.normalize(hidden, p=2, dim=1)  # L2 normalize
+
         elif self.aggr_hidden_method == "concat":
             hidden = torch.cat([self_hidden, neighbor_hidden], dim=1)
+            hidden = F.normalize(hidden, p=2, dim=1)  # L2 normalize
         else:
             raise ValueError("Expected sum or concat, got {}"
                              .format(self.aggr_hidden))
+        
+        
         if self.activation:
             return self.activation(hidden)
         else:
@@ -232,7 +244,7 @@ class EmbedNet(nn.Module):
         
         #graph
         self.input_dim = 8192
-        self.hidden_dim = [8192, 8192]
+        self.hidden_dim = [8192, 4096]
         self.num_neighbors_list = [3,1]#,2]
         
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
@@ -293,14 +305,30 @@ class EmbedNet(nn.Module):
         #     [0, int(H/3), int(2*W/3),H], 
         #     [int(W/3), int(H/3), W,H],
         #     [0,0,W,H]#,
-        #     # [0, 0, int(W/2),int(H/2)], 
-        #     # [int(W/2),0 , W, int(H/2)], 
-        #     # [0, int(H/2), int(W/2),H], 
-        #     # [int(W/2), int(H/2), W,H]
-        #     ]  
         
-        bb_x = [[0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H], 
-                [int(W/2), 0, W, H], [0, 0, int(W/2), H], [0, int(H/2), W, H], [0, 0, W, int(H/2)],
+        
+        #[int(W/2), 0, W, H], [0, 0, int(W/2), H], [0, int(H/2), W, H], [0, 0, W, int(H/2)], 
+        
+        
+        # A-Class Neighbours
+        # [0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H], 
+        
+        
+        # B-Class Neighbours
+        #[0, 0, int(2*W/3),int(2*H/3)], [int(W/3), 0, W,int(2*H/3)], [0, int(H/3), int(2*W/3),H], [int(W/3), int(H/3), W,H]
+        
+        # C-Class Neighbours
+        # [int(W/2), int(H/2), W,H], [0, int(H/2), int(W/2),H], [int(W/2),0 , W, int(H/2)], [0, 0, int(W/2),int(H/2)]  
+        
+        
+        bb_x = [[0, 0, int(2*W/3),int(2*H/3)], 
+                [int(W/3), 0, W,int(2*H/3)], 
+                [0, int(H/3), int(2*W/3),H], 
+                [int(W/3), int(H/3), W,H],
+                [int(W/2), int(H/2), W,H], 
+                [0, int(H/2), int(W/2),H], 
+                [int(W/2),0 , W, int(H/2)], 
+                [0, 0, int(W/2),int(H/2)],  
                 [0,0,W,H]]
             
                 
