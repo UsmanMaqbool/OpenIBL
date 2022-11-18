@@ -68,8 +68,8 @@ class NeighborAggregator(nn.Module):
 class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
-                 aggr_neighbor_method="sum",
-                 aggr_hidden_method="concat"):
+                 aggr_neighbor_method="mean",
+                 aggr_hidden_method="sum"):
         """SageGCN layer definition
         # firstworking with mean and concat
         Args:
@@ -243,9 +243,9 @@ class EmbedNet(nn.Module):
         self.net_vlad = net_vlad
         
         #graph
-        self.input_dim = 4096
-        self.hidden_dim = [4096, 2048]
-        self.num_neighbors_list = [4,1]#,2]
+        self.input_dim = 8192
+        self.hidden_dim = [8192, 2048]
+        self.num_neighbors_list = [4]#,1]#,2]
         
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
                   num_neighbors_list=self.num_neighbors_list)
@@ -324,8 +324,7 @@ class EmbedNet(nn.Module):
         # [int(W/2), 0, W,H], [0, 0, int(W/2),H], [0, 0, W,int(H/2),[0,int(H/2) , W, H]]  
         
         
-        bb_x = [[0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H],
-                [int(W/2), 0, W,H], [0, 0, int(W/2),H], [0,int(H/2) , W, H], [0, 0, W,int(H/2)],  
+        bb_x = [[int(W/2), 0, W,H], [0, 0, int(W/2),H], [0,int(H/2) , W, H], [0, 0, W,int(H/2)],  
                 [0,0,W,H]]
             
                 
@@ -343,7 +342,7 @@ class EmbedNet(nn.Module):
             
             neighborsFeat.append(vlad_x)
 
-        node_features_list.append(neighborsFeat[8])
+        node_features_list.append(neighborsFeat[4])
         # node_features_list.append(torch.concat(neighborsFeat[0:4],0))
         #node_features_list.append(torch.concat(neighborsFeat[4:7],0))
         
@@ -353,10 +352,10 @@ class EmbedNet(nn.Module):
         node_features_list[1] = torch.concat([node_features_list[1],neighborsFeat[3]],0)
         
                 
-        node_features_list.append(neighborsFeat[4])
-        node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[5]],0)
-        node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[6]],0)
-        node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[7]],0)
+        # node_features_list.append(neighborsFeat[4])
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[5]],0)
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[6]],0)
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[7]],0)
 
         # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[8]],0)
 
@@ -381,7 +380,7 @@ class EmbedNet(nn.Module):
         ## Graphsage
         gvlad = self.graph(node_features_list)
         
-        gvlad = F.normalize(gvlad, p=2, dim=1)  # L2 normalize
+        # gvlad = F.normalize(gvlad, p=2, dim=1)  # L2 normalize
 
 
         gvlad = torch.add(gvlad,vlad_x)
