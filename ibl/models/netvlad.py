@@ -42,7 +42,7 @@ class NeighborAggregator(nn.Module):
         elif self.aggr_method == "sum":
             aggr_neighbor = neighbor_feature.sum(dim=1)
         elif self.aggr_method == "max":
-            aggr_neighbor = neighbor_feature.max(dim=1)
+            aggr_neighbor = torch.amax(neighbor_feature, 1)
         else:
             raise ValueError("Unknown aggr type, expected sum, max, or mean, but got {}"
                              .format(self.aggr_method))
@@ -68,7 +68,7 @@ class NeighborAggregator(nn.Module):
 class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
-                 aggr_neighbor_method="mean",
+                 aggr_neighbor_method="max",
                  aggr_hidden_method="sum"):
         """SageGCN layer definition
         # firstworking with mean and concat
