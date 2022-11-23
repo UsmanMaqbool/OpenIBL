@@ -68,7 +68,7 @@ class NeighborAggregator(nn.Module):
 class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
-                 aggr_neighbor_method="max",
+                 aggr_neighbor_method="mean",
                  aggr_hidden_method="concat"):
         """SageGCN layer definition
         # firstworking with mean and concat
