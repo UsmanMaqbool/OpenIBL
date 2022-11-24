@@ -36,7 +36,7 @@ class NeighborAggregator(nn.Module):
             init.zeros_(self.bias)
 
     def forward(self, neighbor_feature):
-        # print(neighbor_feature.shape)
+       # print(neighbor_feature.shape)
         if self.aggr_method == "mean":
             aggr_neighbor = neighbor_feature.mean(dim=1)
         elif self.aggr_method == "sum":
@@ -47,13 +47,6 @@ class NeighborAggregator(nn.Module):
             raise ValueError("Unknown aggr type, expected sum, max, or mean, but got {}"
                              .format(self.aggr_method))
         # print(aggr_neighbor.shape,self.weight.shape)
-        ## normalize
-        
-        
-        
-        #aggr_neighbor = F.normalize(aggr_neighbor, p=2, dim=1)  # L2 normalize
-        # print(aggr_neighbor.shape,self.weight.shape)
-        
         neighbor_hidden = torch.matmul(aggr_neighbor, self.weight)
         if self.use_bias:
             neighbor_hidden += self.bias
@@ -105,16 +98,11 @@ class SageGCN(nn.Module):
         
         if self.aggr_hidden_method == "sum":
             hidden = self_hidden + neighbor_hidden
-            # hidden = F.normalize(hidden, p=2, dim=1)  # L2 normalize
-
         elif self.aggr_hidden_method == "concat":
             hidden = torch.cat([self_hidden, neighbor_hidden], dim=1)
-            # hidden = F.normalize(hidden, p=2, dim=1)  # L2 normalize
         else:
             raise ValueError("Expected sum or concat, got {}"
                              .format(self.aggr_hidden))
-        
-        
         if self.activation:
             return self.activation(hidden)
         else:
@@ -154,7 +142,7 @@ class GraphSage(nn.Module):
                 # print('neighbor_node_features ', hidden[hop + 1].shape  ,' / ',  src_node_num, self.num_neighbors_list[hop], '-1')
                 neighbor_node_features = hidden[hop + 1] \
                     .view((src_node_num, self.num_neighbors_list[hop], -1))
-                #print(l,' ', hop  ,'  ',  src_node_features.shape  ,'  ' , neighbor_node_features.shape)
+                # print(l,' ', hop  ,'  ',  src_node_features.shape  ,'  ' , neighbor_node_features.shape)
                 
                 # splitting the i/p
                 #h = gcn(src_node_features, neighbor_node_features)
@@ -245,7 +233,7 @@ class EmbedNet(nn.Module):
         #graph
         self.input_dim = 8192
         self.hidden_dim = [4096, 8192]
-        self.num_neighbors_list = [4]#,1]#,2]
+        self.num_neighbors_list = [4]#,2]
         
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
                   num_neighbors_list=self.num_neighbors_list)
@@ -297,37 +285,9 @@ class EmbedNet(nn.Module):
         
         
         #bb_x = [[int(W/4), int(H/4), int(3*W/4),int(3*H/4)], [0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H], [0,0,W,H]]
-
-
-          
-        # bb_x = [[0, 0, int(2*W/3),int(2*H/3)], 
-        #     [int(W/3), 0, W,int(2*H/3)], 
-        #     [0, int(H/3), int(2*W/3),H], 
-        #     [int(W/3), int(H/3), W,H],
-        #     [0,0,W,H]#,
-        
-        
-        #[int(W/2), 0, W, H], [0, 0, int(W/2), H], [0, int(H/2), W, H], [0, 0, W, int(H/2)], 
-        
-        
-        # A-Class Neighbours
-        # [0, 0, int(W/3),H], [0, 0, W,int(H/3)], [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H], 
-        
-        
-        # B-Class Neighbours
-        #[0, 0, int(2*W/3),int(2*H/3)], [int(W/3), 0, W,int(2*H/3)], [0, int(H/3), int(2*W/3),H], [int(W/3), int(H/3), W,H]
-        
-        # C-Class Neighbours
-        # [int(W/2), int(H/2), W,H], [0, int(H/2), int(W/2),H], [int(W/2),0 , W, int(H/2)], [0, 0, int(W/2),int(H/2)]  
-        
-        # D-Class Neighbours
-        # [int(W/2), 0, W,H], [0, 0, int(W/2),H], [0, 0, W,int(H/2),[0,int(H/2) , W, H]]  
-        
-        
+   
         bb_x = [[int(W/2), 0, W,H], [0, 0, int(W/2),H], [0,int(H/2) , W, H], [0, 0, W,int(H/2)],  
-                [0,0,W,H]]
-            
-                
+                [0,0,W,H]]                
         for i in range(len(bb_x)):
             
             x_cropped = x[:, : ,bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
@@ -351,25 +311,22 @@ class EmbedNet(nn.Module):
         node_features_list[1] = torch.concat([node_features_list[1],neighborsFeat[2]],0)
         node_features_list[1] = torch.concat([node_features_list[1],neighborsFeat[3]],0)
         
-                
-        # node_features_list.append(neighborsFeat[4])
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[5]],0)
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[6]],0)
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[7]],0)
-
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[8]],0)
-
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[5]],0)
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[7]],0)
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[8]],0)
         
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[5]],0)
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[6]],0)
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[8]],0)
+        # node_features_list.append(neighborsFeat[1])
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[2]],0)
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[3]],0)
+
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[0]],0)
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[2]],0)
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[3]],0)
+        
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[0]],0)
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[1]],0)
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[3]],0)
        
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[5]],0)   
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[6]],0)   
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[7]],0)   
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[0]],0)   
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[1]],0)   
+        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[2]],0)   
        
         # print(node_features_list[0].shape,node_features_list[1].shape,node_features_list[2].shape) 
         
@@ -379,16 +336,10 @@ class EmbedNet(nn.Module):
         
         ## Graphsage
         gvlad = self.graph(node_features_list)
-        
-        # gvlad = F.normalize(gvlad, p=2, dim=1)  # L2 normalize
-
 
         gvlad = torch.add(gvlad,vlad_x)
+
         
-        gvlad = F.normalize(gvlad, p=2, dim=1)  # L2 normalize
-
-
-
         return pool_x, gvlad.view(-1,32768)
 
 class EmbedNetPCA(nn.Module):
