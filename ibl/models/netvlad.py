@@ -339,7 +339,7 @@ class EmbedNet(nn.Module):
 
         gvlad = torch.add(gvlad,vlad_x)
 
-        gvlad = F.normalize(gvlad, p=2, dim=1)  # L2 normalize
+        # gvlad = F.normalize(gvlad, p=2, dim=1)  # L2 normalize
 
         return pool_x, gvlad.view(-1,32768)
 
