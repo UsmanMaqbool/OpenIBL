@@ -5,9 +5,18 @@ import torch.nn.functional as F
 import numpy as np
 import copy
 import code
+#code.interact(local=locals())
 
 # graphsage
 import torch.nn.init as init
+
+# Semantic Segmentation
+from torchvision import transforms
+# import espnet as net
+from .espnet import *
+from torchvision.ops import masks_to_boxes
+
+
 #### graphsage     
 class NeighborAggregator(nn.Module):
     def __init__(self, input_dim, output_dim,
@@ -207,6 +216,7 @@ class NetVLAD(nn.Module):
 
     def forward(self, x):
         N, C = x.shape[:2]
+        
         if self.normalize_input:
             x = F.normalize(x, p=2, dim=1)  # across descriptor dim
 
@@ -224,11 +234,20 @@ class NetVLAD(nn.Module):
 
         return vlad
 
+
 class EmbedNet(nn.Module):
     def __init__(self, base_model, net_vlad):
         super(EmbedNet, self).__init__()
         self.base_model = base_model
         self.net_vlad = net_vlad
+        
+        # Semantic Segmentation
+        self.classes = 20
+        self.p = 2
+        self.q = 8
+        self.encoderFile = "/media/leo/2C737A9872F69ECF/datasets/pretrained/encoder/espnet_p_2_q_8.pth"
+        self.Espnet = ESPNet(classes=self.classes, p=self.p, q = self.q, encoderFile=self.encoderFile)  # Net.Mobile_SegNetDilatedIA_C_stage1(20)
+        # requires_grad=False
         
         #graph
         self.input_dim = 8192
@@ -243,13 +262,38 @@ class EmbedNet(nn.Module):
         self.net_vlad._init_params()
 
     def forward(self, x):
-        pool_x, x = self.base_model(x)
+        
+        # createboxes
+        print("debuggind started")
+        
+        b_out = self.Espnet(x)
+        mask = b_out.max(1)[1]   #torch.Size([36, 480, 640])
+        for jj in range(len(mask)):  #batch processing
+        
+            single_label_mask = relabel_merge(mask[jj])    # single image mask
+            # single_label_mask = mask[jj]
+            obj_ids = torch.unique(single_label_mask)
+            obj_ids = obj_ids[1:]      #torch.Size([19])
+            masks = single_label_mask == obj_ids[:, None, None]
+            boxes = masks_to_boxes(masks.to(torch.float32))
+            # boxes = masks_to_boxes(masks.to(torch.float32))/16
+            boxes_s = (boxes/16).cpu().numpy().astype(int)
+            #append boxes
+            print (len(boxes_s))
+            code.interact(local=locals())
+
+            
+        
+        
+        pool_x, x = self.base_model(x)   
         
         N, C, H, W = x.shape
         
         node_features_list = []
         neighborsFeat = []
 
+        # resizef = transforms.Resize([224,224])
+        # img = resizef(img)
 
         # bb_x = [[0,0,W,H],                                  #0 
         #         [0, 0, int(W/2),int(H/2)],                       #1 

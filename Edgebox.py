@@ -2,11 +2,18 @@ import cv2 as cv
 import numpy as np
 import sys
 import matplotlib.pyplot as plt
+import glob
+filelist = glob.glob('../SFSegNets/data/*.jpg')
+
+
 
 if __name__ == '__main__':
-    print(__doc__)
+
+    filelist = glob.glob('../SFSegNets/data/*.jpg')
+
 
     model = "/mnt/ssd/usman_ws/Edge-Boxes-Python-Docker/models/model.yml.gz"
+    
     im = cv.imread("testimages/3.jpg")
 
     edge_detection = cv.ximgproc.createStructuredEdgeDetection(model)
@@ -20,6 +27,8 @@ if __name__ == '__main__':
     edge_boxes.setMaxBoxes(15)
     boxes = edge_boxes.getBoundingBoxes(edges, orimap)
 
+    
+    
     for b in boxes[0]:
         x, y, w, h = b
         color1 = (list(np.random.choice(range(256), size=3)))  

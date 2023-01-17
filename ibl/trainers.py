@@ -8,6 +8,9 @@ import torch.distributed as dist
 
 from .utils.meters import AverageMeter
 
+import code
+#code.interact(local=locals())
+
 class Trainer(object):
     #############################
     # Training module for
@@ -35,6 +38,7 @@ class Trainer(object):
         for i in range(train_iters):
             inputs = self._parse_data(data_loader.next())
             data_time.update(time.time() - end)
+            
 
             loss = self._forward(inputs, vlad, loss_type)
             losses.update(loss.item())
