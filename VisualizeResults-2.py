@@ -274,6 +274,7 @@ def evaluateModel(args, model, up, image_list):
 
     to_tensor = transforms.ToTensor()
     to_image = transforms.ToPILImage()
+    
     x = []
     
     for fname in image_list:
@@ -287,21 +288,33 @@ def evaluateModel(args, model, up, image_list):
     # img_test = torch.unsqueeze(batch[0],0)
     # mg_out = model(img_test.cuda())  #36,20,480,640
     # mask_t = mg_out[0].max(0)[1]  #[512, 1024]
-
-    aa = mask[0]
     
-    rsizet = transforms.Resize((30,40)) #H W
+          
+    
     
     patch_mask = torch.zeros((480, 640))
     for jj in range(len(mask)):  #batch processing
         
         img_orig = to_tensor(Image.open(image_list[jj]).convert('RGB'))
+        _, H, W = img_orig.shape
+
+        bb_x = [[0, 0, round(2*W/3), round(2*H/3)],  [round(W/3),  0,  W, round(2*H/3)], [0, round(H/3), round(2*W/3), H], [round(W/3), round(H/3), W, H]]
+            
+        patch_mask = torch.zeros((H, W))
+        # patch_mask = torch.zeros(round(2*W/3), round(2*H/3))
+        
+        # rsizet = transforms.Resize((427, 320)) #H W
+        rsizet = transforms.Resize((round(2*W/3), round(2*H/3))) #H W
+        
+
+        img_stk = [] #patch_mask, patch_mask, patch_mask, patch_mask]
+        
         
         name = image_list[jj].split('/')[-1]
 
-        single_label_mask = relabel_merge(mask[jj])    # single image mask
+        # single_label_mask = relabel_merge(mask[jj])    # single image mask
         # all the labels to single slides
-        # single_label_mask = mask[jj]
+        single_label_mask = mask[jj]
         
         # obj_ids = torch.unique(single_label_mask)
         obj_ids, obj_i = single_label_mask.unique(return_counts=True)
@@ -311,10 +324,10 @@ def evaluateModel(args, model, up, image_list):
         
         masks = single_label_mask == obj_ids[:, None, None]
         boxes_t = masks_to_boxes(masks.to(torch.float32))
-        print ("boxes-lenght:", len(boxes_t))
+        # print ("boxes-lenght:", len(boxes_t))
 
         # Sort the boxes                
-        # rr = ((boxes_t[:, 2])-(boxes_t[:, 0]))*((boxes_t[:, 3])-(boxes_t[:, 1]))
+        # rr = ((bb_x[:, 2])-(bb_x[:, 0]))*((bb_x[:, 3])-(bb_x[:, 1]))
         # rr_boxes = torch.argsort(rr,descending=True) # (decending order)
         
         rr_boxes = torch.argsort(torch.argsort(obj_i,descending=True)) # (decending order)
@@ -322,17 +335,15 @@ def evaluateModel(args, model, up, image_list):
         
         # rr_boxes = torch.argsort(rr) # (decending order)
 
-        
         boxes = boxes_t.cpu().numpy().astype(int)
-        patch_mask = torch.zeros((480, 640))
         
         
         for idx in range(len(boxes)):
             for b_idx in range(len(rr_boxes)):
                 # print(idx, " ", b_idx)
-                if idx == rr_boxes[b_idx] and obj_i[b_idx] > 5000 :
-                    print("found match")
-                    print(idx, " ", b_idx)
+                if idx == rr_boxes[b_idx] and obj_i[b_idx] > 10000 and len(img_stk) < 4 :
+                    # print("found match")
+                    # print(idx, " ", b_idx)
                     patch_mask = patch_mask*0
                     # label obj_ids[rr_boxes[b_idx]]
                     patch_mask[single_label_mask == obj_ids[b_idx]] = 1
@@ -350,6 +361,8 @@ def evaluateModel(args, model, up, image_list):
                     # Multiply arrays
                     resultant = c_img*mmask    
                     
+                    img_stk.append(resultant)
+
                     # imgg = torch.permute(resultant, (1, 2, 0)).cpu().numpy()[0]
                     # aa = img_orig.numpy()
                     # imgg = to_image(aa)
@@ -357,9 +370,20 @@ def evaluateModel(args, model, up, image_list):
                     # cv2.imwrite(args.savedir + os.sep + 'img_'+str(idx)+'_' + name.replace(args.img_extn, 'png'), aa)
                     save_image(resultant, args.savedir + os.sep + 'img_'+str(idx)+'_' + name.replace(args.img_extn, 'png'))
                     break                    
+        
+        # check the size
+        # print("first: ", len(img_stk))
+        
+        if len(img_stk) < 4:
+            for i in range(len(bb_x)-len(img_stk)):
+                x_cropped = img_orig[: ,bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
+                img_stk.append(x_cropped)
             
+        
+
+                
+        print("total: ", len(img_stk))
             
-        name = image_list[jj].split('/')[-1]          
         f_boxes = boxes
         name = image_list[jj].split('/')[-1]
 
