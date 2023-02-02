@@ -265,8 +265,9 @@ class EmbedNet(nn.Module):
         
         # createboxes
         # print("debuggind started")
-        
-        b_out = self.Espnet(x)
+        with torch.no_grad():
+            b_out = self.Espnet(x)
+        # b_out = self.Espnet(x)
         mask = b_out.max(1)[1]   #torch.Size([36, 480, 640])
         
         for jj in range(len(mask)):  #batch processing
@@ -345,7 +346,7 @@ class EmbedNet(nn.Module):
         NB = 4
         
         graph_nodes = torch.zeros(N,NB,C,H,W).cuda()
-        rsizet = transforms.Resize([H, W])
+        rsizet = transforms.Resize((H,W)) #H W
 
         # rsizet = transforms.Resize((427, 320)) #H W
         # rsizet = transforms.Resize((round(2*W/3), round(2*H/3))) #H W
@@ -359,7 +360,7 @@ class EmbedNet(nn.Module):
                     # print(idx, " ", b_idx)
                     # code.interact(local=locals())
 
-                    if idx == rr_boxes[b_idx] and obj_i[b_idx] > 10000 and len(img_nodes) < 4:
+                    if idx == rr_boxes[b_idx] and obj_i[b_idx] > 10000 and len(img_nodes) < NB:
                         # print("found match")
                         # print(idx, " ", b_idx)
                         # print (img_nodes.shape)
@@ -372,6 +373,7 @@ class EmbedNet(nn.Module):
 
                         # patch_mask = patch_mask.unsqueeze(0)
                         patch_maskr = rsizet(patch_mask.unsqueeze(0))
+                        
                         patch_maskr = patch_maskr.squeeze(0)
 
                         boxesd = boxes.to(torch.long)
@@ -385,12 +387,12 @@ class EmbedNet(nn.Module):
                         # increase dimension
                         mmask = torch.stack((zero_img,)*512, axis=0)
                         
-                        
-
 
                         # Multiply arrays
-                        resultant = rsizet(c_img*mmask)
-                         
+                        # code.interact(local=locals())
+                        # resultant = rsizet(c_img*mmask)
+                        resultant = rsizet(c_img)
+ 
                         img_nodes.append(resultant.unsqueeze(0))
                         
                         
@@ -410,7 +412,7 @@ class EmbedNet(nn.Module):
             # check the size
             # print("first: ", len(img_nodes))
             # code.interact(local=locals())
-            if len(img_nodes) < 4:
+            if len(img_nodes) < NB:
                 for i in range(len(bb_x)-len(img_nodes)):
                     x_cropped =  x[Nx][: ,bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
                     img_nodes.append(x_cropped.unsqueeze(0))
@@ -429,7 +431,7 @@ class EmbedNet(nn.Module):
         neighborsFeat = []
 
         x_cropped = graph_nodes.view(NB,N,C,H,W)
-        xx = x.unsqueeze(0)
+        # xx = x.unsqueeze(0)
         # Append root node
         # print(x_cropped.shape)
         # print(x.unsqueeze(0).shape)
