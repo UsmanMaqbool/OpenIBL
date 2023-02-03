@@ -71,7 +71,7 @@ class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
                  aggr_neighbor_method="mean",
-                 aggr_hidden_method="concat"):
+                 aggr_hidden_method="sum"):
         """SageGCN layer definition
         # firstworking with mean and concat
         Args:
@@ -251,7 +251,7 @@ class EmbedNet(nn.Module):
         
         #graph
         self.input_dim = 8192
-        self.hidden_dim = [4096, 8192]
+        self.hidden_dim = [8192,4096]
         self.num_neighbors_list = [4]#,2]
         
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
@@ -455,32 +455,9 @@ class EmbedNet(nn.Module):
 
         # code.interact(local=locals())
         node_features_list.append(neighborsFeat[3])
-        # node_features_list.append(torch.concat(neighborsFeat[0:4],0))
-        #node_features_list.append(torch.concat(neighborsFeat[4:7],0))
+        node_features_list.append(torch.concat(neighborsFeat[0:4],0))
+        # code.interact(local=locals())
         
-        node_features_list.append(neighborsFeat[0])
-        node_features_list[1] = torch.concat([node_features_list[1],neighborsFeat[1]],0)
-        node_features_list[1] = torch.concat([node_features_list[1],neighborsFeat[2]],0)
-        node_features_list[1] = torch.concat([node_features_list[1],neighborsFeat[3]],0)
-        
-        
-        # node_features_list.append(neighborsFeat[1])
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[2]],0)
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[3]],0)
-
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[0]],0)
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[2]],0)
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[3]],0)
-        
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[0]],0)
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[1]],0)
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[3]],0)
-       
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[0]],0)   
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[1]],0)   
-        # node_features_list[2] = torch.concat([node_features_list[2],neighborsFeat[2]],0)   
-       
-        # print(node_features_list[0].shape,node_features_list[1].shape,node_features_list[2].shape) 
         
         
         neighborsFeat = []
