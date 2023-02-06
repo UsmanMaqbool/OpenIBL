@@ -70,8 +70,8 @@ class NeighborAggregator(nn.Module):
 class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
-                 aggr_neighbor_method="mean",
-                 aggr_hidden_method="sum"):
+                 aggr_neighbor_method="sum",
+                 aggr_hidden_method="concat"):
         """SageGCN layer definition
         # firstworking with mean and concat
         Args:
@@ -251,7 +251,7 @@ class EmbedNet(nn.Module):
         
         #graph
         self.input_dim = 8192
-        self.hidden_dim = [8192,4096]
+        self.hidden_dim = [4096,8192]
         self.num_neighbors_list = [4]#,2]
         
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
