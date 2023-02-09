@@ -390,8 +390,8 @@ class EmbedNet(nn.Module):
 
                         # Multiply arrays
                         # code.interact(local=locals())
-                        # resultant = rsizet(c_img*mmask)
-                        resultant = rsizet(c_img)
+                        resultant = rsizet(c_img*mmask)
+                        # resultant = rsizet(c_img)
  
                         img_nodes.append(resultant.unsqueeze(0))
                         
