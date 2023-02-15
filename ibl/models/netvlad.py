@@ -70,7 +70,7 @@ class NeighborAggregator(nn.Module):
 class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
-                 aggr_neighbor_method="sum",
+                 aggr_neighbor_method="mean",
                  aggr_hidden_method="concat"):
         """SageGCN layer definition
         # firstworking with mean and concat
@@ -250,8 +250,8 @@ class EmbedNet(nn.Module):
         # requires_grad=False
         
         #graph
-        self.input_dim = 8192
-        self.hidden_dim = [4096,8192]
+        self.input_dim = 8192 # 16384# 8192
+        self.hidden_dim = [4096,4096]#[8192, 8192]
         self.num_neighbors_list = [4]#,2]
         
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
@@ -340,10 +340,16 @@ class EmbedNet(nn.Module):
         # img_orig = to_tensor(Image.open(image_list[jj]).convert('RGB'))
         # _, H, W = img_orig.shape
 
-        bb_x = [[0, 0, round(2*W/3), round(2*H/3)],  [round(W/3),  0,  W, round(2*H/3)], [0, round(H/3), round(2*W/3), H], [round(W/3), round(H/3), W, H]]
+        bb_x = [[0, 0, int(W/3),H], 
+        [0, 0, W,int(H/3)], 
+        [int(2*W/3), 0, W,H], 
+        [0, int(2*H/3), W,H], 
+        [int(W/4), int(H/4), int(3*W/4),int(3*H/4)]]
+
+        # bb_x = [[0, 0, round(2*W/3), round(2*H/3)],  [round(W/3),  0,  W, round(2*H/3)], [0, round(H/3), round(2*W/3), H], [round(W/3), round(H/3), W, H]]
             
         # patch_mask = torch.zeros((H, W))
-        NB = 4
+        NB = 5
         
         graph_nodes = torch.zeros(N,NB,C,H,W).cuda()
         rsizet = transforms.Resize((H,W)) #H W
@@ -390,8 +396,8 @@ class EmbedNet(nn.Module):
 
                         # Multiply arrays
                         # code.interact(local=locals())
-                        resultant = rsizet(c_img*mmask)
-                        # resultant = rsizet(c_img)
+                        # resultant = rsizet(c_img*mmask)
+                        resultant = rsizet(c_img)
  
                         img_nodes.append(resultant.unsqueeze(0))
                         
@@ -415,7 +421,7 @@ class EmbedNet(nn.Module):
             if len(img_nodes) < NB:
                 for i in range(len(bb_x)-len(img_nodes)):
                     x_cropped =  x[Nx][: ,bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
-                    img_nodes.append(x_cropped.unsqueeze(0))
+                    img_nodes.append(rsizet(x_cropped.unsqueeze(0)))
                     
                 
         
@@ -439,7 +445,7 @@ class EmbedNet(nn.Module):
         x_cropped = torch.cat((graph_nodes.view(NB,N,C,H,W), x.unsqueeze(0)))
         # x_call = x_cropped.append(x.unsqueeze(0))
          
-        for i in range(NB):
+        for i in range(NB+1):
             
             
             vlad_x = self.net_vlad(x_cropped[i])
@@ -450,12 +456,13 @@ class EmbedNet(nn.Module):
             vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
             # aa = vlad_x.shape #32, 32768
             #vlad_x = vlad_x.view(-1,8192) # 8192
+            # print(i)
             
             neighborsFeat.append(vlad_x)
 
-        # code.interact(local=locals())
-        node_features_list.append(neighborsFeat[3])
-        node_features_list.append(torch.concat(neighborsFeat[0:4],0))
+        #code.interact(local=locals())
+        node_features_list.append(neighborsFeat[NB])
+        node_features_list.append(torch.concat(neighborsFeat[0:NB],0))
         # code.interact(local=locals())
         
         
@@ -469,7 +476,7 @@ class EmbedNet(nn.Module):
         gvlad = torch.add(gvlad,vlad_x)
 
         # gvlad = F.normalize(gvlad, p=2, dim=1)  # L2 normalize
-
+        
         return pool_x, gvlad.view(-1,32768)
 
 class EmbedNetPCA(nn.Module):
