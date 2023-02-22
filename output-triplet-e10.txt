@@ -1,0 +1,946 @@
+Use GPU: 0 for training, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='6010', dataset='pitts', scale='30k', tuple_size=1, test_batch_size=32, cache_size=1000, workers=1, height=480, width=640, neg_num=10, num_clusters=64, neg_pool=1000, arch='vgg16', layers='conv5', nowhiten=False, syncbn=True, sync_gather=True, features=4096, lr=0.001, momentum=0.9, weight_decay=0.001, loss_type='triplet', step_size=5, resume='', vlad=True, eval_step=1, rerank=False, epochs=10, iters=0, seed=43, deterministic=False, print_freq=200, margin=0.1, data_dir='/mnt/ssd/usman_ws/OpenIBL/examples/data', logs_dir='/media/leo/2C737A9872F69ECF/why-so-deepv2-data/pittsburgh/netvlad-run/pitts30k-vgg16/conv5-triplet-lr0.001-tuple1-21-Feb', init_dir='/mnt/ssd/usman_ws/OpenIBL/examples/../logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+Loading centroids from /mnt/ssd/usman_ws/OpenIBL/examples/../logs/vgg16_pitts_64_desc_cen.hdf5
+Encoder loaded!
+Test the initial model:
+Extract Features: [100/551]	Time 1.070 (1.125)	Data 0.000 (0.020)	
+Extract Features: [200/551]	Time 1.014 (1.088)	Data 0.000 (0.010)	
+Extract Features: [300/551]	Time 1.061 (1.079)	Data 0.000 (0.007)	
+Extract Features: [400/551]	Time 0.997 (1.070)	Data 0.000 (0.005)	
+Extract Features: [500/551]	Time 1.096 (1.063)	Data 0.000 (0.004)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          65.0%
+  top-5          80.1%
+  top-10         84.0%
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 1.035 (1.206)	Data 0.000 (0.142)	
+Extract Features: [200/542]	Time 1.078 (1.135)	Data 0.000 (0.079)	
+Extract Features: [300/542]	Time 1.795 (1.134)	Data 0.663 (0.059)	
+Extract Features: [400/542]	Time 1.140 (1.140)	Data 0.000 (0.050)	
+Extract Features: [500/542]	Time 1.128 (1.147)	Data 0.000 (0.040)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [0-0][200/1000]	Time 0.753 (0.776)	Data 0.040 (0.053)	Loss 0.027 (0.089)
+Epoch: [0-0][400/1000]	Time 0.720 (0.755)	Data 0.021 (0.038)	Loss 0.010 (0.092)
+Epoch: [0-0][600/1000]	Time 0.712 (0.746)	Data 0.027 (0.033)	Loss 0.082 (0.091)
+Epoch: [0-0][800/1000]	Time 0.671 (0.734)	Data 0.022 (0.030)	Loss 0.053 (0.088)
+Epoch: [0-0][1000/1000]	Time 0.671 (0.734)	Data 0.009 (0.029)	Loss 0.000 (0.086)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 1.030 (1.181)	Data 0.000 (0.023)	
+Extract Features: [200/542]	Time 0.985 (1.175)	Data 0.000 (0.011)	
+Extract Features: [300/542]	Time 1.166 (1.173)	Data 0.000 (0.010)	
+Extract Features: [400/542]	Time 1.157 (1.175)	Data 0.000 (0.010)	
+Extract Features: [500/542]	Time 1.122 (1.169)	Data 0.000 (0.008)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [0-1][200/1000]	Time 0.673 (0.789)	Data 0.022 (0.081)	Loss 0.000 (0.115)
+Epoch: [0-1][400/1000]	Time 0.620 (0.747)	Data 0.020 (0.051)	Loss 0.099 (0.110)
+Epoch: [0-1][600/1000]	Time 0.690 (0.709)	Data 0.032 (0.042)	Loss 0.000 (0.100)
+Epoch: [0-1][800/1000]	Time 0.696 (0.696)	Data 0.019 (0.037)	Loss 0.000 (0.097)
+Epoch: [0-1][1000/1000]	Time 0.527 (0.685)	Data 0.009 (0.034)	Loss 0.292 (0.094)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.959 (1.011)	Data 0.000 (0.019)	
+Extract Features: [200/542]	Time 0.829 (1.000)	Data 0.000 (0.010)	
+Extract Features: [300/542]	Time 1.633 (1.003)	Data 0.713 (0.020)	
+Extract Features: [400/542]	Time 1.097 (1.008)	Data 0.000 (0.024)	
+Extract Features: [500/542]	Time 1.104 (1.033)	Data 0.000 (0.019)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [0-2][200/1000]	Time 0.582 (0.754)	Data 0.020 (0.038)	Loss 0.000 (0.091)
+Epoch: [0-2][400/1000]	Time 0.818 (0.746)	Data 0.020 (0.031)	Loss 0.074 (0.092)
+Epoch: [0-2][600/1000]	Time 0.691 (0.756)	Data 0.021 (0.029)	Loss 0.000 (0.088)
+Epoch: [0-2][800/1000]	Time 0.785 (0.763)	Data 0.024 (0.027)	Loss 0.097 (0.084)
+Epoch: [0-2][1000/1000]	Time 0.677 (0.747)	Data 0.009 (0.026)	Loss 0.038 (0.083)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.996 (1.097)	Data 0.000 (0.019)	
+Extract Features: [200/542]	Time 1.343 (1.057)	Data 0.000 (0.010)	
+Extract Features: [300/542]	Time 1.064 (1.061)	Data 0.063 (0.010)	
+Extract Features: [400/542]	Time 1.047 (1.074)	Data 0.000 (0.014)	
+Extract Features: [500/542]	Time 0.993 (1.106)	Data 0.000 (0.011)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [0-3][200/1000]	Time 0.608 (0.814)	Data 0.021 (0.083)	Loss 0.000 (0.084)
+Epoch: [0-3][400/1000]	Time 0.529 (0.800)	Data 0.022 (0.054)	Loss 0.070 (0.083)
+Epoch: [0-3][600/1000]	Time 0.546 (0.719)	Data 0.020 (0.044)	Loss 0.078 (0.081)
+Epoch: [0-3][800/1000]	Time 0.554 (0.676)	Data 0.019 (0.038)	Loss 0.162 (0.074)
+Epoch: [0-3][1000/1000]	Time 0.489 (0.652)	Data 0.010 (0.035)	Loss 0.000 (0.074)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.825 (0.907)	Data 0.000 (0.021)	
+Extract Features: [200/542]	Time 0.780 (0.862)	Data 0.000 (0.011)	
+Extract Features: [300/542]	Time 1.250 (0.910)	Data 0.000 (0.007)	
+Extract Features: [400/542]	Time 1.265 (0.981)	Data 0.000 (0.005)	
+Extract Features: [500/542]	Time 0.904 (0.957)	Data 0.000 (0.004)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [0-4][200/1000]	Time 0.560 (0.648)	Data 0.029 (0.032)	Loss 0.008 (0.060)
+Epoch: [0-4][400/1000]	Time 0.515 (0.622)	Data 0.017 (0.027)	Loss 0.000 (0.062)
+Epoch: [0-4][600/1000]	Time 0.822 (0.617)	Data 0.025 (0.025)	Loss 0.079 (0.065)
+Epoch: [0-4][800/1000]	Time 0.523 (0.622)	Data 0.019 (0.024)	Loss 0.099 (0.063)
+Epoch: [0-4][1000/1000]	Time 0.497 (0.600)	Data 0.009 (0.024)	Loss 0.363 (0.062)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.850 (0.812)	Data 0.000 (0.018)	
+Extract Features: [200/542]	Time 0.782 (0.805)	Data 0.000 (0.009)	
+Extract Features: [300/542]	Time 0.829 (0.803)	Data 0.043 (0.007)	
+Extract Features: [400/542]	Time 1.239 (0.827)	Data 0.000 (0.013)	
+Extract Features: [500/542]	Time 0.940 (0.861)	Data 0.000 (0.010)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [0-5][200/1000]	Time 0.586 (0.668)	Data 0.018 (0.048)	Loss 0.002 (0.055)
+Epoch: [0-5][400/1000]	Time 0.572 (0.638)	Data 0.019 (0.035)	Loss 0.038 (0.058)
+Epoch: [0-5][600/1000]	Time 0.645 (0.650)	Data 0.026 (0.031)	Loss 0.000 (0.060)
+Epoch: [0-5][800/1000]	Time 0.786 (0.673)	Data 0.020 (0.029)	Loss 0.295 (0.061)
+Epoch: [0-5][1000/1000]	Time 0.597 (0.677)	Data 0.009 (0.028)	Loss 0.047 (0.060)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.926 (1.171)	Data 0.000 (0.014)	
+Extract Features: [200/542]	Time 0.978 (1.137)	Data 0.000 (0.007)	
+Extract Features: [300/542]	Time 1.266 (1.142)	Data 0.000 (0.005)	
+Extract Features: [400/542]	Time 1.127 (1.176)	Data 0.000 (0.004)	
+Extract Features: [500/542]	Time 1.263 (1.143)	Data 0.000 (0.003)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [0-6][200/1000]	Time 0.525 (0.602)	Data 0.022 (0.112)	Loss 0.118 (0.056)
+Epoch: [0-6][400/1000]	Time 0.498 (0.558)	Data 0.022 (0.067)	Loss 0.000 (0.056)
+Epoch: [0-6][600/1000]	Time 0.534 (0.542)	Data 0.021 (0.052)	Loss 0.024 (0.057)
+Epoch: [0-6][800/1000]	Time 0.508 (0.534)	Data 0.018 (0.044)	Loss 0.033 (0.056)
+Epoch: [0-6][1000/1000]	Time 0.502 (0.529)	Data 0.009 (0.040)	Loss 0.000 (0.055)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.806 (0.806)	Data 0.000 (0.017)	
+Extract Features: [200/542]	Time 0.796 (0.799)	Data 0.000 (0.008)	
+Extract Features: [300/542]	Time 1.514 (0.802)	Data 0.733 (0.012)	
+Extract Features: [400/542]	Time 0.812 (0.811)	Data 0.000 (0.019)	
+Extract Features: [500/542]	Time 0.785 (0.809)	Data 0.000 (0.015)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [0-7][200/320]	Time 0.503 (0.643)	Data 0.022 (0.156)	Loss 0.022 (0.055)
+Extract Features: [100/551]	Time 1.078 (1.082)	Data 0.306 (0.298)	
+Extract Features: [200/551]	Time 1.125 (1.021)	Data 0.348 (0.234)	
+Extract Features: [300/551]	Time 1.101 (1.040)	Data 0.311 (0.252)	
+Extract Features: [400/551]	Time 0.859 (1.006)	Data 0.070 (0.215)	
+Extract Features: [500/551]	Time 0.806 (0.972)	Data 0.000 (0.177)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          75.1%
+  top-5          88.3%
+  top-10         92.2%
+
+ * Finished epoch   0 recall@1: 75.1%  recall@5: 88.3%  recall@10: 92.2%  best@5: 88.3% *
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 1.027 (1.046)	Data 0.256 (0.266)	
+Extract Features: [200/542]	Time 1.058 (0.994)	Data 0.288 (0.212)	
+Extract Features: [300/542]	Time 1.767 (0.978)	Data 0.802 (0.192)	
+Extract Features: [400/542]	Time 0.852 (0.965)	Data 0.000 (0.157)	
+Extract Features: [500/542]	Time 0.979 (0.947)	Data 0.000 (0.127)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [1-0][200/1000]	Time 0.783 (0.730)	Data 0.022 (0.054)	Loss 0.032 (0.057)
+Epoch: [1-0][400/1000]	Time 0.537 (0.713)	Data 0.018 (0.039)	Loss 0.040 (0.057)
+Epoch: [1-0][600/1000]	Time 0.813 (0.661)	Data 0.024 (0.033)	Loss 0.045 (0.061)
+Epoch: [1-0][800/1000]	Time 0.668 (0.643)	Data 0.018 (0.030)	Loss 0.007 (0.061)
+Epoch: [1-0][1000/1000]	Time 0.511 (0.648)	Data 0.009 (0.028)	Loss 0.015 (0.060)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.882 (0.923)	Data 0.000 (0.012)	
+Extract Features: [200/542]	Time 1.137 (0.940)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 1.134 (0.991)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 1.354 (1.035)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 1.205 (1.064)	Data 0.000 (0.003)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [1-1][200/1000]	Time 0.612 (0.648)	Data 0.018 (0.032)	Loss 0.000 (0.061)
+Epoch: [1-1][400/1000]	Time 0.646 (0.648)	Data 0.022 (0.027)	Loss 0.022 (0.056)
+Epoch: [1-1][600/1000]	Time 0.707 (0.643)	Data 0.017 (0.025)	Loss 0.000 (0.054)
+Epoch: [1-1][800/1000]	Time 0.491 (0.653)	Data 0.020 (0.024)	Loss 0.000 (0.055)
+Epoch: [1-1][1000/1000]	Time 0.531 (0.649)	Data 0.008 (0.024)	Loss 0.027 (0.057)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.764 (0.895)	Data 0.000 (0.012)	
+Extract Features: [200/542]	Time 0.989 (0.899)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 1.261 (0.942)	Data 0.000 (0.009)	
+Extract Features: [400/542]	Time 0.789 (0.980)	Data 0.000 (0.007)	
+Extract Features: [500/542]	Time 1.221 (0.977)	Data 0.000 (0.005)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [1-2][200/1000]	Time 0.689 (0.564)	Data 0.028 (0.030)	Loss 0.028 (0.065)
+Epoch: [1-2][400/1000]	Time 0.575 (0.620)	Data 0.026 (0.026)	Loss 0.216 (0.056)
+Epoch: [1-2][600/1000]	Time 0.742 (0.626)	Data 0.016 (0.024)	Loss 0.000 (0.054)
+Epoch: [1-2][800/1000]	Time 0.745 (0.656)	Data 0.019 (0.024)	Loss 0.003 (0.053)
+Epoch: [1-2][1000/1000]	Time 0.679 (0.672)	Data 0.009 (0.023)	Loss 0.000 (0.052)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.870 (1.021)	Data 0.000 (0.012)	
+Extract Features: [200/542]	Time 1.287 (1.025)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.922 (1.025)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.970 (1.031)	Data 0.000 (0.007)	
+Extract Features: [500/542]	Time 1.290 (1.019)	Data 0.000 (0.006)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [1-3][200/1000]	Time 0.642 (0.722)	Data 0.019 (0.088)	Loss 0.000 (0.061)
+Epoch: [1-3][400/1000]	Time 0.526 (0.664)	Data 0.020 (0.055)	Loss 0.000 (0.057)
+Epoch: [1-3][600/1000]	Time 0.651 (0.655)	Data 0.029 (0.044)	Loss 0.000 (0.057)
+Epoch: [1-3][800/1000]	Time 0.595 (0.647)	Data 0.019 (0.039)	Loss 0.047 (0.055)
+Epoch: [1-3][1000/1000]	Time 0.798 (0.668)	Data 0.011 (0.036)	Loss 0.000 (0.055)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.815 (1.141)	Data 0.000 (0.014)	
+Extract Features: [200/542]	Time 0.837 (0.995)	Data 0.000 (0.007)	
+Extract Features: [300/542]	Time 1.134 (0.997)	Data 0.000 (0.005)	
+Extract Features: [400/542]	Time 1.130 (1.017)	Data 0.000 (0.004)	
+Extract Features: [500/542]	Time 0.782 (1.025)	Data 0.000 (0.003)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [1-4][200/1000]	Time 0.549 (0.603)	Data 0.019 (0.029)	Loss 0.011 (0.055)
+Epoch: [1-4][400/1000]	Time 0.800 (0.606)	Data 0.020 (0.025)	Loss 0.183 (0.055)
+Epoch: [1-4][600/1000]	Time 0.528 (0.617)	Data 0.019 (0.024)	Loss 0.007 (0.054)
+Epoch: [1-4][800/1000]	Time 0.828 (0.645)	Data 0.020 (0.023)	Loss 0.057 (0.053)
+Epoch: [1-4][1000/1000]	Time 0.697 (0.665)	Data 0.009 (0.023)	Loss 0.005 (0.054)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.963 (0.952)	Data 0.000 (0.012)	
+Extract Features: [200/542]	Time 1.267 (1.000)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.810 (0.968)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.964 (0.960)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 1.034 (0.980)	Data 0.000 (0.003)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [1-5][200/1000]	Time 0.598 (0.615)	Data 0.023 (0.032)	Loss 0.014 (0.064)
+Epoch: [1-5][400/1000]	Time 0.501 (0.659)	Data 0.018 (0.027)	Loss 0.000 (0.051)
+Epoch: [1-5][600/1000]	Time 0.709 (0.683)	Data 0.018 (0.026)	Loss 0.000 (0.053)
+Epoch: [1-5][800/1000]	Time 0.522 (0.683)	Data 0.019 (0.025)	Loss 0.000 (0.055)
+Epoch: [1-5][1000/1000]	Time 0.582 (0.671)	Data 0.009 (0.024)	Loss 0.000 (0.055)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.840 (0.930)	Data 0.000 (0.012)	
+Extract Features: [200/542]	Time 0.785 (0.930)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 1.198 (0.949)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 1.212 (0.989)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.997 (0.999)	Data 0.000 (0.003)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [1-6][200/1000]	Time 0.574 (0.643)	Data 0.015 (0.028)	Loss 0.072 (0.042)
+Epoch: [1-6][400/1000]	Time 0.847 (0.674)	Data 0.020 (0.025)	Loss 0.000 (0.047)
+Epoch: [1-6][600/1000]	Time 0.678 (0.694)	Data 0.019 (0.024)	Loss 0.082 (0.049)
+Epoch: [1-6][800/1000]	Time 0.770 (0.698)	Data 0.020 (0.024)	Loss 0.000 (0.050)
+Epoch: [1-6][1000/1000]	Time 0.670 (0.704)	Data 0.009 (0.023)	Loss 0.000 (0.049)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 1.170 (1.149)	Data 0.000 (0.012)	
+Extract Features: [200/542]	Time 0.869 (1.133)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.891 (1.048)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.847 (0.994)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.838 (0.964)	Data 0.000 (0.003)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [1-7][200/320]	Time 0.511 (0.581)	Data 0.024 (0.031)	Loss 0.000 (0.043)
+Extract Features: [100/551]	Time 0.935 (1.075)	Data 0.152 (0.179)	
+Extract Features: [200/551]	Time 1.411 (1.069)	Data 0.097 (0.102)	
+Extract Features: [300/551]	Time 1.294 (1.068)	Data 0.315 (0.095)	
+Extract Features: [400/551]	Time 1.063 (1.035)	Data 0.000 (0.073)	
+Extract Features: [500/551]	Time 0.921 (1.027)	Data 0.000 (0.059)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          77.2%
+  top-5          91.2%
+  top-10         94.5%
+
+ * Finished epoch   1 recall@1: 77.2%  recall@5: 91.2%  recall@10: 94.5%  best@5: 91.2% *
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.942 (1.034)	Data 0.000 (0.067)	
+Extract Features: [200/542]	Time 0.807 (0.966)	Data 0.000 (0.033)	
+Extract Features: [300/542]	Time 1.537 (0.962)	Data 0.651 (0.027)	
+Extract Features: [400/542]	Time 0.962 (0.961)	Data 0.000 (0.028)	
+Extract Features: [500/542]	Time 0.949 (0.966)	Data 0.000 (0.023)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [2-0][200/1000]	Time 0.679 (0.666)	Data 0.019 (0.035)	Loss 0.000 (0.051)
+Epoch: [2-0][400/1000]	Time 0.585 (0.657)	Data 0.017 (0.028)	Loss 0.000 (0.047)
+Epoch: [2-0][600/1000]	Time 0.498 (0.657)	Data 0.017 (0.026)	Loss 0.162 (0.045)
+Epoch: [2-0][800/1000]	Time 0.570 (0.646)	Data 0.019 (0.025)	Loss 0.208 (0.047)
+Epoch: [2-0][1000/1000]	Time 0.514 (0.636)	Data 0.009 (0.024)	Loss 0.036 (0.047)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 1.313 (1.137)	Data 0.000 (0.012)	
+Extract Features: [200/542]	Time 1.113 (1.167)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 1.082 (1.157)	Data 0.000 (0.005)	
+Extract Features: [400/542]	Time 1.774 (1.148)	Data 0.000 (0.004)	
+Extract Features: [500/542]	Time 1.258 (1.139)	Data 0.000 (0.003)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [2-1][200/1000]	Time 0.644 (0.593)	Data 0.028 (0.040)	Loss 0.152 (0.041)
+Epoch: [2-1][400/1000]	Time 0.552 (0.552)	Data 0.020 (0.031)	Loss 0.023 (0.043)
+Epoch: [2-1][600/1000]	Time 0.481 (0.533)	Data 0.018 (0.027)	Loss 0.051 (0.045)
+Epoch: [2-1][800/1000]	Time 0.501 (0.523)	Data 0.018 (0.026)	Loss 0.005 (0.045)
+Epoch: [2-1][1000/1000]	Time 0.475 (0.517)	Data 0.008 (0.025)	Loss 0.001 (0.046)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.766 (0.779)	Data 0.000 (0.012)	
+Extract Features: [200/542]	Time 0.771 (0.772)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 1.566 (0.783)	Data 0.816 (0.016)	
+Extract Features: [400/542]	Time 0.766 (0.790)	Data 0.000 (0.020)	
+Extract Features: [500/542]	Time 0.758 (0.787)	Data 0.000 (0.016)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [2-2][200/1000]	Time 0.477 (0.505)	Data 0.019 (0.029)	Loss 0.021 (0.053)
+Epoch: [2-2][400/1000]	Time 0.495 (0.498)	Data 0.018 (0.025)	Loss 0.038 (0.054)
+Epoch: [2-2][600/1000]	Time 0.499 (0.496)	Data 0.018 (0.024)	Loss 0.066 (0.054)
+Epoch: [2-2][800/1000]	Time 0.512 (0.496)	Data 0.022 (0.023)	Loss 0.000 (0.052)
+Epoch: [2-2][1000/1000]	Time 0.466 (0.495)	Data 0.008 (0.023)	Loss 0.000 (0.051)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.760 (0.773)	Data 0.000 (0.012)	
+Extract Features: [200/542]	Time 0.786 (0.768)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.975 (0.766)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.761 (0.766)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.756 (0.765)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [2-3][200/1000]	Time 0.482 (0.506)	Data 0.021 (0.034)	Loss 0.084 (0.046)
+Epoch: [2-3][400/1000]	Time 0.474 (0.499)	Data 0.015 (0.027)	Loss 0.000 (0.050)
+Epoch: [2-3][600/1000]	Time 0.492 (0.497)	Data 0.023 (0.025)	Loss 0.062 (0.046)
+Epoch: [2-3][800/1000]	Time 0.497 (0.496)	Data 0.018 (0.024)	Loss 0.000 (0.047)
+Epoch: [2-3][1000/1000]	Time 0.464 (0.495)	Data 0.008 (0.023)	Loss 0.000 (0.047)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.766 (0.776)	Data 0.000 (0.013)	
+Extract Features: [200/542]	Time 0.756 (0.769)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.774 (0.769)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.776 (0.771)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.766 (0.773)	Data 0.000 (0.003)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [2-4][200/1000]	Time 0.507 (0.500)	Data 0.018 (0.028)	Loss 0.000 (0.050)
+Epoch: [2-4][400/1000]	Time 0.484 (0.496)	Data 0.020 (0.024)	Loss 0.006 (0.048)
+Epoch: [2-4][600/1000]	Time 0.492 (0.494)	Data 0.028 (0.023)	Loss 0.002 (0.047)
+Epoch: [2-4][800/1000]	Time 0.502 (0.494)	Data 0.023 (0.023)	Loss 0.000 (0.044)
+Epoch: [2-4][1000/1000]	Time 0.468 (0.494)	Data 0.009 (0.022)	Loss 0.015 (0.043)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.763 (0.773)	Data 0.000 (0.011)	
+Extract Features: [200/542]	Time 0.768 (0.769)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.777 (0.767)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.759 (0.769)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.756 (0.767)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [2-5][200/1000]	Time 0.489 (0.504)	Data 0.025 (0.030)	Loss 0.033 (0.030)
+Epoch: [2-5][400/1000]	Time 0.583 (0.502)	Data 0.048 (0.026)	Loss 0.000 (0.035)
+Epoch: [2-5][600/1000]	Time 0.482 (0.501)	Data 0.018 (0.024)	Loss 0.004 (0.041)
+Epoch: [2-5][800/1000]	Time 0.503 (0.501)	Data 0.020 (0.024)	Loss 0.000 (0.042)
+Epoch: [2-5][1000/1000]	Time 0.472 (0.500)	Data 0.008 (0.023)	Loss 0.000 (0.044)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.770 (0.785)	Data 0.000 (0.011)	
+Extract Features: [200/542]	Time 0.771 (0.783)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.786 (0.783)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.791 (0.785)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.764 (0.787)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [2-6][200/1000]	Time 0.523 (0.508)	Data 0.027 (0.029)	Loss 0.000 (0.053)
+Epoch: [2-6][400/1000]	Time 0.482 (0.505)	Data 0.019 (0.026)	Loss 0.022 (0.051)
+Epoch: [2-6][600/1000]	Time 0.494 (0.504)	Data 0.024 (0.024)	Loss 0.000 (0.048)
+Epoch: [2-6][800/1000]	Time 0.495 (0.503)	Data 0.019 (0.024)	Loss 0.004 (0.049)
+Epoch: [2-6][1000/1000]	Time 0.484 (0.503)	Data 0.012 (0.023)	Loss 0.000 (0.048)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.750 (0.790)	Data 0.000 (0.012)	
+Extract Features: [200/542]	Time 0.761 (0.781)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.762 (0.776)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.786 (0.777)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.776 (0.777)	Data 0.000 (0.003)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [2-7][200/320]	Time 0.499 (0.518)	Data 0.019 (0.039)	Loss 0.095 (0.037)
+Extract Features: [100/551]	Time 1.015 (1.079)	Data 0.256 (0.307)	
+Extract Features: [200/551]	Time 0.926 (1.005)	Data 0.165 (0.232)	
+Extract Features: [300/551]	Time 1.098 (1.028)	Data 0.321 (0.255)	
+Extract Features: [400/551]	Time 0.759 (1.002)	Data 0.000 (0.224)	
+Extract Features: [500/551]	Time 0.804 (0.967)	Data 0.020 (0.186)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          77.3%
+  top-5          91.2%
+  top-10         94.7%
+
+ * Finished epoch   2 recall@1: 77.3%  recall@5: 91.2%  recall@10: 94.7%  best@5: 91.2%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.786 (0.854)	Data 0.000 (0.071)	
+Extract Features: [200/542]	Time 0.782 (0.821)	Data 0.000 (0.036)	
+Extract Features: [300/542]	Time 0.761 (0.804)	Data 0.000 (0.024)	
+Extract Features: [400/542]	Time 0.780 (0.798)	Data 0.000 (0.018)	
+Extract Features: [500/542]	Time 0.763 (0.793)	Data 0.000 (0.014)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [3-0][200/1000]	Time 0.512 (0.500)	Data 0.019 (0.027)	Loss 0.113 (0.037)
+Epoch: [3-0][400/1000]	Time 0.496 (0.497)	Data 0.018 (0.024)	Loss 0.218 (0.035)
+Epoch: [3-0][600/1000]	Time 0.486 (0.496)	Data 0.021 (0.023)	Loss 0.000 (0.037)
+Epoch: [3-0][800/1000]	Time 0.489 (0.495)	Data 0.025 (0.022)	Loss 0.007 (0.036)
+Epoch: [3-0][1000/1000]	Time 0.462 (0.495)	Data 0.009 (0.022)	Loss 0.000 (0.037)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.744 (0.766)	Data 0.000 (0.011)	
+Extract Features: [200/542]	Time 0.747 (0.760)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.888 (0.759)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.770 (0.761)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.763 (0.762)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [3-1][200/1000]	Time 0.503 (0.501)	Data 0.020 (0.028)	Loss 0.267 (0.042)
+Epoch: [3-1][400/1000]	Time 0.495 (0.497)	Data 0.026 (0.024)	Loss 0.009 (0.045)
+Epoch: [3-1][600/1000]	Time 0.477 (0.495)	Data 0.020 (0.023)	Loss 0.002 (0.044)
+Epoch: [3-1][800/1000]	Time 0.488 (0.495)	Data 0.021 (0.022)	Loss 0.000 (0.042)
+Epoch: [3-1][1000/1000]	Time 0.468 (0.495)	Data 0.008 (0.022)	Loss 0.183 (0.041)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.742 (0.765)	Data 0.000 (0.011)	
+Extract Features: [200/542]	Time 0.746 (0.763)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.762 (0.760)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.791 (0.763)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.769 (0.767)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [3-2][200/1000]	Time 0.507 (0.501)	Data 0.019 (0.026)	Loss 0.000 (0.043)
+Epoch: [3-2][400/1000]	Time 0.483 (0.497)	Data 0.019 (0.023)	Loss 0.039 (0.046)
+Epoch: [3-2][600/1000]	Time 0.492 (0.496)	Data 0.022 (0.022)	Loss 0.024 (0.045)
+Epoch: [3-2][800/1000]	Time 0.481 (0.495)	Data 0.019 (0.022)	Loss 0.151 (0.045)
+Epoch: [3-2][1000/1000]	Time 0.522 (0.494)	Data 0.009 (0.022)	Loss 0.000 (0.043)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.741 (0.765)	Data 0.000 (0.012)	
+Extract Features: [200/542]	Time 0.742 (0.760)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.756 (0.759)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.762 (0.761)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.760 (0.762)	Data 0.000 (0.003)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [3-3][200/1000]	Time 0.496 (0.508)	Data 0.017 (0.034)	Loss 0.011 (0.046)
+Epoch: [3-3][400/1000]	Time 0.487 (0.500)	Data 0.023 (0.027)	Loss 0.049 (0.043)
+Epoch: [3-3][600/1000]	Time 0.492 (0.497)	Data 0.021 (0.025)	Loss 0.000 (0.041)
+Epoch: [3-3][800/1000]	Time 0.510 (0.496)	Data 0.019 (0.024)	Loss 0.000 (0.039)
+Epoch: [3-3][1000/1000]	Time 0.466 (0.495)	Data 0.009 (0.023)	Loss 0.000 (0.039)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.743 (0.765)	Data 0.000 (0.011)	
+Extract Features: [200/542]	Time 0.738 (0.759)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.758 (0.758)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.769 (0.765)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.763 (0.768)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [3-4][200/1000]	Time 0.482 (0.497)	Data 0.024 (0.027)	Loss 0.008 (0.041)
+Epoch: [3-4][400/1000]	Time 0.484 (0.495)	Data 0.018 (0.024)	Loss 0.000 (0.043)
+Epoch: [3-4][600/1000]	Time 0.490 (0.494)	Data 0.028 (0.023)	Loss 0.110 (0.040)
+Epoch: [3-4][800/1000]	Time 0.482 (0.494)	Data 0.021 (0.022)	Loss 0.002 (0.040)
+Epoch: [3-4][1000/1000]	Time 0.464 (0.494)	Data 0.008 (0.022)	Loss 0.011 (0.039)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.747 (0.774)	Data 0.000 (0.016)	
+Extract Features: [200/542]	Time 0.742 (0.764)	Data 0.000 (0.008)	
+Extract Features: [300/542]	Time 0.763 (0.761)	Data 0.000 (0.005)	
+Extract Features: [400/542]	Time 0.758 (0.763)	Data 0.000 (0.004)	
+Extract Features: [500/542]	Time 0.757 (0.763)	Data 0.000 (0.003)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [3-5][200/1000]	Time 0.507 (0.498)	Data 0.022 (0.027)	Loss 0.000 (0.036)
+Epoch: [3-5][400/1000]	Time 0.488 (0.496)	Data 0.018 (0.024)	Loss 0.132 (0.033)
+Epoch: [3-5][600/1000]	Time 0.488 (0.495)	Data 0.021 (0.022)	Loss 0.286 (0.036)
+Epoch: [3-5][800/1000]	Time 0.484 (0.495)	Data 0.018 (0.022)	Loss 0.000 (0.036)
+Epoch: [3-5][1000/1000]	Time 0.468 (0.495)	Data 0.009 (0.022)	Loss 0.015 (0.037)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.747 (0.766)	Data 0.000 (0.011)	
+Extract Features: [200/542]	Time 0.745 (0.760)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 1.044 (0.759)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.762 (0.761)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.762 (0.762)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [3-6][200/1000]	Time 0.479 (0.498)	Data 0.019 (0.027)	Loss 0.030 (0.048)
+Epoch: [3-6][400/1000]	Time 0.495 (0.496)	Data 0.017 (0.024)	Loss 0.000 (0.046)
+Epoch: [3-6][600/1000]	Time 0.488 (0.496)	Data 0.018 (0.023)	Loss 0.002 (0.041)
+Epoch: [3-6][800/1000]	Time 0.488 (0.495)	Data 0.019 (0.022)	Loss 0.110 (0.041)
+Epoch: [3-6][1000/1000]	Time 0.472 (0.495)	Data 0.010 (0.022)	Loss 0.000 (0.042)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.740 (0.775)	Data 0.000 (0.016)	
+Extract Features: [200/542]	Time 0.740 (0.765)	Data 0.000 (0.008)	
+Extract Features: [300/542]	Time 0.775 (0.761)	Data 0.000 (0.005)	
+Extract Features: [400/542]	Time 0.766 (0.763)	Data 0.000 (0.004)	
+Extract Features: [500/542]	Time 0.758 (0.764)	Data 0.000 (0.003)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [3-7][200/320]	Time 0.481 (0.504)	Data 0.016 (0.031)	Loss 0.000 (0.048)
+Extract Features: [100/551]	Time 0.964 (1.030)	Data 0.220 (0.264)	
+Extract Features: [200/551]	Time 0.895 (0.979)	Data 0.151 (0.212)	
+Extract Features: [300/551]	Time 1.100 (1.001)	Data 0.339 (0.234)	
+Extract Features: [400/551]	Time 0.902 (0.979)	Data 0.109 (0.210)	
+Extract Features: [500/551]	Time 0.759 (0.953)	Data 0.000 (0.181)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          76.4%
+  top-5          89.4%
+  top-10         92.8%
+
+ * Finished epoch   3 recall@1: 76.4%  recall@5: 89.4%  recall@10: 92.8%  best@5: 91.2%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.746 (0.798)	Data 0.000 (0.035)	
+Extract Features: [200/542]	Time 0.761 (0.781)	Data 0.000 (0.017)	
+Extract Features: [300/542]	Time 0.760 (0.776)	Data 0.000 (0.012)	
+Extract Features: [400/542]	Time 0.780 (0.778)	Data 0.000 (0.009)	
+Extract Features: [500/542]	Time 0.765 (0.778)	Data 0.000 (0.007)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [4-0][200/1000]	Time 0.487 (0.500)	Data 0.026 (0.027)	Loss 0.000 (0.023)
+Epoch: [4-0][400/1000]	Time 0.477 (0.496)	Data 0.016 (0.024)	Loss 0.014 (0.031)
+Epoch: [4-0][600/1000]	Time 0.492 (0.496)	Data 0.023 (0.023)	Loss 0.000 (0.032)
+Epoch: [4-0][800/1000]	Time 0.485 (0.495)	Data 0.018 (0.022)	Loss 0.128 (0.033)
+Epoch: [4-0][1000/1000]	Time 0.465 (0.495)	Data 0.008 (0.022)	Loss 0.000 (0.033)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.745 (0.764)	Data 0.000 (0.011)	
+Extract Features: [200/542]	Time 0.747 (0.759)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 1.031 (0.759)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.766 (0.761)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.756 (0.762)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [4-1][200/1000]	Time 0.486 (0.501)	Data 0.020 (0.027)	Loss 0.000 (0.046)
+Epoch: [4-1][400/1000]	Time 0.481 (0.496)	Data 0.019 (0.023)	Loss 0.000 (0.043)
+Epoch: [4-1][600/1000]	Time 0.482 (0.495)	Data 0.020 (0.022)	Loss 0.000 (0.043)
+Epoch: [4-1][800/1000]	Time 0.485 (0.495)	Data 0.021 (0.022)	Loss 0.000 (0.043)
+Epoch: [4-1][1000/1000]	Time 0.468 (0.494)	Data 0.008 (0.022)	Loss 0.000 (0.041)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.734 (0.766)	Data 0.000 (0.011)	
+Extract Features: [200/542]	Time 0.743 (0.761)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.978 (0.760)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.783 (0.767)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.781 (0.770)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [4-2][200/1000]	Time 0.481 (0.500)	Data 0.019 (0.026)	Loss 0.000 (0.032)
+Epoch: [4-2][400/1000]	Time 0.510 (0.496)	Data 0.019 (0.023)	Loss 0.011 (0.031)
+Epoch: [4-2][600/1000]	Time 0.491 (0.496)	Data 0.026 (0.023)	Loss 0.246 (0.036)
+Epoch: [4-2][800/1000]	Time 0.488 (0.495)	Data 0.016 (0.022)	Loss 0.000 (0.036)
+Epoch: [4-2][1000/1000]	Time 0.475 (0.495)	Data 0.008 (0.022)	Loss 0.170 (0.037)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.735 (0.766)	Data 0.000 (0.011)	
+Extract Features: [200/542]	Time 0.743 (0.760)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.938 (0.759)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.765 (0.761)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.757 (0.762)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [4-3][200/1000]	Time 0.476 (0.502)	Data 0.016 (0.030)	Loss 0.141 (0.033)
+Epoch: [4-3][400/1000]	Time 0.495 (0.497)	Data 0.022 (0.025)	Loss 0.029 (0.037)
+Epoch: [4-3][600/1000]	Time 0.484 (0.496)	Data 0.029 (0.024)	Loss 0.188 (0.039)
+Epoch: [4-3][800/1000]	Time 0.501 (0.495)	Data 0.018 (0.023)	Loss 0.003 (0.038)
+Epoch: [4-3][1000/1000]	Time 0.460 (0.495)	Data 0.008 (0.022)	Loss 0.000 (0.038)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.742 (0.766)	Data 0.000 (0.011)	
+Extract Features: [200/542]	Time 0.738 (0.760)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.775 (0.760)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.789 (0.766)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.779 (0.769)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [4-4][200/1000]	Time 0.491 (0.500)	Data 0.019 (0.027)	Loss 0.005 (0.036)
+Epoch: [4-4][400/1000]	Time 0.484 (0.498)	Data 0.022 (0.023)	Loss 0.205 (0.036)
+Epoch: [4-4][600/1000]	Time 0.489 (0.497)	Data 0.017 (0.023)	Loss 0.000 (0.034)
+Epoch: [4-4][800/1000]	Time 0.482 (0.496)	Data 0.018 (0.022)	Loss 0.000 (0.034)
+Epoch: [4-4][1000/1000]	Time 0.464 (0.496)	Data 0.008 (0.022)	Loss 0.014 (0.036)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.742 (0.765)	Data 0.000 (0.011)	
+Extract Features: [200/542]	Time 0.744 (0.759)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.763 (0.758)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.767 (0.760)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.759 (0.762)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [4-5][200/1000]	Time 0.501 (0.502)	Data 0.019 (0.029)	Loss 0.012 (0.030)
+Epoch: [4-5][400/1000]	Time 0.486 (0.497)	Data 0.019 (0.025)	Loss 0.019 (0.034)
+Epoch: [4-5][600/1000]	Time 0.486 (0.496)	Data 0.017 (0.023)	Loss 0.235 (0.037)
+Epoch: [4-5][800/1000]	Time 0.485 (0.495)	Data 0.017 (0.023)	Loss 0.121 (0.038)
+Epoch: [4-5][1000/1000]	Time 0.463 (0.495)	Data 0.008 (0.022)	Loss 0.020 (0.037)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.738 (0.773)	Data 0.000 (0.012)	
+Extract Features: [200/542]	Time 0.744 (0.764)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.759 (0.762)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.772 (0.768)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.779 (0.769)	Data 0.000 (0.003)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [4-6][200/1000]	Time 0.485 (0.500)	Data 0.021 (0.027)	Loss 0.036 (0.040)
+Epoch: [4-6][400/1000]	Time 0.486 (0.497)	Data 0.018 (0.024)	Loss 0.022 (0.033)
+Epoch: [4-6][600/1000]	Time 0.476 (0.496)	Data 0.021 (0.023)	Loss 0.035 (0.033)
+Epoch: [4-6][800/1000]	Time 0.483 (0.496)	Data 0.018 (0.022)	Loss 0.000 (0.036)
+Epoch: [4-6][1000/1000]	Time 0.477 (0.495)	Data 0.008 (0.022)	Loss 0.035 (0.036)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.737 (0.768)	Data 0.000 (0.015)	
+Extract Features: [200/542]	Time 0.744 (0.760)	Data 0.000 (0.008)	
+Extract Features: [300/542]	Time 0.752 (0.758)	Data 0.000 (0.005)	
+Extract Features: [400/542]	Time 0.769 (0.760)	Data 0.000 (0.004)	
+Extract Features: [500/542]	Time 0.763 (0.762)	Data 0.000 (0.003)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [4-7][200/320]	Time 0.483 (0.503)	Data 0.020 (0.029)	Loss 0.000 (0.038)
+Extract Features: [100/551]	Time 1.058 (1.070)	Data 0.318 (0.311)	
+Extract Features: [200/551]	Time 0.998 (0.996)	Data 0.253 (0.234)	
+Extract Features: [300/551]	Time 0.926 (1.018)	Data 0.096 (0.256)	
+Extract Features: [400/551]	Time 0.843 (0.988)	Data 0.084 (0.223)	
+Extract Features: [500/551]	Time 0.776 (0.952)	Data 0.000 (0.185)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          75.6%
+  top-5          89.3%
+  top-10         93.4%
+
+ * Finished epoch   4 recall@1: 75.6%  recall@5: 89.3%  recall@10: 93.4%  best@5: 91.2%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.742 (0.809)	Data 0.000 (0.046)	
+Extract Features: [200/542]	Time 0.747 (0.793)	Data 0.000 (0.031)	
+Extract Features: [300/542]	Time 1.433 (0.791)	Data 0.683 (0.030)	
+Extract Features: [400/542]	Time 0.780 (0.791)	Data 0.000 (0.025)	
+Extract Features: [500/542]	Time 0.767 (0.789)	Data 0.000 (0.020)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [5-0][200/2000]	Time 0.475 (0.501)	Data 0.018 (0.028)	Loss 0.092 (0.029)
+Epoch: [5-0][400/2000]	Time 0.510 (0.497)	Data 0.025 (0.024)	Loss 0.001 (0.033)
+Epoch: [5-0][600/2000]	Time 0.494 (0.496)	Data 0.020 (0.023)	Loss 0.004 (0.033)
+Epoch: [5-0][800/2000]	Time 0.486 (0.495)	Data 0.018 (0.022)	Loss 0.026 (0.033)
+Epoch: [5-0][1000/2000]	Time 0.487 (0.495)	Data 0.018 (0.022)	Loss 0.096 (0.032)
+Epoch: [5-0][1200/2000]	Time 0.479 (0.495)	Data 0.021 (0.022)	Loss 0.000 (0.032)
+Epoch: [5-0][1400/2000]	Time 0.492 (0.495)	Data 0.022 (0.022)	Loss 0.028 (0.032)
+Epoch: [5-0][1600/2000]	Time 0.487 (0.494)	Data 0.022 (0.021)	Loss 0.000 (0.032)
+Epoch: [5-0][1800/2000]	Time 0.480 (0.494)	Data 0.017 (0.021)	Loss 0.000 (0.032)
+Epoch: [5-0][2000/2000]	Time 0.476 (0.494)	Data 0.009 (0.021)	Loss 0.061 (0.031)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.732 (0.764)	Data 0.000 (0.011)	
+Extract Features: [200/542]	Time 0.739 (0.758)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.755 (0.758)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.760 (0.760)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.764 (0.761)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [5-1][200/2000]	Time 0.493 (0.501)	Data 0.018 (0.027)	Loss 0.010 (0.027)
+Epoch: [5-1][400/2000]	Time 0.481 (0.497)	Data 0.019 (0.024)	Loss 0.032 (0.024)
+Epoch: [5-1][600/2000]	Time 0.486 (0.496)	Data 0.019 (0.023)	Loss 0.009 (0.026)
+Epoch: [5-1][800/2000]	Time 0.509 (0.495)	Data 0.020 (0.022)	Loss 0.037 (0.024)
+Epoch: [5-1][1000/2000]	Time 0.486 (0.495)	Data 0.019 (0.022)	Loss 0.000 (0.023)
+Epoch: [5-1][1200/2000]	Time 0.485 (0.494)	Data 0.022 (0.022)	Loss 0.002 (0.023)
+Epoch: [5-1][1400/2000]	Time 0.475 (0.494)	Data 0.016 (0.021)	Loss 0.000 (0.024)
+Epoch: [5-1][1600/2000]	Time 0.491 (0.494)	Data 0.018 (0.021)	Loss 0.115 (0.024)
+Epoch: [5-1][1800/2000]	Time 0.480 (0.494)	Data 0.017 (0.021)	Loss 0.016 (0.023)
+Epoch: [5-1][2000/2000]	Time 0.464 (0.494)	Data 0.008 (0.021)	Loss 0.000 (0.023)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.746 (0.766)	Data 0.000 (0.011)	
+Extract Features: [200/542]	Time 0.814 (0.762)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.782 (0.760)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.785 (0.766)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.759 (0.769)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [5-2][200/2000]	Time 0.484 (0.500)	Data 0.020 (0.026)	Loss 0.003 (0.030)
+Epoch: [5-2][400/2000]	Time 0.479 (0.496)	Data 0.018 (0.023)	Loss 0.105 (0.026)
+Epoch: [5-2][600/2000]	Time 0.484 (0.496)	Data 0.023 (0.023)	Loss 0.000 (0.028)
+Epoch: [5-2][800/2000]	Time 0.490 (0.495)	Data 0.018 (0.022)	Loss 0.010 (0.026)
+Epoch: [5-2][1000/2000]	Time 0.482 (0.495)	Data 0.020 (0.022)	Loss 0.005 (0.026)
+Epoch: [5-2][1200/2000]	Time 0.492 (0.495)	Data 0.024 (0.021)	Loss 0.000 (0.025)
+Epoch: [5-2][1400/2000]	Time 0.483 (0.495)	Data 0.021 (0.021)	Loss 0.000 (0.025)
+Epoch: [5-2][1600/2000]	Time 0.494 (0.494)	Data 0.022 (0.021)	Loss 0.005 (0.024)
+Epoch: [5-2][1800/2000]	Time 0.487 (0.494)	Data 0.019 (0.021)	Loss 0.022 (0.024)
+Epoch: [5-2][2000/2000]	Time 0.469 (0.495)	Data 0.009 (0.021)	Loss 0.000 (0.024)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.739 (0.763)	Data 0.000 (0.012)	
+Extract Features: [200/542]	Time 1.025 (0.759)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.752 (0.758)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.764 (0.760)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.754 (0.761)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [5-3][200/1320]	Time 0.488 (0.499)	Data 0.018 (0.027)	Loss 0.000 (0.023)
+Epoch: [5-3][400/1320]	Time 0.479 (0.495)	Data 0.018 (0.024)	Loss 0.157 (0.022)
+Epoch: [5-3][600/1320]	Time 0.498 (0.494)	Data 0.020 (0.023)	Loss 0.078 (0.023)
+Epoch: [5-3][800/1320]	Time 0.486 (0.494)	Data 0.020 (0.022)	Loss 0.006 (0.023)
+Epoch: [5-3][1000/1320]	Time 0.499 (0.494)	Data 0.018 (0.022)	Loss 0.000 (0.023)
+Epoch: [5-3][1200/1320]	Time 0.492 (0.494)	Data 0.016 (0.022)	Loss 0.000 (0.024)
+Extract Features: [100/551]	Time 0.949 (1.005)	Data 0.198 (0.244)	
+Extract Features: [200/551]	Time 0.903 (0.957)	Data 0.157 (0.196)	
+Extract Features: [300/551]	Time 1.106 (0.983)	Data 0.344 (0.222)	
+Extract Features: [400/551]	Time 1.005 (0.958)	Data 0.248 (0.193)	
+Extract Features: [500/551]	Time 0.763 (0.928)	Data 0.000 (0.161)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          78.4%
+  top-5          91.0%
+  top-10         94.4%
+
+ * Finished epoch   5 recall@1: 78.4%  recall@5: 91.0%  recall@10: 94.4%  best@5: 91.2%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.764 (0.797)	Data 0.000 (0.036)	
+Extract Features: [200/542]	Time 0.741 (0.776)	Data 0.000 (0.018)	
+Extract Features: [300/542]	Time 0.780 (0.770)	Data 0.000 (0.012)	
+Extract Features: [400/542]	Time 0.767 (0.772)	Data 0.000 (0.009)	
+Extract Features: [500/542]	Time 0.763 (0.773)	Data 0.000 (0.007)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [6-0][200/4000]	Time 0.479 (0.499)	Data 0.019 (0.027)	Loss 0.043 (0.023)
+Epoch: [6-0][400/4000]	Time 0.482 (0.495)	Data 0.018 (0.024)	Loss 0.000 (0.026)
+Epoch: [6-0][600/4000]	Time 0.504 (0.494)	Data 0.018 (0.023)	Loss 0.002 (0.025)
+Epoch: [6-0][800/4000]	Time 0.485 (0.494)	Data 0.018 (0.022)	Loss 0.000 (0.024)
+Epoch: [6-0][1000/4000]	Time 0.495 (0.494)	Data 0.029 (0.022)	Loss 0.000 (0.023)
+Epoch: [6-0][1200/4000]	Time 0.482 (0.493)	Data 0.016 (0.022)	Loss 0.013 (0.023)
+Epoch: [6-0][1400/4000]	Time 0.488 (0.493)	Data 0.019 (0.022)	Loss 0.016 (0.022)
+Epoch: [6-0][1600/4000]	Time 0.505 (0.493)	Data 0.026 (0.021)	Loss 0.000 (0.023)
+Epoch: [6-0][1800/4000]	Time 0.488 (0.493)	Data 0.018 (0.021)	Loss 0.001 (0.023)
+Epoch: [6-0][2000/4000]	Time 0.482 (0.494)	Data 0.019 (0.021)	Loss 0.000 (0.022)
+Epoch: [6-0][2200/4000]	Time 0.481 (0.493)	Data 0.019 (0.021)	Loss 0.000 (0.022)
+Epoch: [6-0][2400/4000]	Time 0.504 (0.494)	Data 0.021 (0.021)	Loss 0.000 (0.023)
+Epoch: [6-0][2600/4000]	Time 0.490 (0.494)	Data 0.023 (0.021)	Loss 0.000 (0.023)
+Epoch: [6-0][2800/4000]	Time 0.478 (0.493)	Data 0.017 (0.021)	Loss 0.007 (0.023)
+Epoch: [6-0][3000/4000]	Time 0.482 (0.493)	Data 0.017 (0.021)	Loss 0.021 (0.022)
+Epoch: [6-0][3200/4000]	Time 0.506 (0.493)	Data 0.018 (0.021)	Loss 0.000 (0.022)
+Epoch: [6-0][3400/4000]	Time 0.496 (0.493)	Data 0.019 (0.021)	Loss 0.000 (0.022)
+Epoch: [6-0][3600/4000]	Time 0.480 (0.493)	Data 0.016 (0.021)	Loss 0.009 (0.022)
+Epoch: [6-0][3800/4000]	Time 0.488 (0.493)	Data 0.018 (0.021)	Loss 0.025 (0.022)
+Epoch: [6-0][4000/4000]	Time 0.472 (0.493)	Data 0.009 (0.021)	Loss 0.033 (0.022)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.737 (0.769)	Data 0.000 (0.012)	
+Extract Features: [200/542]	Time 0.746 (0.761)	Data 0.000 (0.006)	
+Extract Features: [300/542]	Time 0.756 (0.758)	Data 0.000 (0.004)	
+Extract Features: [400/542]	Time 0.762 (0.760)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.755 (0.761)	Data 0.000 (0.003)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [6-1][200/3320]	Time 0.504 (0.500)	Data 0.018 (0.027)	Loss 0.208 (0.016)
+Epoch: [6-1][400/3320]	Time 0.481 (0.496)	Data 0.017 (0.023)	Loss 0.000 (0.020)
+Epoch: [6-1][600/3320]	Time 0.487 (0.495)	Data 0.025 (0.023)	Loss 0.078 (0.020)
+Epoch: [6-1][800/3320]	Time 0.512 (0.495)	Data 0.018 (0.022)	Loss 0.003 (0.019)
+Epoch: [6-1][1000/3320]	Time 0.486 (0.495)	Data 0.018 (0.022)	Loss 0.019 (0.019)
+Epoch: [6-1][1200/3320]	Time 0.484 (0.494)	Data 0.017 (0.021)	Loss 0.088 (0.019)
+Epoch: [6-1][1400/3320]	Time 0.502 (0.494)	Data 0.022 (0.021)	Loss 0.000 (0.019)
+Epoch: [6-1][1600/3320]	Time 0.477 (0.494)	Data 0.018 (0.021)	Loss 0.000 (0.019)
+Epoch: [6-1][1800/3320]	Time 0.513 (0.494)	Data 0.022 (0.021)	Loss 0.008 (0.019)
+Epoch: [6-1][2000/3320]	Time 0.488 (0.494)	Data 0.023 (0.021)	Loss 0.000 (0.019)
+Epoch: [6-1][2200/3320]	Time 0.485 (0.494)	Data 0.018 (0.021)	Loss 0.001 (0.019)
+Epoch: [6-1][2400/3320]	Time 0.481 (0.494)	Data 0.020 (0.021)	Loss 0.000 (0.019)
+Epoch: [6-1][2600/3320]	Time 0.499 (0.494)	Data 0.024 (0.021)	Loss 0.000 (0.019)
+Epoch: [6-1][2800/3320]	Time 0.482 (0.494)	Data 0.020 (0.021)	Loss 0.000 (0.019)
+Epoch: [6-1][3000/3320]	Time 0.488 (0.494)	Data 0.021 (0.021)	Loss 0.003 (0.019)
+Epoch: [6-1][3200/3320]	Time 0.485 (0.494)	Data 0.018 (0.021)	Loss 0.017 (0.019)
+Extract Features: [100/551]	Time 0.991 (1.002)	Data 0.250 (0.242)	
+Extract Features: [200/551]	Time 0.888 (0.958)	Data 0.141 (0.195)	
+Extract Features: [300/551]	Time 0.994 (0.984)	Data 0.000 (0.220)	
+Extract Features: [400/551]	Time 0.832 (0.949)	Data 0.071 (0.183)	
+Extract Features: [500/551]	Time 0.853 (0.920)	Data 0.000 (0.151)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          79.1%
+  top-5          91.8%
+  top-10         95.0%
+
+ * Finished epoch   6 recall@1: 79.1%  recall@5: 91.8%  recall@10: 95.0%  best@5: 91.8% *
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.772 (0.809)	Data 0.000 (0.056)	
+Extract Features: [200/542]	Time 0.747 (0.781)	Data 0.000 (0.028)	
+Extract Features: [300/542]	Time 0.778 (0.775)	Data 0.000 (0.019)	
+Extract Features: [400/542]	Time 0.772 (0.779)	Data 0.000 (0.014)	
+Extract Features: [500/542]	Time 0.764 (0.780)	Data 0.000 (0.011)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [7-0][200/7320]	Time 0.493 (0.498)	Data 0.018 (0.027)	Loss 0.046 (0.018)
+Epoch: [7-0][400/7320]	Time 0.489 (0.496)	Data 0.026 (0.024)	Loss 0.000 (0.019)
+Epoch: [7-0][600/7320]	Time 0.495 (0.496)	Data 0.020 (0.023)	Loss 0.033 (0.016)
+Epoch: [7-0][800/7320]	Time 0.482 (0.495)	Data 0.022 (0.022)	Loss 0.019 (0.016)
+Epoch: [7-0][1000/7320]	Time 0.483 (0.495)	Data 0.021 (0.022)	Loss 0.000 (0.017)
+Epoch: [7-0][1200/7320]	Time 0.482 (0.495)	Data 0.018 (0.022)	Loss 0.000 (0.018)
+Epoch: [7-0][1400/7320]	Time 0.518 (0.495)	Data 0.024 (0.022)	Loss 0.010 (0.018)
+Epoch: [7-0][1600/7320]	Time 0.507 (0.495)	Data 0.022 (0.022)	Loss 0.000 (0.018)
+Epoch: [7-0][1800/7320]	Time 0.482 (0.495)	Data 0.018 (0.021)	Loss 0.050 (0.018)
+Epoch: [7-0][2000/7320]	Time 0.490 (0.495)	Data 0.018 (0.021)	Loss 0.000 (0.018)
+Epoch: [7-0][2200/7320]	Time 0.485 (0.495)	Data 0.016 (0.021)	Loss 0.000 (0.018)
+Epoch: [7-0][2400/7320]	Time 0.492 (0.495)	Data 0.024 (0.021)	Loss 0.000 (0.017)
+Epoch: [7-0][2600/7320]	Time 0.506 (0.495)	Data 0.019 (0.021)	Loss 0.001 (0.018)
+Epoch: [7-0][2800/7320]	Time 0.512 (0.494)	Data 0.024 (0.021)	Loss 0.000 (0.017)
+Epoch: [7-0][3000/7320]	Time 0.489 (0.494)	Data 0.024 (0.021)	Loss 0.000 (0.017)
+Epoch: [7-0][3200/7320]	Time 0.497 (0.494)	Data 0.019 (0.021)	Loss 0.000 (0.017)
+Epoch: [7-0][3400/7320]	Time 0.474 (0.494)	Data 0.018 (0.021)	Loss 0.009 (0.018)
+Epoch: [7-0][3600/7320]	Time 0.489 (0.494)	Data 0.019 (0.021)	Loss 0.000 (0.018)
+Epoch: [7-0][3800/7320]	Time 0.491 (0.494)	Data 0.020 (0.021)	Loss 0.000 (0.018)
+Epoch: [7-0][4000/7320]	Time 0.565 (0.494)	Data 0.026 (0.021)	Loss 0.004 (0.018)
+Epoch: [7-0][4200/7320]	Time 0.491 (0.494)	Data 0.025 (0.021)	Loss 0.000 (0.018)
+Epoch: [7-0][4400/7320]	Time 0.497 (0.494)	Data 0.020 (0.021)	Loss 0.022 (0.018)
+Epoch: [7-0][4600/7320]	Time 0.495 (0.494)	Data 0.024 (0.021)	Loss 0.000 (0.018)
+Epoch: [7-0][4800/7320]	Time 0.486 (0.494)	Data 0.019 (0.021)	Loss 0.000 (0.018)
+Epoch: [7-0][5000/7320]	Time 0.492 (0.494)	Data 0.021 (0.021)	Loss 0.000 (0.018)
+Epoch: [7-0][5200/7320]	Time 0.587 (0.494)	Data 0.035 (0.021)	Loss 0.000 (0.017)
+Epoch: [7-0][5400/7320]	Time 0.517 (0.494)	Data 0.028 (0.021)	Loss 0.000 (0.017)
+Epoch: [7-0][5600/7320]	Time 0.492 (0.494)	Data 0.018 (0.021)	Loss 0.000 (0.017)
+Epoch: [7-0][5800/7320]	Time 0.484 (0.494)	Data 0.018 (0.021)	Loss 0.000 (0.017)
+Epoch: [7-0][6000/7320]	Time 0.502 (0.494)	Data 0.018 (0.021)	Loss 0.021 (0.018)
+Epoch: [7-0][6200/7320]	Time 0.490 (0.494)	Data 0.019 (0.021)	Loss 0.000 (0.017)
+Epoch: [7-0][6400/7320]	Time 0.485 (0.494)	Data 0.018 (0.021)	Loss 0.077 (0.018)
+Epoch: [7-0][6600/7320]	Time 0.479 (0.494)	Data 0.018 (0.021)	Loss 0.000 (0.018)
+Epoch: [7-0][6800/7320]	Time 0.490 (0.494)	Data 0.029 (0.021)	Loss 0.167 (0.018)
+Epoch: [7-0][7000/7320]	Time 0.487 (0.494)	Data 0.018 (0.021)	Loss 0.000 (0.018)
+Epoch: [7-0][7200/7320]	Time 0.494 (0.494)	Data 0.019 (0.021)	Loss 0.000 (0.018)
+Extract Features: [100/551]	Time 1.067 (1.010)	Data 0.324 (0.257)	
+Extract Features: [200/551]	Time 0.897 (0.960)	Data 0.153 (0.209)	
+Extract Features: [300/551]	Time 0.813 (0.987)	Data 0.050 (0.236)	
+Extract Features: [400/551]	Time 0.772 (0.946)	Data 0.000 (0.191)	
+Extract Features: [500/551]	Time 0.757 (0.912)	Data 0.000 (0.152)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          76.7%
+  top-5          90.5%
+  top-10         94.2%
+
+ * Finished epoch   7 recall@1: 76.7%  recall@5: 90.5%  recall@10: 94.2%  best@5: 91.8%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.736 (0.805)	Data 0.000 (0.038)	
+Extract Features: [200/542]	Time 0.741 (0.779)	Data 0.000 (0.019)	
+Extract Features: [300/542]	Time 0.775 (0.774)	Data 0.000 (0.013)	
+Extract Features: [400/542]	Time 0.770 (0.775)	Data 0.000 (0.010)	
+Extract Features: [500/542]	Time 0.765 (0.777)	Data 0.000 (0.008)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [8-0][200/7320]	Time 0.486 (0.499)	Data 0.021 (0.027)	Loss 0.000 (0.014)
+Epoch: [8-0][400/7320]	Time 0.489 (0.496)	Data 0.026 (0.023)	Loss 0.000 (0.015)
+Epoch: [8-0][600/7320]	Time 0.497 (0.496)	Data 0.018 (0.022)	Loss 0.002 (0.015)
+Epoch: [8-0][800/7320]	Time 0.479 (0.495)	Data 0.019 (0.022)	Loss 0.026 (0.014)
+Epoch: [8-0][1000/7320]	Time 0.476 (0.495)	Data 0.017 (0.022)	Loss 0.000 (0.015)
+Epoch: [8-0][1200/7320]	Time 0.488 (0.495)	Data 0.020 (0.021)	Loss 0.000 (0.016)
+Epoch: [8-0][1400/7320]	Time 0.484 (0.495)	Data 0.018 (0.021)	Loss 0.000 (0.016)
+Epoch: [8-0][1600/7320]	Time 0.596 (0.495)	Data 0.032 (0.021)	Loss 0.000 (0.016)
+Epoch: [8-0][1800/7320]	Time 0.489 (0.494)	Data 0.025 (0.021)	Loss 0.000 (0.017)
+Epoch: [8-0][2000/7320]	Time 0.476 (0.494)	Data 0.019 (0.021)	Loss 0.000 (0.017)
+Epoch: [8-0][2200/7320]	Time 0.489 (0.494)	Data 0.023 (0.021)	Loss 0.000 (0.017)
+Epoch: [8-0][2400/7320]	Time 0.477 (0.494)	Data 0.020 (0.021)	Loss 0.011 (0.016)
+Epoch: [8-0][2600/7320]	Time 0.475 (0.494)	Data 0.015 (0.021)	Loss 0.008 (0.016)
+Epoch: [8-0][2800/7320]	Time 0.582 (0.494)	Data 0.032 (0.021)	Loss 0.000 (0.016)
+Epoch: [8-0][3000/7320]	Time 0.481 (0.494)	Data 0.019 (0.021)	Loss 0.004 (0.016)
+Epoch: [8-0][3200/7320]	Time 0.496 (0.494)	Data 0.018 (0.021)	Loss 0.000 (0.016)
+Epoch: [8-0][3400/7320]	Time 0.483 (0.494)	Data 0.019 (0.021)	Loss 0.000 (0.016)
+Epoch: [8-0][3600/7320]	Time 0.476 (0.494)	Data 0.018 (0.021)	Loss 0.000 (0.016)
+Epoch: [8-0][3800/7320]	Time 0.493 (0.494)	Data 0.027 (0.021)	Loss 0.000 (0.016)
+Epoch: [8-0][4000/7320]	Time 0.481 (0.494)	Data 0.018 (0.021)	Loss 0.033 (0.016)
+Epoch: [8-0][4200/7320]	Time 0.492 (0.494)	Data 0.018 (0.021)	Loss 0.000 (0.016)
+Epoch: [8-0][4400/7320]	Time 0.529 (0.494)	Data 0.028 (0.021)	Loss 0.000 (0.016)
+Epoch: [8-0][4600/7320]	Time 0.492 (0.494)	Data 0.023 (0.021)	Loss 0.000 (0.015)
+Epoch: [8-0][4800/7320]	Time 0.479 (0.494)	Data 0.018 (0.021)	Loss 0.030 (0.015)
+Epoch: [8-0][5000/7320]	Time 0.488 (0.494)	Data 0.019 (0.021)	Loss 0.000 (0.016)
+Epoch: [8-0][5200/7320]	Time 0.481 (0.494)	Data 0.024 (0.021)	Loss 0.007 (0.016)
+Epoch: [8-0][5400/7320]	Time 0.502 (0.494)	Data 0.021 (0.021)	Loss 0.000 (0.016)
+Epoch: [8-0][5600/7320]	Time 0.486 (0.494)	Data 0.018 (0.021)	Loss 0.000 (0.016)
+Epoch: [8-0][5800/7320]	Time 0.491 (0.494)	Data 0.018 (0.021)	Loss 0.059 (0.015)
+Epoch: [8-0][6000/7320]	Time 0.481 (0.494)	Data 0.018 (0.021)	Loss 0.000 (0.016)
+Epoch: [8-0][6200/7320]	Time 0.483 (0.494)	Data 0.018 (0.021)	Loss 0.133 (0.016)
+Epoch: [8-0][6400/7320]	Time 0.487 (0.494)	Data 0.020 (0.021)	Loss 0.018 (0.016)
+Epoch: [8-0][6600/7320]	Time 0.496 (0.494)	Data 0.018 (0.021)	Loss 0.000 (0.016)
+Epoch: [8-0][6800/7320]	Time 0.488 (0.494)	Data 0.024 (0.021)	Loss 0.004 (0.016)
+Epoch: [8-0][7000/7320]	Time 0.485 (0.494)	Data 0.016 (0.021)	Loss 0.010 (0.016)
+Epoch: [8-0][7200/7320]	Time 0.482 (0.494)	Data 0.018 (0.021)	Loss 0.005 (0.016)
+Extract Features: [100/551]	Time 0.850 (0.995)	Data 0.112 (0.241)	
+Extract Features: [200/551]	Time 0.850 (0.954)	Data 0.096 (0.195)	
+Extract Features: [300/551]	Time 0.764 (0.982)	Data 0.000 (0.221)	
+Extract Features: [400/551]	Time 0.776 (0.941)	Data 0.000 (0.177)	
+Extract Features: [500/551]	Time 0.754 (0.907)	Data 0.000 (0.141)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          75.9%
+  top-5          90.0%
+  top-10         93.8%
+
+ * Finished epoch   8 recall@1: 75.9%  recall@5: 90.0%  recall@10: 93.8%  best@5: 91.8%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.735 (0.782)	Data 0.000 (0.032)	
+Extract Features: [200/542]	Time 0.740 (0.767)	Data 0.000 (0.016)	
+Extract Features: [300/542]	Time 0.773 (0.764)	Data 0.000 (0.011)	
+Extract Features: [400/542]	Time 0.760 (0.764)	Data 0.000 (0.008)	
+Extract Features: [500/542]	Time 0.757 (0.764)	Data 0.000 (0.006)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [9-0][200/7320]	Time 0.497 (0.499)	Data 0.019 (0.026)	Loss 0.000 (0.011)
+Epoch: [9-0][400/7320]	Time 0.480 (0.495)	Data 0.016 (0.023)	Loss 0.000 (0.011)
+Epoch: [9-0][600/7320]	Time 0.474 (0.494)	Data 0.019 (0.022)	Loss 0.084 (0.013)
+Epoch: [9-0][800/7320]	Time 0.489 (0.495)	Data 0.024 (0.022)	Loss 0.116 (0.013)
+Epoch: [9-0][1000/7320]	Time 0.484 (0.495)	Data 0.018 (0.022)	Loss 0.000 (0.014)
+Epoch: [9-0][1200/7320]	Time 0.486 (0.495)	Data 0.020 (0.021)	Loss 0.000 (0.014)
+Epoch: [9-0][1400/7320]	Time 0.488 (0.494)	Data 0.019 (0.021)	Loss 0.000 (0.014)
+Epoch: [9-0][1600/7320]	Time 0.505 (0.494)	Data 0.018 (0.021)	Loss 0.012 (0.014)
+Epoch: [9-0][1800/7320]	Time 0.496 (0.494)	Data 0.025 (0.021)	Loss 0.048 (0.014)
+Epoch: [9-0][2000/7320]	Time 0.490 (0.494)	Data 0.021 (0.021)	Loss 0.000 (0.014)
+Epoch: [9-0][2200/7320]	Time 0.484 (0.494)	Data 0.020 (0.021)	Loss 0.000 (0.014)
+Epoch: [9-0][2400/7320]	Time 0.502 (0.494)	Data 0.018 (0.021)	Loss 0.007 (0.014)
+Epoch: [9-0][2600/7320]	Time 0.494 (0.494)	Data 0.028 (0.021)	Loss 0.000 (0.014)
+Epoch: [9-0][2800/7320]	Time 0.478 (0.494)	Data 0.016 (0.021)	Loss 0.000 (0.014)
+Epoch: [9-0][3000/7320]	Time 0.488 (0.494)	Data 0.019 (0.021)	Loss 0.000 (0.014)
+Epoch: [9-0][3200/7320]	Time 0.517 (0.494)	Data 0.024 (0.021)	Loss 0.028 (0.014)
+Epoch: [9-0][3400/7320]	Time 0.475 (0.494)	Data 0.018 (0.021)	Loss 0.016 (0.014)
+Epoch: [9-0][3600/7320]	Time 0.475 (0.494)	Data 0.018 (0.021)	Loss 0.006 (0.014)
+Epoch: [9-0][3800/7320]	Time 0.493 (0.494)	Data 0.016 (0.021)	Loss 0.041 (0.014)
+Epoch: [9-0][4000/7320]	Time 0.488 (0.493)	Data 0.019 (0.021)	Loss 0.000 (0.014)
+Epoch: [9-0][4200/7320]	Time 0.487 (0.493)	Data 0.019 (0.021)	Loss 0.061 (0.014)
+Epoch: [9-0][4400/7320]	Time 0.486 (0.493)	Data 0.022 (0.021)	Loss 0.000 (0.014)
+Epoch: [9-0][4600/7320]	Time 0.495 (0.493)	Data 0.023 (0.021)	Loss 0.000 (0.014)
+Epoch: [9-0][4800/7320]	Time 0.487 (0.493)	Data 0.022 (0.021)	Loss 0.000 (0.014)
+Epoch: [9-0][5000/7320]	Time 0.501 (0.493)	Data 0.016 (0.021)	Loss 0.000 (0.014)
+Epoch: [9-0][5200/7320]	Time 0.480 (0.493)	Data 0.021 (0.021)	Loss 0.000 (0.014)
+Epoch: [9-0][5400/7320]	Time 0.486 (0.493)	Data 0.018 (0.021)	Loss 0.000 (0.014)
+Epoch: [9-0][5600/7320]	Time 0.486 (0.493)	Data 0.021 (0.021)	Loss 0.000 (0.014)
+Epoch: [9-0][5800/7320]	Time 0.489 (0.493)	Data 0.023 (0.021)	Loss 0.054 (0.014)
+Epoch: [9-0][6000/7320]	Time 0.491 (0.493)	Data 0.016 (0.021)	Loss 0.000 (0.014)
+Epoch: [9-0][6200/7320]	Time 0.487 (0.493)	Data 0.023 (0.021)	Loss 0.000 (0.014)
+Epoch: [9-0][6400/7320]	Time 0.486 (0.493)	Data 0.023 (0.021)	Loss 0.034 (0.014)
+Epoch: [9-0][6600/7320]	Time 0.521 (0.493)	Data 0.025 (0.021)	Loss 0.000 (0.014)
+Epoch: [9-0][6800/7320]	Time 0.488 (0.493)	Data 0.020 (0.021)	Loss 0.207 (0.014)
+Epoch: [9-0][7000/7320]	Time 0.505 (0.493)	Data 0.016 (0.021)	Loss 0.000 (0.014)
+Epoch: [9-0][7200/7320]	Time 0.490 (0.493)	Data 0.019 (0.021)	Loss 0.000 (0.014)
+Extract Features: [100/551]	Time 0.998 (0.995)	Data 0.255 (0.240)	
+Extract Features: [200/551]	Time 0.971 (0.954)	Data 0.124 (0.197)	
+Extract Features: [300/551]	Time 0.758 (0.942)	Data 0.000 (0.186)	
+Extract Features: [400/551]	Time 0.762 (0.901)	Data 0.000 (0.139)	
+Extract Features: [500/551]	Time 0.760 (0.876)	Data 0.000 (0.111)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          76.9%
+  top-5          89.9%
+  top-10         93.6%
+
+ * Finished epoch   9 recall@1: 76.9%  recall@5: 89.9%  recall@10: 93.6%  best@5: 91.8%
+
+Performing PCA reduction on the best model:
+=> Loaded checkpoint '/media/leo/2C737A9872F69ECF/why-so-deepv2-data/pittsburgh/netvlad-run/pitts30k-vgg16/conv5-triplet-lr0.001-tuple1-21-Feb/model_best.pth.tar'
+Extract Features: [100/542]	Time 0.751 (0.804)	Data 0.000 (0.042)	
+Extract Features: [200/542]	Time 0.764 (0.783)	Data 0.000 (0.021)	
+Extract Features: [300/542]	Time 0.763 (0.778)	Data 0.000 (0.014)	
+Extract Features: [400/542]	Time 0.785 (0.778)	Data 0.000 (0.011)	
+Extract Features: [500/542]	Time 0.816 (0.780)	Data 0.000 (0.009)	
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Testing on Pitts30k-test:
+load PCA parameters...
+Extract Features: [100/526]	Time 1.094 (1.081)	Data 0.332 (0.309)	
+Extract Features: [200/526]	Time 0.920 (1.046)	Data 0.148 (0.273)	
+Extract Features: [300/526]	Time 1.186 (1.032)	Data 0.437 (0.259)	
+Extract Features: [400/526]	Time 0.955 (1.005)	Data 0.180 (0.233)	
+Extract Features: [500/526]	Time 0.772 (0.974)	Data 0.000 (0.203)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          86.0%
+  top-5          92.5%
+  top-10         94.5%

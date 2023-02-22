@@ -252,7 +252,7 @@ class EmbedNet(nn.Module):
         #graph
         self.input_dim = 4096 # 16384# 8192
         self.hidden_dim = [4096,4096]#[8192, 8192]
-        self.num_neighbors_list = [4]#,2]
+        self.num_neighbors_list = [5]#,2]
         
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
                   num_neighbors_list=self.num_neighbors_list)
@@ -396,8 +396,8 @@ class EmbedNet(nn.Module):
 
                         # Multiply arrays
                         # code.interact(local=locals())
-                        # resultant = rsizet(c_img*mmask)
-                        resultant = rsizet(c_img)
+                        resultant = rsizet(c_img*mmask)
+                        # resultant = rsizet(c_img)
  
                         img_nodes.append(resultant.unsqueeze(0))
                         
