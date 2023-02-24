@@ -7,7 +7,7 @@ SCALE=30k
 ARCH=vgg16
 LAYERS=conv5
 LOSS=$1
-LR=0.001
+LR=0.0001
 
 if [ $# -ne 1 ]
   then
