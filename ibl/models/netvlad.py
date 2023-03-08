@@ -70,7 +70,7 @@ class NeighborAggregator(nn.Module):
 class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
-                 aggr_neighbor_method="max",
+                 aggr_neighbor_method="sum",
                  aggr_hidden_method="concat"):
         """SageGCN layer definition
         # firstworking with mean and concat
@@ -267,7 +267,6 @@ class EmbedNet(nn.Module):
         # print("debuggind started")
         with torch.no_grad():
             b_out = self.Espnet(x)
-            
         # b_out = self.Espnet(x)
         mask = b_out.max(1)[1]   #torch.Size([36, 480, 640])
         

@@ -1,6 +1,6 @@
 #!/bin/sh
-PYTHON=${PYTHON:-"python"}
-GPUS=8
+PYTHON=${PYTHON:-"python3"}
+GPUS=1
 
 RESUME=$1
 ARCH=vgg16
@@ -15,15 +15,15 @@ if [ $# -lt 1 ]
     exit 1
 fi
 
-while true # find unused tcp port
-do
-    PORT=$(( ((RANDOM<<15)|RANDOM) % 49152 + 10000 ))
-    status="$(nc -z 127.0.0.1 $PORT < /dev/null &>/dev/null; echo $?)"
-    if [ "${status}" != "0" ]; then
-        break;
-    fi
-done
-
+# while true # find unused tcp port
+# do
+#     PORT=$(( ((RANDOM<<15)|RANDOM) % 49152 + 10000 ))
+#     status="$(nc -z 127.0.0.1 $PORT < /dev/null &>/dev/null; echo $?)"
+#     if [ "${status}" != "0" ]; then
+#         break;
+#     fi
+# done
+PORT=6010
 $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
 examples/test.py --launcher pytorch \
     -d ${DATASET} --scale ${SCALE} -a ${ARCH} \
