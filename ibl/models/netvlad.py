@@ -340,11 +340,10 @@ class EmbedNet(nn.Module):
         # img_orig = to_tensor(Image.open(image_list[jj]).convert('RGB'))
         # _, H, W = img_orig.shape
 
-        bb_x = [[0, 0, int(W/3),H], 
-        [0, 0, W,int(H/3)], 
-        [int(2*W/3), 0, W,H], 
-        [0, int(2*H/3), W,H], 
-        [int(W/4), int(H/4), int(3*W/4),int(3*H/4)]]
+        bb_x = [[int(W/4), int(H/4), int(3*W/4),int(3*H/4)],
+                [0, 0, int(W/3),H], 
+                [0, 0, W,int(H/3)], 
+                [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H]]
 
         # bb_x = [[0, 0, round(2*W/3), round(2*H/3)],  [round(W/3),  0,  W, round(2*H/3)], [0, round(H/3), round(2*W/3), H], [round(W/3), round(H/3), W, H]]
             
