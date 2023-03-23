@@ -70,8 +70,8 @@ class NeighborAggregator(nn.Module):
 class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
-                 aggr_neighbor_method="sum",
-                 aggr_hidden_method="concat"):
+                 aggr_neighbor_method="max",
+                 aggr_hidden_method="sum"):
         """SageGCN layer definition
         # firstworking with mean and concat
         Args:
@@ -177,7 +177,7 @@ class GraphSage(nn.Module):
 class NetVLAD(nn.Module):
     """NetVLAD layer implementation"""
 
-    def __init__(self, num_clusters=64, dim=512, alpha=100.0, normalize_input=True):
+    def __init__(self, num_clusters=64, dim=128, alpha=0, normalize_input=True):
         """
         Args:
             num_clusters : int
@@ -251,7 +251,7 @@ class EmbedNet(nn.Module):
         
         #graph
         self.input_dim = 4096 # 16384# 8192
-        self.hidden_dim = [2048,4096]#[8192, 8192]
+        self.hidden_dim = [4096,4096]#[8192, 8192]
         self.num_neighbors_list = [5]#,2]
         
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
@@ -343,7 +343,8 @@ class EmbedNet(nn.Module):
         bb_x = [[int(W/4), int(H/4), int(3*W/4),int(3*H/4)],
                 [0, 0, int(W/3),H], 
                 [0, 0, W,int(H/3)], 
-                [int(2*W/3), 0, W,H], [0, int(2*H/3), W,H]]
+                [int(2*W/3), 0, W,H], 
+                [0, int(2*H/3), W,H]]
 
         # bb_x = [[0, 0, round(2*W/3), round(2*H/3)],  [round(W/3),  0,  W, round(2*H/3)], [0, round(H/3), round(2*W/3), H], [round(W/3), round(H/3), W, H]]
             
@@ -384,13 +385,13 @@ class EmbedNet(nn.Module):
                         boxesd = boxes.to(torch.long)
                         x_min,y_min,x_max,y_max = boxesd[b_idx]
                     
-                        zero_img = patch_maskr[y_min:y_max,x_min:x_max]
+                        # zero_img = patch_maskr[y_min:y_max,x_min:x_max]
                     
                         # imgg = img[0].permute(1, 2, 0).numpy().astype(int)
                         c_img = x[Nx][:, y_min:y_max,x_min:x_max]
                         
                         # increase dimension
-                        mmask = torch.stack((zero_img,)*512, axis=0)
+                        # mmask = torch.stack((zero_img,)*512, axis=0)
                         
 
                         # Multiply arrays
