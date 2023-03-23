@@ -66,7 +66,8 @@ class NeighborAggregator(nn.Module):
         return 'in_features={}, out_features={}, aggr_method={}'.format(
             self.input_dim, self.output_dim, self.aggr_method)
     
-
+#F.pre PReLU
+# prelu
 class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
@@ -177,7 +178,7 @@ class GraphSage(nn.Module):
 class NetVLAD(nn.Module):
     """NetVLAD layer implementation"""
 
-    def __init__(self, num_clusters=64, dim=128, alpha=0, normalize_input=True):
+    def __init__(self, num_clusters=64, dim=512, alpha=100.0, normalize_input=True):
         """
         Args:
             num_clusters : int
@@ -366,7 +367,7 @@ class EmbedNet(nn.Module):
                     # print(idx, " ", b_idx)
                     # code.interact(local=locals())
 
-                    if idx == rr_boxes[b_idx] and obj_i[b_idx] > 10000 and len(img_nodes) < NB:
+                    if idx == rr_boxes[b_idx] and obj_i[b_idx] > 10000 and len(img_nodes) < NB-2:
                         # print("found match")
                         # print(idx, " ", b_idx)
                         # print (img_nodes.shape)
