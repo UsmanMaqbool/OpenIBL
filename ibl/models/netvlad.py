@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
+from torchvision.utils import save_image
 import numpy as np
 import copy
 import code
@@ -265,7 +265,33 @@ class EmbedNet(nn.Module):
     def forward(self, x):
         
         # createboxes
-        # print("debuggind started")
+        sizeH = x.shape[2]
+        sizeW = x.shape[3]
+        
+        # if x.shape[2] == 1137:
+        #     img1 = x[0]
+        #     img1 = img1.cpu()#.numpy() # TypeError: tensor or list of tensors expected, got <class 'numpy.ndarray'>
+        #     # print(img1.shape)
+        #     save_image(img1, 'img1.jpg')
+        # for Tokyo 247 Test
+        if sizeH%2 != 0:
+            x = F.pad(input=x, pad=(0,0,1,2), mode='constant', value=0)
+            # sizeH = sizeH - 1
+            # x = x[:,:,0:sizeH,:]
+
+            # x = x[:,:,0:x.shape[2]+1,:]
+        if sizeW%2 != 0:
+            # print("yes")
+            # img1 = x[0]
+            # img1 = img1.cpu()#.numpy() # TypeError: tensor or list of tensors expected, got <class 'numpy.ndarray'>
+            # print(img1.shape)
+            # save_image(img1, 'img1.jpg')
+            
+            x = F.pad(input=x, pad=(1,2), mode='constant', value=0)
+            # sizeW = sizeW - 1
+            # x = x[:, :, :, 0:sizeW]
+
+        
         with torch.no_grad():
             b_out = self.Espnet(x)
         # b_out = self.Espnet(x)
@@ -330,6 +356,8 @@ class EmbedNet(nn.Module):
 
             
         _, _, H, W = x.shape
+        # H = sizeH
+        # W = sizeW
         patch_mask = torch.zeros((H, W)).cuda()
         
         # VGG 
@@ -367,7 +395,7 @@ class EmbedNet(nn.Module):
                     # print(idx, " ", b_idx)
                     # code.interact(local=locals())
 
-                    if idx == rr_boxes[b_idx] and obj_i[b_idx] > 10000 and len(img_nodes) < NB-2:
+                    if idx == rr_boxes[b_idx] and obj_i[b_idx] > 5000 and len(img_nodes) < NB:
                         # print("found match")
                         # print(idx, " ", b_idx)
                         # print (img_nodes.shape)

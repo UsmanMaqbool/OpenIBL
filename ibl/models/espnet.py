@@ -2,6 +2,7 @@
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 __author__ = "Sachin Mehta"
 
@@ -383,6 +384,13 @@ class ESPNet(nn.Module):
         output2_c = self.up_l3(self.br(self.modules[10](output2_cat))) #RUM
 
         output1_C = self.level3_C(output1_cat) # project to C-dimensional space
+        
+        if output2_c.shape[2] > output1_C.shape[2]:
+            output2_c = output2_c[:,:,0:output2_c.shape[2]-1,:]
+        
+        if output2_c.shape[3] > output1_C.shape[3]:
+            output2_c = output2_c[:,:,:, 0:output2_c.shape[3]-1]    
+        # print (output1_C.shape," ", output2_c.shape)
         comb_l2_l3 = self.up_l2(self.combine_l2_l3(torch.cat([output1_C, output2_c], 1))) #RUM
 
         concat_features = self.conv(torch.cat([comb_l2_l3, output0], 1))
