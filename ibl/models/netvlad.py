@@ -71,8 +71,8 @@ class NeighborAggregator(nn.Module):
 class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
-                 aggr_neighbor_method="sum",
-                 aggr_hidden_method="concat"):
+                 aggr_neighbor_method="max",
+                 aggr_hidden_method="sum"):
         """SageGCN layer definition
         # firstworking with mean and concat
         Args:
@@ -252,7 +252,7 @@ class EmbedNet(nn.Module):
         
         #graph
         self.input_dim = 4096 # 16384# 8192
-        self.hidden_dim = [2048,4096]#[8192, 8192]
+        self.hidden_dim = [4096,4096]#[8192, 8192]
         self.num_neighbors_list = [5]#,2]
         
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
@@ -395,7 +395,7 @@ class EmbedNet(nn.Module):
                     # print(idx, " ", b_idx)
                     # code.interact(local=locals())
 
-                    if idx == rr_boxes[b_idx] and obj_i[b_idx] > 5000 and len(img_nodes) < NB:
+                    if idx == rr_boxes[b_idx] and obj_i[b_idx] > 12000 and len(img_nodes) < NB:
                         # print("found match")
                         # print(idx, " ", b_idx)
                         # print (img_nodes.shape)
