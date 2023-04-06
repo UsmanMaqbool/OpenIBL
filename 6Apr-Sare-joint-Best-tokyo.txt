@@ -1,0 +1,53 @@
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='tokyo', scale='250k', test_batch_size=32, workers=2, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/media/leo/2C737A9872F69ECF/models/graphnetvlad/pitts30k-vgg16/conv5-sare_joint-lr0.0001-tuple1-06-Apr-0109/model_best.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, data_dir='/mnt/ssd/usman_ws/OpenIBL/examples/data', logs_dir='/mnt/ssd/usman_ws/OpenIBL/examples/logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+Encoder loaded!
+=> Loaded checkpoint '/media/leo/2C737A9872F69ECF/models/graphnetvlad/pitts30k-vgg16/conv5-sare_joint-lr0.0001-tuple1-06-Apr-0109/model_best.pth.tar'
+=> Start epoch 0  best recall5 95.4%
+Evaluate on the test set:
+load PCA parameters...
+Extract Features: [100/315]	Time 0.046 (0.073)	Data 0.000 (0.009)	
+Extract Features: [200/315]	Time 0.046 (0.059)	Data 0.000 (0.004)	
+Extract Features: [300/315]	Time 0.053 (0.059)	Data 0.000 (0.003)	
+gathering features from rank no.0
+load PCA parameters...
+Extract Features: [100/2375]	Time 1.621 (1.161)	Data 0.949 (0.455)	
+Extract Features: [200/2375]	Time 1.026 (1.135)	Data 0.344 (0.442)	
+Extract Features: [300/2375]	Time 1.292 (1.117)	Data 0.603 (0.424)	
+Extract Features: [400/2375]	Time 1.851 (1.131)	Data 1.154 (0.440)	
+Extract Features: [500/2375]	Time 1.020 (1.128)	Data 0.330 (0.438)	
+Extract Features: [600/2375]	Time 1.303 (1.124)	Data 0.631 (0.435)	
+Extract Features: [700/2375]	Time 1.149 (1.118)	Data 0.445 (0.429)	
+Extract Features: [800/2375]	Time 1.025 (1.118)	Data 0.326 (0.429)	
+Extract Features: [900/2375]	Time 1.441 (1.119)	Data 0.772 (0.431)	
+Extract Features: [1000/2375]	Time 0.824 (1.115)	Data 0.151 (0.427)	
+Extract Features: [1100/2375]	Time 0.895 (1.115)	Data 0.219 (0.427)	
+Extract Features: [1200/2375]	Time 0.795 (1.120)	Data 0.120 (0.432)	
+Extract Features: [1300/2375]	Time 0.879 (1.116)	Data 0.185 (0.429)	
+Extract Features: [1400/2375]	Time 1.406 (1.118)	Data 0.736 (0.430)	
+Extract Features: [1500/2375]	Time 1.874 (1.118)	Data 1.193 (0.431)	
+Extract Features: [1600/2375]	Time 1.930 (1.117)	Data 1.253 (0.430)	
+Extract Features: [1700/2375]	Time 1.109 (1.119)	Data 0.412 (0.431)	
+Extract Features: [1800/2375]	Time 1.546 (1.118)	Data 0.862 (0.431)	
+Extract Features: [1900/2375]	Time 1.642 (1.121)	Data 0.968 (0.433)	
+Extract Features: [2000/2375]	Time 1.591 (1.120)	Data 0.909 (0.432)	
+Extract Features: [2100/2375]	Time 0.855 (1.119)	Data 0.169 (0.431)	
+Extract Features: [2200/2375]	Time 0.820 (1.119)	Data 0.141 (0.431)	
+Extract Features: [2300/2375]	Time 1.100 (1.117)	Data 0.426 (0.429)	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          80.3%
+  top-5          85.7%
+  top-10         88.6%
