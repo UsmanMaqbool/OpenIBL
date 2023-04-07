@@ -130,7 +130,7 @@ class GraphSage(nn.Module):
         self.gcn.append(SageGCN(input_dim, hidden_dim[0])) # (1433, 128)
         for index in range(0, len(hidden_dim) - 2):
             self.gcn.append(SageGCN(hidden_dim[index], hidden_dim[index+1])) #128, 7
-        self.gcn.append(SageGCN(hidden_dim[-2], hidden_dim[-1], activation=None))
+        self.gcn.append(SageGCN(hidden_dim[-2], hidden_dim[-1], activation=F.gelu))
         
 
 
@@ -282,21 +282,6 @@ class EmbedNet(nn.Module):
         
         for jj in range(len(mask)):  #batch processing
             
-            # img_orig = to_tensor(Image.open(image_list[jj]).convert('RGB'))
-            # _, H, W = img_orig.shape
-
-            # bb_x = [[0, 0, round(2*W/3), round(2*H/3)],  [round(W/3),  0,  W, round(2*H/3)], [0, round(H/3), round(2*W/3), H], [round(W/3), round(H/3), W, H]]
-                
-            # patch_mask = torch.zeros((H, W))
-            
-            # rsizet = transforms.Resize((427, 320)) #H W
-            # rsizet = transforms.Resize((round(2*W/3), round(2*H/3))) #H W
-            
-
-             #patch_mask, patch_mask, patch_mask, patch_mask]
-
-            # single_label_mask = relabel_merge(mask[jj])    # single image mask
-            # all the labels to single slides
             single_label_mask = mask[jj]
             
             # obj_ids = torch.unique(single_label_mask)
@@ -307,37 +292,15 @@ class EmbedNet(nn.Module):
             
             masks = single_label_mask == obj_ids[:, None, None]
             boxes_t = masks_to_boxes(masks.to(torch.float32))
-            # print ("boxes-lenght:", len(boxes_t))
 
-            # Sort the boxes                
-            # rr = ((bb_x[:, 2])-(bb_x[:, 0]))*((bb_x[:, 3])-(bb_x[:, 1]))
-            # rr_boxes = torch.argsort(rr,descending=True) # (decending order)
             
             rr_boxes = torch.argsort(torch.argsort(obj_i,descending=True)) # (decending order)
 
-            
-            # rr_boxes = torch.argsort(rr) # (decending order)
-
-            # boxes = (boxes_t/16).cpu().numpy().astype(int)
+    
             
             boxes = boxes_t/16
         
-        
-        # for jj in range(len(mask)):  #batch processing
-        
-        #     single_label_mask = relabel_merge(mask[jj])    # single image mask
-        #     # single_label_mask = mask[jj]
-        #     obj_ids = torch.unique(single_label_mask)
-        #     obj_ids = obj_ids[1:]      #torch.Size([19])
-        #     masks = single_label_mask == obj_ids[:, None, None]
-        #     boxes = masks_to_boxes(masks.to(torch.float32))
-        #     # boxes = masks_to_boxes(masks.to(torch.float32))/16
-        #     boxes_s = (boxes/16).cpu().numpy().astype(int)
-        #     #append boxes
-        #     print (len(boxes_s))
-        #     code.interact(local=locals())
-
-            
+  
         _, _, H, W = x.shape
         patch_mask = torch.zeros((H, W)).cuda()
         
@@ -356,16 +319,12 @@ class EmbedNet(nn.Module):
                 [int(2*W/3), 0, W,H], 
                 [0, int(2*H/3), W,H]]
 
-        # bb_x = [[0, 0, round(2*W/3), round(2*H/3)],  [round(W/3),  0,  W, round(2*H/3)], [0, round(H/3), round(2*W/3), H], [round(W/3), round(H/3), W, H]]
-            
-        # patch_mask = torch.zeros((H, W))
+ 
         NB = 5
         
         graph_nodes = torch.zeros(N,NB,C,H,W).cuda()
         rsizet = transforms.Resize((H,W)) #H W
 
-        # rsizet = transforms.Resize((427, 320)) #H W
-        # rsizet = transforms.Resize((round(2*W/3), round(2*H/3))) #H W
         
         for Nx in range(N):    
             # img_stk = x[Nx].unsqueeze(0)
@@ -373,14 +332,10 @@ class EmbedNet(nn.Module):
             # print(Nx)
             for idx in range(len(boxes)):
                 for b_idx in range(len(rr_boxes)):
-                    # print(idx, " ", b_idx)
-                    # code.interact(local=locals())
+
 
                     if idx == rr_boxes[b_idx] and obj_i[b_idx] > 10000 and len(img_nodes) < NB-2:
-                        # print("found match")
-                        # print(idx, " ", b_idx)
-                        # print (img_nodes.shape)
-                        
+
                         patch_mask = patch_mask*0
 
                         # label obj_ids[rr_boxes[b_idx]]
@@ -395,39 +350,17 @@ class EmbedNet(nn.Module):
                         boxesd = boxes.to(torch.long)
                         x_min,y_min,x_max,y_max = boxesd[b_idx]
                     
-                        # zero_img = patch_maskr[y_min:y_max,x_min:x_max]
-                    
-                        # imgg = img[0].permute(1, 2, 0).numpy().astype(int)
+
                         c_img = x[Nx][:, y_min:y_max,x_min:x_max]
                         
-                        # increase dimension
-                        # mmask = torch.stack((zero_img,)*512, axis=0)
-                        
 
-                        # Multiply arrays
-                        # code.interact(local=locals())
-                        # resultant = rsizet(c_img*mmask)
                         resultant = rsizet(c_img)
  
                         img_nodes.append(resultant.unsqueeze(0))
                         
-                        
-                        # img_nodes = torch.stack((img_nodes,resultant.unsqueeze(0)), 0)
-                        # code.interact(local=locals())
-                        # img_nodes.append(resultant.unsqueeze(0))
-                        
-
-                        # imgg = torch.permute(resultant, (1, 2, 0)).cpu().numpy()[0]
-                        # aa = img_orig.numpy()
-                        # imgg = to_image(aa)
-                        
-                        # cv2.imwrite(args.savedir + os.sep + 'img_'+str(idx)+'_' + name.replace(args.img_extn, 'png'), aa)
-                        # save_image(resultant, args.savedir + os.sep + 'img_'+str(idx)+'_' + name.replace(args.img_extn, 'png'))
                         break                    
             
-            # check the size
-            # print("first: ", len(img_nodes))
-            # code.interact(local=locals())
+
             if len(img_nodes) < NB:
                 for i in range(len(bb_x)-len(img_nodes)):
                     x_cropped =  x[Nx][: ,bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
@@ -438,22 +371,15 @@ class EmbedNet(nn.Module):
             aa = torch.stack(img_nodes,1)
             # code.interact(local=locals())
             graph_nodes[Nx] = aa[0]
-            # graph_nodes.append(torch.stack(img_nodes,1))
-            # print("total: ", len(img_nodes))
-        # code.interact(local=locals())
+
         
         
         node_features_list = []
         neighborsFeat = []
 
         x_cropped = graph_nodes.view(NB,N,C,H,W)
-        # xx = x.unsqueeze(0)
-        # Append root node
-        # print(x_cropped.shape)
-        # print(x.unsqueeze(0).shape)
-        # code.interact(local=locals())
+
         x_cropped = torch.cat((graph_nodes.view(NB,N,C,H,W), x.unsqueeze(0)))
-        # x_call = x_cropped.append(x.unsqueeze(0))
          
         for i in range(NB+1):
             
@@ -484,8 +410,6 @@ class EmbedNet(nn.Module):
         gvlad = self.graph(node_features_list)
 
         gvlad = torch.add(gvlad,vlad_x)
-
-        # gvlad = F.normalize(gvlad, p=2, dim=1)  # L2 normalize
         
         return pool_x, gvlad.view(-1,32768)
 

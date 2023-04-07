@@ -1,0 +1,30 @@
+Use GPU: 0 for training, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='6010', dataset='pitts', scale='30k', tuple_size=1, test_batch_size=32, cache_size=1000, workers=1, height=480, width=640, neg_num=10, num_clusters=64, neg_pool=1000, arch='vgg16', layers='conv5', nowhiten=False, syncbn=True, sync_gather=True, features=4096, lr=0.0001, momentum=0.9, weight_decay=0.001, loss_type='sare_ind', step_size=5, resume='', vlad=True, eval_step=1, rerank=False, epochs=5, iters=0, seed=43, deterministic=False, print_freq=200, margin=0.1, data_dir='/mnt/ssd/usman_ws/OpenIBL/examples/data', logs_dir='/media/leo/2C737A9872F69ECF/models/graphnetvlad/pitts30k-vgg16/conv5-sare_ind-lr0.0001-tuple1-07-Apr-0326', init_dir='/mnt/ssd/usman_ws/OpenIBL/examples/../logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+Loading centroids from /mnt/ssd/usman_ws/OpenIBL/examples/../logs/vgg16_pitts_64_desc_cen.hdf5
+Encoder loaded!
+Test the initial model:
+Extract Features: [100/551]	Time 0.832 (0.971)	Data 0.100 (0.133)	
+Extract Features: [200/551]	Time 0.817 (0.887)	Data 0.081 (0.100)	
+Extract Features: [300/551]	Time 0.845 (0.867)	Data 0.106 (0.096)	
+Extract Features: [400/551]	Time 0.777 (0.841)	Data 0.031 (0.078)	
+Extract Features: [500/551]	Time 0.732 (0.822)	Data 0.000 (0.063)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          79.2%
+  top-5          91.8%
+  top-10         94.9%
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.832 (0.827)	Data 0.121 (0.095)	
+Extract Features: [200/542]	Time 0.892 (0.862)	Data 0.150 (0.131)	

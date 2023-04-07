@@ -1,0 +1,58 @@
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='tokyo', scale='250k', test_batch_size=32, workers=2, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/media/leo/2C737A9872F69ECF/why-so-deepv2-data/pittsburgh/netvlad-run/pitts30k-vgg16/conv5-sare_ind-lr0.0001-tuple1-20-Mar/checkpoint4.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, data_dir='/mnt/ssd/usman_ws/OpenIBL/examples/data', logs_dir='/mnt/ssd/usman_ws/OpenIBL/examples/logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+Encoder loaded!
+=> Loaded checkpoint '/media/leo/2C737A9872F69ECF/why-so-deepv2-data/pittsburgh/netvlad-run/pitts30k-vgg16/conv5-sare_ind-lr0.0001-tuple1-20-Mar/checkpoint4.pth.tar'
+mismatch: module.graph.gcn.0.weight torch.Size([4096, 4096]) torch.Size([4096, 2048])
+mismatch: module.graph.gcn.0.aggregator.weight torch.Size([4096, 4096]) torch.Size([4096, 2048])
+mismatch: module.graph.gcn.1.weight torch.Size([4096, 4096]) torch.Size([2048, 4096])
+mismatch: module.graph.gcn.1.aggregator.weight torch.Size([4096, 4096]) torch.Size([2048, 4096])
+missing keys in state_dict: {'module.graph.gcn.1.weight', 'module.graph.gcn.0.weight', 'module.graph.gcn.0.aggregator.weight', 'module.graph.gcn.1.aggregator.weight'}
+=> Start epoch 4  best recall5 96.6%
+Evaluate on the test set:
+load PCA parameters...
+Extract Features: [100/315]	Time 0.045 (0.075)	Data 0.000 (0.010)	
+Extract Features: [200/315]	Time 0.050 (0.061)	Data 0.000 (0.005)	
+Extract Features: [300/315]	Time 0.058 (0.060)	Data 0.000 (0.003)	
+gathering features from rank no.0
+load PCA parameters...
+Extract Features: [100/2375]	Time 1.013 (1.151)	Data 0.336 (0.441)	
+Extract Features: [200/2375]	Time 0.689 (1.127)	Data 0.000 (0.429)	
+Extract Features: [300/2375]	Time 0.684 (1.106)	Data 0.000 (0.410)	
+Extract Features: [400/2375]	Time 1.260 (1.116)	Data 0.581 (0.424)	
+Extract Features: [500/2375]	Time 0.690 (1.117)	Data 0.000 (0.426)	
+Extract Features: [600/2375]	Time 0.766 (1.114)	Data 0.088 (0.424)	
+Extract Features: [700/2375]	Time 0.741 (1.109)	Data 0.053 (0.419)	
+Extract Features: [800/2375]	Time 1.074 (1.109)	Data 0.382 (0.419)	
+Extract Features: [900/2375]	Time 1.754 (1.110)	Data 1.066 (0.421)	
+Extract Features: [1000/2375]	Time 1.426 (1.107)	Data 0.751 (0.418)	
+Extract Features: [1100/2375]	Time 1.505 (1.107)	Data 0.826 (0.419)	
+Extract Features: [1200/2375]	Time 1.149 (1.112)	Data 0.479 (0.424)	
+Extract Features: [1300/2375]	Time 0.858 (1.109)	Data 0.175 (0.422)	
+Extract Features: [1400/2375]	Time 1.295 (1.110)	Data 0.619 (0.423)	
+Extract Features: [1500/2375]	Time 1.409 (1.111)	Data 0.730 (0.424)	
+Extract Features: [1600/2375]	Time 1.305 (1.110)	Data 0.632 (0.423)	
+Extract Features: [1700/2375]	Time 0.696 (1.111)	Data 0.000 (0.425)	
+Extract Features: [1800/2375]	Time 1.756 (1.109)	Data 1.073 (0.424)	
+Extract Features: [1900/2375]	Time 1.283 (1.111)	Data 0.604 (0.426)	
+Extract Features: [2000/2375]	Time 1.418 (1.109)	Data 0.737 (0.424)	
+Extract Features: [2100/2375]	Time 0.861 (1.109)	Data 0.171 (0.424)	
+Extract Features: [2200/2375]	Time 0.931 (1.109)	Data 0.252 (0.424)	
+Extract Features: [2300/2375]	Time 1.685 (1.108)	Data 1.009 (0.423)	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          65.1%
+  top-5          81.0%
+  top-10         85.1%
