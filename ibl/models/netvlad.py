@@ -130,7 +130,7 @@ class GraphSage(nn.Module):
         self.gcn.append(SageGCN(input_dim, hidden_dim[0])) # (1433, 128)
         for index in range(0, len(hidden_dim) - 2):
             self.gcn.append(SageGCN(hidden_dim[index], hidden_dim[index+1])) #128, 7
-        self.gcn.append(SageGCN(hidden_dim[-2], hidden_dim[-1], activation=F.gelu))
+        self.gcn.append(SageGCN(hidden_dim[-2], hidden_dim[-1], activation=None))
         
 
 
@@ -334,7 +334,7 @@ class EmbedNet(nn.Module):
                 for b_idx in range(len(rr_boxes)):
 
 
-                    if idx == rr_boxes[b_idx] and obj_i[b_idx] > 10000 and len(img_nodes) < NB-2:
+                    if idx == rr_boxes[b_idx] and obj_i[b_idx] > 10000 and len(img_nodes) < NB-1:
 
                         patch_mask = patch_mask*0
 
@@ -410,6 +410,7 @@ class EmbedNet(nn.Module):
         gvlad = self.graph(node_features_list)
 
         gvlad = torch.add(gvlad,vlad_x)
+
         
         return pool_x, gvlad.view(-1,32768)
 

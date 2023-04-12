@@ -1,53 +1,45 @@
 Use GPU: 0 for testing, rank no.0 of world_size 1
 ==========
-Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='tokyo', scale='250k', test_batch_size=32, workers=2, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/media/leo/2C737A9872F69ECF/models/graphnetvlad/pitts30k-vgg16/conv5-sare_joint-lr0.0001-tuple1-07-Apr-0338/checkpoint1.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, data_dir='/mnt/ssd/usman_ws/OpenIBL/examples/data', logs_dir='/mnt/ssd/usman_ws/OpenIBL/examples/logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=2, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/media/leo/2C737A9872F69ECF/models/graphnetvlad/pitts30k-vgg16/conv5-sare_ind-lr0.0001-tuple1-07-Apr-1821/checkpoint4.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, data_dir='/mnt/ssd/usman_ws/OpenIBL/examples/data', logs_dir='/mnt/ssd/usman_ws/OpenIBL/examples/logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
 ==========
-Tokyo dataset loaded
+Pittsburgh dataset loaded
   subset        | # pids | # images
   ---------------------------------
-  train_query   |  4035  |    48420
-  train_gallery |  4092  |    49104
-  val_query     |  1308  |    15696
-  val_gallery   |  2780  |    33360
-  test_query    |    35  |      315
-  test_gallery  |  6254  |    75984
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
 Encoder loaded!
-=> Loaded checkpoint '/media/leo/2C737A9872F69ECF/models/graphnetvlad/pitts30k-vgg16/conv5-sare_joint-lr0.0001-tuple1-07-Apr-0338/checkpoint1.pth.tar'
-=> Start epoch 1  best recall5 94.9%
+=> Loaded checkpoint '/media/leo/2C737A9872F69ECF/models/graphnetvlad/pitts30k-vgg16/conv5-sare_ind-lr0.0001-tuple1-07-Apr-1821/checkpoint4.pth.tar'
+=> Start epoch 4  best recall5 95.0%
+Extract Features: [100/542]	Time 0.682 (0.796)	Data 0.000 (0.083)	
+Extract Features: [200/542]	Time 0.697 (0.751)	Data 0.000 (0.050)	
+Extract Features: [300/542]	Time 0.912 (0.732)	Data 0.237 (0.036)	
+Extract Features: [400/542]	Time 0.690 (0.725)	Data 0.000 (0.032)	
+Extract Features: [500/542]	Time 0.688 (0.718)	Data 0.000 (0.026)	
+gathering features from rank no.0
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
 Evaluate on the test set:
 load PCA parameters...
-Extract Features: [100/315]	Time 0.045 (0.075)	Data 0.000 (0.010)	
-Extract Features: [200/315]	Time 0.046 (0.061)	Data 0.000 (0.005)	
-Extract Features: [300/315]	Time 0.053 (0.059)	Data 0.000 (0.003)	
+Extract Features: [100/213]	Time 0.690 (0.750)	Data 0.000 (0.065)	
+Extract Features: [200/213]	Time 0.693 (0.720)	Data 0.000 (0.033)	
 gathering features from rank no.0
 load PCA parameters...
-Extract Features: [100/2375]	Time 2.007 (1.171)	Data 1.333 (0.466)	
-Extract Features: [200/2375]	Time 1.166 (1.150)	Data 0.490 (0.457)	
-Extract Features: [300/2375]	Time 1.379 (1.129)	Data 0.700 (0.439)	
-Extract Features: [400/2375]	Time 1.497 (1.140)	Data 0.822 (0.452)	
-Extract Features: [500/2375]	Time 1.018 (1.138)	Data 0.331 (0.451)	
-Extract Features: [600/2375]	Time 1.761 (1.136)	Data 1.092 (0.450)	
-Extract Features: [700/2375]	Time 1.064 (1.132)	Data 0.378 (0.446)	
-Extract Features: [800/2375]	Time 1.289 (1.132)	Data 0.617 (0.446)	
-Extract Features: [900/2375]	Time 1.959 (1.135)	Data 1.294 (0.450)	
-Extract Features: [1000/2375]	Time 1.523 (1.132)	Data 0.853 (0.447)	
-Extract Features: [1100/2375]	Time 1.810 (1.133)	Data 1.128 (0.448)	
-Extract Features: [1200/2375]	Time 1.589 (1.137)	Data 0.918 (0.453)	
-Extract Features: [1300/2375]	Time 1.109 (1.134)	Data 0.427 (0.450)	
-Extract Features: [1400/2375]	Time 1.736 (1.136)	Data 1.063 (0.451)	
-Extract Features: [1500/2375]	Time 1.863 (1.137)	Data 1.182 (0.453)	
-Extract Features: [1600/2375]	Time 2.112 (1.138)	Data 1.441 (0.453)	
-Extract Features: [1700/2375]	Time 1.500 (1.140)	Data 0.826 (0.456)	
-Extract Features: [1800/2375]	Time 1.945 (1.141)	Data 1.271 (0.457)	
-Extract Features: [1900/2375]	Time 1.966 (1.143)	Data 1.290 (0.459)	
-Extract Features: [2000/2375]	Time 1.812 (1.142)	Data 1.136 (0.458)	
-Extract Features: [2100/2375]	Time 1.679 (1.142)	Data 0.994 (0.458)	
-Extract Features: [2200/2375]	Time 1.863 (1.143)	Data 1.188 (0.459)	
-Extract Features: [2300/2375]	Time 2.027 (1.142)	Data 1.344 (0.458)	
+Extract Features: [100/313]	Time 0.737 (0.812)	Data 0.055 (0.128)	
+Extract Features: [200/313]	Time 0.693 (0.774)	Data 0.009 (0.091)	
+Extract Features: [300/313]	Time 0.815 (0.755)	Data 0.143 (0.071)	
 gathering features from rank no.0
 ===> Start calculating pairwise distances
 ===> Start calculating recalls
 Recall Scores:
-  top-1          80.6%
-  top-5          88.3%
-  top-10         90.5%
+  top-1          86.3%
+  top-5          93.2%
+  top-10         95.0%

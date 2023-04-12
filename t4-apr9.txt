@@ -1,0 +1,14 @@
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='tokyo', scale='250k', test_batch_size=32, workers=2, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/media/leo/2C737A9872F69ECF/models/graphnetvlad/pitts30k-vgg16/conv5-sare_joint-lr0.0001-tuple1-09-Apr-0207/checkpoint7.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, data_dir='/mnt/ssd/usman_ws/OpenIBL/examples/data', logs_dir='/mnt/ssd/usman_ws/OpenIBL/examples/logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+Encoder loaded!
