@@ -33,7 +33,7 @@ def extract_cnn_feature(model, inputs, vlad=True, gpu=None):
         outputs = F.normalize(outputs, p=2, dim=-1)
     return outputs
 
-def extract_features(model, data_loader, dataset, print_freq=100,
+def extract_features(model, data_loader, dataset, print_freq=500,
                 vlad=True, pca=None, gpu=None, sync_gather=False):
     model.eval()
     batch_time = AverageMeter()
@@ -117,6 +117,7 @@ def pairwise_distance(features, query=None, gallery=None, metric=None):
         print ("===> Start calculating pairwise distances")
     x = torch.cat([features[f].unsqueeze(0) for f, _, _, _ in query], 0)
     y = torch.cat([features[f].unsqueeze(0) for f, _, _, _ in gallery], 0)
+    print ("line 120")
 
     m, n = x.size(0), y.size(0)
     x = x.view(m, -1)
@@ -124,10 +125,14 @@ def pairwise_distance(features, query=None, gallery=None, metric=None):
     if metric is not None:
         x = metric.transform(x)
         y = metric.transform(y)
+    print ("line 128")
     dist_m = torch.pow(x, 2).sum(dim=1, keepdim=True).expand(m, n) + \
            torch.pow(y, 2).sum(dim=1, keepdim=True).expand(n, m).t()
-    # dist_m.addmm_(1, -2, x, y.t())
-    dist_m.addmm_(x, y.t(), beta=1, alpha=-2)
+
+    print ("line 132")
+    dist_m.addmm_(1, -2, x, y.t())
+    # dist_m.addmm_(x, y.t(), beta=1, alpha=-2)
+    print ("line 134")
     return dist_m, x.numpy(), y.numpy()
 
 def spatial_nms(pred, db_ids, topN):
