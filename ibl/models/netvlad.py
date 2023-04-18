@@ -578,14 +578,15 @@ class EmbedRegionNet(nn.Module):
             vlad_x = F.normalize(vlad_x, p=2, dim=2)  # L2 normalize
             return vlad_x
 
-        vlad_A = torch.cat((vlad_A_global, vlad_A_half, vlad_A_quarter), dim=1)
-        vlad_B = torch.cat((vlad_B_global, vlad_B_half, vlad_B_quarter), dim=1)
-        vlad_A = norm(vlad_A)
-        vlad_B = norm(vlad_B)
+        vlad_A = torch.cat((vlad_A_global, vlad_A_half, vlad_A_quarter), dim=1) #torch.Size([1, 9, 64, 512])
+        vlad_B = torch.cat((vlad_B_global, vlad_B_half, vlad_B_quarter), dim=1) #torch.Size([11, 9, 64, 512])
+
+        vlad_A = norm(vlad_A) #torch.Size([1, 9, 32768])
+        vlad_B = norm(vlad_B)  #torch.Size([11, 9, 32768])
 
         _, B, L = vlad_B.size()
-        vlad_A = vlad_A.view(self.tuple_size,-1,B,L)
-        vlad_B = vlad_B.view(self.tuple_size,-1,B,L)
+        vlad_A = vlad_A.view(self.tuple_size,-1,B,L) #torch.Size([1, 1, 9, 32768])
+        vlad_B = vlad_B.view(self.tuple_size,-1,B,L) #torch.Size([1, 11, 9, 32768])
 
         score = torch.bmm(vlad_A.expand_as(vlad_B).view(-1,B,L), vlad_B.view(-1,B,L).transpose(1,2))
         score = score.view(self.tuple_size,-1,B,B)

@@ -78,11 +78,18 @@ def update_sampler(sampler, model, loader, query, gallery, sub_set, rerank=False
     features = extract_features(model, loader, sorted(list(set(query) | set(gallery))),
                                 vlad=vlad, gpu=gpu, sync_gather=sync_gather)
     distmat, _, _ = pairwise_distance(features, query, gallery)
+    print("line81")
     if rerank:
         distmat_qq, _, _ = pairwise_distance(features, query, query)
+        print("line84")
+
         distmat_gg, _, _ = pairwise_distance(features, gallery, gallery)
+        print("line87")
+
         distmat_jac = re_ranking(distmat.numpy(), distmat_qq.numpy(), distmat_gg.numpy(),
                                                     k1=20, k2=1, lambda_value=lambda_value)
+        print("line91")
+
         distmat_jac = torch.from_numpy(distmat_jac)
         del distmat_qq, distmat_gg
     else:
@@ -304,7 +311,7 @@ if __name__ == '__main__':
     parser.add_argument('--iters', type=int, default=0)
     parser.add_argument('--seed', type=int, default=43)
     parser.add_argument('--deterministic', action='store_true')
-    parser.add_argument('--print-freq', type=int, default=10)
+    parser.add_argument('--print-freq', type=int, default=200)
     parser.add_argument('--margin', type=float, default=0.1, help='margin for the triplet loss with batch hard')
     # path
     working_dir = osp.dirname(osp.abspath(__file__))

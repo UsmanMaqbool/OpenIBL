@@ -19,6 +19,9 @@ from .utils.serialization import write_json
 from .utils.data.preprocessor import Preprocessor
 from .utils import to_torch
 
+import code
+
+
 def extract_cnn_feature(model, inputs, vlad=True, gpu=None):
     model.eval()
     inputs = to_torch(inputs).cuda(gpu)
@@ -124,10 +127,14 @@ def pairwise_distance(features, query=None, gallery=None, metric=None):
     if metric is not None:
         x = metric.transform(x)
         y = metric.transform(y)
+    print("lines 130")
     dist_m = torch.pow(x, 2).sum(dim=1, keepdim=True).expand(m, n) + \
            torch.pow(y, 2).sum(dim=1, keepdim=True).expand(n, m).t()
+    
     # dist_m.addmm_(1, -2, x, y.t())
+    print("lines 135")
     dist_m.addmm_(x, y.t(), beta=1, alpha=-2)
+    print("lines 137")
     return dist_m, x.numpy(), y.numpy()
 
 def spatial_nms(pred, db_ids, topN):

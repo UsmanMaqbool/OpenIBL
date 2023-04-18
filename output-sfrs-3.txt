@@ -1,0 +1,70 @@
+Use GPU: 0 for training, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='6010', dataset='pitts', scale='30k', tuple_size=1, test_batch_size=16, cache_size=1000, workers=2, height=480, width=640, num_clusters=64, pos_num=10, pos_pool=20, neg_num=10, neg_pool=1000, arch='vgg16', layers='conv5', nowhiten=False, syncbn=True, sync_gather=False, features=4096, lr=0.001, momentum=0.9, weight_decay=0.001, step_size=5, resume='', eval_step=1, epochs=5, generations=4, loss_type='sare_ind', temperature=[0.07, 0.07, 0.06, 0.05], soft_weight=0.5, iters=0, seed=43, deterministic=False, print_freq=10, margin=0.1, data_dir='/mnt/ssd/usman_ws/OpenIBL/examples/data', logs_dir='/media/leo/2C737A9872F69ECF/why-so-deepv2-data/pittsburgh/netvlad-run/pitts30k-vgg16/conv5-sare_ind-lr0.001-tuple1-SFRS', init_dir='/mnt/ssd/usman_ws/OpenIBL/examples/../logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+Loading centroids from /mnt/ssd/usman_ws/OpenIBL/examples/../logs/vgg16_pitts_64_desc_cen.hdf5
+Loading centroids from /mnt/ssd/usman_ws/OpenIBL/examples/../logs/vgg16_pitts_64_desc_cen.hdf5
+Test the initial model:
+Extract Features: [100/1101]	Time 0.216 (0.422)	Data 0.075 (0.260)	
+Extract Features: [200/1101]	Time 0.508 (0.394)	Data 0.368 (0.246)	
+Extract Features: [300/1101]	Time 0.645 (0.384)	Data 0.517 (0.241)	
+Extract Features: [400/1101]	Time 0.484 (0.376)	Data 0.345 (0.235)	
+Extract Features: [500/1101]	Time 0.831 (0.377)	Data 0.698 (0.238)	
+Extract Features: [600/1101]	Time 0.479 (0.379)	Data 0.349 (0.241)	
+Extract Features: [700/1101]	Time 0.412 (0.375)	Data 0.282 (0.238)	
+Extract Features: [800/1101]	Time 0.342 (0.368)	Data 0.213 (0.232)	
+Extract Features: [900/1101]	Time 0.315 (0.364)	Data 0.182 (0.228)	
+Extract Features: [1000/1101]	Time 0.434 (0.359)	Data 0.304 (0.223)	
+Extract Features: [1100/1101]	Time 0.182 (0.352)	Data 0.052 (0.216)	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          79.8%
+  top-5          92.7%
+  top-10         95.7%
+===> Start extracting features for sorting gallery
+Extract Features: [100/1083]	Time 0.129 (0.425)	Data 0.000 (0.296)	
+Extract Features: [200/1083]	Time 0.448 (0.402)	Data 0.316 (0.272)	
+Extract Features: [300/1083]	Time 0.609 (0.391)	Data 0.480 (0.261)	
+Extract Features: [400/1083]	Time 0.481 (0.386)	Data 0.351 (0.257)	
+Extract Features: [500/1083]	Time 0.904 (0.382)	Data 0.775 (0.252)	
+Extract Features: [600/1083]	Time 1.023 (0.379)	Data 0.893 (0.249)	
+Extract Features: [700/1083]	Time 0.288 (0.374)	Data 0.159 (0.244)	
+Extract Features: [800/1083]	Time 0.570 (0.369)	Data 0.441 (0.239)	
+Extract Features: [900/1083]	Time 0.362 (0.364)	Data 0.232 (0.234)	
+Extract Features: [1000/1083]	Time 0.129 (0.358)	Data 0.000 (0.228)	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [4-0][10/1000]	Time 0.362 (1.169)	Data 0.036 (0.788)	Loss_hard 0.097 (0.280)	Loss_soft 4.329 (4.242)
+Epoch: [4-0][20/1000]	Time 0.360 (0.950)	Data 0.032 (0.596)	Loss_hard 0.559 (0.338)	Loss_soft 4.431 (4.225)
+Epoch: [4-0][30/1000]	Time 0.521 (0.881)	Data 0.194 (0.536)	Loss_hard 0.222 (0.339)	Loss_soft 4.406 (4.275)
+Epoch: [4-0][40/1000]	Time 0.359 (0.844)	Data 0.031 (0.503)	Loss_hard 0.340 (0.382)	Loss_soft 4.430 (4.258)
+Epoch: [4-0][50/1000]	Time 0.360 (0.813)	Data 0.032 (0.475)	Loss_hard 0.183 (0.350)	Loss_soft 4.637 (4.247)
+Epoch: [4-0][60/1000]	Time 0.360 (0.793)	Data 0.034 (0.456)	Loss_hard 0.143 (0.335)	Loss_soft 4.305 (4.258)
+Epoch: [4-0][70/1000]	Time 0.356 (0.778)	Data 0.031 (0.443)	Loss_hard 0.802 (0.342)	Loss_soft 4.651 (4.247)
+Epoch: [4-0][80/1000]	Time 0.364 (0.761)	Data 0.036 (0.426)	Loss_hard 0.294 (0.333)	Loss_soft 4.073 (4.228)
+Epoch: [4-0][90/1000]	Time 0.361 (0.747)	Data 0.034 (0.414)	Loss_hard 0.132 (0.330)	Loss_soft 4.237 (4.245)
+Epoch: [4-0][100/1000]	Time 0.359 (0.736)	Data 0.033 (0.403)	Loss_hard 0.093 (0.339)	Loss_soft 4.355 (4.262)
+Epoch: [4-0][110/1000]	Time 0.361 (0.720)	Data 0.033 (0.388)	Loss_hard 0.104 (0.331)	Loss_soft 4.558 (4.275)
+Epoch: [4-0][120/1000]	Time 0.357 (0.712)	Data 0.030 (0.380)	Loss_hard 0.160 (0.319)	Loss_soft 4.533 (4.290)
+Epoch: [4-0][130/1000]	Time 0.365 (0.703)	Data 0.038 (0.371)	Loss_hard 0.272 (0.321)	Loss_soft 4.154 (4.298)
+Epoch: [4-0][140/1000]	Time 0.360 (0.692)	Data 0.031 (0.361)	Loss_hard 0.255 (0.319)	Loss_soft 4.465 (4.315)
+Epoch: [4-0][150/1000]	Time 0.361 (0.683)	Data 0.034 (0.352)	Loss_hard 0.316 (0.319)	Loss_soft 4.396 (4.320)
+Epoch: [4-0][160/1000]	Time 0.365 (0.678)	Data 0.038 (0.347)	Loss_hard 0.700 (0.320)	Loss_soft 4.408 (4.323)
+Epoch: [4-0][170/1000]	Time 0.364 (0.670)	Data 0.035 (0.339)	Loss_hard 0.410 (0.318)	Loss_soft 4.488 (4.335)
+Epoch: [4-0][180/1000]	Time 0.361 (0.663)	Data 0.033 (0.332)	Loss_hard 0.130 (0.314)	Loss_soft 4.069 (4.342)
+Epoch: [4-0][190/1000]	Time 0.364 (0.659)	Data 0.038 (0.329)	Loss_hard 0.301 (0.317)	Loss_soft 4.467 (4.340)
+Epoch: [4-0][200/1000]	Time 0.376 (0.653)	Data 0.048 (0.322)	Loss_hard 0.352 (0.315)	Loss_soft 4.296 (4.337)
+Epoch: [4-0][210/1000]	Time 0.359 (0.646)	Data 0.032 (0.315)	Loss_hard 0.214 (0.322)	Loss_soft 4.282 (4.344)
+Epoch: [4-0][220/1000]	Time 0.365 (0.639)	Data 0.031 (0.308)	Loss_hard 0.255 (0.320)	Loss_soft 4.197 (4.347)
