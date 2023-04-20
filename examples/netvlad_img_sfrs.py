@@ -7,6 +7,7 @@ import sys
 import h5py
 import scipy.io
 import copy
+import code
 
 import torch
 from torch import nn
@@ -77,7 +78,11 @@ def update_sampler(sampler, model, loader, query, gallery, sub_set, rerank=False
         print ("===> Start extracting features for sorting gallery")
     features = extract_features(model, loader, sorted(list(set(query) | set(gallery))),
                                 vlad=vlad, gpu=gpu, sync_gather=sync_gather)
+    #code.interact(local=locals())
+
     distmat, _, _ = pairwise_distance(features, query, gallery)
+        # code.interact(local=locals())
+
     print("line81")
     if rerank:
         distmat_qq, _, _ = pairwise_distance(features, query, query)
