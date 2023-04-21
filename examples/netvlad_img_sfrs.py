@@ -78,10 +78,16 @@ def update_sampler(sampler, model, loader, query, gallery, sub_set, rerank=False
     features = extract_features(model, loader, sorted(list(set(query) | set(gallery))),
                                 vlad=vlad, gpu=gpu, sync_gather=sync_gather)
     distmat, _, _ = pairwise_distance(features, query, gallery)
+
     if rerank:
         distmat_qq, _, _ = pairwise_distance(features, query, query)
+
         distmat_gg, _, _ = pairwise_distance(features, gallery, gallery)
-        distmat_jac = re_ranking(distmat.numpy(), distmat_qq.numpy(), distmat_gg.numpy(),
+
+        # m = {'distmat': distmat, 'distmat_qq': distmat_qq, 'distmat_gg': distmat_gg}
+        # torch.save(m, 'tensor.pt')
+
+        distmat_jac = re_ranking(distmat.cuda(), distmat_qq.cuda(), distmat_gg.cuda(),
                                                     k1=20, k2=1, lambda_value=lambda_value)
         distmat_jac = torch.from_numpy(distmat_jac)
         del distmat_qq, distmat_gg

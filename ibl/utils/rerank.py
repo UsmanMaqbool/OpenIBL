@@ -27,23 +27,44 @@ __all__ = ['re_ranking']
 
 import numpy as np
 import gc
-
+import torch
 
 def re_ranking(q_g_dist, q_q_dist, g_g_dist, k1=20, k2=6, lambda_value=0.3):
 
     # The following naming, e.g. gallery_num, is different from outer scope.
     # Don't care about it.
 
-    original_dist = np.concatenate(
-      [np.concatenate([q_q_dist, q_g_dist], axis=1),
-       np.concatenate([q_g_dist.T, g_g_dist], axis=1)],
+    # original_dist = np.concatenate(
+    #   [np.concatenate([q_q_dist, q_g_dist], axis=1),
+    #    np.concatenate([q_g_dist.T, g_g_dist], axis=1)],
+    #   axis=0)
+    aa = torch.cat([q_q_dist, q_g_dist], axis=1)
+    original_dist = torch.cat(
+      [torch.cat([q_q_dist, q_g_dist], axis=1),
+       torch.cat([q_g_dist.T, g_g_dist], axis=1)],
       axis=0)
+    
     del q_q_dist, g_g_dist
-    original_dist = np.power(original_dist, 2).astype(np.float32)
-    original_dist = np.transpose(1. * original_dist/np.max(original_dist,axis = 0))
+    print("line 48")
+    # original_dist = np.power(original_dist, 2).astype(np.float32)
+    original_dist = torch.pow(original_dist, 2)
+    print("line 51")
+    # original_dist = np.transpose(1. * original_dist/np.max(original_dist,axis = 0))
+    original_dist = torch.transpose(1. * original_dist/torch.max(original_dist,axis = 0))
+    print("line 54")
+    original_dist = original_dist.cpu().numpy()
+    print("line 56")
     V = np.zeros_like(original_dist).astype(np.float32)
+    V = np.zeros_like(original_dist).astype(np.float32)
+    print("line 59")
     initial_rank = np.argsort(original_dist).astype(np.int32)
 
+
+    q_g_dist = q_g_dist.cpu().numpy()
+    initial_rank = initial_rank.cpu().numpy()
+    original_dist = original_dist.cpu().numpy()
+    V = V.cpu.numpy()
+    
     query_num = q_g_dist.shape[0]
     gallery_num = q_g_dist.shape[0] + q_g_dist.shape[1]
     all_num = gallery_num
