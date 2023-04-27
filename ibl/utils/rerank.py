@@ -35,26 +35,15 @@ def re_ranking(q_g_dist, q_q_dist, g_g_dist, k1=20, k2=6, lambda_value=0.3):
     # Don't care about it.
 
     original_dist = torch.cat((torch.cat((q_q_dist, q_g_dist),1), torch.cat((q_g_dist.T, g_g_dist),1)), 0)
-    
     del q_q_dist, g_g_dist
-    print("line 48")
-
     original_dist = torch.pow(original_dist, 2)
-    print("line 51")
-
     original_dist = torch.transpose(1. * original_dist/torch.max(original_dist,0).values, 0, 1)
-    print("line 54")
-
     V = torch.zeros_like(original_dist)
-    print("line 59")
     initial_rank = torch.argsort(original_dist)
-
-    
     q_g_dist = q_g_dist.cpu().numpy()
     initial_rank = initial_rank.cpu().numpy()
     original_dist = original_dist.cpu().numpy()
     V = V.cpu().numpy()
-
     query_num = q_g_dist.shape[0]
     gallery_num = q_g_dist.shape[0] + q_g_dist.shape[1]
     all_num = gallery_num
