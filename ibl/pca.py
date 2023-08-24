@@ -50,7 +50,8 @@ class PCA():
             doDual = True
             x2 = torch.matmul(x.t(), x) / (nPoints - 1)
 
-        L, U = torch.symeig(x2, eigenvectors=True)
+        # L, U = torch.symeig(x2, eigenvectors=True)
+        L, U = torch.linalg.eigh(x2)
         if (self.pca_n_components < x2.size(0)):
             k_indices = torch.argsort(L, descending=True)[:self.pca_n_components]
             L = torch.index_select(L, 0, k_indices)

@@ -10,8 +10,10 @@ ARCH=vgg16
 
 PORT=6010
 
-FILES="/media/leo/2C737A9872F69ECF/why-so-deepv2-data/pittsburgh/netvlad-run/pitts30k-vgg16/conv5-sare_ind-lr0.001-tuple1-SFRS/*.tar"
+FILES="/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-sare_joint-lr0.001-tuple1-/*.tar"
 
+echo "==========Testing============="
+echo "=============================="
 
 for RESUME in $FILES
 do
@@ -19,7 +21,8 @@ do
   # take action on each file. $f store current file name
   DATASET=pitts
   SCALE=30k
-
+  echo "==========Pitts30k============="
+  echo "==============================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test.py --launcher pytorch \
     -d ${DATASET} --scale ${SCALE} -a ${ARCH} \
@@ -28,7 +31,11 @@ do
     --resume ${RESUME}
 
    DATASET=tokyo
-  
+
+  echo "==========Tokyo247============="
+  echo "==============================="
+
+
    $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test.py --launcher pytorch \
     -d ${DATASET} --scale ${SCALE} -a ${ARCH} \
