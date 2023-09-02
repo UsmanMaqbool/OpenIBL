@@ -1,13 +1,16 @@
 from __future__ import absolute_import
 import warnings
 
-from .pitts import Pittsburgh
+# from .pitts import Pittsburgh
 from .tokyo import Tokyo
+from .pitts import Pittsburgh
 
 
 __factory = {
     'pitts': Pittsburgh,
     'tokyo': Tokyo,
+
+    
 }
 
 
