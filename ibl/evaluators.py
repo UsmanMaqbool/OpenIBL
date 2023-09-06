@@ -118,20 +118,30 @@ def pairwise_distance(features, query=None, gallery=None, metric=None):
 
     if (dist.get_rank()==0):
         print ("===> Start calculating pairwise distances")
+    # print("line 121")
+
     x = torch.cat([features[f].unsqueeze(0) for f, _, _, _ in query], 0)
     y = torch.cat([features[f].unsqueeze(0) for f, _, _, _ in gallery], 0)
-
+    # print("line 125")
     m, n = x.size(0), y.size(0)
     x = x.view(m, -1)
     y = y.view(n, -1)
     if metric is not None:
         x = metric.transform(x)
         y = metric.transform(y)
+    # print("line 132")
+    # print(torch.pow(x, 2).sum(dim=1, keepdim=True).expand(m, n))
+    # print("line 133")
+    
+    # print(torch.pow(y, 2).sum(dim=1, keepdim=True).expand(n, m))
+    # print("line 138")
+    
     dist_m = torch.pow(x, 2).sum(dim=1, keepdim=True).expand(m, n) + \
            torch.pow(y, 2).sum(dim=1, keepdim=True).expand(n, m).t()
-    
+    # print("line 141")
     # dist_m.addmm_(1, -2, x, y.t())
     dist_m.addmm_(x, y.t(), beta=1, alpha=-2)
+    # print("line 144")
     return dist_m, x.numpy(), y.numpy()
 
 def spatial_nms(pred, db_ids, topN):

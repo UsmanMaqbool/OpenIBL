@@ -50,7 +50,7 @@ class Pittsburgh(Dataset):
             q_ids = []
             for img_name in os.listdir(dir_path):
             # for img_name in f:
-                print(img_name)
+                # print(img_name)
                 _, UTM_east, UTM_north, UTM_zone_number, UTM_zone_letter, latitude, longitude, pano_id, tile_num, heading, pitch, roll, height, timestamp, note, extension = img_name.split('@')
                 sid = pano_id
                 utm = [float(UTM_east),float(UTM_north)]
