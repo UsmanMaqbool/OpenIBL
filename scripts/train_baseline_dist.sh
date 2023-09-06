@@ -10,6 +10,7 @@ LOSS=$1
 LR=0.0001
 
 FILES="/home/leo/usman_ws/models/openibl/official/${DATASET}${SCALE}-${ARCH}/${LAYERS}-${LOSS}-lr${LR}-tuple${GPUS}-${DATE}"
+
 echo ${FILES}
 
 if [ $# -ne 1 ]
@@ -48,7 +49,7 @@ do
     --vlad --reduction \
     --resume ${RESUME}
 
-   DATASET=tokyo
+  DATASET=tokyo
 
   echo "==========Test on Tokyo247============="
   echo "$RESUME"
@@ -57,7 +58,7 @@ do
 
    $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test.py --launcher pytorch \
-    -d ${DATASET} --scale ${SCALE} -a ${ARCH} \
+    -d ${DATASET} -a ${ARCH} \
     --test-batch-size 32 -j 2 \
     --vlad --reduction \
     --resume ${RESUME}
