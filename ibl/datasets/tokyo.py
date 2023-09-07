@@ -3,7 +3,6 @@ import os.path as osp
 import random
 import numpy as np
 from collections import namedtuple
-import os
 
 from ..utils.data import Dataset
 from ..utils.osutils import mkdir_if_missing
@@ -39,7 +38,8 @@ class Tokyo(Dataset):
         if (not osp.isdir(raw_dir)):
             raise RuntimeError("Dataset not found.")
         TM_root = osp.join('tokyoTM', 'images')
-        # db_root = osp.join('tokyo247', 'images')
+        db_root = osp.join('tokyo247', 'images')
+        q_root = osp.join('tokyo247', 'query')
 
         identities = []
         utms = []
@@ -98,50 +98,34 @@ class Tokyo(Dataset):
         utms = new_utms
 
         # process tokyo247
-        raw_dir = osp.join(self.root, 'images')
-        # print(raw_dir)
-        if (not osp.isdir(raw_dir)):
-            raise RuntimeError("Dataset not found.")
         q_pids, db_pids = {}, {}
         def register_247(split):
-            dir_path = osp.join(raw_dir, split, 'queries')
-
-
+            struct = parse_dbStruct(osp.join(raw_dir, 'tokyo247.mat'), False)
             q_ids = []
-            if (osp.isdir(dir_path)):
-                for img_name in os.listdir(dir_path):
-                # for img_name in f:
-                    # print(img_name)
-                    _, UTM_east, UTM_north, UTM_zone_number, UTM_zone_letter, latitude, longitude, pano_id, tile_num, heading, pitch, roll, height, timestamp, note, extension = img_name.split('@')
-                    sid = pano_id
-                    utm = [float(UTM_east),float(UTM_north)]
-                    if (sid not in q_pids.keys()):      
-                        pid = len(identities)
-                        q_pids[sid] = pid
-                        identities.append([])
-                        utms.append(utm)
-                        q_ids.append(pid)
-                    identities[q_pids[sid]].append(osp.join(dir_path, img_name))
-                    assert(utms[q_pids[sid]]==utm)
-
-            dir_path = osp.join(raw_dir, split, 'database')
+            for fpath, utm in zip(struct.qImage, struct.utmQ):
+                sid = str(utm[0])+'_'+str(utm[1])
+                if (sid not in q_pids.keys()):
+                    pid = len(identities)
+                    q_pids[sid] = pid
+                    identities.append([])
+                    utms.append(utm.tolist())
+                    q_ids.append(pid)
+                identities[q_pids[sid]].append(osp.join(q_root, fpath))
+                assert(utms[q_pids[sid]]==utm.tolist())
             db_ids = []
-            if (osp.isdir(dir_path)): 
-                for img_name in os.listdir(dir_path):
-                    # for img_name in f:
-                    print(img_name)
-                    _, UTM_east, UTM_north, UTM_zone_number, UTM_zone_letter, latitude, longitude, pano_id, tile_num, heading, pitch, roll, height, timestamp, note, extension = img_name.split('@')
-                    sid = pano_id
-                    utm = [float(UTM_east),float(UTM_north)]
-                    # [585089.3603214071, 4477427.575588894]
-                    if (sid not in db_pids.keys()):
-                        pid = len(identities)
-                        db_pids[sid] = pid
-                        identities.append([])
-                        utms.append(utm)
-                        db_ids.append(pid)
-                    identities[db_pids[sid]].append(osp.join(dir_path, img_name))
-                    assert(utms[db_pids[sid]]==utm)
+            for fpath, utm in zip(struct.dbImage, struct.utmDb):
+                sid = osp.dirname(fpath)
+                fpath = fpath[:-3]+'png'
+                # sid = str(utm[0])+'_'+str(utm[1])
+                # sid = fpath[:-12]
+                if (sid not in db_pids.keys()):
+                    pid = len(identities)
+                    db_pids[sid] = pid
+                    identities.append([])
+                    utms.append(utm.tolist())
+                    db_ids.append(pid)
+                identities[db_pids[sid]].append(osp.join(db_root, fpath))
+                assert(utms[db_pids[sid]]==utm.tolist())
             return q_ids, db_ids
 
         q_test_pids, db_test_pids = register_247('test')
