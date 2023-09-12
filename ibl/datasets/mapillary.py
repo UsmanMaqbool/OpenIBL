@@ -8,17 +8,16 @@ from ..utils.osutils import mkdir_if_missing
 from ..utils.serialization import write_json, read_mat
 from ..utils.dist_utils import synchronize
 
-class Pittsburgh(Dataset):
+class Mapillary(Dataset):
 
-    def __init__(self, root, scale='250k', verbose=True):
-        super(Pittsburgh, self).__init__(root)
-        self.scale = scale
+    def __init__(self, root, scale=None, verbose=True):
+        super(Mapillary, self).__init__(root)
 
         self.arrange()
-        self.load(verbose, scale)
+        self.load(verbose)
 
     def arrange(self):
-        if self._check_integrity(self.scale):
+        if self._check_integrity():
             return
 
         raw_dir = osp.join(self.root, 'images')
@@ -70,21 +69,21 @@ class Pittsburgh(Dataset):
         q_train_pids, db_train_pids = register('train')
         q_val_pids, db_val_pids = register('val')
         q_test_pids, db_test_pids = register('test')
+
         assert len(identities)==len(utms)
 
         # Save meta information into a json file
-        meta = {'name': 'Pittsburgh_'+self.scale,
+        meta = {'name': 'Mapillary',
                 'identities': identities, 'utm': utms}
         try:
             rank = dist.get_rank()
         except:
             rank = 0
         if rank == 0:
-            write_json(meta, osp.join(self.root, 'meta_'+self.scale+'.json'))
+            write_json(meta, osp.join(self.root, 'meta.json'))
 
         # Save the training / test split
         splits = {
-            # 'train': sorted(train_pids),
             'q_train': sorted(q_train_pids),
             'db_train': sorted(db_train_pids),
             'q_val': sorted(q_val_pids),
@@ -92,5 +91,5 @@ class Pittsburgh(Dataset):
             'q_test': sorted(q_test_pids),
             'db_test': sorted(db_test_pids)}
         if rank == 0:
-            write_json(splits, osp.join(self.root, 'splits_'+self.scale+'.json'))
+            write_json(splits, osp.join(self.root, 'splits.json'))
         synchronize()

@@ -79,15 +79,24 @@ def extract_features(model, data_loader, dataset, print_freq=100,
     if (sync_gather):
         # all gather features in parallel
         # cost more GPU memory but less time
-        features = torch.cat(features).cuda(gpu)
-        all_features = [torch.empty_like(features) for _ in range(world_size)]
-        dist.all_gather(all_features, features)
-        del features
-        all_features = torch.cat(all_features).cpu()[:len(dataset)]
-        features_dict = OrderedDict()
+        # features = torch.cat(features).cuda(gpu)
+        # all_features = [torch.empty_like(features) for _ in range(world_size)]
+        # dist.all_gather(all_features, features)
+        # del features
+        # all_features = torch.cat(all_features).cpu()[:len(dataset)]
+        # features_dict = OrderedDict()
+        # for fname, output in zip(dataset, all_features):
+        #     features_dict[fname[0]] = output
+        # del all_features
+
+        features_dict = OrderedDict()        
+        all_features = torch.cat(features).cpu()[:len(dataset)]
+        print(len(all_features))
         for fname, output in zip(dataset, all_features):
             features_dict[fname[0]] = output
+        print(len(features_dict))
         del all_features
+        
     else:
         # broadcast features in sequence
         # cost more time but less GPU memory
@@ -116,33 +125,21 @@ def pairwise_distance(features, query=None, gallery=None, metric=None):
         dist_m = dist_m.expand(n, n) - 2 * torch.mm(x, x.t())
         return dist_m, None, None
 
-    if (dist.get_rank()==0):
-        print ("===> Start calculating pairwise distances")
-    # print("line 121")
-
+    # if (dist.get_rank()==0):
+        # print ("===> Start calculating pairwise distances")
+        
     x = torch.cat([features[f].unsqueeze(0) for f, _, _, _ in query], 0)
     y = torch.cat([features[f].unsqueeze(0) for f, _, _, _ in gallery], 0)
-    # print("line 125")
     m, n = x.size(0), y.size(0)
     x = x.view(m, -1)
     y = y.view(n, -1)
     if metric is not None:
         x = metric.transform(x)
         y = metric.transform(y)
-    # print("line 132")
-    # print(torch.pow(x, 2).sum(dim=1, keepdim=True).expand(m, n))
-    # print("line 133")
-    
-    # print(torch.pow(y, 2).sum(dim=1, keepdim=True).expand(n, m))
-    # print("line 138")
-    
     dist_m = torch.pow(x, 2).sum(dim=1, keepdim=True).expand(m, n) + \
            torch.pow(y, 2).sum(dim=1, keepdim=True).expand(n, m).t()
-    # print("line 141")
-    # dist_m.addmm_(1, -2, x, y.t())
     dist_m.addmm_(x, y.t(), beta=1, alpha=-2)
-    # print("line 144")
-    return dist_m, x.numpy(), y.numpy()
+    return dist_m
 
 def spatial_nms(pred, db_ids, topN):
     assert(len(pred)==len(db_ids))
@@ -201,15 +198,47 @@ class Evaluator(object):
             features = extract_features(self.model, query_loader, dataset,
                             vlad=vlad, pca=pca, gpu=gpu, sync_gather=sync_gather)
 
-        distmat, _, _ = pairwise_distance(features, query, gallery)
+        print(f"lenght of features: {len(features)}")
+        print(len(query))
+        print(len(gallery))
+        # distmat = pairwise_distance(features, query, gallery)
+
+        # Split features, query, and gallery into chunks
+        n_query = len(query)
+        n_gallery = len(gallery)
+
+        # Define the batch size for all datasets
+        batch_size = 100  # Adjust this based on available memory
+
+        # Initialize an empty distance matrix
+        distmat = np.zeros((n_query, n_gallery))
+
+        for i in range(0, n_query, batch_size):
+            query_batch = query[i:i+batch_size]
+
+            for j in range(0, n_gallery, batch_size):
+                gallery_batch = gallery[j:j+batch_size]
+
+                # Compute distances for the current batches
+                
+                dist_batch = pairwise_distance(features, query_batch, gallery_batch)
+
+                # Update the distance matrix with the computed distances
+                i_start, i_end = i, min(i + batch_size, n_query)
+                j_start, j_end = j, min(j + batch_size, n_gallery)
+                distmat[i_start:i_end, j_start:j_end] = dist_batch
+
+        print(len(distmat))
+
+        
         recalls = evaluate_all(distmat, ground_truth, gallery, nms=nms)
         if (not rerank):
             return recalls
 
         if (self.rank==0):
             print('Applying re-ranking ...')
-            distmat_gg, _, _ = pairwise_distance(features, gallery, gallery)
-            distmat_qq, _, _ = pairwise_distance(features, query, query)
+            distmat_gg = pairwise_distance(features, gallery, gallery)
+            distmat_qq = pairwise_distance(features, query, query)
             distmat = re_ranking(distmat.numpy(), distmat_qq.numpy(), distmat_gg.numpy(),
                                 k1=rr_topk, k2=1, lambda_value=lambda_value)
 

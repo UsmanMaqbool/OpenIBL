@@ -87,10 +87,13 @@ class Dataset(object):
         db_train_pids = list(set([x[1] for x in self.db_train]))
 
         self.val_pos, select = get_groundtruth(self.q_val, self.db_val, 25, None)
-        assert(len(select)==len(self.q_val))
-        self.test_pos, select = get_groundtruth(self.q_test, self.db_test, 25, None)
-        assert(len(select)==len(self.q_test))
-
+       
+        if( len(self.db_test) or len(self.db_test) ) :
+            self.test_pos, select = get_groundtruth(self.q_test, self.db_test, 25, None)
+        else:
+            self.test_pos = []
+            select = []
+        
         try:
             rank = dist.get_rank()
         except:

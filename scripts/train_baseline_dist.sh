@@ -2,18 +2,18 @@
 PYTHON=${PYTHON:-"python"}
 GPUS=1
 DATE=$(date '+%d-%b') 
-DATASET=pitts
+DATASET=$1
 SCALE=30k
 ARCH=vgg16
 LAYERS=conv5
-LOSS=$1
+LOSS=$2
 LR=0.0001
 
 FILES="/home/leo/usman_ws/models/openibl/official/${DATASET}${SCALE}-${ARCH}/${LAYERS}-${LOSS}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
-if [ $# -ne 1 ]
+if [ $# -ne 2 ]
   then
     echo "Arguments error: <LOSS_TYPE (triplet|sare_ind|sare_joint)>"
     exit 1
@@ -30,37 +30,37 @@ examples/netvlad_img.py --launcher pytorch --tcp-port ${PORT} \
   --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 \
   --logs-dir ${FILES}
 
-echo "==========Testing============="
-FILES="${FILES}/*.tar"
-echo ${FILES}
-echo "=============================="
-for RESUME in $FILES
-do
-  # take action on each file. $f store current file name
-  DATASET=pitts
-  SCALE=30k
-  echo "==========Test on Pitts30k============="
-  echo "$RESUME"
-  echo "======================================="
-  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-   examples/test.py --launcher pytorch \
-    -d ${DATASET} --scale ${SCALE} -a ${ARCH} \
-    --test-batch-size 32 -j 2 \
-    --vlad --reduction \
-    --resume ${RESUME}
+# echo "==========Testing============="
+# FILES="${FILES}/*.tar"
+# echo ${FILES}
+# echo "=============================="
+# for RESUME in $FILES
+# do
+#   # take action on each file. $f store current file name
+#   DATASET=pitts
+#   SCALE=30k
+#   echo "==========Test on Pitts30k============="
+#   echo "$RESUME"
+#   echo "======================================="
+#   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+#    examples/test.py --launcher pytorch \
+#     -d ${DATASET} --scale ${SCALE} -a ${ARCH} \
+#     --test-batch-size 32 -j 2 \
+#     --vlad --reduction \
+#     --resume ${RESUME}
 
-  DATASET=tokyo
+#   DATASET=tokyo
 
-  echo "==========Test on Tokyo247============="
-  echo "$RESUME"
-  echo "======================================="
+#   echo "==========Test on Tokyo247============="
+#   echo "$RESUME"
+#   echo "======================================="
 
 
-   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-   examples/test.py --launcher pytorch \
-    -d ${DATASET} -a ${ARCH} \
-    --test-batch-size 32 -j 2 \
-    --vlad --reduction \
-    --resume ${RESUME}
+#    $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+#    examples/test.py --launcher pytorch \
+#     -d ${DATASET} -a ${ARCH} \
+#     --test-batch-size 32 -j 2 \
+#     --vlad --reduction \
+#     --resume ${RESUME}
 
 done

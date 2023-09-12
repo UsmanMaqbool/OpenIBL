@@ -75,7 +75,7 @@ def update_sampler(sampler, model, loader, query, gallery, sub_set, vlad=True, g
         print ("===> Start extracting features for sorting gallery")
     features = extract_features(model, loader, sorted(list(set(query) | set(gallery))),
                                 vlad=vlad, gpu=gpu, sync_gather=sync_gather)
-    distmat, _, _ = pairwise_distance(features, query, gallery)
+    distmat = pairwise_distance(features, query, gallery)
     del features
     if (dist.get_rank()==0):
         print ("===> Start sorting gallery")
@@ -87,7 +87,7 @@ def get_model(args):
     if args.vlad:
         pool_layer = models.create('netvlad', dim=base_model.feature_dim)
         # vgg16_pitts_64_desc_cen_mat.hdf5
-        initcache = osp.join(args.init_dir, args.arch + '_' + args.dataset + '_' + str(args.num_clusters) + '_desc_cen.hdf5')
+        initcache = osp.join(args.init_dir, args.arch + '_' + 'pitts_' + str(args.num_clusters) + '_desc_cen.hdf5')
         if (dist.get_rank()==0):
             print ('Loading centroids from {}'.format(initcache))
         with h5py.File(initcache, mode='r') as h5:

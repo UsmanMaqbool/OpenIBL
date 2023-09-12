@@ -4,13 +4,12 @@ import warnings
 # from .pitts import Pittsburgh
 from .tokyo import Tokyo
 from .pitts import Pittsburgh
-
+from .mapillary import Mapillary 
 
 __factory = {
     'pitts': Pittsburgh,
     'tokyo': Tokyo,
-
-    
+    'mapillary': Mapillary,   
 }
 
 
