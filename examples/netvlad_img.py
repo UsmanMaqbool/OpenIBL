@@ -138,7 +138,8 @@ def main_worker(args):
     # Create data loaders
     iters = args.iters if (args.iters>0) else None
     dataset, train_loader, val_loader, test_loader, sampler, train_extract_loader = get_data(args, iters)
-
+    print(f"dataset.q_val = {len(dataset.q_val)}, dataset.db_val = {len(dataset.db_val)}, dataset.val_pos = {len(dataset.val_pos)}")
+    exit()
     # Create model
     model = get_model(args)
 

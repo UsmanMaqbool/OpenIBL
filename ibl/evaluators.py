@@ -90,12 +90,55 @@ def extract_features(model, data_loader, dataset, print_freq=100,
         # del all_features
 
         features_dict = OrderedDict()        
-        all_features = torch.cat(features).cpu()[:len(dataset)]
-        print(len(all_features))
-        for fname, output in zip(dataset, all_features):
-            features_dict[fname[0]] = output
-        print(len(features_dict))
-        del all_features
+        
+        # all_features = torch.cat(features).cpu()[:len(dataset)]
+        # print(len(all_features))
+        # for fname, output in zip(dataset, all_features):
+        #     features_dict[fname[0]] = output
+        # print(len(features_dict))
+        # del all_features
+        
+    #   17608
+    #   17608
+    #     lenght of features: 17608
+    #     7608
+    #     10000
+    #     7608
+        
+        
+    
+        #551x32x32768
+        #dataset: 17608
+        # code.interact(local=locals())
+        
+        
+        
+        # print(len(all_features))
+        # for fname, output in zip(dataset, all_features):
+        #     features_dict[fname[0]] = output
+        # print(len(features_dict))
+        # del all_features
+        chunk_start = 0
+        chunk_end = 0
+        for k in range(len(features)):
+            l = len(features[k]) #32
+            #below should run till 32
+            chunk_start = chunk_end
+            chunk_end = chunk_start+l
+            
+            # print(f"chunk start:{chunk_start} chuck end: {chunk_end} featuresize: {l}")
+            for fname, output in zip(dataset[chunk_start:chunk_end], features[k]):
+                features_dict[fname[0]] = output
+            
+        
+        # print("Length of dataset:", len(dataset))
+        # print("Length of features:", len(features))
+        # # l = len(features)-1
+        # for k in range(len(dataset)/len(features)):  
+        #     for fname, output in zip(dataset[k*l:(k+1)*l], features):
+        #         features_dict[fname[0]] = output
+        # Print the length of features_dict
+        print("Length of features_dict:", len(features_dict))
         
     else:
         # broadcast features in sequence
@@ -159,11 +202,13 @@ def evaluate_all(distmat, gt, gallery, recall_topk=[1, 5, 10], nms=False):
     if (dist.get_rank()==0):
         print("===> Start calculating recalls")
     correct_at_n = np.zeros(len(recall_topk))
-
+    # len(sort_idx) = 22168
+    # len(gt)       = 22016
+    print(f"len(sort_idx) = {len(sort_idx)} and len(gt) = {len(gt)}")
     for qIx, pred in enumerate(sort_idx):
         if (nms):
             pred = spatial_nms(pred.tolist(), db_ids, max(recall_topk)*12)
-
+        code.interact(local=locals())
         for i, n in enumerate(recall_topk):
             # if in top N then also in top NN, where NN > N
             if np.any(np.in1d(pred[:n], gt[qIx])):
@@ -198,7 +243,7 @@ class Evaluator(object):
             features = extract_features(self.model, query_loader, dataset,
                             vlad=vlad, pca=pca, gpu=gpu, sync_gather=sync_gather)
 
-        print(f"lenght of features: {len(features)}")
+        print(f"lenght of features 244: {len(features)}")
         print(len(query))
         print(len(gallery))
         # distmat = pairwise_distance(features, query, gallery)
@@ -208,7 +253,7 @@ class Evaluator(object):
         n_gallery = len(gallery)
 
         # Define the batch size for all datasets
-        batch_size = 100  # Adjust this based on available memory
+        batch_size = 50  # Adjust this based on available memory
 
         # Initialize an empty distance matrix
         distmat = np.zeros((n_query, n_gallery))
@@ -228,7 +273,7 @@ class Evaluator(object):
                 j_start, j_end = j, min(j + batch_size, n_gallery)
                 distmat[i_start:i_end, j_start:j_end] = dist_batch
 
-        print(len(distmat))
+        print(f"ground truth lenght {len(ground_truth)}")
 
         
         recalls = evaluate_all(distmat, ground_truth, gallery, nms=nms)

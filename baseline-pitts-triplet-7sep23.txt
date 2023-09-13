@@ -1,9 +1,9 @@
-/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-12-Sep
+/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-13-Sep
 ==========Starting Training=============
 ========================================
 Use GPU: 0 for training, rank no.0 of world_size 1
 ==========
-Args:Namespace(launcher='pytorch', tcp_port='6010', dataset='pitts', scale='30k', tuple_size=1, test_batch_size=32, cache_size=1000, workers=1, height=480, width=640, neg_num=10, num_clusters=64, neg_pool=1000, arch='vgg16', layers='conv5', nowhiten=False, syncbn=True, sync_gather=True, features=4096, lr=0.0001, momentum=0.9, weight_decay=0.001, loss_type='triplet', step_size=5, resume='', vlad=True, eval_step=1, rerank=False, epochs=5, iters=0, seed=43, deterministic=False, print_freq=200, margin=0.1, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-12-Sep', init_dir='/home/leo/usman_ws/codes/OpenIBL/examples/../logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+Args:Namespace(launcher='pytorch', tcp_port='6010', dataset='pitts', scale='30k', tuple_size=1, test_batch_size=32, cache_size=1000, workers=1, height=480, width=640, neg_num=10, num_clusters=64, neg_pool=1000, arch='vgg16', layers='conv5', nowhiten=False, syncbn=True, sync_gather=True, features=4096, lr=0.0001, momentum=0.9, weight_decay=0.001, loss_type='triplet', step_size=5, resume='', vlad=True, eval_step=1, rerank=False, epochs=5, iters=0, seed=43, deterministic=False, print_freq=200, margin=0.1, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-13-Sep', init_dir='/home/leo/usman_ws/codes/OpenIBL/examples/../logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
 ==========
 Pittsburgh dataset loaded
   subset        | # pids | # images
@@ -16,4 +16,17 @@ Pittsburgh dataset loaded
   test_gallery  |   417  |    10000
 Loading centroids from /home/leo/usman_ws/codes/OpenIBL/examples/../logs/vgg16_pitts_64_desc_cen.hdf5
 Test the initial model:
-Extract Features: [100/551]	Time 0.206 (0.232)	Data 0.000 (0.010)	
+Extract Features: [100/551]	Time 0.218 (0.229)	Data 0.000 (0.009)	
+Extract Features: [200/551]	Time 0.217 (0.221)	Data 0.000 (0.004)	
+Extract Features: [300/551]	Time 0.219 (0.219)	Data 0.000 (0.003)	
+Extract Features: [400/551]	Time 0.205 (0.217)	Data 0.000 (0.002)	
+Extract Features: [500/551]	Time 0.216 (0.217)	Data 0.000 (0.002)	
+Length of features_dict: 17608
+lenght of features 244: 17608
+7608
+10000
+line 274 7608
+===> Start calculating recalls
+len(sort_idx) = 7608 and len(gt) = 7608
+>>> Use exit() or Ctrl-D (i.e. EOF) to exit
+>>> 

@@ -1,9 +1,9 @@
-/home/leo/usman_ws/models/openibl/official/mapillary30k-vgg16/conv5-triplet-lr0.0001-tuple1-12-Sep
+/home/leo/usman_ws/models/openibl/official/mapillary30k-vgg16/conv5-triplet-lr0.0001-tuple1-13-Sep
 ==========Starting Training=============
 ========================================
 Use GPU: 0 for training, rank no.0 of world_size 1
 ==========
-Args:Namespace(launcher='pytorch', tcp_port='6010', dataset='mapillary', scale='30k', tuple_size=1, test_batch_size=32, cache_size=1000, workers=1, height=480, width=640, neg_num=10, num_clusters=64, neg_pool=1000, arch='vgg16', layers='conv5', nowhiten=False, syncbn=True, sync_gather=True, features=4096, lr=0.0001, momentum=0.9, weight_decay=0.001, loss_type='triplet', step_size=5, resume='', vlad=True, eval_step=1, rerank=False, epochs=5, iters=0, seed=43, deterministic=False, print_freq=200, margin=0.1, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/models/openibl/official/mapillary30k-vgg16/conv5-triplet-lr0.0001-tuple1-12-Sep', init_dir='/home/leo/usman_ws/codes/OpenIBL/examples/../logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+Args:Namespace(launcher='pytorch', tcp_port='6010', dataset='mapillary', scale='30k', tuple_size=1, test_batch_size=32, cache_size=1000, workers=1, height=480, width=640, neg_num=10, num_clusters=64, neg_pool=1000, arch='vgg16', layers='conv5', nowhiten=False, syncbn=True, sync_gather=True, features=4096, lr=0.0001, momentum=0.9, weight_decay=0.001, loss_type='triplet', step_size=5, resume='', vlad=True, eval_step=1, rerank=False, epochs=5, iters=0, seed=43, deterministic=False, print_freq=200, margin=0.1, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/models/openibl/official/mapillary30k-vgg16/conv5-triplet-lr0.0001-tuple1-13-Sep', init_dir='/home/leo/usman_ws/codes/OpenIBL/examples/../logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
 ==========
 Mapillary dataset loaded
   subset        | # pids | # images
@@ -14,34 +14,4 @@ Mapillary dataset loaded
   val_gallery   | 18871  |    37742
   test_query    |     0  |        0
   test_gallery  |     0  |        0
-Loading centroids from /home/leo/usman_ws/codes/OpenIBL/examples/../logs/vgg16_pitts_64_desc_cen.hdf5
-Test the initial model:
-Extract Features: [100/1873]	Time 0.211 (0.249)	Data 0.000 (0.010)	
-Extract Features: [200/1873]	Time 0.217 (0.238)	Data 0.000 (0.005)	
-Extract Features: [300/1873]	Time 0.221 (0.232)	Data 0.000 (0.003)	
-Extract Features: [400/1873]	Time 0.224 (0.228)	Data 0.000 (0.003)	
-Extract Features: [500/1873]	Time 0.254 (0.229)	Data 0.000 (0.002)	
-Extract Features: [600/1873]	Time 0.205 (0.228)	Data 0.000 (0.002)	
-Extract Features: [700/1873]	Time 0.217 (0.228)	Data 0.000 (0.002)	
-Extract Features: [800/1873]	Time 0.219 (0.228)	Data 0.000 (0.001)	
-Extract Features: [900/1873]	Time 0.267 (0.228)	Data 0.000 (0.001)	
-Extract Features: [1000/1873]	Time 0.225 (0.227)	Data 0.000 (0.001)	
-Extract Features: [1100/1873]	Time 0.220 (0.226)	Data 0.000 (0.001)	
-Extract Features: [1200/1873]	Time 0.243 (0.227)	Data 0.000 (0.001)	
-Extract Features: [1300/1873]	Time 0.229 (0.227)	Data 0.000 (0.001)	
-Extract Features: [1400/1873]	Time 0.273 (0.228)	Data 0.000 (0.001)	
-Extract Features: [1500/1873]	Time 0.209 (0.227)	Data 0.000 (0.001)	
-Extract Features: [1600/1873]	Time 0.205 (0.227)	Data 0.000 (0.001)	
-Extract Features: [1700/1873]	Time 0.213 (0.226)	Data 0.000 (0.001)	
-Extract Features: [1800/1873]	Time 0.212 (0.226)	Data 0.000 (0.001)	
-Gathering features from rank no.0 (Batch 1/19)
-Gathering features from rank no.0 (Batch 2/19)
-Gathering features from rank no.0 (Batch 3/19)
-Gathering features from rank no.0 (Batch 4/19)
-Gathering features from rank no.0 (Batch 5/19)
-Gathering features from rank no.0 (Batch 6/19)
-Gathering features from rank no.0 (Batch 7/19)
-Gathering features from rank no.0 (Batch 8/19)
-Gathering features from rank no.0 (Batch 9/19)
-Gathering features from rank no.0 (Batch 10/19)
-Gathering features from rank no.0 (Batch 11/19)
+dataset.q_val = 22168, dataset.db_val = 37742, dataset.val_pos = 22016
