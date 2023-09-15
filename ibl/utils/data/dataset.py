@@ -4,7 +4,7 @@ import numpy as np
 import copy
 import torch.distributed as dist
 from sklearn.neighbors import NearestNeighbors
-
+import code
 from ..serialization import read_json, read_mat
 
 
@@ -20,6 +20,8 @@ def _pluck(identities, utm, indices, relabel=False):
                 ret.append((fname, pid, x, y))
     return sorted(ret)
 
+# self.val_pos, select = get_groundtruth(self.q_val, self.db_val, 25, None)
+
 def get_groundtruth(query, gallery, intra_thres, inter_thres=None):
     utm_query = [[u[2], u[3]] for u in query]
     utm_gallery = [[u[2], u[3]] for u in gallery]
@@ -30,9 +32,13 @@ def get_groundtruth(query, gallery, intra_thres, inter_thres=None):
     for idx, p in enumerate(neighbors):
         pid = query[idx][1]
         select_p = [i for i in p.tolist() if gallery[i][1]!=pid]
+        # code.interact(local=locals())
         if (len(select_p)>0):
             pos.append(select_p)
             select_pos.append(idx)
+        else:
+            pos.append(0)
+            select_pos.append(0)
     if (inter_thres is None):
         return pos, select_pos
     dist, neighbors = neigh.radius_neighbors(utm_query, radius=inter_thres)
@@ -87,7 +93,7 @@ class Dataset(object):
         db_train_pids = list(set([x[1] for x in self.db_train]))
 
         self.val_pos, select = get_groundtruth(self.q_val, self.db_val, 25, None)
-       
+        print(len(self.val_pos))
         if( len(self.db_test) or len(self.db_test) ) :
             self.test_pos, select = get_groundtruth(self.q_test, self.db_test, 25, None)
         else:

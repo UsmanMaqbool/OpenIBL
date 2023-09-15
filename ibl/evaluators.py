@@ -208,7 +208,7 @@ def evaluate_all(distmat, gt, gallery, recall_topk=[1, 5, 10], nms=False):
     for qIx, pred in enumerate(sort_idx):
         if (nms):
             pred = spatial_nms(pred.tolist(), db_ids, max(recall_topk)*12)
-        code.interact(local=locals())
+        # code.interact(local=locals())
         for i, n in enumerate(recall_topk):
             # if in top N then also in top NN, where NN > N
             if np.any(np.in1d(pred[:n], gt[qIx])):
