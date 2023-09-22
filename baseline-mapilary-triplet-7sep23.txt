@@ -1,9 +1,9 @@
-/home/leo/usman_ws/models/openibl/official/mapillary30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Sep
+/home/leo/usman_ws/models/openibl/official/mapillary30k-vgg16/conv5-triplet-lr0.0001-tuple1-18-Sep
 ==========Starting Training=============
 ========================================
 Use GPU: 0 for training, rank no.0 of world_size 1
 ==========
-Args:Namespace(launcher='pytorch', tcp_port='6010', dataset='mapillary', scale='30k', tuple_size=1, test_batch_size=32, cache_size=1000, workers=1, height=480, width=640, neg_num=10, num_clusters=64, neg_pool=1000, arch='vgg16', layers='conv5', nowhiten=False, syncbn=True, sync_gather=True, features=4096, lr=0.0001, momentum=0.9, weight_decay=0.001, loss_type='triplet', step_size=5, resume='', vlad=True, eval_step=1, rerank=False, epochs=5, iters=0, seed=43, deterministic=False, print_freq=200, margin=0.1, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/models/openibl/official/mapillary30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Sep', init_dir='/home/leo/usman_ws/codes/OpenIBL/examples/../logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+Args:Namespace(launcher='pytorch', tcp_port='6010', dataset='mapillary', scale='30k', tuple_size=1, test_batch_size=32, cache_size=1000, workers=1, height=480, width=640, neg_num=10, num_clusters=64, neg_pool=1000, arch='vgg16', layers='conv5', nowhiten=False, syncbn=True, sync_gather=True, features=4096, lr=0.0001, momentum=0.9, weight_decay=0.001, loss_type='triplet', step_size=5, resume='', vlad=True, eval_step=1, rerank=False, epochs=5, iters=0, seed=43, deterministic=False, print_freq=200, margin=0.1, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/models/openibl/official/mapillary30k-vgg16/conv5-triplet-lr0.0001-tuple1-18-Sep', init_dir='/home/leo/usman_ws/codes/OpenIBL/examples/../logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
 ==========
 22168
 Mapillary dataset loaded
@@ -17,91 +17,12 @@ Mapillary dataset loaded
   test_gallery  |     0  |        0
 dataset.q_val = 22168, dataset.db_val = 37742, dataset.val_pos = 22168
 Loading centroids from /home/leo/usman_ws/codes/OpenIBL/examples/../logs/vgg16_pitts_64_desc_cen.hdf5
-Test the initial model:
-Extract Features: [100/1873]	Time 0.202 (0.231)	Data 0.000 (0.010)	
-Extract Features: [200/1873]	Time 0.209 (0.220)	Data 0.000 (0.005)	
-Extract Features: [300/1873]	Time 0.211 (0.217)	Data 0.000 (0.003)	
-Extract Features: [400/1873]	Time 0.212 (0.215)	Data 0.000 (0.002)	
-Extract Features: [500/1873]	Time 0.212 (0.214)	Data 0.000 (0.002)	
-Extract Features: [600/1873]	Time 0.213 (0.213)	Data 0.000 (0.002)	
-Extract Features: [700/1873]	Time 0.211 (0.212)	Data 0.000 (0.001)	
-Extract Features: [800/1873]	Time 0.214 (0.212)	Data 0.000 (0.001)	
-Extract Features: [900/1873]	Time 0.214 (0.212)	Data 0.000 (0.001)	
-Extract Features: [1000/1873]	Time 0.214 (0.211)	Data 0.000 (0.001)	
-Extract Features: [1100/1873]	Time 0.204 (0.211)	Data 0.000 (0.001)	
-Extract Features: [1200/1873]	Time 0.202 (0.211)	Data 0.000 (0.001)	
-Extract Features: [1300/1873]	Time 0.211 (0.211)	Data 0.000 (0.001)	
-Extract Features: [1400/1873]	Time 0.202 (0.211)	Data 0.000 (0.001)	
-Extract Features: [1500/1873]	Time 0.202 (0.210)	Data 0.000 (0.001)	
-Extract Features: [1600/1873]	Time 0.202 (0.210)	Data 0.000 (0.001)	
-Extract Features: [1700/1873]	Time 0.202 (0.210)	Data 0.000 (0.001)	
-Extract Features: [1800/1873]	Time 0.202 (0.210)	Data 0.000 (0.001)	
-Length of features_dict: 59910
-lenght of features 244: 59910
-22168
-37742
-ground truth lenght 22168
-===> Start calculating recalls
-len(sort_idx) = 22168 and len(gt) = 22168
-Recall Scores:
-  top-1          36.2%
-  top-5          44.4%
-  top-10         48.1%
 ===> Start extracting features for sorting gallery
-Extract Features: [100/42390]	Time 0.201 (0.230)	Data 0.000 (0.021)	
-Extract Features: [200/42390]	Time 0.212 (0.219)	Data 0.000 (0.011)	
-Extract Features: [300/42390]	Time 0.214 (0.216)	Data 0.000 (0.007)	
-Extract Features: [400/42390]	Time 0.214 (0.214)	Data 0.000 (0.005)	
-Extract Features: [500/42390]	Time 0.202 (0.213)	Data 0.000 (0.004)	
-Extract Features: [600/42390]	Time 0.213 (0.212)	Data 0.000 (0.004)	
-Extract Features: [700/42390]	Time 0.202 (0.211)	Data 0.000 (0.003)	
-Extract Features: [800/42390]	Time 0.212 (0.211)	Data 0.000 (0.003)	
-Extract Features: [900/42390]	Time 0.213 (0.210)	Data 0.000 (0.002)	
-Extract Features: [1000/42390]	Time 0.213 (0.210)	Data 0.000 (0.002)	
-Extract Features: [1100/42390]	Time 0.203 (0.210)	Data 0.000 (0.002)	
-Extract Features: [1200/42390]	Time 0.210 (0.210)	Data 0.000 (0.002)	
-Extract Features: [1300/42390]	Time 0.213 (0.209)	Data 0.000 (0.002)	
-Extract Features: [1400/42390]	Time 0.203 (0.209)	Data 0.000 (0.002)	
-Extract Features: [1500/42390]	Time 0.213 (0.209)	Data 0.000 (0.001)	
-Extract Features: [1600/42390]	Time 0.213 (0.209)	Data 0.000 (0.001)	
-Extract Features: [1700/42390]	Time 0.213 (0.209)	Data 0.000 (0.001)	
-Extract Features: [1800/42390]	Time 0.201 (0.209)	Data 0.000 (0.001)	
-Extract Features: [1900/42390]	Time 0.215 (0.209)	Data 0.000 (0.001)	
-Extract Features: [2000/42390]	Time 0.202 (0.209)	Data 0.000 (0.001)	
-Extract Features: [2100/42390]	Time 0.202 (0.209)	Data 0.000 (0.001)	
-Extract Features: [2200/42390]	Time 0.202 (0.209)	Data 0.000 (0.001)	
-Extract Features: [2300/42390]	Time 0.214 (0.209)	Data 0.000 (0.001)	
-Extract Features: [2400/42390]	Time 0.214 (0.209)	Data 0.000 (0.001)	
-Extract Features: [2500/42390]	Time 0.202 (0.209)	Data 0.000 (0.001)	
-Extract Features: [2600/42390]	Time 0.213 (0.209)	Data 0.000 (0.001)	
-Extract Features: [2700/42390]	Time 0.213 (0.209)	Data 0.000 (0.001)	
-Extract Features: [2800/42390]	Time 0.214 (0.209)	Data 0.000 (0.001)	
-Extract Features: [2900/42390]	Time 0.202 (0.209)	Data 0.000 (0.001)	
-Extract Features: [3000/42390]	Time 0.201 (0.209)	Data 0.000 (0.001)	
-Extract Features: [3100/42390]	Time 0.212 (0.209)	Data 0.000 (0.001)	
-Extract Features: [3200/42390]	Time 0.214 (0.208)	Data 0.000 (0.001)	
-Extract Features: [3300/42390]	Time 0.202 (0.208)	Data 0.000 (0.001)	
-Extract Features: [3400/42390]	Time 0.214 (0.208)	Data 0.000 (0.001)	
-Extract Features: [3500/42390]	Time 0.212 (0.208)	Data 0.000 (0.001)	
-Extract Features: [3600/42390]	Time 0.201 (0.208)	Data 0.000 (0.001)	
-Extract Features: [3700/42390]	Time 0.202 (0.208)	Data 0.000 (0.001)	
-Extract Features: [3800/42390]	Time 0.214 (0.208)	Data 0.000 (0.001)	
-Extract Features: [3900/42390]	Time 0.202 (0.208)	Data 0.000 (0.001)	
-Extract Features: [4000/42390]	Time 0.214 (0.208)	Data 0.000 (0.001)	
-Extract Features: [4100/42390]	Time 0.214 (0.208)	Data 0.000 (0.001)	
-Extract Features: [4200/42390]	Time 0.213 (0.208)	Data 0.000 (0.001)	
-Extract Features: [4300/42390]	Time 0.213 (0.208)	Data 0.000 (0.001)	
-Extract Features: [4400/42390]	Time 0.214 (0.208)	Data 0.000 (0.001)	
-Extract Features: [4500/42390]	Time 0.214 (0.208)	Data 0.000 (0.001)	
-Extract Features: [4600/42390]	Time 0.214 (0.208)	Data 0.000 (0.001)	
-Extract Features: [4700/42390]	Time 0.214 (0.208)	Data 0.000 (0.001)	
-Extract Features: [4800/42390]	Time 0.213 (0.208)	Data 0.000 (0.001)	
-Extract Features: [4900/42390]	Time 0.213 (0.208)	Data 0.000 (0.001)	
-Extract Features: [5000/42390]	Time 0.202 (0.208)	Data 0.000 (0.000)	
-Extract Features: [5100/42390]	Time 0.202 (0.208)	Data 0.000 (0.000)	
-Extract Features: [5200/42390]	Time 0.214 (0.208)	Data 0.000 (0.000)	
-Extract Features: [5300/42390]	Time 0.202 (0.208)	Data 0.000 (0.000)	
-Extract Features: [5400/42390]	Time 0.214 (0.208)	Data 0.000 (0.000)	
-Extract Features: [5500/42390]	Time 0.202 (0.208)	Data 0.000 (0.000)	
-Extract Features: [5600/42390]	Time 0.202 (0.208)	Data 0.000 (0.000)	
-Extract Features: [5700/42390]	Time 0.205 (0.208)	Data 0.001 (0.000)	
+>>> 502704
+>>> 915202
+>>> >>> 1356479
+>>> 502704915202
+>>> 1417906
+>>> 61427
+>>> ... >>> 441277
+>>> 

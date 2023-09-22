@@ -54,14 +54,13 @@ def extract_features(model, data_loader, dataset, print_freq=100,
     with torch.no_grad():
         for i, (imgs, fnames, _, _, _) in enumerate(data_loader):
             data_time.update(time.time() - end)
-
             outputs = extract_cnn_feature(model, imgs, vlad, gpu=gpu)
             if (pca is not None):
                 outputs = pca.infer(outputs)
             outputs = outputs.data.cpu()
 
             features.append(outputs)
-
+                
             batch_time.update(time.time() - end)
             end = time.time()
 
@@ -77,47 +76,13 @@ def extract_features(model, data_loader, dataset, print_freq=100,
         del pca
 
     if (sync_gather):
-        # all gather features in parallel
-        # cost more GPU memory but less time
-        # features = torch.cat(features).cuda(gpu)
-        # all_features = [torch.empty_like(features) for _ in range(world_size)]
-        # dist.all_gather(all_features, features)
-        # del features
-        # all_features = torch.cat(all_features).cpu()[:len(dataset)]
-        # features_dict = OrderedDict()
-        # for fname, output in zip(dataset, all_features):
-        #     features_dict[fname[0]] = output
-        # del all_features
 
         features_dict = OrderedDict()        
-        
-        # all_features = torch.cat(features).cpu()[:len(dataset)]
-        # print(len(all_features))
-        # for fname, output in zip(dataset, all_features):
-        #     features_dict[fname[0]] = output
-        # print(len(features_dict))
-        # del all_features
-        
-    #   17608
-    #   17608
-    #     lenght of features: 17608
-    #     7608
-    #     10000
-    #     7608
-        
-        
-    
+
         #551x32x32768
         #dataset: 17608
         # code.interact(local=locals())
         
-        
-        
-        # print(len(all_features))
-        # for fname, output in zip(dataset, all_features):
-        #     features_dict[fname[0]] = output
-        # print(len(features_dict))
-        # del all_features
         chunk_start = 0
         chunk_end = 0
         for k in range(len(features)):
@@ -129,15 +94,6 @@ def extract_features(model, data_loader, dataset, print_freq=100,
             # print(f"chunk start:{chunk_start} chuck end: {chunk_end} featuresize: {l}")
             for fname, output in zip(dataset[chunk_start:chunk_end], features[k]):
                 features_dict[fname[0]] = output
-            
-        
-        # print("Length of dataset:", len(dataset))
-        # print("Length of features:", len(features))
-        # # l = len(features)-1
-        # for k in range(len(dataset)/len(features)):  
-        #     for fname, output in zip(dataset[k*l:(k+1)*l], features):
-        #         features_dict[fname[0]] = output
-        # Print the length of features_dict
         print("Length of features_dict:", len(features_dict))
         
     else:
@@ -157,6 +113,68 @@ def extract_features(model, data_loader, dataset, print_freq=100,
 
     return features_dict
 
+def features_pairwise_distance(model, data_loader, query_len, gallery_len, print_freq=100,
+                vlad=True, pca=None, gpu=None, sync_gather=False, metric=None):
+    model.eval()
+    batch_time = AverageMeter()
+    data_time = AverageMeter()
+                                
+    rank = dist.get_rank()
+    world_size = dist.get_world_size()
+    features = []
+    features_dict = []
+    q_chunk = 64
+    db_chunk = 128
+    
+    if (pca is not None):
+        pca.load(gpu=gpu)
+
+    end = time.time()
+    with torch.no_grad():
+        for i, (imgs, fnames, _, _, _) in enumerate(data_loader):
+            data_time.update(time.time() - end)
+            outputs = extract_cnn_feature(model, imgs, vlad, gpu=gpu)
+            if (pca is not None):
+                outputs = pca.infer(outputs)
+            outputs = outputs.data.cpu()
+
+            features.append(outputs)
+
+            
+            
+            if(i%(q_chunk+db_chunk)==0 and i != 0):
+                print(i)
+                
+                x = torch.cat(features[0:q_chunk]) #7416, 32768
+                y = torch.cat(features[q_chunk:q_chunk+db_chunk]) # 10000, 32768  
+                features = []
+                m, n = x.size(0), y.size(0)
+                x = x.view(m, -1) #7416, 32768
+                y = y.view(n, -1) # 10000, 32768
+                if metric is not None:
+                    x = metric.transform(x)
+                    y = metric.transform(y)
+                dist_m = torch.pow(x, 2).sum(dim=1, keepdim=True).expand(m, n) + \
+                    torch.pow(y, 2).sum(dim=1, keepdim=True).expand(n, m).t()
+                dist_m.addmm_(x, y.t(), beta=1, alpha=-2)
+                #features_dict[i:i+q_chunk, j:j+db_chunk] = dist_m
+                #0, 0:q_chunk, 0, 0:db_chunk
+                features_dict.append(dist_m)
+            batch_time.update(time.time() - end)
+            end = time.time()
+
+            if ((i + 1) % print_freq == 0 and rank==0):
+                print('Extract Features: [{}/{}]\t'
+                      'Time {:.3f} ({:.3f})\t'
+                      'Data {:.3f} ({:.3f})\t'
+                      .format(i + 1, len(data_loader),
+                              batch_time.val, batch_time.avg,
+                              data_time.val, data_time.avg))
+
+    code.interact(local=locals())
+
+    return features_dict
+
 def pairwise_distance(features, query=None, gallery=None, metric=None):
     if query is None and gallery is None:
         n = len(features)
@@ -171,17 +189,19 @@ def pairwise_distance(features, query=None, gallery=None, metric=None):
     # if (dist.get_rank()==0):
         # print ("===> Start calculating pairwise distances")
         
-    x = torch.cat([features[f].unsqueeze(0) for f, _, _, _ in query], 0)
-    y = torch.cat([features[f].unsqueeze(0) for f, _, _, _ in gallery], 0)
+    x = torch.cat([features[f].unsqueeze(0) for f, _, _, _ in query], 0) #7416, 32768
+    y = torch.cat([features[f].unsqueeze(0) for f, _, _, _ in gallery], 0) # 10000, 32768
     m, n = x.size(0), y.size(0)
-    x = x.view(m, -1)
-    y = y.view(n, -1)
+    x = x.view(m, -1) #7416, 32768
+    y = y.view(n, -1) # 10000, 32768
     if metric is not None:
         x = metric.transform(x)
         y = metric.transform(y)
     dist_m = torch.pow(x, 2).sum(dim=1, keepdim=True).expand(m, n) + \
            torch.pow(y, 2).sum(dim=1, keepdim=True).expand(n, m).t()
+    # torch.Size([7416, 10000])
     dist_m.addmm_(x, y.t(), beta=1, alpha=-2)
+    # torch.Size([7416, 10000])
     return dist_m
 
 def spatial_nms(pred, db_ids, topN):

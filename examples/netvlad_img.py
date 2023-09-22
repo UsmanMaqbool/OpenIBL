@@ -7,7 +7,7 @@ import sys
 import h5py
 import scipy.io
 import copy
-
+import code
 import torch
 from torch import nn
 from torch.backends import cudnn
@@ -20,7 +20,7 @@ import torchvision.transforms as T
 from ibl import datasets
 from ibl import models
 from ibl.trainers import Trainer
-from ibl.evaluators import Evaluator, extract_features, pairwise_distance
+from ibl.evaluators import Evaluator, extract_features, pairwise_distance, features_pairwise_distance
 from ibl.utils.data import IterLoader, get_transformer_train, get_transformer_test
 from ibl.utils.data.sampler import DistributedRandomTupleSampler, DistributedSliceSampler
 from ibl.utils.data.preprocessor import Preprocessor
@@ -53,6 +53,28 @@ def get_data(args, iters):
         batch_size=args.test_batch_size, num_workers=args.workers,
         sampler=DistributedSliceSampler(sorted(list(set(dataset.q_train) | set(dataset.db_train)))),
         shuffle=False, pin_memory=True)
+    
+    # Initialize an empty list to store the sum result
+    list_q_db = []
+    q_chunk = args.test_batch_size*64
+    db_chunk = args.test_batch_size*128
+    
+    for i in range(0, len(dataset.q_train), q_chunk):
+        for j in range(0, len(dataset.db_train), db_chunk):
+            start_q = i
+            end_q = min(i + q_chunk, len(dataset.q_train))
+            start_db = j
+            end_db = min(j + db_chunk, len(dataset.db_train))
+            print(end_q)
+            print(end_db)
+            list_q_db = list_q_db + dataset.q_train[start_q:end_q] + dataset.db_train[start_db:end_db]
+
+    train_extract_loader_large = DataLoader(
+        Preprocessor(list_q_db,
+                     root=dataset.images_dir, transform=test_transformer),
+        batch_size=args.test_batch_size, num_workers=args.workers,
+        sampler=DistributedSliceSampler(list_q_db),
+        shuffle=False, pin_memory=True)
 
     val_loader = DataLoader(
         Preprocessor(sorted(list(set(dataset.q_val) | set(dataset.db_val))),
@@ -68,14 +90,55 @@ def get_data(args, iters):
         sampler=DistributedSliceSampler(sorted(list(set(dataset.q_test) | set(dataset.db_test)))),
         shuffle=False, pin_memory=True)
 
-    return dataset, train_loader, val_loader, test_loader, sampler, train_extract_loader
+    return dataset, train_loader, val_loader, test_loader, sampler, train_extract_loader, train_extract_loader_large
+
+def update_sampler_large(sampler, model, loader, query_len, gallery_len, sub_set, vlad=True, gpu=None, sync_gather=False):
+    if (dist.get_rank()==0):
+        print ("===> Start extracting features for sorting gallery")
+    # len(query) # 502704
+    # len(gallery) 915202
+    
+    #Total: 502704 + 915202
+    
+    # len(query) = 7416
+    # len(gallery) = 10000
+    
+    # Features: = 17321
+    # distmat (equal to the lenght of query) =     7416
+    
+    # create new loader
+    # Create sub-loaders for the desired fnames
+    # code.interact(local=locals())
+    distmat = features_pairwise_distance(model, loader, query_len, gallery_len,
+                                vlad=vlad, gpu=gpu, sync_gather=sync_gather)
+
+    del features
+    if (dist.get_rank()==0):
+        print ("===> Start sorting gallery")
+    sampler.sort_gallery(distmat, sub_set)
+    del distmat
+
 
 def update_sampler(sampler, model, loader, query, gallery, sub_set, vlad=True, gpu=None, sync_gather=False):
     if (dist.get_rank()==0):
         print ("===> Start extracting features for sorting gallery")
+        # len(query) # 502704
+    # len(gallery) 915202
+    
+    #Total: 502704 + 915202
+    
+    # len(query) = 7416
+    # len(gallery) = 10000
+    
+    # Features: = 17321
+    # distmat (equal to the lenght of query) =     7416
+    
+    # create new loader
+    # Create sub-loaders for the desired fnames
+    
     features = extract_features(model, loader, sorted(list(set(query) | set(gallery))),
                                 vlad=vlad, gpu=gpu, sync_gather=sync_gather)
-    distmat = pairwise_distance(features, query, gallery)
+    distmat = pairwise_distance(features, query, gallery) # 7416, 10000
     del features
     if (dist.get_rank()==0):
         print ("===> Start sorting gallery")
@@ -137,7 +200,7 @@ def main_worker(args):
 
     # Create data loaders
     iters = args.iters if (args.iters>0) else None
-    dataset, train_loader, val_loader, test_loader, sampler, train_extract_loader = get_data(args, iters)
+    dataset, train_loader, val_loader, test_loader, sampler, train_extract_loader, train_extract_loader_large = get_data(args, iters)
     print(f"dataset.q_val = {len(dataset.q_val)}, dataset.db_val = {len(dataset.db_val)}, dataset.val_pos = {len(dataset.val_pos)}")
 
     # Create model
@@ -154,12 +217,12 @@ def main_worker(args):
                   .format(start_epoch, best_recall5))
 
     # Evaluator
-    evaluator = Evaluator(model)
-    if (args.rank==0):
-        print("Test the initial model:")
-    recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
-                        dataset.q_val, dataset.db_val, dataset.val_pos,
-                        vlad=args.vlad, gpu=args.gpu, sync_gather=args.sync_gather)
+    # evaluator = Evaluator(model)
+    # if (args.rank==0):
+    #     print("Test the initial model:")
+    # recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
+    #                     dataset.q_val, dataset.db_val, dataset.val_pos,
+    #                     vlad=args.vlad, gpu=args.gpu, sync_gather=args.sync_gather)
 
     # Optimizer
     optimizer = torch.optim.SGD(filter(lambda p: p.requires_grad, model.parameters()),
@@ -181,7 +244,9 @@ def main_worker(args):
         subset_indices = torch.randperm(len(dataset.q_train), generator=g).long().split(args.cache_size)
 
         for subid, subset in enumerate(subset_indices):
-            update_sampler(sampler, model, train_extract_loader, dataset.q_train, dataset.db_train, subset.tolist(),
+            # update_sampler(sampler, model, train_extract_loader_large, dataset.q_train, dataset.db_train, subset.tolist(),
+            #                 vlad=args.vlad, gpu=args.gpu, sync_gather=args.sync_gather)
+            update_sampler_large(sampler, model, train_extract_loader_large, len(dataset.q_train), len(dataset.db_train), subset.tolist(),
                             vlad=args.vlad, gpu=args.gpu, sync_gather=args.sync_gather)
             synchronize()
             trainer.train(epoch, subid, train_loader, optimizer,
