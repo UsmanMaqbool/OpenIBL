@@ -122,9 +122,15 @@ def features_pairwise_distance(model, data_loader, query_len, gallery_len, print
     rank = dist.get_rank()
     world_size = dist.get_world_size()
     features = []
-    features_dict = []
+    features_dict = torch.zeros(query_len, gallery_len)
     q_chunk = 64
     db_chunk = 128
+    
+    start_x = 0
+    start_y = 0
+    x_top = 0
+    k = 0
+    j = 0
     
     if (pca is not None):
         pca.load(gpu=gpu)
@@ -157,9 +163,29 @@ def features_pairwise_distance(model, data_loader, query_len, gallery_len, print
                 dist_m = torch.pow(x, 2).sum(dim=1, keepdim=True).expand(m, n) + \
                     torch.pow(y, 2).sum(dim=1, keepdim=True).expand(n, m).t()
                 dist_m.addmm_(x, y.t(), beta=1, alpha=-2)
-                #features_dict[i:i+q_chunk, j:j+db_chunk] = dist_m
-                #0, 0:q_chunk, 0, 0:db_chunk
-                features_dict.append(dist_m)
+                
+                # torch.Size([2048, 4096])
+                num_rows, num_cols = dist_m.shape
+                print(f"num_rows: {num_rows}, num_cols {num_cols}")
+                print(f"start: {start_x+j}, {start_y+k}: {start_x}, {start_y}, {j}, {k} ")
+                for k in range(num_cols):
+                    for j in range(num_rows):
+                        if(start_y+k == gallery_len):
+                            print("we are here now")
+                            print(features_dict.shape)
+                            print(f"Update Position: {start_x+j}, {start_y+k}: {start_x}, {start_y}, {j}, {k} ")
+                            x_top = x_top + num_rows
+                            start_x = x_top
+                            start_y = -k
+                            print(f"After Update: {start_x+j}, {start_y+k} : {start_x}, {start_y}, {j}, {k} ")    
+                        features_dict[start_x+j, start_y+k] = dist_m[j, k]
+                print(f"end: {start_x+j}, {start_y+k}: {start_x}, {start_y}, {j}, {k} ")
+                start_x = x_top
+                start_y = start_y + k + 1
+                k = 0
+                j = 0
+                
+                
             batch_time.update(time.time() - end)
             end = time.time()
 
