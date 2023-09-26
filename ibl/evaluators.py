@@ -123,8 +123,29 @@ def features_pairwise_distance(model, data_loader, query_len, gallery_len, print
     world_size = dist.get_world_size()
     features = []
     features_dict = torch.zeros(query_len, gallery_len)
-    q_chunk = 64
-    db_chunk = 128
+    
+    q_chunk = 32*64
+    db_chunk = 32*128
+    
+    q_db_pos_list = []    
+    
+    for i in range(0, query_len, q_chunk):
+        for j in range(0, gallery_len, db_chunk):
+            start_q = i
+            end_q = min(i + q_chunk, query_len)
+            start_db = j
+            end_db = min(j + db_chunk, gallery_len)
+            print(f"Query: {start_q}:{end_q} and DB {start_db}:{end_db}")
+            
+            # Append a tuple with the values to q_db_pos_list
+            q_db_pos_list.append((start_q, end_q, start_db, end_db,end_q-start_q+end_db-start_db))
+    
+    
+    
+    q_db_pos = 0
+    mark_chunk = q_db_pos_list[q_db_pos][4]
+    i_pos = (mark_chunk/32)
+    extra_feature = 0
     
     start_x = 0
     start_y = 0
@@ -145,14 +166,22 @@ def features_pairwise_distance(model, data_loader, query_len, gallery_len, print
             outputs = outputs.data.cpu()
 
             features.append(outputs)
-
             
-            
-            if(i%(q_chunk+db_chunk)==0 and i != 0):
+            if(i == i_pos-1 and i != 0):
                 print(i)
-                
-                x = torch.cat(features[0:q_chunk]) #7416, 32768
-                y = torch.cat(features[q_chunk:q_chunk+db_chunk]) # 10000, 32768  
+                start_q, end_q, start_db, end_db, _ = q_db_pos_list[q_db_pos]
+                q_chunk = end_q-start_q
+                db_chunk = end_db-start_db
+                features_cat = torch.cat(features)
+                if(extra_feature):
+                    features_cat = torch.cat((feature_rem, features_cat), dim=0)
+                    print("~~~~~~~~~~~~~~Concatenating~~~~~~~~~~~~~~~~~")
+    
+                x = features_cat[0:q_chunk]
+                y = features_cat[q_chunk:q_chunk+db_chunk]
+                feature_rem = features_cat[q_chunk+db_chunk:]
+                print("~~~~~~feature_rem~~~~~~~{feature_rem.shape}~~~~~~~~~~~~~~~~~")
+                  
                 features = []
                 m, n = x.size(0), y.size(0)
                 x = x.view(m, -1) #7416, 32768
@@ -165,27 +194,23 @@ def features_pairwise_distance(model, data_loader, query_len, gallery_len, print
                 dist_m.addmm_(x, y.t(), beta=1, alpha=-2)
                 
                 # torch.Size([2048, 4096])
-                num_rows, num_cols = dist_m.shape
-                print(f"num_rows: {num_rows}, num_cols {num_cols}")
-                print(f"start: {start_x+j}, {start_y+k}: {start_x}, {start_y}, {j}, {k} ")
-                for k in range(num_cols):
-                    for j in range(num_rows):
-                        if(start_y+k == gallery_len):
-                            print("we are here now")
-                            print(features_dict.shape)
-                            print(f"Update Position: {start_x+j}, {start_y+k}: {start_x}, {start_y}, {j}, {k} ")
-                            x_top = x_top + num_rows
-                            start_x = x_top
-                            start_y = -k
-                            print(f"After Update: {start_x+j}, {start_y+k} : {start_x}, {start_y}, {j}, {k} ")    
-                        features_dict[start_x+j, start_y+k] = dist_m[j, k]
-                print(f"end: {start_x+j}, {start_y+k}: {start_x}, {start_y}, {j}, {k} ")
-                start_x = x_top
-                start_y = start_y + k + 1
-                k = 0
-                j = 0
+                features_dict[start_q:end_q, start_db:end_db] = dist_m
                 
                 
+                # estimate next position
+                q_db_pos = q_db_pos + 1
+                mark_chunk = q_db_pos_list[q_db_pos][4]
+
+                if (mark_chunk%32)==0:
+                    print("yes, its fully convertable")
+                    i_pos = i_pos+(mark_chunk/32)
+                    print(f"new position {i_pos}")
+                    extra_feature = 0
+                else:
+                    i_pos = i_pos+round(mark_chunk/32)+1
+                    extra_feature = mark_chunk%32
+                    print(f"calcuated addtional {mark_chunk%32} and need to keep")
+
             batch_time.update(time.time() - end)
             end = time.time()
 
@@ -196,8 +221,6 @@ def features_pairwise_distance(model, data_loader, query_len, gallery_len, print
                       .format(i + 1, len(data_loader),
                               batch_time.val, batch_time.avg,
                               data_time.val, data_time.avg))
-
-    code.interact(local=locals())
 
     return features_dict
 

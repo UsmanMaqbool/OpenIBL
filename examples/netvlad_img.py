@@ -65,8 +65,7 @@ def get_data(args, iters):
             end_q = min(i + q_chunk, len(dataset.q_train))
             start_db = j
             end_db = min(j + db_chunk, len(dataset.db_train))
-            print(end_q)
-            print(end_db)
+            # print(f"Query: {start_q}:{end_q} and DB {start_db}:{end_db}")
             list_q_db = list_q_db + dataset.q_train[start_q:end_q] + dataset.db_train[start_db:end_db]
 
     train_extract_loader_large = DataLoader(
@@ -112,7 +111,6 @@ def update_sampler_large(sampler, model, loader, query_len, gallery_len, sub_set
     distmat = features_pairwise_distance(model, loader, query_len, gallery_len,
                                 vlad=vlad, gpu=gpu, sync_gather=sync_gather)
 
-    del features
     if (dist.get_rank()==0):
         print ("===> Start sorting gallery")
     sampler.sort_gallery(distmat, sub_set)
