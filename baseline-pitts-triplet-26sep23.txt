@@ -1,0 +1,299 @@
+[(0, 2048, 0, 4096, 6144) : 192
+(0, 2048, 4096, 8192, 6144): 192
+(0, 2048, 8192, 10000, 3856): 120+16
+
+(2048, 4096, 0, 4096, 6144): 16+192
+(2048, 4096, 4096, 8192, 6144)
+(2048, 4096, 8192, 10000, 3856)
+
+(4096, 6144, 0, 4096, 6144)
+(4096, 6144, 4096, 8192, 6144)
+(4096, 6144, 8192, 10000, 3856)
+
+(6144, 7416, 0, 4096, 5368)
+(6144, 7416, 4096, 8192, 5368)
+(6144, 7416, 8192, 10000, 3080)]
+
+
+
+191
+Query: 0:2048 and DB 0:4096
+~~~~~~Next:~~~~~~~0~~~~~~~~~~~~~~~~~
+mark_chunk 6144 =  6144 + 0
+yes, next is fully convertable
+new position 384.0
+
+
+383
+Query: 0:2048 and DB 4096:8192
+~~~~~~Next:~~~~~~~0~~~~~~~~~~~~~~~~~
+mark_chunk 3856 =  3856 + 0
+For next: 16 need to keep
+
+
+504
+Query: 0:2048 and DB 8192:10000
+~~~~~~~~~~~~~~Concatenating~~~~~~~~~~~~~~~~~
+Previous: torch.Size([0, 32768]) Current: torch.Size([3872, 32768]) 
+~~~~~~Next:~~~~~~~16~~~~~~~~~~~~~~~~~
+mark_chunk 6128 =  6144 - 16
+For next: 16 need to keep
+
+697
+Query: 2048:4096 and DB 0:4096
+~~~~~~~~~~~~~~Concatenating~~~~~~~~~~~~~~~~~
+Previous: torch.Size([16, 32768]) Current: torch.Size([6192, 32768]) 
+~~~~~~Next:~~~~~~~48~~~~~~~~~~~~~~~~~
+mark_chunk 6096 =  6144 - 48
+For next: 16 need to keep
+
+
+888
+Query: 2048:4096 and DB 4096:8192
+~~~~~~~~~~~~~~Concatenating~~~~~~~~~~~~~~~~~
+Previous: torch.Size([48, 32768]) Current: torch.Size([6160, 32768]) 
+~~~~~~Next:~~~~~~~16~~~~~~~~~~~~~~~~~
+mark_chunk 3840 =  3856 + 16
+yes, next is fully convertable
+new position 1009.0
+
+	
+1008
+Query: 2048:4096 and DB 8192:10000
+~~~~~~~~~~~~~~Concatenating~~~~~~~~~~~~~~~~~
+Previous: torch.Size([16, 32768]) Current: torch.Size([3856, 32768]) 
+~~~~~~Next:~~~~~~~0~~~~~~~~~~~~~~~~~
+mark_chunk 6144 =  6144 + 0
+yes, next is fully convertable
+new position 1201.0
+	
+	
+1200
+Query: 4096:6144 and DB 0:4096
+~~~~~~Next:~~~~~~~0~~~~~~~~~~~~~~~~~
+mark_chunk 6144 =  6144 + 0
+yes, next is fully convertable
+new position 1393.0
+	
+1392
+Query: 4096:6144 and DB 4096:8192
+~~~~~~Next:~~~~~~~0~~~~~~~~~~~~~~~~~
+mark_chunk 3856 =  3856 + 0
+For next: 16 need to keep
+	
+	
+1513
+Query: 4096:6144 and DB 8192:10000
+~~~~~~~~~~~~~~Concatenating~~~~~~~~~~~~~~~~~
+Previous: torch.Size([0, 32768]) Current: torch.Size([3872, 32768]) 
+~~~~~~Next:~~~~~~~16~~~~~~~~~~~~~~~~~
+mark_chunk 5352 =  5368 + 16
+For next: 8 need to keep
+	
+1681
+Query: 6144:7416 and DB 0:4096
+~~~~~~~~~~~~~~Concatenating~~~~~~~~~~~~~~~~~
+Previous: torch.Size([16, 32768]) Current: torch.Size([5392, 32768]) 
+~~~~~~Next:~~~~~~~24~~~~~~~~~~~~~~~~~
+mark_chunk 5344 =  5368 + 24
+yes, next is fully convertable
+new position 1849.0
+	
+	
+1848
+Query: 6144:7416 and DB 4096:8192
+~~~~~~~~~~~~~~Concatenating~~~~~~~~~~~~~~~~~
+Previous: torch.Size([24, 32768]) Current: torch.Size([5368, 32768]) 
+~~~~~~Next:~~~~~~~0~~~~~~~~~~~~~~~~~
+mark_chunk 3080 =  3080 + 0
+For next: 8 need to keep
+	
+1945
+Query: 6144:7416 and DB 8192:10000
+~~~~~~~~~~~~~~Concatenating~~~~~~~~~~~~~~~~~
+Previous: torch.Size([0, 32768]) Current: torch.Size([3080, 32768]) 
+~~~~~~Next:~~~~~~~0~~~~~~~~~~~~~~~~~
+
+
+/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-26-Sep
+==========Starting Training=============
+========================================
+Use GPU: 0 for training, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='6010', dataset='pitts', scale='30k', tuple_size=1, test_batch_size=32, cache_size=1000, workers=1, height=480, width=640, neg_num=10, num_clusters=64, neg_pool=1000, arch='vgg16', layers='conv5', nowhiten=False, syncbn=True, sync_gather=True, features=4096, lr=0.0001, momentum=0.9, weight_decay=0.001, loss_type='triplet', step_size=5, resume='', vlad=True, eval_step=1, rerank=False, epochs=5, iters=0, seed=43, deterministic=False, print_freq=200, margin=0.1, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-26-Sep', init_dir='/home/leo/usman_ws/codes/OpenIBL/examples/../logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+7608
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   312  |     7416
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+Query: 0:4096 and DB 0:4096
+Query: 0:4096 and DB 4096:8192
+Query: 0:4096 and DB 8192:10000
+Query: 4096:7416 and DB 0:4096
+Query: 4096:7416 and DB 4096:8192
+Query: 4096:7416 and DB 8192:10000
+dataset.q_val = 7608, dataset.db_val = 10000, dataset.val_pos = 7608
+Loading centroids from /home/leo/usman_ws/codes/OpenIBL/examples/../logs/vgg16_pitts_64_desc_cen.hdf5
+===> Start extracting features for sorting gallery
+Extract Features: [100/1321]	Time 0.281 (0.307)	Data 0.000 (0.009)	
+Extract Features: [200/1321]	Time 0.297 (0.301)	Data 0.000 (0.005)	
+Extract Features: [300/1321]	Time 0.243 (0.301)	Data 0.000 (0.003)	
+Extract Features: [400/1321]	Time 0.300 (0.299)	Data 0.000 (0.002)	
+Extract Features: [500/1321]	Time 0.282 (0.298)	Data 0.000 (0.002)	
+Extract Features: [600/1321]	Time 0.245 (0.298)	Data 0.000 (0.002)	
+Extract Features: [700/1321]	Time 0.315 (0.298)	Data 0.000 (0.001)	
+Extract Features: [800/1321]	Time 0.312 (0.297)	Data 0.000 (0.001)	
+Extract Features: [900/1321]	Time 0.295 (0.297)	Data 0.000 (0.001)	
+Extract Features: [1000/1321]	Time 0.289 (0.297)	Data 0.000 (0.001)	
+Extract Features: [1100/1321]	Time 0.277 (0.297)	Data 0.000 (0.001)	
+Extract Features: [1200/1321]	Time 0.268 (0.297)	Data 0.000 (0.001)	
+Extract Features: [1300/1321]	Time 0.301 (0.297)	Data 0.000 (0.001)	
+===> Start sorting gallery
+Epoch: [0-0][200/1000]	Time 0.153 (0.435)	Data 0.024 (0.315)	Loss 0.146 (0.176)
+Epoch: [0-0][400/1000]	Time 0.116 (0.443)	Data 0.027 (0.320)	Loss 0.041 (0.142)
+Epoch: [0-0][600/1000]	Time 0.123 (0.433)	Data 0.030 (0.321)	Loss 0.007 (0.116)
+Epoch: [0-0][800/1000]	Time 0.117 (0.428)	Data 0.024 (0.321)	Loss 0.014 (0.097)
+Epoch: [0-0][1000/1000]	Time 0.118 (0.425)	Data 0.024 (0.321)	Loss 0.000 (0.083)
+===> Start extracting features for sorting gallery
+Extract Features: [100/1321]	Time 0.194 (0.212)	Data 0.000 (0.010)	
+Extract Features: [200/1321]	Time 0.207 (0.208)	Data 0.000 (0.005)	
+Extract Features: [300/1321]	Time 0.198 (0.210)	Data 0.000 (0.003)	
+Extract Features: [400/1321]	Time 0.202 (0.208)	Data 0.000 (0.002)	
+Extract Features: [500/1321]	Time 0.194 (0.207)	Data 0.000 (0.002)	
+Extract Features: [600/1321]	Time 0.197 (0.208)	Data 0.000 (0.002)	
+Extract Features: [700/1321]	Time 0.204 (0.208)	Data 0.000 (0.001)	
+Extract Features: [800/1321]	Time 0.192 (0.207)	Data 0.000 (0.001)	
+Extract Features: [900/1321]	Time 0.205 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1000/1321]	Time 0.197 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1100/1321]	Time 0.195 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1200/1321]	Time 0.197 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1300/1321]	Time 0.206 (0.207)	Data 0.000 (0.001)	
+===> Start sorting gallery
+Epoch: [0-1][200/1000]	Time 0.163 (0.235)	Data 0.072 (0.143)	Loss 0.216 (0.194)
+Epoch: [0-1][400/1000]	Time 0.166 (0.232)	Data 0.072 (0.140)	Loss 0.227 (0.178)
+Epoch: [0-1][600/1000]	Time 0.177 (0.233)	Data 0.082 (0.141)	Loss 0.181 (0.161)
+Epoch: [0-1][800/1000]	Time 0.168 (0.232)	Data 0.079 (0.140)	Loss 0.153 (0.148)
+Epoch: [0-1][1000/1000]	Time 0.165 (0.232)	Data 0.071 (0.140)	Loss 0.089 (0.136)
+===> Start extracting features for sorting gallery
+Extract Features: [100/1321]	Time 0.193 (0.212)	Data 0.000 (0.010)	
+Extract Features: [200/1321]	Time 0.200 (0.208)	Data 0.000 (0.005)	
+Extract Features: [300/1321]	Time 0.204 (0.209)	Data 0.000 (0.003)	
+Extract Features: [400/1321]	Time 0.206 (0.208)	Data 0.000 (0.003)	
+Extract Features: [500/1321]	Time 0.208 (0.207)	Data 0.000 (0.002)	
+Extract Features: [600/1321]	Time 0.197 (0.208)	Data 0.000 (0.002)	
+Extract Features: [700/1321]	Time 0.201 (0.208)	Data 0.000 (0.002)	
+Extract Features: [800/1321]	Time 0.200 (0.207)	Data 0.000 (0.001)	
+Extract Features: [900/1321]	Time 0.204 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1000/1321]	Time 0.205 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1100/1321]	Time 0.207 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1200/1321]	Time 0.194 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1300/1321]	Time 0.206 (0.207)	Data 0.000 (0.001)	
+===> Start sorting gallery
+Epoch: [0-2][200/1000]	Time 0.164 (0.207)	Data 0.070 (0.114)	Loss 0.208 (0.186)
+Epoch: [0-2][400/1000]	Time 0.163 (0.206)	Data 0.074 (0.114)	Loss 0.030 (0.177)
+Epoch: [0-2][600/1000]	Time 0.180 (0.206)	Data 0.086 (0.114)	Loss 0.019 (0.168)
+Epoch: [0-2][800/1000]	Time 0.175 (0.206)	Data 0.086 (0.114)	Loss 0.029 (0.161)
+Epoch: [0-2][1000/1000]	Time 0.181 (0.206)	Data 0.088 (0.114)	Loss 0.004 (0.154)
+===> Start extracting features for sorting gallery
+Extract Features: [100/1321]	Time 0.195 (0.215)	Data 0.000 (0.010)	
+Extract Features: [200/1321]	Time 0.206 (0.209)	Data 0.000 (0.005)	
+Extract Features: [300/1321]	Time 0.195 (0.211)	Data 0.000 (0.003)	
+Extract Features: [400/1321]	Time 0.224 (0.209)	Data 0.000 (0.002)	
+Extract Features: [500/1321]	Time 0.206 (0.208)	Data 0.000 (0.002)	
+Extract Features: [600/1321]	Time 0.205 (0.209)	Data 0.000 (0.002)	
+Extract Features: [700/1321]	Time 0.195 (0.209)	Data 0.000 (0.001)	
+Extract Features: [800/1321]	Time 0.195 (0.208)	Data 0.000 (0.001)	
+Extract Features: [900/1321]	Time 0.205 (0.208)	Data 0.000 (0.001)	
+Extract Features: [1000/1321]	Time 0.205 (0.208)	Data 0.000 (0.001)	
+Extract Features: [1100/1321]	Time 0.244 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1200/1321]	Time 0.205 (0.208)	Data 0.000 (0.001)	
+Extract Features: [1300/1321]	Time 0.195 (0.207)	Data 0.000 (0.001)	
+===> Start sorting gallery
+Epoch: [0-3][200/1000]	Time 0.135 (0.180)	Data 0.042 (0.086)	Loss 0.273 (0.165)
+Epoch: [0-3][400/1000]	Time 0.167 (0.181)	Data 0.077 (0.088)	Loss 0.048 (0.162)
+Epoch: [0-3][600/1000]	Time 0.176 (0.181)	Data 0.083 (0.088)	Loss 0.250 (0.162)
+Epoch: [0-3][800/1000]	Time 0.166 (0.179)	Data 0.072 (0.087)	Loss 0.026 (0.160)
+Epoch: [0-3][1000/1000]	Time 0.186 (0.179)	Data 0.079 (0.087)	Loss 0.127 (0.158)
+===> Start extracting features for sorting gallery
+Extract Features: [100/1321]	Time 0.207 (0.213)	Data 0.000 (0.010)	
+Extract Features: [200/1321]	Time 0.195 (0.208)	Data 0.000 (0.005)	
+Extract Features: [300/1321]	Time 0.202 (0.210)	Data 0.000 (0.003)	
+Extract Features: [400/1321]	Time 0.206 (0.208)	Data 0.000 (0.002)	
+Extract Features: [500/1321]	Time 0.199 (0.207)	Data 0.000 (0.002)	
+Extract Features: [600/1321]	Time 0.227 (0.208)	Data 0.000 (0.002)	
+Extract Features: [700/1321]	Time 0.205 (0.208)	Data 0.000 (0.001)	
+Extract Features: [800/1321]	Time 0.205 (0.208)	Data 0.000 (0.001)	
+Extract Features: [900/1321]	Time 0.199 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1000/1321]	Time 0.195 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1100/1321]	Time 0.204 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1200/1321]	Time 0.208 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1300/1321]	Time 0.203 (0.207)	Data 0.000 (0.001)	
+===> Start sorting gallery
+Epoch: [0-4][200/1000]	Time 0.177 (0.369)	Data 0.084 (0.278)	Loss 0.205 (0.080)
+Epoch: [0-4][400/1000]	Time 0.169 (0.369)	Data 0.076 (0.277)	Loss 0.113 (0.059)
+Epoch: [0-4][600/1000]	Time 0.183 (0.369)	Data 0.089 (0.277)	Loss 0.049 (0.047)
+Epoch: [0-4][800/1000]	Time 0.182 (0.369)	Data 0.088 (0.277)	Loss 0.036 (0.038)
+Epoch: [0-4][1000/1000]	Time 0.141 (0.369)	Data 0.044 (0.277)	Loss 0.012 (0.032)
+===> Start extracting features for sorting gallery
+Extract Features: [100/1321]	Time 0.205 (0.212)	Data 0.000 (0.010)	
+Extract Features: [200/1321]	Time 0.198 (0.207)	Data 0.000 (0.005)	
+Extract Features: [300/1321]	Time 0.195 (0.209)	Data 0.000 (0.003)	
+Extract Features: [400/1321]	Time 0.199 (0.208)	Data 0.000 (0.003)	
+Extract Features: [500/1321]	Time 0.194 (0.207)	Data 0.000 (0.002)	
+Extract Features: [600/1321]	Time 0.206 (0.208)	Data 0.000 (0.002)	
+Extract Features: [700/1321]	Time 0.196 (0.208)	Data 0.000 (0.001)	
+Extract Features: [800/1321]	Time 0.196 (0.208)	Data 0.000 (0.001)	
+Extract Features: [900/1321]	Time 0.207 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1000/1321]	Time 0.205 (0.208)	Data 0.000 (0.001)	
+Extract Features: [1100/1321]	Time 0.207 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1200/1321]	Time 0.196 (0.208)	Data 0.000 (0.001)	
+Extract Features: [1300/1321]	Time 0.194 (0.207)	Data 0.000 (0.001)	
+===> Start sorting gallery
+Epoch: [0-5][200/1000]	Time 0.175 (0.206)	Data 0.082 (0.113)	Loss 0.271 (0.153)
+Epoch: [0-5][400/1000]	Time 0.168 (0.204)	Data 0.074 (0.112)	Loss 0.090 (0.148)
+Epoch: [0-5][600/1000]	Time 0.179 (0.204)	Data 0.085 (0.111)	Loss 0.016 (0.143)
+Epoch: [0-5][800/1000]	Time 0.195 (0.203)	Data 0.092 (0.111)	Loss 0.149 (0.137)
+Epoch: [0-5][1000/1000]	Time 0.173 (0.204)	Data 0.081 (0.112)	Loss 0.154 (0.131)
+===> Start extracting features for sorting gallery
+Extract Features: [100/1321]	Time 0.194 (0.211)	Data 0.000 (0.010)	
+Extract Features: [200/1321]	Time 0.197 (0.207)	Data 0.000 (0.005)	
+Extract Features: [300/1321]	Time 0.204 (0.209)	Data 0.000 (0.003)	
+Extract Features: [400/1321]	Time 0.203 (0.207)	Data 0.000 (0.003)	
+Extract Features: [500/1321]	Time 0.207 (0.206)	Data 0.000 (0.002)	
+Extract Features: [600/1321]	Time 0.206 (0.208)	Data 0.000 (0.002)	
+Extract Features: [700/1321]	Time 0.202 (0.208)	Data 0.000 (0.001)	
+Extract Features: [800/1321]	Time 0.201 (0.207)	Data 0.000 (0.001)	
+Extract Features: [900/1321]	Time 0.205 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1000/1321]	Time 0.206 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1100/1321]	Time 0.204 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1200/1321]	Time 0.215 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1300/1321]	Time 0.193 (0.207)	Data 0.000 (0.001)	
+===> Start sorting gallery
+Epoch: [0-6][200/1000]	Time 0.153 (0.195)	Data 0.063 (0.103)	Loss 0.047 (0.169)
+Epoch: [0-6][400/1000]	Time 0.166 (0.196)	Data 0.073 (0.104)	Loss 0.009 (0.165)
+Epoch: [0-6][600/1000]	Time 0.162 (0.196)	Data 0.069 (0.104)	Loss 0.001 (0.160)
+Epoch: [0-6][800/1000]	Time 0.174 (0.196)	Data 0.082 (0.104)	Loss 0.020 (0.155)
+Epoch: [0-6][1000/1000]	Time 0.167 (0.196)	Data 0.074 (0.104)	Loss 0.009 (0.149)
+===> Start extracting features for sorting gallery
+Extract Features: [100/1321]	Time 0.203 (0.214)	Data 0.000 (0.010)	
+Extract Features: [200/1321]	Time 0.204 (0.208)	Data 0.000 (0.005)	
+Extract Features: [300/1321]	Time 0.205 (0.209)	Data 0.000 (0.003)	
+Extract Features: [400/1321]	Time 0.203 (0.208)	Data 0.000 (0.002)	
+Extract Features: [500/1321]	Time 0.208 (0.207)	Data 0.000 (0.002)	
+Extract Features: [600/1321]	Time 0.195 (0.208)	Data 0.000 (0.002)	
+Extract Features: [700/1321]	Time 0.213 (0.208)	Data 0.000 (0.001)	
+Extract Features: [800/1321]	Time 0.203 (0.207)	Data 0.000 (0.001)	
+Extract Features: [900/1321]	Time 0.204 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1000/1321]	Time 0.204 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1100/1321]	Time 0.245 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1200/1321]	Time 0.205 (0.207)	Data 0.000 (0.001)	
+Extract Features: [1300/1321]	Time 0.205 (0.207)	Data 0.000 (0.001)	
+===> Start sorting gallery
+Epoch: [0-7][200/416]	Time 0.169 (0.234)	Data 0.080 (0.142)	Loss 0.044 (0.138)
+Epoch: [0-7][400/416]	Time 0.163 (0.232)	Data 0.074 (0.140)	Loss 0.163 (0.120)

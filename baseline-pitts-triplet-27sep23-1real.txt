@@ -1,0 +1,138 @@
+/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-28-Sep
+==========Starting Training=============
+========================================
+Use GPU: 0 for training, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='6010', dataset='pitts', scale='30k', tuple_size=1, test_batch_size=32, cache_size=1000, workers=1, height=480, width=640, neg_num=10, num_clusters=64, neg_pool=1000, arch='vgg16', layers='conv5', nowhiten=False, syncbn=True, sync_gather=True, features=4096, lr=0.0001, momentum=0.9, weight_decay=0.001, loss_type='triplet', step_size=5, resume='', vlad=True, eval_step=1, rerank=False, epochs=5, iters=0, seed=43, deterministic=False, print_freq=200, margin=0.1, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-28-Sep', init_dir='/home/leo/usman_ws/codes/OpenIBL/examples/../logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+7608
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   312  |     7416
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+Query: 0:2048 and DB 0:4096
+Query: 0:2048 and DB 4096:8192
+Query: 0:2048 and DB 8192:10000
+Query: 2048:4096 and DB 0:4096
+Query: 2048:4096 and DB 4096:8192
+Query: 2048:4096 and DB 8192:10000
+Query: 4096:6144 and DB 0:4096
+Query: 4096:6144 and DB 4096:8192
+Query: 4096:6144 and DB 8192:10000
+Query: 6144:7416 and DB 0:4096
+Query: 6144:7416 and DB 4096:8192
+Query: 6144:7416 and DB 8192:10000
+dataset.q_val = 7608, dataset.db_val = 10000, dataset.val_pos = 7608
+Loading centroids from /home/leo/usman_ws/codes/OpenIBL/examples/../logs/vgg16_pitts_64_desc_cen.hdf5
+===> Start extracting features for sorting gallery
+Extract Features: [100/1946]	Time 0.222 (0.233)	Data 0.000 (0.010)	
+191
+Query: 0:2048 and DB 0:4096
+~~~~~~Next:~~~~~~~0~~~~~~~~~~~~~~~~~
+mark_chunk 6144 =  6144 - 0
+yes, next is fully convertable
+new position 384.0
+Extract Features: [200/1946]	Time 0.211 (0.229)	Data 0.000 (0.005)	
+Extract Features: [300/1946]	Time 0.214 (0.225)	Data 0.000 (0.003)	
+383
+Query: 0:2048 and DB 4096:8192
+~~~~~~Next:~~~~~~~0~~~~~~~~~~~~~~~~~
+mark_chunk 3856 =  3856 - 0
+For next: 16 need to keep
+Extract Features: [400/1946]	Time 0.208 (0.225)	Data 0.000 (0.002)	
+Extract Features: [500/1946]	Time 0.214 (0.223)	Data 0.000 (0.002)	
+504
+Query: 0:2048 and DB 8192:10000
+~~~~~~~~~~~~~~Concatenating~~~~~~~~~~~~~~~~~
+Previous: torch.Size([0, 32768]) Current: torch.Size([3872, 32768]) 
+~~~~~~Next:~~~~~~~16~~~~~~~~~~~~~~~~~
+mark_chunk 6128 =  6144 - 16
+For next: 16 need to keep
+Extract Features: [600/1946]	Time 0.219 (0.223)	Data 0.000 (0.002)	
+697
+Query: 2048:4096 and DB 0:4096
+~~~~~~~~~~~~~~Concatenating~~~~~~~~~~~~~~~~~
+Previous: torch.Size([16, 32768]) Current: torch.Size([6192, 32768]) 
+~~~~~~Next:~~~~~~~48~~~~~~~~~~~~~~~~~
+mark_chunk 6096 =  6144 - 48
+For next: 16 need to keep
+Extract Features: [700/1946]	Time 0.223 (0.223)	Data 0.000 (0.001)	
+Extract Features: [800/1946]	Time 0.211 (0.222)	Data 0.000 (0.001)	
+888
+Query: 2048:4096 and DB 4096:8192
+~~~~~~~~~~~~~~Concatenating~~~~~~~~~~~~~~~~~
+Previous: torch.Size([48, 32768]) Current: torch.Size([6160, 32768]) 
+~~~~~~Next:~~~~~~~16~~~~~~~~~~~~~~~~~
+mark_chunk 3840 =  3856 - 16
+yes, next is fully convertable
+new position 1009.0
+Extract Features: [900/1946]	Time 0.225 (0.222)	Data 0.000 (0.001)	
+Extract Features: [1000/1946]	Time 0.219 (0.222)	Data 0.000 (0.001)	
+1008
+Query: 2048:4096 and DB 8192:10000
+~~~~~~~~~~~~~~Concatenating~~~~~~~~~~~~~~~~~
+Previous: torch.Size([16, 32768]) Current: torch.Size([3856, 32768]) 
+~~~~~~Next:~~~~~~~0~~~~~~~~~~~~~~~~~
+mark_chunk 6144 =  6144 - 0
+yes, next is fully convertable
+new position 1201.0
+Extract Features: [1100/1946]	Time 0.213 (0.222)	Data 0.000 (0.001)	
+Extract Features: [1200/1946]	Time 0.207 (0.221)	Data 0.000 (0.001)	
+1200
+Query: 4096:6144 and DB 0:4096
+~~~~~~Next:~~~~~~~0~~~~~~~~~~~~~~~~~
+mark_chunk 6144 =  6144 - 0
+yes, next is fully convertable
+new position 1393.0
+Extract Features: [1300/1946]	Time 0.220 (0.221)	Data 0.000 (0.001)	
+1392
+Query: 4096:6144 and DB 4096:8192
+~~~~~~Next:~~~~~~~0~~~~~~~~~~~~~~~~~
+mark_chunk 3856 =  3856 - 0
+For next: 16 need to keep
+Extract Features: [1400/1946]	Time 0.219 (0.222)	Data 0.000 (0.001)	
+Extract Features: [1500/1946]	Time 0.224 (0.221)	Data 0.000 (0.001)	
+1513
+Query: 4096:6144 and DB 8192:10000
+~~~~~~~~~~~~~~Concatenating~~~~~~~~~~~~~~~~~
+Previous: torch.Size([0, 32768]) Current: torch.Size([3872, 32768]) 
+~~~~~~Next:~~~~~~~16~~~~~~~~~~~~~~~~~
+mark_chunk 5352 =  5368 - 16
+For next: 8 need to keep
+Extract Features: [1600/1946]	Time 0.219 (0.221)	Data 0.000 (0.001)	
+1681
+Query: 6144:7416 and DB 0:4096
+~~~~~~~~~~~~~~Concatenating~~~~~~~~~~~~~~~~~
+Previous: torch.Size([16, 32768]) Current: torch.Size([5392, 32768]) 
+~~~~~~Next:~~~~~~~24~~~~~~~~~~~~~~~~~
+mark_chunk 5344 =  5368 - 24
+yes, next is fully convertable
+new position 1849.0
+Extract Features: [1700/1946]	Time 0.226 (0.221)	Data 0.000 (0.001)	
+Extract Features: [1800/1946]	Time 0.218 (0.221)	Data 0.000 (0.001)	
+1848
+Query: 6144:7416 and DB 4096:8192
+~~~~~~~~~~~~~~Concatenating~~~~~~~~~~~~~~~~~
+Previous: torch.Size([24, 32768]) Current: torch.Size([5368, 32768]) 
+~~~~~~Next:~~~~~~~0~~~~~~~~~~~~~~~~~
+mark_chunk 3080 =  3080 - 0
+For next: 8 need to keep
+Extract Features: [1900/1946]	Time 0.220 (0.221)	Data 0.000 (0.001)	
+1945
+Query: 6144:7416 and DB 8192:10000
+~~~~~~~~~~~~~~Concatenating~~~~~~~~~~~~~~~~~
+Previous: torch.Size([0, 32768]) Current: torch.Size([3080, 32768]) 
+~~~~~~Next:~~~~~~~0~~~~~~~~~~~~~~~~~
+>>> tensor([[1.7528, 1.8051, 1.9501,  ..., 1.9519, 1.9642, 1.9156],
+        [1.7528, 1.8051, 1.9501,  ..., 1.9519, 1.9642, 1.9156],
+        [1.7528, 1.8051, 1.9501,  ..., 1.9519, 1.9642, 1.9156],
+        ...,
+        [1.9502, 1.9823, 1.9048,  ..., 1.8988, 1.7529, 1.7489],
+        [1.9680, 1.9688, 1.8754,  ..., 1.8636, 1.7702, 1.7800],
+        [2.0576, 2.0132, 1.8857,  ..., 1.8257, 1.8369, 1.8599]])
+>>> 

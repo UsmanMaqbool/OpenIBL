@@ -65,7 +65,7 @@ def get_data(args, iters):
             end_q = min(i + q_chunk, len(dataset.q_train))
             start_db = j
             end_db = min(j + db_chunk, len(dataset.db_train))
-            # print(f"Query: {start_q}:{end_q} and DB {start_db}:{end_db}")
+            print(f"Query: {start_q}:{end_q} and DB {start_db}:{end_db}")
             list_q_db = list_q_db + dataset.q_train[start_q:end_q] + dataset.db_train[start_db:end_db]
 
     train_extract_loader_large = DataLoader(
@@ -94,20 +94,7 @@ def get_data(args, iters):
 def update_sampler_large(sampler, model, loader, query_len, gallery_len, sub_set, vlad=True, gpu=None, sync_gather=False):
     if (dist.get_rank()==0):
         print ("===> Start extracting features for sorting gallery")
-    # len(query) # 502704
-    # len(gallery) 915202
-    
-    #Total: 502704 + 915202
-    
-    # len(query) = 7416
-    # len(gallery) = 10000
-    
-    # Features: = 17321
-    # distmat (equal to the lenght of query) =     7416
-    
-    # create new loader
-    # Create sub-loaders for the desired fnames
-    # code.interact(local=locals())
+
     distmat = features_pairwise_distance(model, loader, query_len, gallery_len,
                                 vlad=vlad, gpu=gpu, sync_gather=sync_gather)
 
@@ -122,7 +109,13 @@ def update_sampler(sampler, model, loader, query, gallery, sub_set, vlad=True, g
         print ("===> Start extracting features for sorting gallery")
         # len(query) # 502704
     # len(gallery) 915202
-    
+    # tensor([[1.7528, 1.8051, 1.9501,  ..., 1.9519, 1.9642, 1.9156],
+    #     [1.7528, 1.8051, 1.9501,  ..., 1.9519, 1.9642, 1.9156],
+    #     [1.7528, 1.8051, 1.9501,  ..., 1.9519, 1.9642, 1.9156],
+    #     ...,
+    #     [1.9502, 1.9823, 1.9048,  ..., 1.8988, 1.7529, 1.7489],
+    #     [1.9680, 1.9688, 1.8754,  ..., 1.8636, 1.7702, 1.7800],
+    #     [2.0576, 2.0132, 1.8857,  ..., 1.8257, 1.8369, 1.8599]])
     #Total: 502704 + 915202
     
     # len(query) = 7416
@@ -137,6 +130,7 @@ def update_sampler(sampler, model, loader, query, gallery, sub_set, vlad=True, g
     features = extract_features(model, loader, sorted(list(set(query) | set(gallery))),
                                 vlad=vlad, gpu=gpu, sync_gather=sync_gather)
     distmat = pairwise_distance(features, query, gallery) # 7416, 10000
+    
     del features
     if (dist.get_rank()==0):
         print ("===> Start sorting gallery")
@@ -214,7 +208,7 @@ def main_worker(args):
             print("=> Start epoch {}  best recall5 {:.1%}"
                   .format(start_epoch, best_recall5))
 
-    # Evaluator
+    # # Evaluator
     # evaluator = Evaluator(model)
     # if (args.rank==0):
     #     print("Test the initial model:")
@@ -242,7 +236,7 @@ def main_worker(args):
         subset_indices = torch.randperm(len(dataset.q_train), generator=g).long().split(args.cache_size)
 
         for subid, subset in enumerate(subset_indices):
-            # update_sampler(sampler, model, train_extract_loader_large, dataset.q_train, dataset.db_train, subset.tolist(),
+            # update_sampler(sampler, model, train_extract_loader, dataset.q_train, dataset.db_train, subset.tolist(),
             #                 vlad=args.vlad, gpu=args.gpu, sync_gather=args.sync_gather)
             update_sampler_large(sampler, model, train_extract_loader_large, len(dataset.q_train), len(dataset.db_train), subset.tolist(),
                             vlad=args.vlad, gpu=args.gpu, sync_gather=args.sync_gather)

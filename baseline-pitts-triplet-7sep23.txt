@@ -94,3 +94,60 @@ calcuated addtional 8 and need to keep
 Extract Features: [1900/1946]	Time 0.226 (0.228)	Data 0.000 (0.001)	
 ===> Start sorting gallery
 Epoch: [0-0][200/1000]	Time 0.132 (0.421)	Data 0.035 (0.324)	Loss 0.133 (0.220)
+Epoch: [0-0][400/1000]	Time 0.149 (0.427)	Data 0.048 (0.330)	Loss 0.051 (0.163)
+Epoch: [0-0][600/1000]	Time 0.125 (0.428)	Data 0.026 (0.330)	Loss 0.002 (0.124)
+Epoch: [0-0][800/1000]	Time 0.119 (0.427)	Data 0.030 (0.329)	Loss 0.018 (0.098)
+Epoch: [0-0][1000/1000]	Time 0.129 (0.427)	Data 0.027 (0.329)	Loss 0.000 (0.080)
+===> Start extracting features for sorting gallery
+Query: 0:2048 and DB 0:4096
+Query: 0:2048 and DB 4096:8192
+Query: 0:2048 and DB 8192:10000
+Query: 2048:4096 and DB 0:4096
+Query: 2048:4096 and DB 4096:8192
+Query: 2048:4096 and DB 8192:10000
+Query: 4096:6144 and DB 0:4096
+Query: 4096:6144 and DB 4096:8192
+Query: 4096:6144 and DB 8192:10000
+Query: 6144:7416 and DB 0:4096
+Query: 6144:7416 and DB 4096:8192
+Query: 6144:7416 and DB 8192:10000
+Extract Features: [100/1946]	Time 0.232 (0.240)	Data 0.000 (0.010)	
+191
+~~~~~~feature_rem~~~~~~~{feature_rem.shape}~~~~~~~~~~~~~~~~~
+yes, its fully convertable
+new position 384.0
+Extract Features: [200/1946]	Time 0.249 (0.237)	Data 0.000 (0.005)	
+Extract Features: [300/1946]	Time 0.211 (0.230)	Data 0.000 (0.003)	
+383
+~~~~~~feature_rem~~~~~~~{feature_rem.shape}~~~~~~~~~~~~~~~~~
+calcuated addtional 16 and need to keep
+Extract Features: [400/1946]	Time 0.196 (0.228)	Data 0.000 (0.003)	
+Extract Features: [500/1946]	Time 0.203 (0.223)	Data 0.000 (0.002)	
+504
+~~~~~~~~~~~~~~Concatenating~~~~~~~~~~~~~~~~~
+~~~~~~feature_rem~~~~~~~{feature_rem.shape}~~~~~~~~~~~~~~~~~
+yes, its fully convertable
+new position 697.0
+Extract Features: [600/1946]	Time 0.209 (0.221)	Data 0.000 (0.002)	
+696
+~~~~~~feature_rem~~~~~~~{feature_rem.shape}~~~~~~~~~~~~~~~~~
+yes, its fully convertable
+new position 889.0
+Extract Features: [700/1946]	Time 0.211 (0.219)	Data 0.000 (0.002)	
+Extract Features: [800/1946]	Time 0.198 (0.219)	Data 0.000 (0.001)	
+888
+~~~~~~feature_rem~~~~~~~{feature_rem.shape}~~~~~~~~~~~~~~~~~
+calcuated addtional 16 and need to keep
+Extract Features: [900/1946]	Time 0.195 (0.218)	Data 0.000 (0.001)	
+Extract Features: [1000/1946]	Time 0.214 (0.217)	Data 0.000 (0.001)	
+1009
+~~~~~~~~~~~~~~Concatenating~~~~~~~~~~~~~~~~~
+~~~~~~feature_rem~~~~~~~{feature_rem.shape}~~~~~~~~~~~~~~~~~
+yes, its fully convertable
+new position 1202.0
+Extract Features: [1100/1946]	Time 0.216 (0.217)	Data 0.000 (0.001)	
+Extract Features: [1200/1946]	Time 0.276 (0.218)	Data 0.000 (0.001)	
+1201
+~~~~~~feature_rem~~~~~~~{feature_rem.shape}~~~~~~~~~~~~~~~~~
+yes, its fully convertable
+new position 1394.0
