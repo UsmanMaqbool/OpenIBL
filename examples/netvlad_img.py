@@ -56,8 +56,8 @@ def get_data(args, iters):
     
     # Initialize an empty list to store the sum result
     list_q_db = []
-    q_chunk = args.test_batch_size*64
-    db_chunk = args.test_batch_size*128
+    q_chunk = args.test_batch_size*1000
+    db_chunk = args.test_batch_size*1500
     
     for i in range(0, len(dataset.q_train), q_chunk):
         for j in range(0, len(dataset.db_train), db_chunk):
@@ -94,7 +94,6 @@ def get_data(args, iters):
 def update_sampler_large(sampler, model, loader, query_len, gallery_len, sub_set, vlad=True, gpu=None, sync_gather=False):
     if (dist.get_rank()==0):
         print ("===> Start extracting features for sorting gallery")
-
     distmat = features_pairwise_distance(model, loader, query_len, gallery_len,
                                 vlad=vlad, gpu=gpu, sync_gather=sync_gather)
 
@@ -107,25 +106,6 @@ def update_sampler_large(sampler, model, loader, query_len, gallery_len, sub_set
 def update_sampler(sampler, model, loader, query, gallery, sub_set, vlad=True, gpu=None, sync_gather=False):
     if (dist.get_rank()==0):
         print ("===> Start extracting features for sorting gallery")
-        # len(query) # 502704
-    # len(gallery) 915202
-    # tensor([[1.7528, 1.8051, 1.9501,  ..., 1.9519, 1.9642, 1.9156],
-    #     [1.7528, 1.8051, 1.9501,  ..., 1.9519, 1.9642, 1.9156],
-    #     [1.7528, 1.8051, 1.9501,  ..., 1.9519, 1.9642, 1.9156],
-    #     ...,
-    #     [1.9502, 1.9823, 1.9048,  ..., 1.8988, 1.7529, 1.7489],
-    #     [1.9680, 1.9688, 1.8754,  ..., 1.8636, 1.7702, 1.7800],
-    #     [2.0576, 2.0132, 1.8857,  ..., 1.8257, 1.8369, 1.8599]])
-    #Total: 502704 + 915202
-    
-    # len(query) = 7416
-    # len(gallery) = 10000
-    
-    # Features: = 17321
-    # distmat (equal to the lenght of query) =     7416
-    
-    # create new loader
-    # Create sub-loaders for the desired fnames
     
     features = extract_features(model, loader, sorted(list(set(query) | set(gallery))),
                                 vlad=vlad, gpu=gpu, sync_gather=sync_gather)
@@ -208,7 +188,7 @@ def main_worker(args):
             print("=> Start epoch {}  best recall5 {:.1%}"
                   .format(start_epoch, best_recall5))
 
-    # # Evaluator
+    # Evaluator
     # evaluator = Evaluator(model)
     # if (args.rank==0):
     #     print("Test the initial model:")
@@ -240,6 +220,7 @@ def main_worker(args):
             #                 vlad=args.vlad, gpu=args.gpu, sync_gather=args.sync_gather)
             update_sampler_large(sampler, model, train_extract_loader_large, len(dataset.q_train), len(dataset.db_train), subset.tolist(),
                             vlad=args.vlad, gpu=args.gpu, sync_gather=args.sync_gather)
+            
             synchronize()
             trainer.train(epoch, subid, train_loader, optimizer,
                             train_iters=len(train_loader), print_freq=args.print_freq,
@@ -296,18 +277,18 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="NetVLAD/SARE training")
     parser.add_argument('--launcher', type=str,
                         choices=['none', 'pytorch', 'slurm'],
-                        default='none', help='job launcher')
-    parser.add_argument('--tcp-port', type=str, default='5017')
+                        default='pytorch', help='job launcher')
+    parser.add_argument('--tcp-port', type=str, default='6010')
     # data
     parser.add_argument('-d', '--dataset', type=str, default='pitts',
                         choices=datasets.names())
     parser.add_argument('--scale', type=str, default='30k')
     parser.add_argument('--tuple-size', type=int, default=1,
                         help="tuple numbers in a batch")
-    parser.add_argument('--test-batch-size', type=int, default=64,
+    parser.add_argument('--test-batch-size', type=int, default=32,
                         help="tuple numbers in a batch")
     parser.add_argument('--cache-size', type=int, default=1000)
-    parser.add_argument('-j', '--workers', type=int, default=8)
+    parser.add_argument('-j', '--workers', type=int, default=1)
     parser.add_argument('--height', type=int, default=480, help="input height")
     parser.add_argument('--width', type=int, default=640, help="input width")
     parser.add_argument('--neg-num', type=int, default=10,
@@ -323,7 +304,7 @@ if __name__ == '__main__':
     parser.add_argument('--sync-gather', action='store_true')
     parser.add_argument('--features', type=int, default=4096)
     # optimizer
-    parser.add_argument('--lr', type=float, default=0.001,
+    parser.add_argument('--lr', type=float, default=0.0001,
                         help="learning rate of new parameters, for pretrained ")
     parser.add_argument('--momentum', type=float, default=0.9)
     parser.add_argument('--weight-decay', type=float, default=0.001)
@@ -344,9 +325,9 @@ if __name__ == '__main__':
     # path
     working_dir = osp.dirname(osp.abspath(__file__))
     parser.add_argument('--data-dir', type=str, metavar='PATH',
-                        default=osp.join(working_dir, 'data'))
+                        default="/home/leo/usman_ws/codes/OpenIBL/examples/data")
     parser.add_argument('--logs-dir', type=str, metavar='PATH',
-                        default=osp.join(working_dir, 'logs'))
+                        default="/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-05-Oct")
     parser.add_argument('--init-dir', type=str, metavar='PATH',
-                        default=osp.join(working_dir, '..', 'logs'))
+                        default="/home/leo/usman_ws/codes/OpenIBL/examples/../logs")
     main()

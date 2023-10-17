@@ -124,8 +124,8 @@ def features_pairwise_distance(model, data_loader, query_len, gallery_len, print
     features = []
     features_dict = torch.zeros(query_len, gallery_len)
     
-    q_chunk = 32*64
-    db_chunk = 32*128
+    q_chunk = 32*1500
+    db_chunk = 32*2500
     
     q_db_pos_list = []    
     
@@ -167,7 +167,7 @@ def features_pairwise_distance(model, data_loader, query_len, gallery_len, print
 
             features.append(outputs)
             
-            if(i == i_pos-1 and i != 0):
+            if((i == i_pos-1 and i != 0) or i == len(data_loader)-1):
                 print(i)
                 start_q, end_q, start_db, end_db, _ = q_db_pos_list[q_db_pos]
                 print(f"Query: {start_q}:{end_q} and DB {start_db}:{end_db}")
@@ -228,7 +228,7 @@ def features_pairwise_distance(model, data_loader, query_len, gallery_len, print
                       .format(i + 1, len(data_loader),
                               batch_time.val, batch_time.avg,
                               data_time.val, data_time.avg))
-        code.interact(local=locals())
+        # code.interact(local=locals())
 
     return features_dict
 
