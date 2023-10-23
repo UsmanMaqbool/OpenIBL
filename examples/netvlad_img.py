@@ -94,7 +94,7 @@ def get_data(args, iters):
 def update_sampler_large(sampler, model, loader, query_len, gallery_len, sub_set, vlad=True, gpu=None, sync_gather=False):
     if (dist.get_rank()==0):
         print ("===> Start extracting features for sorting gallery")
-    distmat = features_pairwise_distance(model, loader, query_len, gallery_len,
+    distmat = features_pairwise_distance(model, loader, sub_set, query_len, gallery_len,
                                 vlad=vlad, gpu=gpu, sync_gather=sync_gather)
 
     if (dist.get_rank()==0):
@@ -288,7 +288,7 @@ if __name__ == '__main__':
     parser.add_argument('--test-batch-size', type=int, default=32,
                         help="tuple numbers in a batch")
     parser.add_argument('--cache-size', type=int, default=1000)
-    parser.add_argument('-j', '--workers', type=int, default=1)
+    parser.add_argument('-j', '--workers', type=int, default=4)
     parser.add_argument('--height', type=int, default=480, help="input height")
     parser.add_argument('--width', type=int, default=640, help="input width")
     parser.add_argument('--neg-num', type=int, default=10,

@@ -47,7 +47,7 @@ class DistributedRandomTupleSampler(Sampler):
         assert(distmat.shape[0]==len(self.query_source))
         assert(distmat.shape[1]==len(self.gallery_source))
         # distmat:7416 X 10000
-        self.sort_idx = torch.argsort(distmat, dim=1)
+        self.sort_idx = torch.argsort(distmat, dim=1) #sort the positions row-wise
         # Sort ids of distmat
         self.sub_set = sub_set # just copy the sub_set to this
         self.sub_length = len(self.sub_set) #1000

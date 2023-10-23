@@ -113,7 +113,7 @@ def extract_features(model, data_loader, dataset, print_freq=100,
 
     return features_dict
 
-def features_pairwise_distance(model, data_loader, query_len, gallery_len, print_freq=100,
+def features_pairwise_distance(model, data_loader, sub_set, query_len, gallery_len, print_freq=100,
                 vlad=True, pca=None, gpu=None, sync_gather=False, metric=None):
     model.eval()
     batch_time = AverageMeter()

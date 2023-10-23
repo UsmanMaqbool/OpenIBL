@@ -80,10 +80,10 @@ class Trainer(object):
             return self._get_loss(outputs_vlad, loss_type, B, N)
 
     def _get_loss(self, outputs, loss_type, B, N):
-        outputs = outputs.view(B, N, -1)
-        L = outputs.size(-1)
+        outputs = outputs.view(B, N, -1) #torch.Size([1, 12, 512])
+        L = outputs.size(-1) #L 512
 
-        output_negatives = outputs[:, 2:]
+        output_negatives = outputs[:, 2:] #torch.Size([1, 10, 512])
         output_anchors = outputs[:, 0]
         output_positives = outputs[:, 1]
 
