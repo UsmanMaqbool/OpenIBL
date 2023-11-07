@@ -10,7 +10,7 @@ ARCH=vgg16
 
 PORT=6010
 
-FILES="/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-sare_joint-lr0.001-tuple1-/*.tar"
+FILES="/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-sare_ind-lr0.0001-tuple1-05-Sep/*.tar"
 
 echo "==========Testing============="
 echo "=============================="

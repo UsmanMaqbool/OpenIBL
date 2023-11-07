@@ -107,14 +107,19 @@ def main_worker(args):
     evaluator = Evaluator(model)
     if (args.reduction):
         pca_parameters_path = osp.join(osp.dirname(args.resume), 'pca_params_'+osp.basename(args.resume).split('.')[0]+'.h5')
+        # '/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-sare_ind-lr0.0001-tuple1-05-Sep/pca_params_checkpoint3.h5'
+
         pca = PCA(args.features, (not args.nowhiten), pca_parameters_path)
+
         if (not osp.isfile(pca_parameters_path)):
             dict_f = extract_features(model, train_extract_loader, pitts_train,
                     vlad=args.vlad, gpu=args.gpu, sync_gather=args.sync_gather)
-            features = list(dict_f.values())
+            # len(dict_f) = 17320
+            features = list(dict_f.values()) # 17320
             if (len(features)>10000):
                 features = random.sample(features, 10000)
             features = torch.stack(features)
+            # features.shape torch.Size([10000, 32768])
             if (args.rank==0):
                 pca.train(features)
             synchronize()
@@ -136,15 +141,15 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Image-based localization testing")
     parser.add_argument('--launcher', type=str,
                         choices=['none', 'pytorch', 'slurm'],
-                        default='none', help='job launcher')
+                        default='pytorch', help='job launcher')
     parser.add_argument('--tcp-port', type=str, default='5017')
     # data
     parser.add_argument('-d', '--dataset', type=str, default='pitts',
                         choices=datasets.names())
     parser.add_argument('--scale', type=str, default='30k')
-    parser.add_argument('--test-batch-size', type=int, default=64,
+    parser.add_argument('--test-batch-size', type=int, default=32,
                         help="tuple numbers in a batch")
-    parser.add_argument('-j', '--workers', type=int, default=8)
+    parser.add_argument('-j', '--workers', type=int, default=2)
     parser.add_argument('--height', type=int, default=480, help="input height")
     parser.add_argument('--width', type=int, default=640, help="input width")
     parser.add_argument('--num-clusters', type=int, default=64)
@@ -155,7 +160,7 @@ if __name__ == '__main__':
     parser.add_argument('--sync-gather', action='store_true')
     parser.add_argument('--features', type=int, default=4096)
     # training configs
-    parser.add_argument('--resume', type=str, default='', metavar='PATH')
+    parser.add_argument('--resume', type=str, default='/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-sare_ind-lr0.0001-tuple1-05-Sep/checkpoint3.pth.tar', metavar='PATH')
     parser.add_argument('--vlad', action='store_true')
     parser.add_argument('--reduction', action='store_true',
                         help="evaluation only")

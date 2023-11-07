@@ -238,13 +238,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="NetVLAD/SARE training")
     parser.add_argument('--launcher', type=str,
                         choices=['none', 'pytorch', 'slurm'],
-                        default='none', help='job launcher')
+                        default='pytorch', help='job launcher')
     parser.add_argument('--tcp-port', type=str, default='5017')
     # data
     parser.add_argument('-d', '--dataset', type=str, default='pitts',
                         choices=datasets.names())
     parser.add_argument('--scale', type=str, default='30k')
-    parser.add_argument('--tuple-size', type=int, default=1,
+    parser.add_argument('--tuple-size', type=int, default=4,
                         help="tuple numbers in a batch")
     parser.add_argument('--test-batch-size', type=int, default=64,
                         help="tuple numbers in a batch")

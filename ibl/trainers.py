@@ -68,7 +68,8 @@ class Trainer(object):
         return imgs.cuda(self.gpu)
 
     def _forward(self, inputs, vlad, loss_type):
-        B, N, C, H, W = inputs.size()
+        B, N, C, H, W = inputs.size() 
+        #torch.Size([4, 12, 3, 480, 640])
         inputs = inputs.view(-1, C, H, W)
 
         outputs_pool, outputs_vlad = self.model(inputs)
@@ -82,7 +83,7 @@ class Trainer(object):
     def _get_loss(self, outputs, loss_type, B, N):
         outputs = outputs.view(B, N, -1)
         L = outputs.size(-1)
-
+        print(f"margin = {self.margin}")
         output_negatives = outputs[:, 2:]
         output_anchors = outputs[:, 0]
         output_positives = outputs[:, 1]
