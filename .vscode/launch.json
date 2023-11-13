@@ -14,9 +14,34 @@
                 "--nproc_per_node=1 ",
                 "--master_port=6010",
                 "--use_env",
-                "examples/netvlad_img.py",
+                "examples/test.py",
+                "--vlad",
+                "--reduction",
+                "--resume=/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-07-Nov/checkpoint0.pth.tar",
             ],
         }
     ]
 }
+// Train
+// {
+//     // Use IntelliSense to learn about possible attributes.
+//     // Hover to view descriptions of existing attributes.
+//     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+//     "version": "0.2.0",
+//     "configurations": [
+//         {
+//             "name": "Python: Module",
+//             "type": "python",
+//             "request": "launch",
+//             "program": "/home/leo/anaconda3/lib/python3.1/site-packages/torch/distributed/launch.py",
+//             "console": "integratedTerminal",
+//             "args": [
+//                 "--nproc_per_node=1 ",
+//                 "--master_port=6010",
+//                 "--use_env",
+//                 "examples/netvlad_img.py",
+//             ],
+//         }
+//     ]
+// }
 

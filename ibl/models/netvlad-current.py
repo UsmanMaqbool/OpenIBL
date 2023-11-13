@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torchvision.utils import save_image
+
 import numpy as np
 import copy
 import code
@@ -246,7 +246,7 @@ class EmbedNet(nn.Module):
         self.classes = 20
         self.p = 2
         self.q = 8
-        self.encoderFile = "/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth"
+        self.encoderFile = "/media/leo/2C737A9872F69ECF/datasets/pretrained/encoder/espnet_p_2_q_8.pth"
         self.Espnet = ESPNet(classes=self.classes, p=self.p, q = self.q, encoderFile=self.encoderFile)  # Net.Mobile_SegNetDilatedIA_C_stage1(20)
         # requires_grad=False
         
@@ -265,18 +265,7 @@ class EmbedNet(nn.Module):
     def forward(self, x):
         
         # createboxes
-        sizeH = x.shape[2]
-        sizeW = x.shape[3]
-        # print("raw: ", x.shape)
-        
-        # for Tokyo 247 Test
-        
-        if sizeH%2 != 0:
-            x = F.pad(input=x, pad=(0,0,1,2), mode='constant', value=0)
-        if sizeW%2 != 0:
-            x = F.pad(input=x, pad=(1,2), mode='constant', value=0)
-
-        # print("padded:", x.shape)
+        # print("debuggind started")
         with torch.no_grad():
             b_out = self.Espnet(x)
         # b_out = self.Espnet(x)
@@ -341,8 +330,6 @@ class EmbedNet(nn.Module):
 
             
         _, _, H, W = x.shape
-        # H = sizeH
-        # W = sizeW
         patch_mask = torch.zeros((H, W)).cuda()
         
         # VGG 
@@ -380,7 +367,7 @@ class EmbedNet(nn.Module):
                     # print(idx, " ", b_idx)
                     # code.interact(local=locals())
 
-                    if idx == rr_boxes[b_idx] and obj_i[b_idx] > 5000 and len(img_nodes) < NB:
+                    if idx == rr_boxes[b_idx] and obj_i[b_idx] > 10000 and len(img_nodes) < NB-2:
                         # print("found match")
                         # print(idx, " ", b_idx)
                         # print (img_nodes.shape)

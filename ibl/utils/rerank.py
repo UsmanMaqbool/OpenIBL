@@ -27,48 +27,34 @@ __all__ = ['re_ranking']
 
 import numpy as np
 import gc
-import torch
+
 
 def re_ranking(q_g_dist, q_q_dist, g_g_dist, k1=20, k2=6, lambda_value=0.3):
 
     # The following naming, e.g. gallery_num, is different from outer scope.
     # Don't care about it.
-
-    # original_dist = np.concatenate(
-    #   [np.concatenate([q_q_dist, q_g_dist], axis=1),
-    #    np.concatenate([q_g_dist.T, g_g_dist], axis=1)],
-    #   axis=0)
-    aa = torch.cat([q_q_dist, q_g_dist], axis=1)
-    original_dist = torch.cat(
-      [torch.cat([q_q_dist, q_g_dist], axis=1),
-       torch.cat([q_g_dist.T, g_g_dist], axis=1)],
+    print("line36")
+    original_dist = np.concatenate(
+      [np.concatenate([q_q_dist, q_g_dist], axis=1),
+       np.concatenate([q_g_dist.T, g_g_dist], axis=1)],
       axis=0)
-    
     del q_q_dist, g_g_dist
-    # print("line 48")
-    # original_dist = np.power(original_dist, 2).astype(np.float32)
-    original_dist = torch.pow(original_dist, 2)
-    # print("line 51")
-    # original_dist = np.transpose(1. * original_dist/np.max(original_dist,axis = 0))
-    original_dist = torch.transpose(1. * original_dist/torch.max(original_dist,axis = 0))
-    # print("line 54")
-    original_dist = original_dist.cpu().numpy()
-    # print("line 56")
-    V = np.zeros_like(original_dist).astype(np.float32)
-    V = np.zeros_like(original_dist).astype(np.float32)
-    # print("line 59")
-    initial_rank = np.argsort(original_dist).astype(np.int32)
+    print("line42")
+    original_dist = np.power(original_dist, 2).astype(np.float32)
+    print("line43")
 
-
-    q_g_dist = q_g_dist.cpu().numpy()
-    initial_rank = initial_rank.cpu().numpy()
-    original_dist = original_dist.cpu().numpy()
-    V = V.cpu.numpy()
+    original_dist = np.transpose(1. * original_dist/np.max(original_dist,axis = 0))
+    print("line44")
     
+    V = np.zeros_like(original_dist).astype(np.float32)
+    print("line45")
+
+    initial_rank = np.argsort(original_dist).astype(np.int32)
+    print("line47")
     query_num = q_g_dist.shape[0]
     gallery_num = q_g_dist.shape[0] + q_g_dist.shape[1]
     all_num = gallery_num
-
+    print("line51")
     for i in range(all_num):
         # k-reciprocal neighbors
         forward_k_neigh_index = initial_rank[i,:k1+1]
@@ -97,11 +83,13 @@ def re_ranking(q_g_dist, q_q_dist, g_g_dist, k1=20, k2=6, lambda_value=0.3):
         del V_qe
     del initial_rank
     invIndex = []
+    print("line80")
     for i in range(gallery_num):
         invIndex.append(np.where(V[:,i] != 0)[0])
 
     jaccard_dist = np.zeros_like(original_dist,dtype = np.float32)
 
+    print("line86")
 
     for i in range(query_num):
         temp_min = np.zeros(shape=[1,gallery_num],dtype=np.float32)
@@ -111,11 +99,12 @@ def re_ranking(q_g_dist, q_q_dist, g_g_dist, k1=20, k2=6, lambda_value=0.3):
         for j in range(len(indNonZero)):
             temp_min[0,indImages[j]] = temp_min[0,indImages[j]]+ np.minimum(V[i,indNonZero[j]],V[indImages[j],indNonZero[j]])
         jaccard_dist[i] = 1-temp_min/(2.-temp_min)
-
+    print("line96")
     final_dist = jaccard_dist*(1-lambda_value) + original_dist*lambda_value
     del original_dist
     del V
     del jaccard_dist
+    print("line101")
     final_dist = final_dist[:query_num,query_num:]
     gc.collect()
     return final_dist
