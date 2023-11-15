@@ -1,0 +1,1241 @@
+/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov
+==========Starting Training=============
+========================================
+Use GPU: 0 for training, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='6010', dataset='pitts', scale='30k', tuple_size=1, test_batch_size=32, cache_size=1000, workers=1, height=480, width=640, neg_num=10, num_clusters=64, neg_pool=1000, arch='vgg16', layers='conv5', nowhiten=False, syncbn=True, sync_gather=True, features=4096, lr=0.0001, momentum=0.9, weight_decay=0.001, loss_type='triplet', step_size=5, resume='', vlad=True, eval_step=1, rerank=False, epochs=5, iters=0, seed=43, deterministic=False, print_freq=200, margin=0.1, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov', init_dir='/home/leo/usman_ws/codes/OpenIBL/examples/../logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+Loading centroids from /home/leo/usman_ws/codes/OpenIBL/examples/../logs/vgg16_pitts_64_desc_cen.hdf5
+Encoder loaded!
+Test the initial model:
+Extract Features: [100/551]	Time 0.680 (0.576)	Data 0.000 (0.009)	
+Extract Features: [200/551]	Time 0.555 (0.584)	Data 0.000 (0.005)	
+Extract Features: [300/551]	Time 0.645 (0.581)	Data 0.000 (0.003)	
+Extract Features: [400/551]	Time 0.580 (0.584)	Data 0.000 (0.002)	
+Extract Features: [500/551]	Time 0.547 (0.584)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          79.3%
+  top-5          92.3%
+  top-10         95.1%
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.547 (0.569)	Data 0.000 (0.014)	
+Extract Features: [200/542]	Time 0.540 (0.563)	Data 0.000 (0.007)	
+Extract Features: [300/542]	Time 0.552 (0.562)	Data 0.000 (0.005)	
+Extract Features: [400/542]	Time 0.555 (0.561)	Data 0.000 (0.004)	
+Extract Features: [500/542]	Time 0.544 (0.560)	Data 0.000 (0.003)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [0-0][200/1000]	Time 0.400 (0.391)	Data 0.022 (0.019)	Loss 0.195 (0.122)
+Epoch: [0-0][400/1000]	Time 0.378 (0.388)	Data 0.013 (0.016)	Loss 0.037 (0.125)
+Epoch: [0-0][600/1000]	Time 0.397 (0.387)	Data 0.017 (0.015)	Loss 0.332 (0.118)
+Epoch: [0-0][800/1000]	Time 0.381 (0.387)	Data 0.014 (0.015)	Loss 0.047 (0.113)
+Epoch: [0-0][1000/1000]	Time 0.374 (0.387)	Data 0.007 (0.014)	Loss 0.000 (0.110)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.530 (0.555)	Data 0.000 (0.010)	
+Extract Features: [200/542]	Time 0.537 (0.550)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.564 (0.549)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.550 (0.548)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.549 (0.548)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [0-1][200/1000]	Time 0.381 (0.390)	Data 0.013 (0.018)	Loss 0.000 (0.098)
+Epoch: [0-1][400/1000]	Time 0.384 (0.385)	Data 0.012 (0.015)	Loss 0.221 (0.094)
+Epoch: [0-1][600/1000]	Time 0.379 (0.384)	Data 0.012 (0.015)	Loss 0.000 (0.090)
+Epoch: [0-1][800/1000]	Time 0.384 (0.384)	Data 0.012 (0.014)	Loss 0.000 (0.091)
+Epoch: [0-1][1000/1000]	Time 0.376 (0.383)	Data 0.007 (0.014)	Loss 0.244 (0.089)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.529 (0.548)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.539 (0.544)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.540 (0.543)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.531 (0.542)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.542 (0.542)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [0-2][200/1000]	Time 0.381 (0.387)	Data 0.012 (0.018)	Loss 0.050 (0.085)
+Epoch: [0-2][400/1000]	Time 0.378 (0.384)	Data 0.013 (0.015)	Loss 0.232 (0.089)
+Epoch: [0-2][600/1000]	Time 0.381 (0.383)	Data 0.012 (0.014)	Loss 0.000 (0.085)
+Epoch: [0-2][800/1000]	Time 0.427 (0.383)	Data 0.015 (0.014)	Loss 0.044 (0.081)
+Epoch: [0-2][1000/1000]	Time 0.374 (0.383)	Data 0.007 (0.014)	Loss 0.000 (0.080)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.528 (0.549)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.538 (0.545)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.530 (0.543)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.545 (0.542)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.530 (0.542)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [0-3][200/1000]	Time 0.382 (0.387)	Data 0.012 (0.018)	Loss 0.004 (0.077)
+Epoch: [0-3][400/1000]	Time 0.377 (0.385)	Data 0.013 (0.015)	Loss 0.088 (0.075)
+Epoch: [0-3][600/1000]	Time 0.381 (0.384)	Data 0.012 (0.015)	Loss 0.000 (0.079)
+Epoch: [0-3][800/1000]	Time 0.382 (0.383)	Data 0.013 (0.014)	Loss 0.014 (0.075)
+Epoch: [0-3][1000/1000]	Time 0.372 (0.383)	Data 0.009 (0.014)	Loss 0.000 (0.073)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.536 (0.548)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.538 (0.544)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.540 (0.542)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.533 (0.542)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.542 (0.541)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [0-4][200/1000]	Time 0.380 (0.386)	Data 0.012 (0.018)	Loss 0.004 (0.070)
+Epoch: [0-4][400/1000]	Time 0.378 (0.384)	Data 0.011 (0.015)	Loss 0.000 (0.068)
+Epoch: [0-4][600/1000]	Time 0.378 (0.383)	Data 0.015 (0.014)	Loss 0.220 (0.069)
+Epoch: [0-4][800/1000]	Time 0.381 (0.383)	Data 0.012 (0.014)	Loss 0.000 (0.066)
+Epoch: [0-4][1000/1000]	Time 0.373 (0.383)	Data 0.007 (0.014)	Loss 0.172 (0.066)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.528 (0.549)	Data 0.000 (0.010)	
+Extract Features: [200/542]	Time 0.539 (0.544)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.536 (0.542)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.538 (0.542)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.541 (0.541)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [0-5][200/1000]	Time 0.379 (0.387)	Data 0.012 (0.018)	Loss 0.071 (0.065)
+Epoch: [0-5][400/1000]	Time 0.382 (0.384)	Data 0.012 (0.015)	Loss 0.075 (0.066)
+Epoch: [0-5][600/1000]	Time 0.381 (0.383)	Data 0.016 (0.015)	Loss 0.061 (0.066)
+Epoch: [0-5][800/1000]	Time 0.380 (0.383)	Data 0.012 (0.014)	Loss 0.084 (0.065)
+Epoch: [0-5][1000/1000]	Time 0.374 (0.383)	Data 0.007 (0.014)	Loss 0.154 (0.063)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.537 (0.549)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.542 (0.544)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.544 (0.542)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.543 (0.542)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.540 (0.541)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [0-6][200/1000]	Time 0.380 (0.386)	Data 0.011 (0.018)	Loss 0.142 (0.051)
+Epoch: [0-6][400/1000]	Time 0.382 (0.384)	Data 0.012 (0.015)	Loss 0.000 (0.056)
+Epoch: [0-6][600/1000]	Time 0.379 (0.383)	Data 0.013 (0.014)	Loss 0.000 (0.058)
+Epoch: [0-6][800/1000]	Time 0.389 (0.383)	Data 0.014 (0.014)	Loss 0.044 (0.058)
+Epoch: [0-6][1000/1000]	Time 0.375 (0.382)	Data 0.007 (0.014)	Loss 0.000 (0.057)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.540 (0.548)	Data 0.000 (0.010)	
+Extract Features: [200/542]	Time 0.539 (0.544)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.534 (0.543)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.543 (0.542)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.530 (0.542)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [0-7][200/320]	Time 0.377 (0.387)	Data 0.013 (0.018)	Loss 0.056 (0.055)
+Extract Features: [100/551]	Time 0.528 (0.548)	Data 0.000 (0.010)	
+Extract Features: [200/551]	Time 0.527 (0.545)	Data 0.000 (0.005)	
+Extract Features: [300/551]	Time 0.529 (0.543)	Data 0.000 (0.003)	
+Extract Features: [400/551]	Time 0.527 (0.542)	Data 0.000 (0.002)	
+Extract Features: [500/551]	Time 0.534 (0.541)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          87.9%
+  top-5          96.1%
+  top-10         97.6%
+
+ * Finished epoch   0 recall@1: 87.9%  recall@5: 96.1%  recall@10: 97.6%  best@5: 96.1% *
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.536 (0.544)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.525 (0.541)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.533 (0.539)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.578 (0.539)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.527 (0.538)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [1-0][200/1000]	Time 0.381 (0.387)	Data 0.013 (0.018)	Loss 0.000 (0.061)
+Epoch: [1-0][400/1000]	Time 0.380 (0.384)	Data 0.011 (0.015)	Loss 0.114 (0.063)
+Epoch: [1-0][600/1000]	Time 0.378 (0.383)	Data 0.014 (0.015)	Loss 0.009 (0.066)
+Epoch: [1-0][800/1000]	Time 0.384 (0.383)	Data 0.012 (0.014)	Loss 0.138 (0.065)
+Epoch: [1-0][1000/1000]	Time 0.387 (0.383)	Data 0.007 (0.014)	Loss 0.000 (0.063)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.527 (0.547)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.527 (0.543)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.533 (0.541)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.541 (0.540)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.527 (0.539)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [1-1][200/1000]	Time 0.378 (0.387)	Data 0.012 (0.018)	Loss 0.000 (0.064)
+Epoch: [1-1][400/1000]	Time 0.384 (0.385)	Data 0.014 (0.015)	Loss 0.000 (0.060)
+Epoch: [1-1][600/1000]	Time 0.376 (0.384)	Data 0.011 (0.015)	Loss 0.000 (0.059)
+Epoch: [1-1][800/1000]	Time 0.384 (0.383)	Data 0.012 (0.014)	Loss 0.000 (0.060)
+Epoch: [1-1][1000/1000]	Time 0.376 (0.383)	Data 0.008 (0.014)	Loss 0.068 (0.059)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.538 (0.546)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.525 (0.541)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.541 (0.540)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.568 (0.539)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.539 (0.538)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [1-2][200/1000]	Time 0.379 (0.386)	Data 0.016 (0.018)	Loss 0.000 (0.058)
+Epoch: [1-2][400/1000]	Time 0.380 (0.384)	Data 0.016 (0.015)	Loss 0.144 (0.060)
+Epoch: [1-2][600/1000]	Time 0.375 (0.383)	Data 0.011 (0.014)	Loss 0.003 (0.059)
+Epoch: [1-2][800/1000]	Time 0.381 (0.383)	Data 0.012 (0.014)	Loss 0.019 (0.056)
+Epoch: [1-2][1000/1000]	Time 0.448 (0.383)	Data 0.009 (0.014)	Loss 0.000 (0.056)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.525 (0.546)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.525 (0.542)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.541 (0.541)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.529 (0.539)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.540 (0.539)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [1-3][200/1000]	Time 0.382 (0.386)	Data 0.013 (0.018)	Loss 0.000 (0.061)
+Epoch: [1-3][400/1000]	Time 0.383 (0.384)	Data 0.013 (0.015)	Loss 0.000 (0.059)
+Epoch: [1-3][600/1000]	Time 0.380 (0.383)	Data 0.016 (0.014)	Loss 0.000 (0.057)
+Epoch: [1-3][800/1000]	Time 0.382 (0.383)	Data 0.014 (0.014)	Loss 0.050 (0.059)
+Epoch: [1-3][1000/1000]	Time 0.374 (0.383)	Data 0.007 (0.014)	Loss 0.008 (0.057)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.536 (0.544)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.525 (0.540)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.529 (0.539)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.543 (0.538)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.538 (0.538)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [1-4][200/1000]	Time 0.382 (0.387)	Data 0.012 (0.018)	Loss 0.011 (0.054)
+Epoch: [1-4][400/1000]	Time 0.384 (0.384)	Data 0.014 (0.015)	Loss 0.233 (0.053)
+Epoch: [1-4][600/1000]	Time 0.377 (0.384)	Data 0.013 (0.015)	Loss 0.015 (0.057)
+Epoch: [1-4][800/1000]	Time 0.380 (0.383)	Data 0.013 (0.014)	Loss 0.014 (0.054)
+Epoch: [1-4][1000/1000]	Time 0.388 (0.383)	Data 0.007 (0.014)	Loss 0.111 (0.054)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.537 (0.546)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.538 (0.542)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.542 (0.540)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.535 (0.539)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.538 (0.539)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [1-5][200/1000]	Time 0.377 (0.387)	Data 0.013 (0.018)	Loss 0.000 (0.056)
+Epoch: [1-5][400/1000]	Time 0.375 (0.384)	Data 0.011 (0.015)	Loss 0.000 (0.050)
+Epoch: [1-5][600/1000]	Time 0.452 (0.383)	Data 0.014 (0.014)	Loss 0.010 (0.049)
+Epoch: [1-5][800/1000]	Time 0.376 (0.383)	Data 0.013 (0.014)	Loss 0.000 (0.051)
+Epoch: [1-5][1000/1000]	Time 0.374 (0.383)	Data 0.007 (0.014)	Loss 0.000 (0.053)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.536 (0.544)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.537 (0.541)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.528 (0.539)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.569 (0.538)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.526 (0.538)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [1-6][200/1000]	Time 0.374 (0.386)	Data 0.010 (0.018)	Loss 0.044 (0.041)
+Epoch: [1-6][400/1000]	Time 0.380 (0.384)	Data 0.012 (0.015)	Loss 0.000 (0.048)
+Epoch: [1-6][600/1000]	Time 0.377 (0.383)	Data 0.012 (0.014)	Loss 0.048 (0.050)
+Epoch: [1-6][800/1000]	Time 0.375 (0.383)	Data 0.012 (0.014)	Loss 0.000 (0.049)
+Epoch: [1-6][1000/1000]	Time 0.399 (0.383)	Data 0.007 (0.014)	Loss 0.009 (0.048)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.539 (0.545)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.538 (0.542)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.537 (0.541)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.534 (0.539)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.539 (0.539)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [1-7][200/320]	Time 0.378 (0.387)	Data 0.014 (0.018)	Loss 0.000 (0.050)
+Extract Features: [100/551]	Time 0.535 (0.544)	Data 0.000 (0.009)	
+Extract Features: [200/551]	Time 0.536 (0.540)	Data 0.000 (0.005)	
+Extract Features: [300/551]	Time 0.540 (0.539)	Data 0.000 (0.003)	
+Extract Features: [400/551]	Time 0.537 (0.538)	Data 0.000 (0.002)	
+Extract Features: [500/551]	Time 0.538 (0.538)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          87.7%
+  top-5          96.0%
+  top-10         97.6%
+
+ * Finished epoch   1 recall@1: 87.7%  recall@5: 96.0%  recall@10: 97.6%  best@5: 96.1%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.536 (0.545)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.538 (0.541)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.528 (0.540)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.540 (0.539)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.538 (0.538)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [2-0][200/1000]	Time 0.380 (0.387)	Data 0.012 (0.018)	Loss 0.000 (0.052)
+Epoch: [2-0][400/1000]	Time 0.376 (0.384)	Data 0.011 (0.015)	Loss 0.000 (0.051)
+Epoch: [2-0][600/1000]	Time 0.383 (0.383)	Data 0.013 (0.015)	Loss 0.002 (0.048)
+Epoch: [2-0][800/1000]	Time 0.381 (0.383)	Data 0.012 (0.014)	Loss 0.013 (0.048)
+Epoch: [2-0][1000/1000]	Time 0.375 (0.383)	Data 0.008 (0.014)	Loss 0.043 (0.047)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.521 (0.544)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.524 (0.540)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.523 (0.538)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.541 (0.538)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.526 (0.537)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [2-1][200/1000]	Time 0.384 (0.387)	Data 0.017 (0.018)	Loss 0.352 (0.048)
+Epoch: [2-1][400/1000]	Time 0.428 (0.384)	Data 0.012 (0.015)	Loss 0.000 (0.049)
+Epoch: [2-1][600/1000]	Time 0.376 (0.383)	Data 0.012 (0.015)	Loss 0.086 (0.049)
+Epoch: [2-1][800/1000]	Time 0.379 (0.383)	Data 0.014 (0.014)	Loss 0.000 (0.050)
+Epoch: [2-1][1000/1000]	Time 0.371 (0.382)	Data 0.007 (0.014)	Loss 0.000 (0.048)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.526 (0.545)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.534 (0.541)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.538 (0.540)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.541 (0.539)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.539 (0.539)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [2-2][200/1000]	Time 0.381 (0.388)	Data 0.013 (0.018)	Loss 0.023 (0.050)
+Epoch: [2-2][400/1000]	Time 0.376 (0.385)	Data 0.011 (0.015)	Loss 0.241 (0.050)
+Epoch: [2-2][600/1000]	Time 0.381 (0.384)	Data 0.011 (0.015)	Loss 0.081 (0.051)
+Epoch: [2-2][800/1000]	Time 0.382 (0.384)	Data 0.014 (0.014)	Loss 0.000 (0.050)
+Epoch: [2-2][1000/1000]	Time 0.372 (0.383)	Data 0.007 (0.014)	Loss 0.000 (0.047)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.531 (0.547)	Data 0.000 (0.010)	
+Extract Features: [200/542]	Time 0.539 (0.542)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.536 (0.540)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.539 (0.539)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.537 (0.538)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [2-3][200/1000]	Time 0.383 (0.387)	Data 0.013 (0.018)	Loss 0.190 (0.050)
+Epoch: [2-3][400/1000]	Time 0.382 (0.384)	Data 0.013 (0.015)	Loss 0.000 (0.049)
+Epoch: [2-3][600/1000]	Time 0.378 (0.383)	Data 0.014 (0.014)	Loss 0.195 (0.048)
+Epoch: [2-3][800/1000]	Time 0.379 (0.383)	Data 0.011 (0.014)	Loss 0.000 (0.046)
+Epoch: [2-3][1000/1000]	Time 0.378 (0.383)	Data 0.007 (0.014)	Loss 0.000 (0.046)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.536 (0.545)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.537 (0.541)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.524 (0.539)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.539 (0.538)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.537 (0.538)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [2-4][200/1000]	Time 0.377 (0.387)	Data 0.011 (0.018)	Loss 0.000 (0.060)
+Epoch: [2-4][400/1000]	Time 0.377 (0.384)	Data 0.012 (0.015)	Loss 0.092 (0.050)
+Epoch: [2-4][600/1000]	Time 0.382 (0.384)	Data 0.017 (0.014)	Loss 0.122 (0.051)
+Epoch: [2-4][800/1000]	Time 0.380 (0.383)	Data 0.016 (0.014)	Loss 0.003 (0.049)
+Epoch: [2-4][1000/1000]	Time 0.395 (0.383)	Data 0.010 (0.014)	Loss 0.003 (0.049)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.537 (0.545)	Data 0.000 (0.010)	
+Extract Features: [200/542]	Time 0.536 (0.541)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.541 (0.540)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.535 (0.539)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.527 (0.538)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [2-5][200/1000]	Time 0.378 (0.386)	Data 0.014 (0.018)	Loss 0.012 (0.035)
+Epoch: [2-5][400/1000]	Time 0.385 (0.384)	Data 0.015 (0.015)	Loss 0.025 (0.041)
+Epoch: [2-5][600/1000]	Time 0.376 (0.383)	Data 0.011 (0.014)	Loss 0.000 (0.044)
+Epoch: [2-5][800/1000]	Time 0.376 (0.383)	Data 0.012 (0.014)	Loss 0.001 (0.047)
+Epoch: [2-5][1000/1000]	Time 0.374 (0.383)	Data 0.007 (0.014)	Loss 0.000 (0.047)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.537 (0.545)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.534 (0.541)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.536 (0.539)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.539 (0.538)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.538 (0.538)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [2-6][200/1000]	Time 0.384 (0.386)	Data 0.016 (0.018)	Loss 0.007 (0.047)
+Epoch: [2-6][400/1000]	Time 0.380 (0.384)	Data 0.012 (0.015)	Loss 0.028 (0.049)
+Epoch: [2-6][600/1000]	Time 0.377 (0.383)	Data 0.014 (0.015)	Loss 0.000 (0.048)
+Epoch: [2-6][800/1000]	Time 0.381 (0.383)	Data 0.011 (0.014)	Loss 0.000 (0.047)
+Epoch: [2-6][1000/1000]	Time 0.372 (0.383)	Data 0.007 (0.014)	Loss 0.005 (0.047)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.536 (0.545)	Data 0.000 (0.010)	
+Extract Features: [200/542]	Time 0.537 (0.541)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.533 (0.539)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.532 (0.538)	Data 0.000 (0.003)	
+Extract Features: [500/542]	Time 0.538 (0.538)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [2-7][200/320]	Time 0.376 (0.387)	Data 0.011 (0.018)	Loss 0.008 (0.039)
+Extract Features: [100/551]	Time 0.530 (0.545)	Data 0.000 (0.009)	
+Extract Features: [200/551]	Time 0.537 (0.540)	Data 0.000 (0.005)	
+Extract Features: [300/551]	Time 0.542 (0.539)	Data 0.000 (0.003)	
+Extract Features: [400/551]	Time 0.525 (0.538)	Data 0.000 (0.002)	
+Extract Features: [500/551]	Time 0.540 (0.538)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          87.5%
+  top-5          95.8%
+  top-10         97.5%
+
+ * Finished epoch   2 recall@1: 87.5%  recall@5: 95.8%  recall@10: 97.5%  best@5: 96.1%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.531 (0.546)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.537 (0.541)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.535 (0.540)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.539 (0.539)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.538 (0.539)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [3-0][200/1000]	Time 0.380 (0.386)	Data 0.011 (0.018)	Loss 0.034 (0.039)
+Epoch: [3-0][400/1000]	Time 0.381 (0.384)	Data 0.012 (0.015)	Loss 0.133 (0.038)
+Epoch: [3-0][600/1000]	Time 0.379 (0.384)	Data 0.014 (0.015)	Loss 0.000 (0.041)
+Epoch: [3-0][800/1000]	Time 0.383 (0.383)	Data 0.014 (0.014)	Loss 0.063 (0.041)
+Epoch: [3-0][1000/1000]	Time 0.376 (0.383)	Data 0.007 (0.014)	Loss 0.000 (0.044)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.537 (0.544)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.531 (0.540)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.532 (0.539)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.542 (0.538)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.540 (0.538)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [3-1][200/1000]	Time 0.378 (0.387)	Data 0.013 (0.018)	Loss 0.502 (0.045)
+Epoch: [3-1][400/1000]	Time 0.389 (0.385)	Data 0.017 (0.016)	Loss 0.000 (0.045)
+Epoch: [3-1][600/1000]	Time 0.385 (0.384)	Data 0.016 (0.015)	Loss 0.000 (0.043)
+Epoch: [3-1][800/1000]	Time 0.382 (0.383)	Data 0.014 (0.014)	Loss 0.000 (0.040)
+Epoch: [3-1][1000/1000]	Time 0.375 (0.383)	Data 0.007 (0.014)	Loss 0.130 (0.041)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.537 (0.545)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.523 (0.540)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.570 (0.539)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.529 (0.538)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.533 (0.538)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [3-2][200/1000]	Time 0.376 (0.387)	Data 0.013 (0.018)	Loss 0.052 (0.050)
+Epoch: [3-2][400/1000]	Time 0.383 (0.384)	Data 0.013 (0.015)	Loss 0.013 (0.047)
+Epoch: [3-2][600/1000]	Time 0.379 (0.383)	Data 0.014 (0.014)	Loss 0.000 (0.048)
+Epoch: [3-2][800/1000]	Time 0.380 (0.383)	Data 0.011 (0.014)	Loss 0.016 (0.046)
+Epoch: [3-2][1000/1000]	Time 0.371 (0.383)	Data 0.007 (0.014)	Loss 0.008 (0.045)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.538 (0.544)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.525 (0.540)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.525 (0.538)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.542 (0.538)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.535 (0.537)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [3-3][200/1000]	Time 0.375 (0.387)	Data 0.011 (0.018)	Loss 0.000 (0.042)
+Epoch: [3-3][400/1000]	Time 0.382 (0.384)	Data 0.017 (0.015)	Loss 0.094 (0.039)
+Epoch: [3-3][600/1000]	Time 0.383 (0.383)	Data 0.014 (0.015)	Loss 0.000 (0.039)
+Epoch: [3-3][800/1000]	Time 0.384 (0.383)	Data 0.014 (0.014)	Loss 0.000 (0.039)
+Epoch: [3-3][1000/1000]	Time 0.373 (0.383)	Data 0.007 (0.014)	Loss 0.000 (0.039)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.526 (0.546)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.525 (0.541)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.524 (0.539)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.538 (0.539)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.526 (0.538)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [3-4][200/1000]	Time 0.383 (0.386)	Data 0.014 (0.018)	Loss 0.202 (0.044)
+Epoch: [3-4][400/1000]	Time 0.382 (0.384)	Data 0.012 (0.015)	Loss 0.001 (0.041)
+Epoch: [3-4][600/1000]	Time 0.388 (0.383)	Data 0.016 (0.015)	Loss 0.037 (0.042)
+Epoch: [3-4][800/1000]	Time 0.380 (0.383)	Data 0.014 (0.014)	Loss 0.063 (0.043)
+Epoch: [3-4][1000/1000]	Time 0.373 (0.383)	Data 0.008 (0.014)	Loss 0.059 (0.042)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.538 (0.546)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.535 (0.541)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.542 (0.539)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.531 (0.539)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.526 (0.538)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [3-5][200/1000]	Time 0.385 (0.387)	Data 0.016 (0.018)	Loss 0.000 (0.044)
+Epoch: [3-5][400/1000]	Time 0.375 (0.384)	Data 0.012 (0.015)	Loss 0.078 (0.038)
+Epoch: [3-5][600/1000]	Time 0.380 (0.383)	Data 0.014 (0.014)	Loss 0.381 (0.039)
+Epoch: [3-5][800/1000]	Time 0.382 (0.383)	Data 0.012 (0.014)	Loss 0.087 (0.038)
+Epoch: [3-5][1000/1000]	Time 0.376 (0.383)	Data 0.009 (0.014)	Loss 0.028 (0.039)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.537 (0.546)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.522 (0.541)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.540 (0.540)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.539 (0.539)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.526 (0.538)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [3-6][200/1000]	Time 0.376 (0.387)	Data 0.012 (0.018)	Loss 0.008 (0.045)
+Epoch: [3-6][400/1000]	Time 0.376 (0.384)	Data 0.011 (0.015)	Loss 0.016 (0.042)
+Epoch: [3-6][600/1000]	Time 0.381 (0.383)	Data 0.012 (0.014)	Loss 0.000 (0.039)
+Epoch: [3-6][800/1000]	Time 0.377 (0.383)	Data 0.012 (0.014)	Loss 0.066 (0.039)
+Epoch: [3-6][1000/1000]	Time 0.375 (0.383)	Data 0.007 (0.014)	Loss 0.000 (0.039)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.527 (0.546)	Data 0.000 (0.010)	
+Extract Features: [200/542]	Time 0.534 (0.541)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.525 (0.539)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.541 (0.538)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.538 (0.538)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [3-7][200/320]	Time 0.380 (0.387)	Data 0.011 (0.018)	Loss 0.031 (0.043)
+Extract Features: [100/551]	Time 0.535 (0.545)	Data 0.000 (0.010)	
+Extract Features: [200/551]	Time 0.535 (0.540)	Data 0.000 (0.005)	
+Extract Features: [300/551]	Time 0.543 (0.538)	Data 0.000 (0.003)	
+Extract Features: [400/551]	Time 0.522 (0.538)	Data 0.000 (0.002)	
+Extract Features: [500/551]	Time 0.533 (0.537)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          87.7%
+  top-5          96.0%
+  top-10         97.6%
+
+ * Finished epoch   3 recall@1: 87.7%  recall@5: 96.0%  recall@10: 97.6%  best@5: 96.1%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.525 (0.543)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.523 (0.538)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.540 (0.537)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.542 (0.536)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.531 (0.536)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [4-0][200/1000]	Time 0.385 (0.386)	Data 0.015 (0.018)	Loss 0.000 (0.031)
+Epoch: [4-0][400/1000]	Time 0.426 (0.384)	Data 0.010 (0.015)	Loss 0.000 (0.032)
+Epoch: [4-0][600/1000]	Time 0.383 (0.383)	Data 0.014 (0.015)	Loss 0.000 (0.033)
+Epoch: [4-0][800/1000]	Time 0.382 (0.383)	Data 0.012 (0.014)	Loss 0.014 (0.033)
+Epoch: [4-0][1000/1000]	Time 0.370 (0.383)	Data 0.007 (0.014)	Loss 0.000 (0.034)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.538 (0.546)	Data 0.000 (0.010)	
+Extract Features: [200/542]	Time 0.525 (0.541)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.541 (0.540)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.529 (0.539)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.529 (0.538)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [4-1][200/1000]	Time 0.384 (0.392)	Data 0.011 (0.018)	Loss 0.000 (0.041)
+Epoch: [4-1][400/1000]	Time 0.387 (0.389)	Data 0.012 (0.015)	Loss 0.000 (0.041)
+Epoch: [4-1][600/1000]	Time 0.386 (0.389)	Data 0.013 (0.014)	Loss 0.008 (0.042)
+Epoch: [4-1][800/1000]	Time 0.388 (0.388)	Data 0.012 (0.014)	Loss 0.027 (0.042)
+Epoch: [4-1][1000/1000]	Time 0.379 (0.388)	Data 0.007 (0.014)	Loss 0.000 (0.042)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.532 (0.544)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.534 (0.540)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.524 (0.537)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.542 (0.538)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.536 (0.540)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [4-2][200/1000]	Time 0.380 (0.391)	Data 0.012 (0.018)	Loss 0.000 (0.035)
+Epoch: [4-2][400/1000]	Time 0.384 (0.388)	Data 0.014 (0.015)	Loss 0.031 (0.033)
+Epoch: [4-2][600/1000]	Time 0.389 (0.388)	Data 0.015 (0.015)	Loss 0.005 (0.034)
+Epoch: [4-2][800/1000]	Time 0.383 (0.388)	Data 0.010 (0.014)	Loss 0.000 (0.034)
+Epoch: [4-2][1000/1000]	Time 0.375 (0.387)	Data 0.007 (0.014)	Loss 0.166 (0.037)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.534 (0.542)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.528 (0.538)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.525 (0.536)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.529 (0.536)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.534 (0.535)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [4-3][200/1000]	Time 0.378 (0.385)	Data 0.011 (0.018)	Loss 0.017 (0.032)
+Epoch: [4-3][400/1000]	Time 0.382 (0.382)	Data 0.014 (0.015)	Loss 0.037 (0.032)
+Epoch: [4-3][600/1000]	Time 0.389 (0.382)	Data 0.020 (0.014)	Loss 0.038 (0.032)
+Epoch: [4-3][800/1000]	Time 0.379 (0.381)	Data 0.011 (0.014)	Loss 0.000 (0.033)
+Epoch: [4-3][1000/1000]	Time 0.377 (0.381)	Data 0.008 (0.014)	Loss 0.000 (0.033)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.531 (0.541)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.529 (0.537)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.536 (0.535)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.538 (0.534)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.536 (0.534)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [4-4][200/1000]	Time 0.378 (0.385)	Data 0.012 (0.018)	Loss 0.008 (0.034)
+Epoch: [4-4][400/1000]	Time 0.383 (0.382)	Data 0.014 (0.015)	Loss 0.000 (0.035)
+Epoch: [4-4][600/1000]	Time 0.376 (0.382)	Data 0.011 (0.014)	Loss 0.029 (0.034)
+Epoch: [4-4][800/1000]	Time 0.379 (0.381)	Data 0.011 (0.014)	Loss 0.000 (0.035)
+Epoch: [4-4][1000/1000]	Time 0.375 (0.381)	Data 0.008 (0.014)	Loss 0.000 (0.035)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.537 (0.543)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.529 (0.539)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.524 (0.537)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.541 (0.536)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.534 (0.536)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [4-5][200/1000]	Time 0.380 (0.390)	Data 0.011 (0.018)	Loss 0.123 (0.029)
+Epoch: [4-5][400/1000]	Time 0.386 (0.388)	Data 0.012 (0.015)	Loss 0.048 (0.031)
+Epoch: [4-5][600/1000]	Time 0.381 (0.388)	Data 0.011 (0.015)	Loss 0.077 (0.035)
+Epoch: [4-5][800/1000]	Time 0.380 (0.387)	Data 0.011 (0.014)	Loss 0.000 (0.036)
+Epoch: [4-5][1000/1000]	Time 0.381 (0.387)	Data 0.008 (0.014)	Loss 0.112 (0.037)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.535 (0.542)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.535 (0.537)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.536 (0.535)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.527 (0.535)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.524 (0.534)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [4-6][200/1000]	Time 0.384 (0.391)	Data 0.014 (0.018)	Loss 0.006 (0.033)
+Epoch: [4-6][400/1000]	Time 0.381 (0.389)	Data 0.012 (0.015)	Loss 0.000 (0.033)
+Epoch: [4-6][600/1000]	Time 0.386 (0.388)	Data 0.013 (0.014)	Loss 0.004 (0.033)
+Epoch: [4-6][800/1000]	Time 0.380 (0.387)	Data 0.012 (0.014)	Loss 0.098 (0.035)
+Epoch: [4-6][1000/1000]	Time 0.382 (0.387)	Data 0.008 (0.014)	Loss 0.031 (0.035)
+===> Start extracting features for sorting gallery
+Extract Features: [100/542]	Time 0.524 (0.543)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.534 (0.539)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.541 (0.537)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.529 (0.537)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.539 (0.536)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Epoch: [4-7][200/320]	Time 0.380 (0.385)	Data 0.012 (0.018)	Loss 0.000 (0.034)
+Extract Features: [100/551]	Time 0.525 (0.541)	Data 0.000 (0.009)	
+Extract Features: [200/551]	Time 0.533 (0.536)	Data 0.000 (0.005)	
+Extract Features: [300/551]	Time 0.525 (0.535)	Data 0.000 (0.003)	
+Extract Features: [400/551]	Time 0.524 (0.534)	Data 0.000 (0.002)	
+Extract Features: [500/551]	Time 0.526 (0.534)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          87.7%
+  top-5          95.9%
+  top-10         97.6%
+
+ * Finished epoch   4 recall@1: 87.7%  recall@5: 95.9%  recall@10: 97.6%  best@5: 96.1%
+
+Performing PCA reduction on the best model:
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/model_best.pth.tar'
+Extract Features: [100/542]	Time 0.522 (0.540)	Data 0.000 (0.009)	
+Extract Features: [200/542]	Time 0.523 (0.537)	Data 0.000 (0.005)	
+Extract Features: [300/542]	Time 0.533 (0.535)	Data 0.000 (0.003)	
+Extract Features: [400/542]	Time 0.536 (0.534)	Data 0.000 (0.002)	
+Extract Features: [500/542]	Time 0.534 (0.534)	Data 0.000 (0.002)	
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Testing on Pitts30k-test:
+load PCA parameters...
+Extract Features: [100/526]	Time 0.524 (0.543)	Data 0.000 (0.010)	
+Extract Features: [200/526]	Time 0.539 (0.537)	Data 0.000 (0.005)	
+Extract Features: [300/526]	Time 0.534 (0.536)	Data 0.000 (0.003)	
+Extract Features: [400/526]	Time 0.539 (0.535)	Data 0.000 (0.002)	
+Extract Features: [500/526]	Time 0.539 (0.535)	Data 0.000 (0.002)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          86.8%
+  top-5          93.6%
+  top-10         95.5%
+==========Testing=============
+/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint0.pth.tar /home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint1.pth.tar /home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint2.pth.tar /home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint3.pth.tar /home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint4.pth.tar /home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/model_best.pth.tar
+==============================
+==========Test on Pitts30k=============
+/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint0.pth.tar
+=======================================
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=2, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint0.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint0.pth.tar'
+=> Start epoch 0  best recall5 96.1%
+Extract Features: [100/542]	Time 0.504 (0.550)	Data 0.000 (0.016)	
+Extract Features: [200/542]	Time 0.505 (0.528)	Data 0.000 (0.008)	
+Extract Features: [300/542]	Time 0.503 (0.521)	Data 0.000 (0.005)	
+Extract Features: [400/542]	Time 0.508 (0.517)	Data 0.000 (0.004)	
+Extract Features: [500/542]	Time 0.505 (0.515)	Data 0.000 (0.003)	
+gathering features from rank no.0
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Evaluate on the test set:
+load PCA parameters...
+Extract Features: [100/213]	Time 0.499 (0.519)	Data 0.000 (0.017)	
+Extract Features: [200/213]	Time 0.503 (0.510)	Data 0.000 (0.009)	
+gathering features from rank no.0
+load PCA parameters...
+Extract Features: [100/313]	Time 0.500 (0.519)	Data 0.000 (0.017)	
+Extract Features: [200/313]	Time 0.503 (0.510)	Data 0.000 (0.009)	
+Extract Features: [300/313]	Time 0.496 (0.507)	Data 0.000 (0.006)	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          87.1%
+  top-5          93.6%
+  top-10         95.1%
+==========Test on Tokyo247=============
+/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint0.pth.tar
+=======================================
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='tokyo', scale='30k', test_batch_size=32, workers=2, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint0.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint0.pth.tar'
+=> Start epoch 0  best recall5 96.1%
+Evaluate on the test set:
+load PCA parameters...
+Extract Features: [100/315]	Time 0.037 (0.098)	Data 0.000 (0.049)	
+Extract Features: [200/315]	Time 0.072 (0.086)	Data 0.034 (0.042)	
+Extract Features: [300/315]	Time 0.046 (0.088)	Data 0.000 (0.042)	
+gathering features from rank no.0
+load PCA parameters...
+Extract Features: [100/2375]	Time 0.515 (0.554)	Data 0.000 (0.019)	
+Extract Features: [200/2375]	Time 0.515 (0.535)	Data 0.000 (0.010)	
+Extract Features: [300/2375]	Time 0.513 (0.528)	Data 0.000 (0.006)	
+Extract Features: [400/2375]	Time 0.514 (0.525)	Data 0.000 (0.005)	
+Extract Features: [500/2375]	Time 0.514 (0.523)	Data 0.000 (0.004)	
+Extract Features: [600/2375]	Time 0.512 (0.522)	Data 0.000 (0.003)	
+Extract Features: [700/2375]	Time 0.514 (0.522)	Data 0.000 (0.003)	
+Extract Features: [800/2375]	Time 0.515 (0.521)	Data 0.000 (0.002)	
+Extract Features: [900/2375]	Time 0.513 (0.521)	Data 0.000 (0.002)	
+Extract Features: [1000/2375]	Time 0.520 (0.520)	Data 0.000 (0.002)	
+Extract Features: [1100/2375]	Time 0.514 (0.520)	Data 0.000 (0.002)	
+Extract Features: [1200/2375]	Time 0.513 (0.520)	Data 0.000 (0.002)	
+Extract Features: [1300/2375]	Time 0.516 (0.520)	Data 0.000 (0.002)	
+Extract Features: [1400/2375]	Time 0.524 (0.520)	Data 0.000 (0.001)	
+Extract Features: [1500/2375]	Time 0.516 (0.519)	Data 0.000 (0.001)	
+Extract Features: [1600/2375]	Time 0.516 (0.519)	Data 0.000 (0.001)	
+Extract Features: [1700/2375]	Time 0.526 (0.519)	Data 0.000 (0.001)	
+Extract Features: [1800/2375]	Time 0.516 (0.519)	Data 0.000 (0.001)	
+Extract Features: [1900/2375]	Time 0.527 (0.519)	Data 0.000 (0.001)	
+Extract Features: [2000/2375]	Time 0.519 (0.519)	Data 0.000 (0.001)	
+Extract Features: [2100/2375]	Time 0.519 (0.519)	Data 0.000 (0.001)	
+Extract Features: [2200/2375]	Time 0.514 (0.519)	Data 0.000 (0.001)	
+Extract Features: [2300/2375]	Time 0.521 (0.519)	Data 0.000 (0.001)	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          74.3%
+  top-5          84.1%
+  top-10         87.6%
+==========Test on Pitts30k=============
+/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint1.pth.tar
+=======================================
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=2, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint1.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint1.pth.tar'
+=> Start epoch 1  best recall5 96.1%
+Extract Features: [100/542]	Time 0.504 (0.546)	Data 0.000 (0.016)	
+Extract Features: [200/542]	Time 0.503 (0.526)	Data 0.000 (0.008)	
+Extract Features: [300/542]	Time 0.506 (0.519)	Data 0.000 (0.005)	
+Extract Features: [400/542]	Time 0.506 (0.515)	Data 0.000 (0.004)	
+Extract Features: [500/542]	Time 0.503 (0.513)	Data 0.000 (0.003)	
+gathering features from rank no.0
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Evaluate on the test set:
+load PCA parameters...
+Extract Features: [100/213]	Time 0.498 (0.519)	Data 0.000 (0.018)	
+Extract Features: [200/213]	Time 0.502 (0.510)	Data 0.000 (0.009)	
+gathering features from rank no.0
+load PCA parameters...
+Extract Features: [100/313]	Time 0.500 (0.519)	Data 0.000 (0.018)	
+Extract Features: [200/313]	Time 0.503 (0.511)	Data 0.000 (0.009)	
+Extract Features: [300/313]	Time 0.496 (0.508)	Data 0.000 (0.006)	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          87.6%
+  top-5          94.0%
+  top-10         95.7%
+==========Test on Tokyo247=============
+/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint1.pth.tar
+=======================================
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='tokyo', scale='30k', test_batch_size=32, workers=2, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint1.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint1.pth.tar'
+=> Start epoch 1  best recall5 96.1%
+Evaluate on the test set:
+load PCA parameters...
+Extract Features: [100/315]	Time 0.091 (0.098)	Data 0.053 (0.049)	
+Extract Features: [200/315]	Time 0.085 (0.086)	Data 0.048 (0.042)	
+Extract Features: [300/315]	Time 0.045 (0.088)	Data 0.000 (0.041)	
+gathering features from rank no.0
+load PCA parameters...
+Extract Features: [100/2375]	Time 0.511 (0.551)	Data 0.000 (0.019)	
+Extract Features: [200/2375]	Time 0.510 (0.532)	Data 0.000 (0.010)	
+Extract Features: [300/2375]	Time 0.512 (0.526)	Data 0.000 (0.006)	
+Extract Features: [400/2375]	Time 0.512 (0.524)	Data 0.000 (0.005)	
+Extract Features: [500/2375]	Time 0.544 (0.523)	Data 0.000 (0.004)	
+Extract Features: [600/2375]	Time 0.510 (0.523)	Data 0.000 (0.003)	
+Extract Features: [700/2375]	Time 0.540 (0.522)	Data 0.000 (0.003)	
+Extract Features: [800/2375]	Time 0.514 (0.522)	Data 0.000 (0.002)	
+Extract Features: [900/2375]	Time 0.512 (0.522)	Data 0.000 (0.002)	
+Extract Features: [1000/2375]	Time 0.510 (0.522)	Data 0.000 (0.002)	
+Extract Features: [1100/2375]	Time 0.514 (0.522)	Data 0.000 (0.002)	
+Extract Features: [1200/2375]	Time 0.528 (0.522)	Data 0.000 (0.002)	
+Extract Features: [1300/2375]	Time 0.513 (0.522)	Data 0.000 (0.002)	
+Extract Features: [1400/2375]	Time 0.511 (0.521)	Data 0.000 (0.001)	
+Extract Features: [1500/2375]	Time 0.511 (0.521)	Data 0.000 (0.001)	
+Extract Features: [1600/2375]	Time 0.543 (0.521)	Data 0.000 (0.001)	
+Extract Features: [1700/2375]	Time 0.515 (0.521)	Data 0.000 (0.001)	
+Extract Features: [1800/2375]	Time 0.512 (0.521)	Data 0.000 (0.001)	
+Extract Features: [1900/2375]	Time 0.536 (0.521)	Data 0.000 (0.001)	
+Extract Features: [2000/2375]	Time 0.514 (0.521)	Data 0.000 (0.001)	
+Extract Features: [2100/2375]	Time 0.514 (0.521)	Data 0.000 (0.001)	
+Extract Features: [2200/2375]	Time 0.543 (0.521)	Data 0.000 (0.001)	
+Extract Features: [2300/2375]	Time 0.542 (0.521)	Data 0.000 (0.001)	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          76.2%
+  top-5          88.3%
+  top-10         90.8%
+==========Test on Pitts30k=============
+/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint2.pth.tar
+=======================================
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=2, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint2.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint2.pth.tar'
+=> Start epoch 2  best recall5 96.1%
+Extract Features: [100/542]	Time 0.503 (0.544)	Data 0.000 (0.016)	
+Extract Features: [200/542]	Time 0.503 (0.524)	Data 0.000 (0.008)	
+Extract Features: [300/542]	Time 0.506 (0.518)	Data 0.000 (0.005)	
+Extract Features: [400/542]	Time 0.505 (0.514)	Data 0.000 (0.004)	
+Extract Features: [500/542]	Time 0.504 (0.512)	Data 0.000 (0.003)	
+gathering features from rank no.0
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Evaluate on the test set:
+load PCA parameters...
+Extract Features: [100/213]	Time 0.498 (0.517)	Data 0.000 (0.017)	
+Extract Features: [200/213]	Time 0.502 (0.509)	Data 0.000 (0.008)	
+gathering features from rank no.0
+load PCA parameters...
+Extract Features: [100/313]	Time 0.501 (0.519)	Data 0.000 (0.017)	
+Extract Features: [200/313]	Time 0.504 (0.510)	Data 0.000 (0.009)	
+Extract Features: [300/313]	Time 0.497 (0.507)	Data 0.000 (0.006)	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.3%
+  top-5          94.1%
+  top-10         95.5%
+==========Test on Tokyo247=============
+/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint2.pth.tar
+=======================================
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='tokyo', scale='30k', test_batch_size=32, workers=2, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint2.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint2.pth.tar'
+=> Start epoch 2  best recall5 96.1%
+Evaluate on the test set:
+load PCA parameters...
+Extract Features: [100/315]	Time 0.068 (0.100)	Data 0.030 (0.051)	
+Extract Features: [200/315]	Time 0.077 (0.087)	Data 0.039 (0.043)	
+Extract Features: [300/315]	Time 0.052 (0.089)	Data 0.000 (0.042)	
+gathering features from rank no.0
+load PCA parameters...
+Extract Features: [100/2375]	Time 0.510 (0.549)	Data 0.000 (0.019)	
+Extract Features: [200/2375]	Time 0.513 (0.531)	Data 0.000 (0.010)	
+Extract Features: [300/2375]	Time 0.511 (0.525)	Data 0.000 (0.006)	
+Extract Features: [400/2375]	Time 0.513 (0.524)	Data 0.000 (0.005)	
+Extract Features: [500/2375]	Time 0.512 (0.523)	Data 0.000 (0.004)	
+Extract Features: [600/2375]	Time 0.510 (0.522)	Data 0.000 (0.003)	
+Extract Features: [700/2375]	Time 0.514 (0.521)	Data 0.000 (0.003)	
+Extract Features: [800/2375]	Time 0.512 (0.520)	Data 0.000 (0.002)	
+Extract Features: [900/2375]	Time 0.509 (0.519)	Data 0.000 (0.002)	
+Extract Features: [1000/2375]	Time 0.507 (0.519)	Data 0.000 (0.002)	
+Extract Features: [1100/2375]	Time 0.516 (0.519)	Data 0.000 (0.002)	
+Extract Features: [1200/2375]	Time 0.508 (0.519)	Data 0.000 (0.002)	
+Extract Features: [1300/2375]	Time 0.514 (0.518)	Data 0.000 (0.002)	
+Extract Features: [1400/2375]	Time 0.511 (0.518)	Data 0.000 (0.001)	
+Extract Features: [1500/2375]	Time 0.514 (0.518)	Data 0.000 (0.001)	
+Extract Features: [1600/2375]	Time 0.523 (0.518)	Data 0.000 (0.001)	
+Extract Features: [1700/2375]	Time 0.516 (0.518)	Data 0.000 (0.001)	
+Extract Features: [1800/2375]	Time 0.513 (0.518)	Data 0.000 (0.001)	
+Extract Features: [1900/2375]	Time 0.511 (0.518)	Data 0.000 (0.001)	
+Extract Features: [2000/2375]	Time 0.514 (0.518)	Data 0.000 (0.001)	
+Extract Features: [2100/2375]	Time 0.514 (0.518)	Data 0.000 (0.001)	
+Extract Features: [2200/2375]	Time 0.516 (0.518)	Data 0.000 (0.001)	
+Extract Features: [2300/2375]	Time 0.516 (0.518)	Data 0.000 (0.001)	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          78.7%
+  top-5          89.2%
+  top-10         90.5%
+==========Test on Pitts30k=============
+/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint3.pth.tar
+=======================================
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=2, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint3.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint3.pth.tar'
+=> Start epoch 3  best recall5 96.1%
+Extract Features: [100/542]	Time 0.502 (0.544)	Data 0.000 (0.016)	
+Extract Features: [200/542]	Time 0.504 (0.524)	Data 0.000 (0.008)	
+Extract Features: [300/542]	Time 0.502 (0.518)	Data 0.000 (0.005)	
+Extract Features: [400/542]	Time 0.506 (0.514)	Data 0.000 (0.004)	
+Extract Features: [500/542]	Time 0.505 (0.512)	Data 0.000 (0.003)	
+gathering features from rank no.0
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Evaluate on the test set:
+load PCA parameters...
+Extract Features: [100/213]	Time 0.507 (0.528)	Data 0.000 (0.017)	
+Extract Features: [200/213]	Time 0.511 (0.519)	Data 0.000 (0.009)	
+gathering features from rank no.0
+load PCA parameters...
+Extract Features: [100/313]	Time 0.508 (0.527)	Data 0.000 (0.017)	
+Extract Features: [200/313]	Time 0.510 (0.518)	Data 0.000 (0.009)	
+Extract Features: [300/313]	Time 0.505 (0.516)	Data 0.000 (0.006)	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.4%
+  top-5          94.2%
+  top-10         95.7%
+==========Test on Tokyo247=============
+/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint3.pth.tar
+=======================================
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='tokyo', scale='30k', test_batch_size=32, workers=2, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint3.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint3.pth.tar'
+=> Start epoch 3  best recall5 96.1%
+Evaluate on the test set:
+load PCA parameters...
+Extract Features: [100/315]	Time 0.057 (0.098)	Data 0.020 (0.048)	
+Extract Features: [200/315]	Time 0.079 (0.085)	Data 0.042 (0.041)	
+Extract Features: [300/315]	Time 0.045 (0.088)	Data 0.000 (0.041)	
+gathering features from rank no.0
+load PCA parameters...
+Extract Features: [100/2375]	Time 0.516 (0.554)	Data 0.000 (0.019)	
+Extract Features: [200/2375]	Time 0.514 (0.534)	Data 0.000 (0.009)	
+Extract Features: [300/2375]	Time 0.511 (0.527)	Data 0.000 (0.006)	
+Extract Features: [400/2375]	Time 0.515 (0.525)	Data 0.000 (0.005)	
+Extract Features: [500/2375]	Time 0.528 (0.525)	Data 0.000 (0.004)	
+Extract Features: [600/2375]	Time 0.511 (0.524)	Data 0.000 (0.003)	
+Extract Features: [700/2375]	Time 0.515 (0.523)	Data 0.000 (0.003)	
+Extract Features: [800/2375]	Time 0.517 (0.523)	Data 0.000 (0.002)	
+Extract Features: [900/2375]	Time 0.509 (0.522)	Data 0.000 (0.002)	
+Extract Features: [1000/2375]	Time 0.560 (0.522)	Data 0.000 (0.002)	
+Extract Features: [1100/2375]	Time 0.514 (0.522)	Data 0.000 (0.002)	
+Extract Features: [1200/2375]	Time 0.510 (0.522)	Data 0.000 (0.002)	
+Extract Features: [1300/2375]	Time 0.514 (0.522)	Data 0.000 (0.002)	
+Extract Features: [1400/2375]	Time 0.518 (0.522)	Data 0.000 (0.001)	
+Extract Features: [1500/2375]	Time 0.517 (0.522)	Data 0.000 (0.001)	
+Extract Features: [1600/2375]	Time 0.523 (0.522)	Data 0.000 (0.001)	
+Extract Features: [1700/2375]	Time 0.513 (0.522)	Data 0.000 (0.001)	
+Extract Features: [1800/2375]	Time 0.514 (0.522)	Data 0.000 (0.001)	
+Extract Features: [1900/2375]	Time 0.535 (0.522)	Data 0.000 (0.001)	
+Extract Features: [2000/2375]	Time 0.548 (0.522)	Data 0.000 (0.001)	
+Extract Features: [2100/2375]	Time 0.518 (0.522)	Data 0.000 (0.001)	
+Extract Features: [2200/2375]	Time 0.557 (0.522)	Data 0.000 (0.001)	
+Extract Features: [2300/2375]	Time 0.554 (0.522)	Data 0.000 (0.001)	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          80.3%
+  top-5          86.7%
+  top-10         88.9%
+==========Test on Pitts30k=============
+/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint4.pth.tar
+=======================================
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=2, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint4.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint4.pth.tar'
+=> Start epoch 4  best recall5 96.1%
+Extract Features: [100/542]	Time 0.503 (0.546)	Data 0.000 (0.016)	
+Extract Features: [200/542]	Time 0.505 (0.526)	Data 0.000 (0.008)	
+Extract Features: [300/542]	Time 0.505 (0.519)	Data 0.000 (0.005)	
+Extract Features: [400/542]	Time 0.508 (0.516)	Data 0.000 (0.004)	
+Extract Features: [500/542]	Time 0.506 (0.514)	Data 0.000 (0.003)	
+gathering features from rank no.0
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Evaluate on the test set:
+load PCA parameters...
+Extract Features: [100/213]	Time 0.509 (0.528)	Data 0.000 (0.017)	
+Extract Features: [200/213]	Time 0.513 (0.520)	Data 0.000 (0.009)	
+gathering features from rank no.0
+load PCA parameters...
+Extract Features: [100/313]	Time 0.511 (0.530)	Data 0.000 (0.017)	
+Extract Features: [200/313]	Time 0.515 (0.521)	Data 0.000 (0.009)	
+Extract Features: [300/313]	Time 0.508 (0.518)	Data 0.000 (0.006)	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.0%
+  top-5          94.2%
+  top-10         95.7%
+==========Test on Tokyo247=============
+/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint4.pth.tar
+=======================================
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='tokyo', scale='30k', test_batch_size=32, workers=2, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint4.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/checkpoint4.pth.tar'
+=> Start epoch 4  best recall5 96.1%
+Evaluate on the test set:
+load PCA parameters...
+Extract Features: [100/315]	Time 0.037 (0.097)	Data 0.000 (0.048)	
+Extract Features: [200/315]	Time 0.081 (0.085)	Data 0.043 (0.042)	
+Extract Features: [300/315]	Time 0.045 (0.088)	Data 0.000 (0.041)	
+gathering features from rank no.0
+load PCA parameters...
+Extract Features: [100/2375]	Time 0.512 (0.551)	Data 0.000 (0.019)	
+Extract Features: [200/2375]	Time 0.515 (0.532)	Data 0.000 (0.009)	
+Extract Features: [300/2375]	Time 0.510 (0.525)	Data 0.000 (0.006)	
+Extract Features: [400/2375]	Time 0.513 (0.524)	Data 0.000 (0.005)	
+Extract Features: [500/2375]	Time 0.514 (0.523)	Data 0.000 (0.004)	
+Extract Features: [600/2375]	Time 0.530 (0.522)	Data 0.000 (0.003)	
+Extract Features: [700/2375]	Time 0.511 (0.521)	Data 0.000 (0.003)	
+Extract Features: [800/2375]	Time 0.513 (0.520)	Data 0.000 (0.002)	
+Extract Features: [900/2375]	Time 0.514 (0.520)	Data 0.000 (0.002)	
+Extract Features: [1000/2375]	Time 0.537 (0.520)	Data 0.000 (0.002)	
+Extract Features: [1100/2375]	Time 0.513 (0.520)	Data 0.000 (0.002)	
+Extract Features: [1200/2375]	Time 0.509 (0.520)	Data 0.000 (0.002)	
+Extract Features: [1300/2375]	Time 0.514 (0.519)	Data 0.000 (0.002)	
+Extract Features: [1400/2375]	Time 0.535 (0.519)	Data 0.000 (0.001)	
+Extract Features: [1500/2375]	Time 0.513 (0.519)	Data 0.000 (0.001)	
+Extract Features: [1600/2375]	Time 0.512 (0.519)	Data 0.000 (0.001)	
+Extract Features: [1700/2375]	Time 0.512 (0.519)	Data 0.000 (0.001)	
+Extract Features: [1800/2375]	Time 0.514 (0.519)	Data 0.000 (0.001)	
+Extract Features: [1900/2375]	Time 0.512 (0.519)	Data 0.000 (0.001)	
+Extract Features: [2000/2375]	Time 0.515 (0.519)	Data 0.000 (0.001)	
+Extract Features: [2100/2375]	Time 0.515 (0.519)	Data 0.000 (0.001)	
+Extract Features: [2200/2375]	Time 0.512 (0.519)	Data 0.000 (0.001)	
+Extract Features: [2300/2375]	Time 0.533 (0.519)	Data 0.000 (0.001)	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          77.8%
+  top-5          85.4%
+  top-10         88.6%
+==========Test on Pitts30k=============
+/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/model_best.pth.tar
+=======================================
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=2, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/model_best.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/model_best.pth.tar'
+=> Start epoch 0  best recall5 96.1%
+Evaluate on the test set:
+load PCA parameters...
+Extract Features: [100/213]	Time 0.503 (0.547)	Data 0.000 (0.016)	
+Extract Features: [200/213]	Time 0.506 (0.526)	Data 0.000 (0.008)	
+gathering features from rank no.0
+load PCA parameters...
+Extract Features: [100/313]	Time 0.505 (0.523)	Data 0.000 (0.016)	
+Extract Features: [200/313]	Time 0.508 (0.515)	Data 0.000 (0.008)	
+Extract Features: [300/313]	Time 0.503 (0.512)	Data 0.000 (0.005)	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          86.8%
+  top-5          93.6%
+  top-10         95.5%
+==========Test on Tokyo247=============
+/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/model_best.pth.tar
+=======================================
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='tokyo', scale='30k', test_batch_size=32, workers=2, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/model_best.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-14-Nov/model_best.pth.tar'
+=> Start epoch 0  best recall5 96.1%
+Evaluate on the test set:
+load PCA parameters...
+Extract Features: [100/315]	Time 0.044 (0.097)	Data 0.000 (0.048)	
+Extract Features: [200/315]	Time 0.077 (0.085)	Data 0.038 (0.042)	
+Extract Features: [300/315]	Time 0.045 (0.087)	Data 0.000 (0.041)	
+gathering features from rank no.0
+load PCA parameters...
+Extract Features: [100/2375]	Time 0.511 (0.549)	Data 0.000 (0.018)	
+Extract Features: [200/2375]	Time 0.518 (0.533)	Data 0.000 (0.009)	
+Extract Features: [300/2375]	Time 0.512 (0.528)	Data 0.000 (0.006)	
+Extract Features: [400/2375]	Time 0.510 (0.527)	Data 0.000 (0.005)	
+Extract Features: [500/2375]	Time 0.545 (0.525)	Data 0.000 (0.004)	
+Extract Features: [600/2375]	Time 0.543 (0.524)	Data 0.000 (0.003)	
+Extract Features: [700/2375]	Time 0.542 (0.523)	Data 0.000 (0.003)	
+Extract Features: [800/2375]	Time 0.512 (0.523)	Data 0.000 (0.002)	
+Extract Features: [900/2375]	Time 0.510 (0.522)	Data 0.000 (0.002)	
+Extract Features: [1000/2375]	Time 0.509 (0.522)	Data 0.000 (0.002)	
+Extract Features: [1100/2375]	Time 0.511 (0.522)	Data 0.000 (0.002)	
+Extract Features: [1200/2375]	Time 0.508 (0.521)	Data 0.000 (0.002)	
+Extract Features: [1300/2375]	Time 0.545 (0.521)	Data 0.000 (0.001)	
+Extract Features: [1400/2375]	Time 0.509 (0.521)	Data 0.000 (0.001)	
+Extract Features: [1500/2375]	Time 0.515 (0.521)	Data 0.000 (0.001)	
+Extract Features: [1600/2375]	Time 0.517 (0.521)	Data 0.000 (0.001)	
+Extract Features: [1700/2375]	Time 0.513 (0.521)	Data 0.000 (0.001)	
+Extract Features: [1800/2375]	Time 0.514 (0.521)	Data 0.000 (0.001)	
+Extract Features: [1900/2375]	Time 0.547 (0.521)	Data 0.000 (0.001)	
+Extract Features: [2000/2375]	Time 0.517 (0.521)	Data 0.000 (0.001)	
+Extract Features: [2100/2375]	Time 0.514 (0.521)	Data 0.000 (0.001)	
+Extract Features: [2200/2375]	Time 0.545 (0.521)	Data 0.000 (0.001)	
+Extract Features: [2300/2375]	Time 0.538 (0.521)	Data 0.000 (0.001)	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          73.7%
+  top-5          83.8%
+  top-10         87.0%

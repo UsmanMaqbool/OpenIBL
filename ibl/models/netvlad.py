@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torchvision.utils import save_image
+
 import numpy as np
 import copy
 import code
@@ -251,8 +251,8 @@ class EmbedNet(nn.Module):
         # requires_grad=False
         
         #graph
-        self.input_dim = 4096 # 16384# 8192
-        self.hidden_dim = [2048,4096]#[8192, 8192]
+        self.input_dim = 8192 # 16384# 8192
+        self.hidden_dim = [4096,4096]#[8192, 8192]
         self.num_neighbors_list = [5]#,2]
         
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
@@ -264,19 +264,17 @@ class EmbedNet(nn.Module):
 
     def forward(self, x):
         
-        # createboxes
+        # fixing for Tokyo
         sizeH = x.shape[2]
         sizeW = x.shape[3]
-        # print("raw: ", x.shape)
-        
-        # for Tokyo 247 Test
         
         if sizeH%2 != 0:
             x = F.pad(input=x, pad=(0,0,1,2), mode='constant', value=0)
         if sizeW%2 != 0:
             x = F.pad(input=x, pad=(1,2), mode='constant', value=0)
-
-        # print("padded:", x.shape)
+        
+        # createboxes
+        # print("debuggind started")
         with torch.no_grad():
             b_out = self.Espnet(x)
         # b_out = self.Espnet(x)
@@ -341,8 +339,6 @@ class EmbedNet(nn.Module):
 
             
         _, _, H, W = x.shape
-        # H = sizeH
-        # W = sizeW
         patch_mask = torch.zeros((H, W)).cuda()
         
         # VGG 
@@ -380,7 +376,7 @@ class EmbedNet(nn.Module):
                     # print(idx, " ", b_idx)
                     # code.interact(local=locals())
 
-                    if idx == rr_boxes[b_idx] and obj_i[b_idx] > 5000 and len(img_nodes) < NB:
+                    if idx == rr_boxes[b_idx] and obj_i[b_idx] > 10000 and len(img_nodes) < NB-2:
                         # print("found match")
                         # print(idx, " ", b_idx)
                         # print (img_nodes.shape)
