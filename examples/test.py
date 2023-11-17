@@ -136,7 +136,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Image-based localization testing")
     parser.add_argument('--launcher', type=str,
                         choices=['none', 'pytorch', 'slurm'],
-                        default='none', help='job launcher')
+                        default='pytorch', help='job launcher')
     parser.add_argument('--tcp-port', type=str, default='5017')
     # data
     parser.add_argument('-d', '--dataset', type=str, default='pitts',

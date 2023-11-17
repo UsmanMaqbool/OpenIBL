@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 from collections import defaultdict
 import math
-import code
+
 import numpy as np
 import copy
 import random
@@ -46,11 +46,9 @@ class DistributedRandomTupleSampler(Sampler):
     def sort_gallery(self, distmat, sub_set):
         assert(distmat.shape[0]==len(self.query_source))
         assert(distmat.shape[1]==len(self.gallery_source))
-        # distmat:7416 X 10000
-        self.sort_idx = torch.argsort(distmat, dim=1) #sort the positions row-wise
-        # Sort ids of distmat
-        self.sub_set = sub_set # just copy the sub_set to this
-        self.sub_length = len(self.sub_set) #1000
+        self.sort_idx = torch.argsort(distmat, dim=1)
+        self.sub_set = sub_set
+        self.sub_length = len(self.sub_set)
 
         self.sub_length_dist = int(math.ceil(self.sub_length * 1.0 / self.num_replicas))
         self.total_size = self.sub_length_dist * self.num_replicas
@@ -62,7 +60,7 @@ class DistributedRandomTupleSampler(Sampler):
         self.epoch = epoch
 
     def __iter__(self):
-        indices = torch.arange(self.sub_length).long().tolist() #1000
+        indices = torch.arange(self.sub_length).long().tolist()
 
         # add extra samples to make it evenly divisible
         indices += indices[:(self.total_size - len(indices))]
@@ -73,7 +71,6 @@ class DistributedRandomTupleSampler(Sampler):
         assert len(indices) == self.sub_length_dist
 
         for i in indices:
-            # code.interact(local=locals())
             anchor_index = self.sub_set[i]
             # easiest positive
             pos_indices = [x for x in self.sort_idx[anchor_index].tolist() if x in self.pos_list[anchor_index]]

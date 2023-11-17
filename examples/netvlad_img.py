@@ -7,7 +7,7 @@ import sys
 import h5py
 import scipy.io
 import copy
-import code
+
 import torch
 from torch import nn
 from torch.backends import cudnn
@@ -20,7 +20,7 @@ import torchvision.transforms as T
 from ibl import datasets
 from ibl import models
 from ibl.trainers import Trainer
-from ibl.evaluators import Evaluator, extract_features, pairwise_distance, features_pairwise_distance
+from ibl.evaluators import Evaluator, extract_features, pairwise_distance
 from ibl.utils.data import IterLoader, get_transformer_train, get_transformer_test
 from ibl.utils.data.sampler import DistributedRandomTupleSampler, DistributedSliceSampler
 from ibl.utils.data.preprocessor import Preprocessor
@@ -53,27 +53,6 @@ def get_data(args, iters):
         batch_size=args.test_batch_size, num_workers=args.workers,
         sampler=DistributedSliceSampler(sorted(list(set(dataset.q_train) | set(dataset.db_train)))),
         shuffle=False, pin_memory=True)
-    
-    # Initialize an empty list to store the sum result
-    list_q_db = []
-    q_chunk = args.test_batch_size*1000
-    db_chunk = args.test_batch_size*1500
-    
-    for i in range(0, len(dataset.q_train), q_chunk):
-        for j in range(0, len(dataset.db_train), db_chunk):
-            start_q = i
-            end_q = min(i + q_chunk, len(dataset.q_train))
-            start_db = j
-            end_db = min(j + db_chunk, len(dataset.db_train))
-            print(f"Query: {start_q}:{end_q} and DB {start_db}:{end_db}")
-            list_q_db = list_q_db + dataset.q_train[start_q:end_q] + dataset.db_train[start_db:end_db]
-
-    train_extract_loader_large = DataLoader(
-        Preprocessor(list_q_db,
-                     root=dataset.images_dir, transform=test_transformer),
-        batch_size=args.test_batch_size, num_workers=args.workers,
-        sampler=DistributedSliceSampler(list_q_db),
-        shuffle=False, pin_memory=True)
 
     val_loader = DataLoader(
         Preprocessor(sorted(list(set(dataset.q_val) | set(dataset.db_val))),
@@ -89,28 +68,14 @@ def get_data(args, iters):
         sampler=DistributedSliceSampler(sorted(list(set(dataset.q_test) | set(dataset.db_test)))),
         shuffle=False, pin_memory=True)
 
-    return dataset, train_loader, val_loader, test_loader, sampler, train_extract_loader, train_extract_loader_large
-
-def update_sampler_large(sampler, model, loader, query_len, gallery_len, sub_set, vlad=True, gpu=None, sync_gather=False):
-    if (dist.get_rank()==0):
-        print ("===> Start extracting features for sorting gallery")
-    distmat = features_pairwise_distance(model, loader, sub_set, query_len, gallery_len,
-                                vlad=vlad, gpu=gpu, sync_gather=sync_gather)
-
-    if (dist.get_rank()==0):
-        print ("===> Start sorting gallery")
-    sampler.sort_gallery(distmat, sub_set)
-    del distmat
-
+    return dataset, train_loader, val_loader, test_loader, sampler, train_extract_loader
 
 def update_sampler(sampler, model, loader, query, gallery, sub_set, vlad=True, gpu=None, sync_gather=False):
     if (dist.get_rank()==0):
         print ("===> Start extracting features for sorting gallery")
-    
     features = extract_features(model, loader, sorted(list(set(query) | set(gallery))),
                                 vlad=vlad, gpu=gpu, sync_gather=sync_gather)
-    distmat = pairwise_distance(features, query, gallery) # 7416, 10000
-    
+    distmat, _, _ = pairwise_distance(features, query, gallery)
     del features
     if (dist.get_rank()==0):
         print ("===> Start sorting gallery")
@@ -122,7 +87,7 @@ def get_model(args):
     if args.vlad:
         pool_layer = models.create('netvlad', dim=base_model.feature_dim)
         # vgg16_pitts_64_desc_cen_mat.hdf5
-        initcache = osp.join(args.init_dir, args.arch + '_' + 'pitts_' + str(args.num_clusters) + '_desc_cen.hdf5')
+        initcache = osp.join(args.init_dir, args.arch + '_' + args.dataset + '_' + str(args.num_clusters) + '_desc_cen.hdf5')
         if (dist.get_rank()==0):
             print ('Loading centroids from {}'.format(initcache))
         with h5py.File(initcache, mode='r') as h5:
@@ -172,8 +137,7 @@ def main_worker(args):
 
     # Create data loaders
     iters = args.iters if (args.iters>0) else None
-    dataset, train_loader, val_loader, test_loader, sampler, train_extract_loader, train_extract_loader_large = get_data(args, iters)
-    print(f"dataset.q_val = {len(dataset.q_val)}, dataset.db_val = {len(dataset.db_val)}, dataset.val_pos = {len(dataset.val_pos)}")
+    dataset, train_loader, val_loader, test_loader, sampler, train_extract_loader = get_data(args, iters)
 
     # Create model
     model = get_model(args)
@@ -189,12 +153,12 @@ def main_worker(args):
                   .format(start_epoch, best_recall5))
 
     # Evaluator
-    # evaluator = Evaluator(model)
-    # if (args.rank==0):
-    #     print("Test the initial model:")
-    # recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
-    #                     dataset.q_val, dataset.db_val, dataset.val_pos,
-    #                     vlad=args.vlad, gpu=args.gpu, sync_gather=args.sync_gather)
+    evaluator = Evaluator(model)
+    if (args.rank==0):
+        print("Test the initial model:")
+    recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
+                        dataset.q_val, dataset.db_val, dataset.val_pos,
+                        vlad=args.vlad, gpu=args.gpu, sync_gather=args.sync_gather)
 
     # Optimizer
     optimizer = torch.optim.SGD(filter(lambda p: p.requires_grad, model.parameters()),
@@ -216,11 +180,8 @@ def main_worker(args):
         subset_indices = torch.randperm(len(dataset.q_train), generator=g).long().split(args.cache_size)
 
         for subid, subset in enumerate(subset_indices):
-            # update_sampler(sampler, model, train_extract_loader, dataset.q_train, dataset.db_train, subset.tolist(),
-            #                 vlad=args.vlad, gpu=args.gpu, sync_gather=args.sync_gather)
-            update_sampler_large(sampler, model, train_extract_loader_large, len(dataset.q_train), len(dataset.db_train), subset.tolist(),
+            update_sampler(sampler, model, train_extract_loader, dataset.q_train, dataset.db_train, subset.tolist(),
                             vlad=args.vlad, gpu=args.gpu, sync_gather=args.sync_gather)
-            
             synchronize()
             trainer.train(epoch, subid, train_loader, optimizer,
                             train_iters=len(train_loader), print_freq=args.print_freq,
@@ -277,18 +238,18 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="NetVLAD/SARE training")
     parser.add_argument('--launcher', type=str,
                         choices=['none', 'pytorch', 'slurm'],
-                        default='pytorch', help='job launcher')
-    parser.add_argument('--tcp-port', type=str, default='6010')
+                        default='none', help='job launcher')
+    parser.add_argument('--tcp-port', type=str, default='5017')
     # data
     parser.add_argument('-d', '--dataset', type=str, default='pitts',
                         choices=datasets.names())
     parser.add_argument('--scale', type=str, default='30k')
     parser.add_argument('--tuple-size', type=int, default=1,
                         help="tuple numbers in a batch")
-    parser.add_argument('--test-batch-size', type=int, default=32,
+    parser.add_argument('--test-batch-size', type=int, default=64,
                         help="tuple numbers in a batch")
     parser.add_argument('--cache-size', type=int, default=1000)
-    parser.add_argument('-j', '--workers', type=int, default=4)
+    parser.add_argument('-j', '--workers', type=int, default=8)
     parser.add_argument('--height', type=int, default=480, help="input height")
     parser.add_argument('--width', type=int, default=640, help="input width")
     parser.add_argument('--neg-num', type=int, default=10,
@@ -304,7 +265,7 @@ if __name__ == '__main__':
     parser.add_argument('--sync-gather', action='store_true')
     parser.add_argument('--features', type=int, default=4096)
     # optimizer
-    parser.add_argument('--lr', type=float, default=0.0001,
+    parser.add_argument('--lr', type=float, default=0.001,
                         help="learning rate of new parameters, for pretrained ")
     parser.add_argument('--momentum', type=float, default=0.9)
     parser.add_argument('--weight-decay', type=float, default=0.001)
@@ -325,9 +286,9 @@ if __name__ == '__main__':
     # path
     working_dir = osp.dirname(osp.abspath(__file__))
     parser.add_argument('--data-dir', type=str, metavar='PATH',
-                        default="/home/leo/usman_ws/codes/OpenIBL/examples/data")
+                        default=osp.join(working_dir, 'data'))
     parser.add_argument('--logs-dir', type=str, metavar='PATH',
-                        default="/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-05-Oct")
+                        default=osp.join(working_dir, 'logs'))
     parser.add_argument('--init-dir', type=str, metavar='PATH',
-                        default="/home/leo/usman_ws/codes/OpenIBL/examples/../logs")
+                        default=osp.join(working_dir, '..', 'logs'))
     main()

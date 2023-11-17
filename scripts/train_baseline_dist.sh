@@ -30,37 +30,37 @@ examples/netvlad_img.py --launcher pytorch --tcp-port ${PORT} \
   --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 \
   --logs-dir ${FILES}
 
-# echo "==========Testing============="
-# FILES="${FILES}/*.tar"
-# echo ${FILES}
-# echo "=============================="
-# for RESUME in $FILES
-# do
-#   # take action on each file. $f store current file name
-#   DATASET=pitts
-#   SCALE=30k
-#   echo "==========Test on Pitts30k============="
-#   echo "$RESUME"
-#   echo "======================================="
-#   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-#    examples/test.py --launcher pytorch \
-#     -d ${DATASET} --scale ${SCALE} -a ${ARCH} \
-#     --test-batch-size 32 -j 2 \
-#     --vlad --reduction \
-#     --resume ${RESUME}
+echo "==========Testing============="
+FILES="${FILES}/*.tar"
+echo ${FILES}
+echo "=============================="
+for RESUME in $FILES
+do
+  # take action on each file. $f store current file name
+  DATASET=pitts
+  SCALE=30k
+  echo "==========Test on Pitts30k============="
+  echo "$RESUME"
+  echo "======================================="
+  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+   examples/test.py --launcher pytorch \
+    -d ${DATASET} --scale ${SCALE} -a ${ARCH} \
+    --test-batch-size 32 -j 2 \
+    --vlad --reduction \
+    --resume ${RESUME}
 
-#   DATASET=tokyo
+  DATASET=tokyo
 
-#   echo "==========Test on Tokyo247============="
-#   echo "$RESUME"
-#   echo "======================================="
+  echo "==========Test on Tokyo247============="
+  echo "$RESUME"
+  echo "======================================="
 
 
-#    $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-#    examples/test.py --launcher pytorch \
-#     -d ${DATASET} -a ${ARCH} \
-#     --test-batch-size 32 -j 2 \
-#     --vlad --reduction \
-#     --resume ${RESUME}
+   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+   examples/test.py --launcher pytorch \
+    -d ${DATASET} -a ${ARCH} \
+    --test-batch-size 32 -j 2 \
+    --vlad --reduction \
+    --resume ${RESUME}
 
 done
