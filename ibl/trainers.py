@@ -75,13 +75,17 @@ class Trainer(object):
         B, N, C, H, W = inputs.size()
         inputs = inputs.view(-1, C, H, W)
 
-        outputs_pool, outputs_vlad = self.model(inputs)
-        if (not vlad):
-            # adopt VLAD layer for feature aggregation
-            return self._get_loss(outputs_pool, loss_type, B, N)
-        else:
-            # adopt max pooling for feature aggregation
-            return self._get_loss(outputs_vlad, loss_type, B, N)
+        # outputs_pool, outputs_vlad = self.model(inputs)
+        # if (not vlad):
+        #     # adopt VLAD layer for feature aggregation
+        #     return self._get_loss(outputs_pool, loss_type, B, N)
+        # else:
+        #     # adopt max pooling for feature aggregation
+        #     return self._get_loss(outputs_vlad, loss_type, B, N)
+        
+        outputs_vlad = self.model(inputs)
+        # adopt max pooling for feature aggregation
+        return self._get_loss(outputs_vlad, loss_type, B, N)
 
     def _get_loss(self, outputs, loss_type, B, N):
         outputs = outputs.view(B, N, -1)
