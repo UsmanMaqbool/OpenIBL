@@ -1,38 +1,88 @@
-#!/bin/sh
-PARTITION=$1
-GPUS=4
-GPUS_PER_NODE=4
+#!/bin/bash
+# Launch pytorch distributed in a software environment or container
+#
+# (c) 2022, Eric Stubbs
+# University of Florida Research Computing
 
-DATASET=pitts
-SCALE=30k
-ARCH=vgg16
-LAYERS=conv5
-LOSS=$2
-LR=0.001
+#SBATCH --wait-all-nodes=1
+#SBATCH --job-name=
+#SBATCH --mail-type=END,FAIL          # Mail events (NONE, BEGIN, END, FAIL, ALL)
+#SBATCH --mail-user=m.maqboolbhutta@ufl.edu
+#SBATCH --time=52:00:00
+#SBATCH --partition=gpu
+#SBATCH --output=R-%x.%j.out
+#SBATCH --error=R-%x.%j.err
+#SBATCH --nodes=1 
+#SBATCH --gpus-per-node=a100:8   
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=32    # There are 24 CPU cores on P100 Cedar GPU nodes
+#SBATCH --constraint=a100
+#SBATCH --mem-per-cpu=4GB
+#SBATCH --distribution=cyclic:cyclic
 
-if [ $# -ne 2 ]
-  then
-    echo "Arguments error: <PARTITION NAME> <LOSS_TYPE (triplet|sare_ind|sare_joint)>"
+
+
+
+
+# PYTHON SCRIPT
+#==============
+
+#This is the python script to run in the pytorch environment
+PYTHON=${PYTHON:-"python"}
+allowed_arguments_list1=("netvlad" "graphvlad")
+allowed_arguments_list2=("triplet" "sare_ind" "sare_joint")
+
+if [ "$#" -ne 2 ]; then
+    echo "Arguments error: <METHOD (netvlad|graphvlad>"
+    echo "Arguments error: <LOSS_TYPE (triplet|sare_ind|sare_joint)>"
     exit 1
 fi
 
-while true # find unused tcp port
-do
-    PORT=$(( ((RANDOM<<15)|RANDOM) % 49152 + 10000 ))
-    status="$(nc -z 127.0.0.1 $PORT < /dev/null &>/dev/null; echo $?)"
-    if [ "${status}" != "0" ]; then
-        break;
-    fi
-done
+METHOD="$1"
+LOSS="$2"
+DATE=$(date '+%d-%b') 
+DATASET="pitts"
 
-srun --mpi=pmi2 -p ${PARTITION} -n${GPUS} \
-     --gres=gpu:${GPUS_PER_NODE} \
-     --ntasks-per-node=${GPUS_PER_NODE} \
-     --job-name=${LOSS} \
+# LOAD PYTORCH SOFTWARE ENVIRONMENT
+#==================================
+
+## You can load a software environment or use a singularity container.
+## CONTAINER="singularity exec --nv /path/to/container.sif" (--nv option is to enable gpu)
+module purge
+module load conda/22.11.1 intel/2019.1.144 openmpi/4.0.0
+conda activate openibl
+
+# PRINTS
+#=======
+date; pwd; which python
+export HOST=$(hostname -s)
+NODES=$(scontrol show hostnames | grep -v $HOST | tr '\n' ' ')
+echo "Host: $HOST" 
+echo "Other nodes: $NODES"
+
+DATE=$(date '+%d-%b') 
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${DATASET}-${METHOD}-${LOSS}-lr${LR}-${DATE}"
+DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
+INIT_DIR="/blue/hmedeiros/m.maqboolbhutta/datasets/openibl-init"
+echo ${FILES}
+
+
+
+GPUS=8
+
+SCALE=30k
+ARCH=vgg16
+LAYERS=conv5
+LR=0.001
+
+PORT=6010
+echo "==========Starting Training============="
+echo "========================================"
+srun --mpi=pmix_v3 -p=gpu --cpus-per-task=4 -n${GPUS} \
 python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
   -d ${DATASET} --scale ${SCALE} \
   -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
-  --width 640 --height 480 --tuple-size 1 -j 2 --neg-num 10 --test-batch-size 32 \
+  --width 640 --height 480 --tuple-size 5 -j 4 --neg-num 10 --test-batch-size 24 \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
-  --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 \
-  --logs-dir logs/netVLAD/${DATASET}${SCALE}-${ARCH}/${LAYERS}-${LOSS}-lr${LR}-tuple${GPUS}
+  --eval-step 1 --epochs 5 --step-size 5 --cache-size 500 \
+  --logs-dir ${FILES} --data-dir ${DATASET_DIR} --init-dir ${INIT_DIR}

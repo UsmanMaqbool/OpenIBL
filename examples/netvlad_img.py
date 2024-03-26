@@ -82,7 +82,7 @@ def update_sampler(sampler, model, loader, query, gallery, sub_set, vlad=True, g
     del distmat
 
 def get_model(args):
-    base_model = models.create(args.arch, train_layers=args.layers, matconvnet='logs/vd16_offtheshelf_conv5_3_max.pth')
+    base_model = models.create(args.arch, train_layers=args.layers, matconvnet=osp.join(args.init_dir, 'vd16_offtheshelf_conv5_3_max.pth'))
     if args.vlad:
         print("No. of Clusters: ", args.num_clusters)
         pool_layer = models.create('netvlad', dim=base_model.feature_dim, num_clusters=args.num_clusters, vladv2=False)
@@ -159,12 +159,12 @@ def main_worker(args):
                   .format(start_epoch, best_recall5))
 
     # Evaluator
-    # evaluator = Evaluator(model)
-    # if (args.rank==0):
-    #     print("Test the initial model:")
-    # recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
-    #                     dataset.q_val, dataset.db_val, dataset.val_pos,
-    #                     vlad=args.vlad, gpu=args.gpu, sync_gather=args.sync_gather)
+    evaluator = Evaluator(model)
+    if (args.rank==0):
+        print("Test the initial model:")
+    recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
+                        dataset.q_val, dataset.db_val, dataset.val_pos,
+                        vlad=args.vlad, gpu=args.gpu, sync_gather=args.sync_gather)
 
     # Optimizer
     optimizer = torch.optim.SGD(filter(lambda p: p.requires_grad, model.parameters()),
