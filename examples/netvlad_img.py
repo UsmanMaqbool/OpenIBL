@@ -32,6 +32,14 @@ from ibl.utils.dist_utils import init_dist, synchronize, convert_sync_bn
 
 start_epoch = best_recall5 = 0
 
+
+def get_segmentation_model(encoderFile):
+    classes = 20
+    p = 2
+    q = 8
+    model = models.create('espnet', classes=classes, p=p, q=q, encoderFile=encoderFile)
+    return model
+
 def get_data(args, iters):
     root = osp.join(args.data_dir, args.dataset)
     dataset = datasets.create(args.dataset, root, scale=args.scale)
@@ -100,7 +108,9 @@ def get_model(args):
         if(args.method=='netvlad'):
             model = models.create('embednet', base_model, pool_layer)   
         elif(args.method=='graphvlad'):
-            model = models.create('graphvlad', base_model, pool_layer)
+            print('===> Loading segmentation model')
+            segmentation_model = get_segmentation_model(args.esp_encoder)
+            model = models.create('graphvlad', base_model, pool_layer, segmentation_model)
 
     else:
         model = base_model
@@ -298,4 +308,5 @@ if __name__ == '__main__':
                         default=osp.join(working_dir, 'logs'))
     parser.add_argument('--init-dir', type=str, metavar='PATH',
                         default=osp.join(working_dir, '..', 'logs'))
+    parser.add_argument('--esp_encoder', type=str, default='', help='Path to ESPNet encoder file')
     main()

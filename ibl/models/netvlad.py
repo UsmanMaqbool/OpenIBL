@@ -390,8 +390,7 @@ class SelectRegions(nn.Module):
             boxes = boxes_t/16
         _, _, H, W = x.shape
         patch_mask = torch.zeros((H, W)).cuda()
-        x = base_model(x)   
-        # print("x464: ", x.shape)
+        _, x = base_model(x)   
         N, C, H, W = x.shape
         bb_x = [[int(W/4), int(H/4), int(3*W/4),int(3*H/4)],
                 [0, 0, int(W/3),H], 

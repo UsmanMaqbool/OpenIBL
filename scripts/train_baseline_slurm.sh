@@ -32,19 +32,20 @@ PYTHON=${PYTHON:-"python"}
 allowed_arguments_list1=("netvlad" "graphvlad")
 allowed_arguments_list2=("triplet" "sare_ind" "sare_joint")
 
-if [ "$#" -ne 2 ]; then
+if [ "$#" -lt 3 ]; then
     echo "Arguments error: <METHOD (netvlad|graphvlad>"
     echo "Arguments error: <LOSS_TYPE (triplet|sare_ind|sare_joint)>"
+    echo "Arguments error: <DATASET (pitts|tokyo)>"
+    echo "./train_baseline_dist.sh netvlad triplet pitts"    
     exit 1
 fi
 
 METHOD="$1"
 LOSS="$2"
-# DATE=$(date '+%d-%b')
-# /home/m.maqboolbhutta/usman_ws/models/openibl/pitts-netvlad-sare_joint-lr-27-Mar  
+DATASET=$3
+DATE=$(date '+%d-%b')
 
-DATE="27-Mar" 
-DATASET="pitts"
+
 
 # LOAD PYTORCH SOFTWARE ENVIRONMENT
 #==================================
@@ -91,7 +92,8 @@ python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
   --eval-step 1 --epochs 10 --step-size 5 --cache-size 500 \
   --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
-  --init-dir ${INIT_DIR}
+  --init-dir ${INIT_DIR} --esp_encoder=${ESP_ENCODER} 
+
 
 echo "==========Testing============="
 FILES="${FILES}/*.tar"
@@ -108,7 +110,7 @@ do
    examples/test_pitts_tokyo.py --launcher pytorch \
     -a ${ARCH} --test-batch-size 32 -j 4 \
     --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME}
+    --resume ${RESUME} --esp_encoder=${ESP_ENCODER} \
   echo "==========################============="
   echo " Done Testing with $RESUME file..."
   echo "======================================="  
