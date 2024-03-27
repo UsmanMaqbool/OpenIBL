@@ -99,7 +99,7 @@ def get_model(args):
 
         if(args.method=='netvlad'):
             model = models.create('embednet', base_model, pool_layer)   
-        elif(args.method=='sare_ind'):
+        elif(args.method=='graphvlad'):
             model = models.create('graphvlad', base_model, pool_layer)
 
     else:
@@ -289,7 +289,7 @@ if __name__ == '__main__':
     parser.add_argument('--deterministic', action='store_true')
     parser.add_argument('--print-freq', type=int, default=200)
     parser.add_argument('--margin', type=float, default=0.1, help='margin for the triplet loss with batch hard')
-    parser.add_argument('--method', type=str, default='netvlad')
+    parser.add_argument('--method', type=str, default='netvlad', choices=['netvlad', 'graphvlad'])
     # path
     working_dir = osp.dirname(osp.abspath(__file__))
     parser.add_argument('--data-dir', type=str, metavar='PATH',

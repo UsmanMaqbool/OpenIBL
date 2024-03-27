@@ -40,7 +40,10 @@ fi
 
 METHOD="$1"
 LOSS="$2"
-DATE=$(date '+%d-%b') 
+# DATE=$(date '+%d-%b')
+# /home/m.maqboolbhutta/usman_ws/models/openibl/pitts-netvlad-sare_joint-lr-27-Mar  
+
+DATE="27-Mar" 
 DATASET="pitts"
 
 # LOAD PYTORCH SOFTWARE ENVIRONMENT
@@ -49,7 +52,7 @@ DATASET="pitts"
 ## You can load a software environment or use a singularity container.
 ## CONTAINER="singularity exec --nv /path/to/container.sif" (--nv option is to enable gpu)
 module purge
-module load conda/22.11.1 intel/2019.1.144 openmpi/4.0.0
+module load conda/24.1.2 intel/2019.1.144 openmpi/4.0.0
 conda activate openibl
 
 # PRINTS
@@ -64,6 +67,8 @@ DATE=$(date '+%d-%b')
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${DATASET}-${METHOD}-${LOSS}-lr${LR}-${DATE}"
 DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
 INIT_DIR="/blue/hmedeiros/m.maqboolbhutta/datasets/openibl-init"
+ESP_ENCODER="/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth"
+
 echo ${FILES}
 
 
@@ -84,5 +89,27 @@ python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
   -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
   --width 640 --height 480 --tuple-size 5 -j 4 --neg-num 10 --test-batch-size 24 \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
-  --eval-step 1 --epochs 5 --step-size 5 --cache-size 500 \
-  --logs-dir ${FILES} --data-dir ${DATASET_DIR} --init-dir ${INIT_DIR}
+  --eval-step 1 --epochs 10 --step-size 5 --cache-size 500 \
+  --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
+  --init-dir ${INIT_DIR}
+
+echo "==========Testing============="
+FILES="${FILES}/*.tar"
+echo ${FILES}
+echo "=============================="
+for RESUME in $FILES
+do
+  # take action on each file. $f store current file name
+
+  echo "==========################============="
+  echo " Testing $RESUME file..."
+  echo "======================================="
+  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+   examples/test_pitts_tokyo.py --launcher pytorch \
+    -a ${ARCH} --test-batch-size 32 -j 4 \
+    --vlad --reduction --method ${METHOD} \
+    --resume ${RESUME}
+  echo "==========################============="
+  echo " Done Testing with $RESUME file..."
+  echo "======================================="  
+done
