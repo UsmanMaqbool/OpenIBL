@@ -11,6 +11,7 @@ LR=0.001
 
 DATE=$(date '+%d-%b') 
 FILES="/home/leo/usman_ws/models/openibl/${DATASET}-${METHOD}-${LOSS}-lr${LR}-${DATE}"
+
 DATASET_DIR="/home/leo/usman_ws/codes/OpenIBL/examples/data/"
 INIT_DIR="/home/leo/usman_ws/datasets/openibl-init"
 ESP_ENCODER="/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth"
@@ -59,44 +60,10 @@ do
    examples/test_pitts_tokyo.py --launcher pytorch \
     -a ${ARCH} --test-batch-size 32 -j 4 \
     --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME} --esp_encoder=${ESP_ENCODER} \
+    --resume ${RESUME} --esp-encoder ${ESP_ENCODER}
   echo "==========################============="
   echo " Done Testing with $RESUME file..."
   echo "======================================="  
 done
-
-
-# echo "==========Testing============="
-# FILES="${FILES}/*.tar"
-# echo ${FILES}
-# echo "=============================="
-# for RESUME in $FILES
-# do
-#   # take action on each file. $f store current file name
-#   DATASET=pitts
-#   SCALE=30k
-#   echo "==========Test on Pitts30k============="
-#   echo "$RESUME"
-#   echo "======================================="
-#   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-#    examples/test.py --launcher pytorch \
-#     -d ${DATASET} --scale ${SCALE} -a ${ARCH} \
-#     --test-batch-size 32 -j 2 \
-#     --vlad --reduction \
-#     --resume ${RESUME}
-
-#   DATASET=tokyo
-
-#   echo "==========Test on Tokyo247============="
-#   echo "$RESUME"
-#   echo "======================================="
-
-
-#    $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-#    examples/test.py --launcher pytorch \
-#     -d ${DATASET} -a ${ARCH} \
-#     --test-batch-size 32 -j 2 \
-#     --vlad --reduction \
-#     --resume ${RESUME}
 
 done
