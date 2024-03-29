@@ -15,6 +15,7 @@ FILES="/home/leo/usman_ws/models/openibl/${DATASET}-${METHOD}-${LOSS}-lr${LR}-${
 DATASET_DIR="/home/leo/usman_ws/codes/OpenIBL/examples/data/"
 INIT_DIR="/home/leo/usman_ws/datasets/openibl-init"
 ESP_ENCODER="/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth"
+RESUME="/home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.001-27-Mar/checkpoint4.pth.tar"
 
 
 if [ "$#" -lt 3 ]; then
@@ -40,9 +41,10 @@ examples/netvlad_img.py --launcher pytorch --tcp-port ${PORT} \
   -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
   --width 640 --height 480 --tuple-size 1 -j 1 --neg-num 10 --test-batch-size 32 \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
-  --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 \
+  --eval-step 1 --epochs 10 --step-size 5 --cache-size 1000 \
   --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
-  --init-dir ${INIT_DIR} --esp_encoder=${ESP_ENCODER} 
+  --init-dir ${INIT_DIR} --esp_encoder=${ESP_ENCODER} \
+  --resume ${RESUME}
 
 
 echo "==========Testing============="
