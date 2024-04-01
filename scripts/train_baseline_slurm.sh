@@ -13,11 +13,11 @@
 #SBATCH --output=R-%x.%j.out
 #SBATCH --error=R-%x.%j.err
 #SBATCH --nodes=1 
-#SBATCH --gpus-per-node=a100:8   
+#SBATCH --gpus-per-node=a100:4   
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=32    # There are 24 CPU cores on P100 Cedar GPU nodes
+#SBATCH --cpus-per-task=24    # There are 24 CPU cores on P100 Cedar GPU nodes
 #SBATCH --constraint=a100
-#SBATCH --mem-per-cpu=4GB
+#SBATCH --mem-per-cpu=8GB
 #SBATCH --distribution=cyclic:cyclic
 
 
@@ -66,6 +66,7 @@ echo "Other nodes: $NODES"
 
 DATE=$(date '+%d-%b') 
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${DATASET}-${METHOD}-${LOSS}-lr${LR}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr-29-Mar"
 DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
 INIT_DIR="/blue/hmedeiros/m.maqboolbhutta/datasets/openibl-init"
 ESP_ENCODER="/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth"
@@ -74,7 +75,7 @@ echo ${FILES}
 
 
 
-GPUS=8
+GPUS=4
 
 SCALE=30k
 ARCH=vgg16
@@ -82,17 +83,17 @@ LAYERS=conv5
 LR=0.001
 
 PORT=6010
-echo "==========Starting Training============="
-echo "========================================"
-srun --mpi=pmix_v3 -p=gpu --cpus-per-task=4 -n${GPUS} \
-python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
-  -d ${DATASET} --scale ${SCALE} \
-  -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
-  --width 640 --height 480 --tuple-size 5 -j 4 --neg-num 10 --test-batch-size 24 \
-  --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
-  --eval-step 1 --epochs 10 --step-size 5 --cache-size 500 \
-  --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
-  --init-dir ${INIT_DIR} --esp_encoder=${ESP_ENCODER} 
+# echo "==========Starting Training============="
+# echo "========================================"
+# srun --mpi=pmix_v3 -p=gpu --cpus-per-task=4 -n${GPUS} \
+# python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
+#   -d ${DATASET} --scale ${SCALE} \
+#   -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
+#   --width 640 --height 480 --tuple-size 1 -j 4 --neg-num 10 --test-batch-size 32 \
+#   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
+#   --eval-step 1 --epochs 10 --step-size 5 --cache-size 1000 \
+#   --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
+#   --init-dir ${INIT_DIR} --esp-encoder ${ESP_ENCODER} 
 
 
 echo "==========Testing============="
@@ -110,7 +111,7 @@ do
    examples/test_pitts_tokyo.py --launcher pytorch \
     -a ${ARCH} --test-batch-size 32 -j 4 \
     --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME} --esp_encoder=${ESP_ENCODER} \
+    --resume ${RESUME} --esp-encoder ${ESP_ENCODER}
   echo "==========################============="
   echo " Done Testing with $RESUME file..."
   echo "======================================="  

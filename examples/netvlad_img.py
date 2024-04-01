@@ -308,5 +308,5 @@ if __name__ == '__main__':
                         default=osp.join(working_dir, 'logs'))
     parser.add_argument('--init-dir', type=str, metavar='PATH',
                         default=osp.join(working_dir, '..', 'logs'))
-    parser.add_argument('--esp_encoder', type=str, default='', help='Path to ESPNet encoder file')
+    parser.add_argument('--esp-encoder', type=str, default='', help='Path to ESPNet encoder file')
     main()

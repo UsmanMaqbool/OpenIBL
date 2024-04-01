@@ -39,7 +39,7 @@ $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT -
 examples/netvlad_img.py --launcher pytorch --tcp-port ${PORT} \
   -d ${DATASET} --scale ${SCALE} \
   -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
-  --width 640 --height 480 --tuple-size 1 -j 1 --neg-num 10 --test-batch-size 32 \
+  --width 640 --height 480 --tuple-size 1 -j 6 --neg-num 10 --test-batch-size 32 \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
   --eval-step 1 --epochs 10 --step-size 5 --cache-size 1000 \
   --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
