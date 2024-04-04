@@ -7,7 +7,7 @@ DATASET=$3
 SCALE=30k
 ARCH=vgg16
 LAYERS=conv5
-LR=0.001
+LR=0.0001
 
 DATE=$(date '+%d-%b') 
 FILES="/home/leo/usman_ws/models/openibl/${DATASET}-${METHOD}-${LOSS}-lr${LR}-${DATE}"
@@ -15,7 +15,7 @@ FILES="/home/leo/usman_ws/models/openibl/${DATASET}-${METHOD}-${LOSS}-lr${LR}-${
 DATASET_DIR="/home/leo/usman_ws/codes/OpenIBL/examples/data/"
 INIT_DIR="/home/leo/usman_ws/datasets/openibl-init"
 ESP_ENCODER="/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth"
-RESUME="/home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.001-27-Mar/checkpoint4.pth.tar"
+# RESUME="/home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.001-27-Mar/checkpoint4.pth.tar"
 
 
 if [ "$#" -lt 3 ]; then
@@ -25,6 +25,15 @@ if [ "$#" -lt 3 ]; then
     echo "./train_baseline_dist.sh netvlad triplet pitts"    
     exit 1
 fi
+
+
+#===================================================================================================
+# Tiplet Loss
+#===================================================================================================
+
+LOSS="triplet"
+DATE=$(date '+%d-%b') 
+FILES="/home/leo/usman_ws/models/openibl/${DATASET}-${METHOD}-${LOSS}-lr${LR}-${DATE}"
 
 
 echo "========================================"
@@ -39,12 +48,13 @@ $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT -
 examples/netvlad_img.py --launcher pytorch --tcp-port ${PORT} \
   -d ${DATASET} --scale ${SCALE} \
   -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
-  --width 640 --height 480 --tuple-size 1 -j 6 --neg-num 10 --test-batch-size 32 \
+  --width 640 --height 480 --tuple-size 1 -j 1 --neg-num 10 --test-batch-size 24 \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
-  --eval-step 1 --epochs 10 --step-size 5 --cache-size 1000 \
+  --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 \
   --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
-  --init-dir ${INIT_DIR} --esp_encoder=${ESP_ENCODER} \
-  --resume ${RESUME}
+  --init-dir ${INIT_DIR} --esp-encoder=${ESP_ENCODER} 
+  # \
+  # --resume ${RESUME}
 
 
 echo "==========Testing============="
@@ -54,12 +64,11 @@ echo "=============================="
 for RESUME in $FILES
 do
   # take action on each file. $f store current file name
-
   echo "==========################============="
   echo " Testing $RESUME file..."
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-   examples/test_pitts_tokyo.py --launcher pytorch \
+    examples/test_pitts_tokyo.py --launcher pytorch \
     -a ${ARCH} --test-batch-size 32 -j 4 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME} --esp-encoder ${ESP_ENCODER}
@@ -68,4 +77,102 @@ do
   echo "======================================="  
 done
 
+
+#===================================================================================================
+# SARE Ind Loss
+#===================================================================================================
+LOSS="sare_ind"
+DATE=$(date '+%d-%b') 
+FILES="/home/leo/usman_ws/models/openibl/${DATASET}-${METHOD}-${LOSS}-lr${LR}-${DATE}"
+
+
+echo "========================================"
+echo "saving checkpoints at ${FILES}"
+echo "========================================"
+
+
+PORT=6010
+echo "==========Starting Training============="
+echo "========================================"
+$PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+examples/netvlad_img.py --launcher pytorch --tcp-port ${PORT} \
+  -d ${DATASET} --scale ${SCALE} \
+  -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
+  --width 640 --height 480 --tuple-size 1 -j 1 --neg-num 10 --test-batch-size 24 \
+  --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
+  --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 \
+  --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
+  --init-dir ${INIT_DIR} --esp-encoder=${ESP_ENCODER} 
+  # \
+  # --resume ${RESUME}
+
+
+echo "==========Testing============="
+FILES="${FILES}/*.tar"
+echo ${FILES}
+echo "=============================="
+for RESUME in $FILES
+do
+  # take action on each file. $f store current file name
+  echo "==========################============="
+  echo " Testing $RESUME file..."
+  echo "======================================="
+  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+    examples/test_pitts_tokyo.py --launcher pytorch \
+    -a ${ARCH} --test-batch-size 32 -j 4 \
+    --vlad --reduction --method ${METHOD} \
+    --resume ${RESUME} --esp-encoder ${ESP_ENCODER}
+  echo "==========################============="
+  echo " Done Testing with $RESUME file..."
+  echo "======================================="  
+done
+
+
+#===================================================================================================
+# SARE Joint Loss
+#===================================================================================================
+LOSS="sare_joint"
+DATE=$(date '+%d-%b') 
+FILES="/home/leo/usman_ws/models/openibl/${DATASET}-${METHOD}-${LOSS}-lr${LR}-${DATE}"
+
+
+echo "========================================"
+echo "saving checkpoints at ${FILES}"
+echo "========================================"
+
+
+PORT=6010
+echo "==========Starting Training============="
+echo "========================================"
+$PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+examples/netvlad_img.py --launcher pytorch --tcp-port ${PORT} \
+  -d ${DATASET} --scale ${SCALE} \
+  -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
+  --width 640 --height 480 --tuple-size 1 -j 1 --neg-num 10 --test-batch-size 24 \
+  --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
+  --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 \
+  --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
+  --init-dir ${INIT_DIR} --esp-encoder=${ESP_ENCODER} 
+  # \
+  # --resume ${RESUME}
+
+
+echo "==========Testing============="
+FILES="${FILES}/*.tar"
+echo ${FILES}
+echo "=============================="
+for RESUME in $FILES
+do
+  # take action on each file. $f store current file name
+  echo "==========################============="
+  echo " Testing $RESUME file..."
+  echo "======================================="
+  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+    examples/test_pitts_tokyo.py --launcher pytorch \
+    -a ${ARCH} --test-batch-size 32 -j 4 \
+    --vlad --reduction --method ${METHOD} \
+    --resume ${RESUME} --esp-encoder ${ESP_ENCODER}
+  echo "==========################============="
+  echo " Done Testing with $RESUME file..."
+  echo "======================================="  
 done

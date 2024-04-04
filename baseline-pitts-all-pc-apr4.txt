@@ -1,0 +1,1944 @@
+==========Test on Pitts30k=============
+
+Recall Scores:
+  top-1          86.8%
+  top-5          93.7%
+  top-10         95.2%
+==========Test on Tokyo247=============
+
+Recall Scores:
+  top-1          75.9%
+  top-5          85.4%
+  top-10         88.6%
+==========################=============
+ Done Testing with /home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/checkpoint0.pth.tar file...
+=======================================
+
+
+Recall Scores:
+  top-1          87.0%
+  top-5          94.3%
+  top-10         95.7%
+==========Test on Tokyo247=============
+Recall Scores:
+  top-1          79.4%
+  top-5          89.8%
+  top-10         90.8%
+==========################=============
+ Done Testing with /home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/checkpoint1.pth.tar file...
+=======================================
+==========################=============
+ Testing /home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/checkpoint2.pth.tar file...
+=======================================
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torch/distributed/launch.py:180: FutureWarning: The module torch.distributed.launch is deprecated
+and will be removed in future. Use torchrun.
+Note that --use_env is set by default in torchrun.
+If your script expects `--local_rank` argument to be set, please
+change it to read from `os.environ['LOCAL_RANK']` instead. See 
+https://pytorch.org/docs/stable/distributed.html#launch-utility for 
+further instructions
+
+  warnings.warn(
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=4, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/checkpoint2.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, method='graphvlad', data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', esp_encoder='/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+===> Loading segmentation model
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/checkpoint2.pth.tar'
+=> Start epoch 2  best recall5 96.5%
+PCA parameters path:  /home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/pca_params_checkpoint2.h5
+Evaluate on the test set:'
+==========Test on Pitts30k=============
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.1%
+  top-5          94.2%
+  top-10         95.5%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          80.0%
+  top-5          87.6%
+  top-10         89.2%
+==========################=============
+ Done Testing with /home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/checkpoint2.pth.tar file...
+=======================================
+==========################=============
+ Testing /home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/checkpoint3.pth.tar file...
+=======================================
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torch/distributed/launch.py:180: FutureWarning: The module torch.distributed.launch is deprecated
+and will be removed in future. Use torchrun.
+Note that --use_env is set by default in torchrun.
+If your script expects `--local_rank` argument to be set, please
+change it to read from `os.environ['LOCAL_RANK']` instead. See 
+https://pytorch.org/docs/stable/distributed.html#launch-utility for 
+further instructions
+
+  warnings.warn(
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=4, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/checkpoint3.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, method='graphvlad', data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', esp_encoder='/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+===> Loading segmentation model
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/checkpoint3.pth.tar'
+=> Start epoch 3  best recall5 96.5%
+PCA parameters path:  /home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/pca_params_checkpoint3.h5
+Evaluate on the test set:
+==========Test on Pitts30k=============
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.3%
+  top-5          94.4%
+  top-10         95.8%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          80.3%
+  top-5          89.5%
+  top-10         90.5%
+==========################=============
+ Done Testing with /home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/checkpoint3.pth.tar file...
+=======================================
+==========################=============
+ Testing /home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/checkpoint4.pth.tar file...
+=======================================
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torch/distributed/launch.py:180: FutureWarning: The module torch.distributed.launch is deprecated
+and will be removed in future. Use torchrun.
+Note that --use_env is set by default in torchrun.
+If your script expects `--local_rank` argument to be set, please
+change it to read from `os.environ['LOCAL_RANK']` instead. See 
+https://pytorch.org/docs/stable/distributed.html#launch-utility for 
+further instructions
+
+  warnings.warn(
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=4, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/checkpoint4.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, method='graphvlad', data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', esp_encoder='/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+===> Loading segmentation model
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/checkpoint4.pth.tar'
+=> Start epoch 4  best recall5 96.5%
+PCA parameters path:  /home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/pca_params_checkpoint4.h5
+Evaluate on the test set:
+==========Test on Pitts30k=============
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.5%
+  top-5          94.4%
+  top-10         95.9%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          79.7%
+  top-5          88.6%
+  top-10         90.8%
+==========################=============
+ Done Testing with /home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/checkpoint4.pth.tar file...
+=======================================
+==========################=============
+ Testing /home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/model_best.pth.tar file...
+=======================================
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torch/distributed/launch.py:180: FutureWarning: The module torch.distributed.launch is deprecated
+and will be removed in future. Use torchrun.
+Note that --use_env is set by default in torchrun.
+If your script expects `--local_rank` argument to be set, please
+change it to read from `os.environ['LOCAL_RANK']` instead. See 
+https://pytorch.org/docs/stable/distributed.html#launch-utility for 
+further instructions
+
+  warnings.warn(
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=4, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/model_best.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, method='graphvlad', data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', esp_encoder='/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+===> Loading segmentation model
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/model_best.pth.tar'
+=> Start epoch 4  best recall5 96.5%
+PCA parameters path:  /home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/pca_params_model_best.h5
+Evaluate on the test set:
+==========Test on Pitts30k=============
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          87.9%
+  top-5          94.2%
+  top-10         95.6%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          75.6%
+  top-5          85.7%
+  top-10         88.9%
+==========################=============
+ Done Testing with /home/leo/usman_ws/models/openibl/pitts-graphvlad-triplet-lr0.0001-02-Apr/model_best.pth.tar file...
+=======================================
+========================================
+saving checkpoints at /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr
+========================================
+==========Starting Training=============
+========================================
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torch/distributed/launch.py:180: FutureWarning: The module torch.distributed.launch is deprecated
+and will be removed in future. Use torchrun.
+Note that --use_env is set by default in torchrun.
+If your script expects `--local_rank` argument to be set, please
+change it to read from `os.environ['LOCAL_RANK']` instead. See 
+https://pytorch.org/docs/stable/distributed.html#launch-utility for 
+further instructions
+
+  warnings.warn(
+Use GPU: 0 for training, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='6010', dataset='pitts', scale='30k', tuple_size=1, test_batch_size=24, cache_size=1000, workers=1, height=480, width=640, neg_num=10, num_clusters=64, neg_pool=1000, arch='vgg16', layers='conv5', nowhiten=False, syncbn=True, sync_gather=True, features=4096, lr=0.0001, momentum=0.9, weight_decay=0.001, loss_type='sare_ind', step_size=5, resume='', vlad=True, eval_step=1, rerank=False, epochs=5, iters=0, seed=43, deterministic=False, print_freq=200, margin=0.1, method='graphvlad', data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data/', logs_dir='/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr', init_dir='/home/leo/usman_ws/datasets/openibl-init', esp_encoder='/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+No. of Clusters:  64
+Loading centroids from /home/leo/usman_ws/datasets/openibl-init/vgg16_pitts_64_desc_cen.hdf5
+===> Loading segmentation model
+Encoder loaded!
+Test the initial model:
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          80.2%
+  top-5          92.6%
+  top-10         95.6%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          83.2%
+  top-5          93.3%
+  top-10         95.8%
+
+ * Finished epoch   0 recall@1: 83.2%  recall@5: 93.3%  recall@10: 95.8%  best@5: 93.3% *
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          84.0%
+  top-5          94.1%
+  top-10         96.4%
+
+ * Finished epoch   1 recall@1: 84.0%  recall@5: 94.1%  recall@10: 96.4%  best@5: 94.1% *
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          85.6%
+  top-5          94.5%
+  top-10         96.6%
+
+ * Finished epoch   2 recall@1: 85.6%  recall@5: 94.5%  recall@10: 96.6%  best@5: 94.5% *
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          86.0%
+  top-5          94.7%
+  top-10         96.6%
+
+ * Finished epoch   3 recall@1: 86.0%  recall@5: 94.7%  recall@10: 96.6%  best@5: 94.7% *
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          86.8%
+  top-5          95.1%
+  top-10         97.3%
+
+ * Finished epoch   4 recall@1: 86.8%  recall@5: 95.1%  recall@10: 97.3%  best@5: 95.1% *
+
+Performing PCA reduction on the best model:
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/model_best.pth.tar'
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Testing on Pitts30k-test:
+load PCA parameters...
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          86.8%
+  top-5          93.3%
+  top-10         94.9%
+==========Testing=============
+/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint0.pth.tar /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint1.pth.tar /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint2.pth.tar /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint3.pth.tar /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint4.pth.tar /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/model_best.pth.tar
+==============================
+==========################=============
+ Testing /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint0.pth.tar file...
+=======================================
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torch/distributed/launch.py:180: FutureWarning: The module torch.distributed.launch is deprecated
+and will be removed in future. Use torchrun.
+Note that --use_env is set by default in torchrun.
+If your script expects `--local_rank` argument to be set, please
+change it to read from `os.environ['LOCAL_RANK']` instead. See 
+https://pytorch.org/docs/stable/distributed.html#launch-utility for 
+further instructions
+
+  warnings.warn(
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=4, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint0.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, method='graphvlad', data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', esp_encoder='/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+===> Loading segmentation model
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint0.pth.tar'
+=> Start epoch 0  best recall5 93.3%
+PCA parameters path:  /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/pca_params_checkpoint0.h5
+gathering features from rank no.0
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Evaluate on the test set:
+==========Test on Pitts30k=============
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          85.5%
+  top-5          92.8%
+  top-10         94.6%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          72.4%
+  top-5          80.3%
+  top-10         84.8%
+==========################=============
+ Done Testing with /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint0.pth.tar file...
+=======================================
+==========################=============
+ Testing /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint1.pth.tar file...
+=======================================
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torch/distributed/launch.py:180: FutureWarning: The module torch.distributed.launch is deprecated
+and will be removed in future. Use torchrun.
+Note that --use_env is set by default in torchrun.
+If your script expects `--local_rank` argument to be set, please
+change it to read from `os.environ['LOCAL_RANK']` instead. See 
+https://pytorch.org/docs/stable/distributed.html#launch-utility for 
+further instructions
+
+  warnings.warn(
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=4, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint1.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, method='graphvlad', data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', esp_encoder='/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+===> Loading segmentation model
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint1.pth.tar'
+=> Start epoch 1  best recall5 94.1%
+PCA parameters path:  /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/pca_params_checkpoint1.h5
+gathering features from rank no.0
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Evaluate on the test set:
+==========Test on Pitts30k=============
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          86.1%
+  top-5          93.0%
+  top-10         94.9%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          78.7%
+  top-5          88.3%
+  top-10         90.8%
+==========################=============
+ Done Testing with /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint1.pth.tar file...
+=======================================
+==========################=============
+ Testing /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint2.pth.tar file...
+=======================================
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torch/distributed/launch.py:180: FutureWarning: The module torch.distributed.launch is deprecated
+and will be removed in future. Use torchrun.
+Note that --use_env is set by default in torchrun.
+If your script expects `--local_rank` argument to be set, please
+change it to read from `os.environ['LOCAL_RANK']` instead. See 
+https://pytorch.org/docs/stable/distributed.html#launch-utility for 
+further instructions
+
+  warnings.warn(
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=4, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint2.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, method='graphvlad', data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', esp_encoder='/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+===> Loading segmentation model
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint2.pth.tar'
+=> Start epoch 2  best recall5 94.5%
+PCA parameters path:  /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/pca_params_checkpoint2.h5
+gathering features from rank no.0
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Evaluate on the test set:
+==========Test on Pitts30k=============
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          87.1%
+  top-5          93.5%
+  top-10         95.3%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          74.6%
+  top-5          84.1%
+  top-10         87.0%
+==========################=============
+ Done Testing with /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint2.pth.tar file...
+=======================================
+==========################=============
+ Testing /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint3.pth.tar file...
+=======================================
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torch/distributed/launch.py:180: FutureWarning: The module torch.distributed.launch is deprecated
+and will be removed in future. Use torchrun.
+Note that --use_env is set by default in torchrun.
+If your script expects `--local_rank` argument to be set, please
+change it to read from `os.environ['LOCAL_RANK']` instead. See 
+https://pytorch.org/docs/stable/distributed.html#launch-utility for 
+further instructions
+
+  warnings.warn(
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=4, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint3.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, method='graphvlad', data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', esp_encoder='/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+===> Loading segmentation model
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint3.pth.tar'
+=> Start epoch 3  best recall5 94.7%
+PCA parameters path:  /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/pca_params_checkpoint3.h5
+gathering features from rank no.0
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Evaluate on the test set:
+==========Test on Pitts30k=============
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          86.8%
+  top-5          93.3%
+  top-10         95.3%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          78.4%
+  top-5          86.0%
+  top-10         89.2%
+==========################=============
+ Done Testing with /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint3.pth.tar file...
+=======================================
+==========################=============
+ Testing /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint4.pth.tar file...
+=======================================
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torch/distributed/launch.py:180: FutureWarning: The module torch.distributed.launch is deprecated
+and will be removed in future. Use torchrun.
+Note that --use_env is set by default in torchrun.
+If your script expects `--local_rank` argument to be set, please
+change it to read from `os.environ['LOCAL_RANK']` instead. See 
+https://pytorch.org/docs/stable/distributed.html#launch-utility for 
+further instructions
+
+  warnings.warn(
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=4, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint4.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, method='graphvlad', data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', esp_encoder='/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+===> Loading segmentation model
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint4.pth.tar'
+=> Start epoch 4  best recall5 95.1%
+PCA parameters path:  /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/pca_params_checkpoint4.h5
+gathering features from rank no.0
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Evaluate on the test set:
+==========Test on Pitts30k=============
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          87.0%
+  top-5          93.3%
+  top-10         95.0%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          80.3%
+  top-5          86.7%
+  top-10         90.2%
+==========################=============
+ Done Testing with /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/checkpoint4.pth.tar file...
+=======================================
+==========################=============
+ Testing /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/model_best.pth.tar file...
+=======================================
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torch/distributed/launch.py:180: FutureWarning: The module torch.distributed.launch is deprecated
+and will be removed in future. Use torchrun.
+Note that --use_env is set by default in torchrun.
+If your script expects `--local_rank` argument to be set, please
+change it to read from `os.environ['LOCAL_RANK']` instead. See 
+https://pytorch.org/docs/stable/distributed.html#launch-utility for 
+further instructions
+
+  warnings.warn(
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=4, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/model_best.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, method='graphvlad', data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', esp_encoder='/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+===> Loading segmentation model
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/model_best.pth.tar'
+=> Start epoch 4  best recall5 95.1%
+PCA parameters path:  /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/pca_params_model_best.h5
+Evaluate on the test set:
+==========Test on Pitts30k=============
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          86.8%
+  top-5          93.3%
+  top-10         94.9%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          80.6%
+  top-5          87.3%
+  top-10         88.9%
+==========################=============
+ Done Testing with /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_ind-lr0.0001-03-Apr/model_best.pth.tar file...
+=======================================
+========================================
+saving checkpoints at /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr
+========================================
+==========Starting Training=============
+========================================
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torch/distributed/launch.py:180: FutureWarning: The module torch.distributed.launch is deprecated
+and will be removed in future. Use torchrun.
+Note that --use_env is set by default in torchrun.
+If your script expects `--local_rank` argument to be set, please
+change it to read from `os.environ['LOCAL_RANK']` instead. See 
+https://pytorch.org/docs/stable/distributed.html#launch-utility for 
+further instructions
+
+  warnings.warn(
+Use GPU: 0 for training, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='6010', dataset='pitts', scale='30k', tuple_size=1, test_batch_size=24, cache_size=1000, workers=1, height=480, width=640, neg_num=10, num_clusters=64, neg_pool=1000, arch='vgg16', layers='conv5', nowhiten=False, syncbn=True, sync_gather=True, features=4096, lr=0.0001, momentum=0.9, weight_decay=0.001, loss_type='sare_joint', step_size=5, resume='', vlad=True, eval_step=1, rerank=False, epochs=5, iters=0, seed=43, deterministic=False, print_freq=200, margin=0.1, method='graphvlad', data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data/', logs_dir='/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr', init_dir='/home/leo/usman_ws/datasets/openibl-init', esp_encoder='/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+No. of Clusters:  64
+Loading centroids from /home/leo/usman_ws/datasets/openibl-init/vgg16_pitts_64_desc_cen.hdf5
+===> Loading segmentation model
+Encoder loaded!
+Test the initial model:
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          80.2%
+  top-5          92.6%
+  top-10         95.6%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          80.3%
+  top-5          91.3%
+  top-10         94.1%
+
+ * Finished epoch   0 recall@1: 80.3%  recall@5: 91.3%  recall@10: 94.1%  best@5: 91.3% *
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          81.8%
+  top-5          92.8%
+  top-10         95.5%
+
+ * Finished epoch   1 recall@1: 81.8%  recall@5: 92.8%  recall@10: 95.5%  best@5: 92.8% *
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          85.1%
+  top-5          93.8%
+  top-10         96.1%
+
+ * Finished epoch   2 recall@1: 85.1%  recall@5: 93.8%  recall@10: 96.1%  best@5: 93.8% *
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          84.8%
+  top-5          93.5%
+  top-10         96.2%
+
+ * Finished epoch   3 recall@1: 84.8%  recall@5: 93.5%  recall@10: 96.2%  best@5: 93.8%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          85.2%
+  top-5          94.1%
+  top-10         96.2%
+
+ * Finished epoch   4 recall@1: 85.2%  recall@5: 94.1%  recall@10: 96.2%  best@5: 94.1% *
+
+Performing PCA reduction on the best model:
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/model_best.pth.tar'
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Testing on Pitts30k-test:
+load PCA parameters...
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          86.7%
+  top-5          93.6%
+  top-10         95.4%
+==========Testing=============
+/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint0.pth.tar /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint1.pth.tar /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint2.pth.tar /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint3.pth.tar /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint4.pth.tar /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/model_best.pth.tar
+==============================
+==========################=============
+ Testing /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint0.pth.tar file...
+=======================================
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torch/distributed/launch.py:180: FutureWarning: The module torch.distributed.launch is deprecated
+and will be removed in future. Use torchrun.
+Note that --use_env is set by default in torchrun.
+If your script expects `--local_rank` argument to be set, please
+change it to read from `os.environ['LOCAL_RANK']` instead. See 
+https://pytorch.org/docs/stable/distributed.html#launch-utility for 
+further instructions
+
+  warnings.warn(
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=4, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint0.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, method='graphvlad', data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', esp_encoder='/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+===> Loading segmentation model
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint0.pth.tar'
+=> Start epoch 0  best recall5 91.3%
+PCA parameters path:  /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/pca_params_checkpoint0.h5
+gathering features from rank no.0
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Evaluate on the test set:
+==========Test on Pitts30k=============
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          85.6%
+  top-5          93.2%
+  top-10         94.9%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          74.0%
+  top-5          84.4%
+  top-10         86.7%
+==========################=============
+ Done Testing with /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint0.pth.tar file...
+=======================================
+==========################=============
+ Testing /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint1.pth.tar file...
+=======================================
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torch/distributed/launch.py:180: FutureWarning: The module torch.distributed.launch is deprecated
+and will be removed in future. Use torchrun.
+Note that --use_env is set by default in torchrun.
+If your script expects `--local_rank` argument to be set, please
+change it to read from `os.environ['LOCAL_RANK']` instead. See 
+https://pytorch.org/docs/stable/distributed.html#launch-utility for 
+further instructions
+
+  warnings.warn(
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=4, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint1.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, method='graphvlad', data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', esp_encoder='/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+===> Loading segmentation model
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint1.pth.tar'
+=> Start epoch 1  best recall5 92.8%
+PCA parameters path:  /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/pca_params_checkpoint1.h5
+gathering features from rank no.0
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Evaluate on the test set:
+==========Test on Pitts30k=============
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          86.1%
+  top-5          93.0%
+  top-10         94.7%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          77.1%
+  top-5          84.4%
+  top-10         87.0%
+==========################=============
+ Done Testing with /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint1.pth.tar file...
+=======================================
+==========################=============
+ Testing /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint2.pth.tar file...
+=======================================
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torch/distributed/launch.py:180: FutureWarning: The module torch.distributed.launch is deprecated
+and will be removed in future. Use torchrun.
+Note that --use_env is set by default in torchrun.
+If your script expects `--local_rank` argument to be set, please
+change it to read from `os.environ['LOCAL_RANK']` instead. See 
+https://pytorch.org/docs/stable/distributed.html#launch-utility for 
+further instructions
+
+  warnings.warn(
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=4, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint2.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, method='graphvlad', data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', esp_encoder='/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+===> Loading segmentation model
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint2.pth.tar'
+=> Start epoch 2  best recall5 93.8%
+PCA parameters path:  /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/pca_params_checkpoint2.h5
+gathering features from rank no.0
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Evaluate on the test set:
+==========Test on Pitts30k=============
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          87.2%
+  top-5          93.2%
+  top-10         95.0%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          77.5%
+  top-5          86.7%
+  top-10         88.9%
+==========################=============
+ Done Testing with /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint2.pth.tar file...
+=======================================
+==========################=============
+ Testing /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint3.pth.tar file...
+=======================================
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torch/distributed/launch.py:180: FutureWarning: The module torch.distributed.launch is deprecated
+and will be removed in future. Use torchrun.
+Note that --use_env is set by default in torchrun.
+If your script expects `--local_rank` argument to be set, please
+change it to read from `os.environ['LOCAL_RANK']` instead. See 
+https://pytorch.org/docs/stable/distributed.html#launch-utility for 
+further instructions
+
+  warnings.warn(
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=4, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint3.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, method='graphvlad', data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', esp_encoder='/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+===> Loading segmentation model
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint3.pth.tar'
+=> Start epoch 3  best recall5 93.8%
+PCA parameters path:  /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/pca_params_checkpoint3.h5
+gathering features from rank no.0
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Evaluate on the test set:
+==========Test on Pitts30k=============
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          87.5%
+  top-5          93.2%
+  top-10         95.0%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          74.9%
+  top-5          84.8%
+  top-10         87.0%
+==========################=============
+ Done Testing with /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint3.pth.tar file...
+=======================================
+==========################=============
+ Testing /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint4.pth.tar file...
+=======================================
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torch/distributed/launch.py:180: FutureWarning: The module torch.distributed.launch is deprecated
+and will be removed in future. Use torchrun.
+Note that --use_env is set by default in torchrun.
+If your script expects `--local_rank` argument to be set, please
+change it to read from `os.environ['LOCAL_RANK']` instead. See 
+https://pytorch.org/docs/stable/distributed.html#launch-utility for 
+further instructions
+
+  warnings.warn(
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=4, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint4.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, method='graphvlad', data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', esp_encoder='/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+===> Loading segmentation model
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint4.pth.tar'
+=> Start epoch 4  best recall5 94.1%
+PCA parameters path:  /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/pca_params_checkpoint4.h5
+gathering features from rank no.0
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Evaluate on the test set:
+==========Test on Pitts30k=============
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          86.6%
+  top-5          93.6%
+  top-10         95.3%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          73.3%
+  top-5          83.8%
+  top-10         87.9%
+==========################=============
+ Done Testing with /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/checkpoint4.pth.tar file...
+=======================================
+==========################=============
+ Testing /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/model_best.pth.tar file...
+=======================================
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torch/distributed/launch.py:180: FutureWarning: The module torch.distributed.launch is deprecated
+and will be removed in future. Use torchrun.
+Note that --use_env is set by default in torchrun.
+If your script expects `--local_rank` argument to be set, please
+change it to read from `os.environ['LOCAL_RANK']` instead. See 
+https://pytorch.org/docs/stable/distributed.html#launch-utility for 
+further instructions
+
+  warnings.warn(
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(launcher='pytorch', tcp_port='5017', dataset='pitts', scale='30k', test_batch_size=32, workers=4, height=480, width=640, num_clusters=64, arch='vgg16', nowhiten=False, sync_gather=False, features=4096, resume='/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/model_best.pth.tar', vlad=True, reduction=True, rerank=False, rr_topk=25, lambda_value=0, print_freq=10, method='graphvlad', data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', esp_encoder='/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth', rank=0, ngpus_per_node=1, gpu=0, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/leo/anaconda3/envs/openibl/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+===> Loading segmentation model
+Encoder loaded!
+=> Loaded checkpoint '/home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/model_best.pth.tar'
+=> Start epoch 4  best recall5 94.1%
+PCA parameters path:  /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/pca_params_model_best.h5
+Evaluate on the test set:
+==========Test on Pitts30k=============
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          86.7%
+  top-5          93.6%
+  top-10         95.4%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+load PCA parameters...
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          74.0%
+  top-5          86.7%
+  top-10         89.2%
+==========################=============
+ Done Testing with /home/leo/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.0001-03-Apr/model_best.pth.tar file...

@@ -373,9 +373,9 @@ class SelectRegions(nn.Module):
         if sizeW%2 != 0:
             x = F.pad(input=x, pad=(1,2), mode='constant', value=0)
 
-        # with torch.no_grad():
-        #     b_out = espnet(x)
-        b_out = espnet(x)
+        with torch.no_grad():
+            b_out = espnet(x)
+        # b_out = espnet(x)
 
 
         mask = b_out.max(1)[1]   
