@@ -1,28 +1,39 @@
+'''
+MIT License
+Copyright (c) 2021 Stephen Hausler, Sourav Garg, Ming Xu, Michael Milford and Tobias Fischer
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+We thank Nanne https://github.com/Nanne/pytorch-NetVlad for the original design of the NetVLAD
+class which in itself was based on https://github.com/lyakaap/NetVLAD-pytorch/blob/master/netvlad.py
+In our version we have significantly modified the code to suit our Patch-NetVLAD approach.
+'''
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
+from sklearn.neighbors import NearestNeighbors
+import faiss
 import numpy as np
-import copy
-import code
-#code.interact(local=locals())
-
-# graphsage
 import torch.nn.init as init
-
-# Semantic Segmentation
 from torchvision import transforms
-# import espnet as net
 from .espnet import *
 from torchvision.ops import masks_to_boxes
-
-
-#### graphsage     
 class NeighborAggregator(nn.Module):
     def __init__(self, input_dim, output_dim,
                  use_bias=False, aggr_method="mean"):
         """Aggregate node neighbors
-
         Args:
             input_dim: the dimension of the input feature
             output_dim: the dimension of the output feature
@@ -38,14 +49,11 @@ class NeighborAggregator(nn.Module):
         if self.use_bias:
             self.bias = nn.Parameter(torch.Tensor(self.output_dim))
         self.reset_parameters()
-    
     def reset_parameters(self):
         init.kaiming_uniform_(self.weight)
         if self.use_bias:
             init.zeros_(self.bias)
-
     def forward(self, neighbor_feature):
-       # print(neighbor_feature.shape)
         if self.aggr_method == "mean":
             aggr_neighbor = neighbor_feature.mean(dim=1)
         elif self.aggr_method == "sum":
@@ -55,26 +63,19 @@ class NeighborAggregator(nn.Module):
         else:
             raise ValueError("Unknown aggr type, expected sum, max, or mean, but got {}"
                              .format(self.aggr_method))
-        # print(aggr_neighbor.shape,self.weight.shape)
         neighbor_hidden = torch.matmul(aggr_neighbor, self.weight)
         if self.use_bias:
             neighbor_hidden += self.bias
-
         return neighbor_hidden
-
     def extra_repr(self):
         return 'in_features={}, out_features={}, aggr_method={}'.format(
             self.input_dim, self.output_dim, self.aggr_method)
-    
-#F.pre PReLU
-# prelu
 class SageGCN(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  activation=F.gelu,
                  aggr_neighbor_method="sum",
                  aggr_hidden_method="concat"):
         """SageGCN layer definition
-        # firstworking with mean and concat
         Args:
             input_dim: the dimension of the input feature
             hidden_dim: dimension of hidden layer features,
@@ -96,16 +97,11 @@ class SageGCN(nn.Module):
                                              aggr_method=aggr_neighbor_method)
         self.weight = nn.Parameter(torch.Tensor(input_dim, hidden_dim))
         self.reset_parameters()
-    
     def reset_parameters(self):
         init.kaiming_uniform_(self.weight)
-
     def forward(self, src_node_features, neighbor_node_features):
         neighbor_hidden = self.aggregator(neighbor_node_features)
-        
-        # print('src_node_features', neighbor_node_features.shape, src_node_features.shape, self.weight.shape)
         self_hidden = torch.matmul(src_node_features, self.weight)
-        
         if self.aggr_hidden_method == "sum":
             hidden = self_hidden + neighbor_hidden
         elif self.aggr_hidden_method == "concat":
@@ -117,64 +113,44 @@ class SageGCN(nn.Module):
             return self.activation(hidden)
         else:
             return hidden
-
 class GraphSage(nn.Module):
     def __init__(self, input_dim, hidden_dim,
                  num_neighbors_list):
         super(GraphSage, self).__init__()
-        self.input_dim = input_dim #1433
-        self.hidden_dim = hidden_dim #[128, 7]
-        self.num_neighbors_list = num_neighbors_list #[10, 10]
-        self.num_layers = len(num_neighbors_list)  #2
+        self.input_dim = input_dim 
+        self.hidden_dim = hidden_dim 
+        self.num_neighbors_list = num_neighbors_list 
+        self.num_layers = len(num_neighbors_list)  
         self.gcn = nn.ModuleList()
-        self.gcn.append(SageGCN(input_dim, hidden_dim[0])) # (1433, 128)
+        self.gcn.append(SageGCN(input_dim, hidden_dim[0])) 
         for index in range(0, len(hidden_dim) - 2):
-            self.gcn.append(SageGCN(hidden_dim[index], hidden_dim[index+1])) #128, 7
+            self.gcn.append(SageGCN(hidden_dim[index], hidden_dim[index+1])) 
         self.gcn.append(SageGCN(hidden_dim[-2], hidden_dim[-1], activation=None))
-        
-
-
     def forward(self, node_features_list):
         hidden = node_features_list
-        # code.interact(local=locals())
-        subfeat_size = int(hidden[0].shape[1]/self.input_dim)
+        subfeat_size = int(hidden[0].shape[1]/self.input_dim) 
         gcndim = int(self.input_dim) 
-        
-        # print('subfeat_size ', subfeat_size)
-        # print('  l  ', ' hop  ', '  src_node_features  ', '  neighbor_node_features  ', '  h  ', '    ')
-
         for l in range(self.num_layers):
             next_hidden = []
             gcn = self.gcn[l]
             for hop in range(self.num_layers - l):
-                src_node_features = hidden[hop]
-                src_node_num = len(src_node_features)
-                # print('neighbor_node_features ', hidden[hop + 1].shape  ,' / ',  src_node_num, self.num_neighbors_list[hop], '-1')
+                src_node_features = hidden[hop] 
+                src_node_num = len(src_node_features) 
                 neighbor_node_features = hidden[hop + 1] \
                     .view((src_node_num, self.num_neighbors_list[hop], -1))
-                # print(l,' ', hop  ,'  ',  src_node_features.shape  ,'  ' , neighbor_node_features.shape)
-                
-                # splitting the i/p
-                #h = gcn(src_node_features, neighbor_node_features)
-                for j in range(subfeat_size): 
+                for j in range(subfeat_size):    
                     h_x = gcn(src_node_features[:,j*gcndim:j*gcndim+gcndim], neighbor_node_features[:,:,j*gcndim:j*gcndim+gcndim])
-                    # neighborsFeat = []
                     if (j==0):
-                        h = h_x;
+                        h = h_x; 
                     else:
                         h = torch.concat([h, h_x],1) 
-                        
-                # print("hop", hop,'  ',  h.shape)
                 next_hidden.append(h)
             hidden = next_hidden
-        # print("hidden", ' ',  hidden[0].shape)    
         return hidden[0]
-
     def extra_repr(self):
         return 'in_features={}, num_neighbors_list={}'.format(
             self.input_dim, self.num_neighbors_list
         )
-   
 class NetVLAD(nn.Module):
     """NetVLAD layer implementation"""
 
@@ -234,289 +210,41 @@ class NetVLAD(nn.Module):
         vlad = residual.sum(dim=-1)
 
         return vlad
-
-
 class EmbedNet(nn.Module):
     def __init__(self, base_model, net_vlad):
         super(EmbedNet, self).__init__()
         self.base_model = base_model
         self.net_vlad = net_vlad
-        
-        # Semantic Segmentation
-        self.classes = 20
-        self.p = 2
-        self.q = 8
-        self.encoderFile = "/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth"
-        self.Espnet = ESPNet(classes=self.classes, p=self.p, q = self.q, encoderFile=self.encoderFile)  # Net.Mobile_SegNetDilatedIA_C_stage1(20)
-        # requires_grad=False
-        
-        #graph
-        self.input_dim = 8192 # 16384# 8192
-        self.hidden_dim = [4096,4096]#[8192, 8192]
-        self.num_neighbors_list = [5]#,2]
-        
-        self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
-                  num_neighbors_list=self.num_neighbors_list)
-
     def _init_params(self):
         self.base_model._init_params()
         self.net_vlad._init_params()
-
     def forward(self, x):
-        
-        # fixing for Tokyo
-        sizeH = x.shape[2]
-        sizeW = x.shape[3]
-        
-        if sizeH%2 != 0:
-            x = F.pad(input=x, pad=(0,0,1,2), mode='constant', value=0)
-        if sizeW%2 != 0:
-            x = F.pad(input=x, pad=(1,2), mode='constant', value=0)
-        
-        # createboxes
-        # print("debuggind started")
-        with torch.no_grad():
-            b_out = self.Espnet(x)
-        # b_out = self.Espnet(x)
-        mask = b_out.max(1)[1]   #torch.Size([36, 480, 640])
-        
-        for jj in range(len(mask)):  #batch processing
-            
-            # img_orig = to_tensor(Image.open(image_list[jj]).convert('RGB'))
-            # _, H, W = img_orig.shape
-
-            # bb_x = [[0, 0, round(2*W/3), round(2*H/3)],  [round(W/3),  0,  W, round(2*H/3)], [0, round(H/3), round(2*W/3), H], [round(W/3), round(H/3), W, H]]
-                
-            # patch_mask = torch.zeros((H, W))
-            
-            # rsizet = transforms.Resize((427, 320)) #H W
-            # rsizet = transforms.Resize((round(2*W/3), round(2*H/3))) #H W
-            
-
-             #patch_mask, patch_mask, patch_mask, patch_mask]
-
-            # single_label_mask = relabel_merge(mask[jj])    # single image mask
-            # all the labels to single slides
-            single_label_mask = mask[jj]
-            
-            # obj_ids = torch.unique(single_label_mask)
-            obj_ids, obj_i = single_label_mask.unique(return_counts=True)
-            obj_ids = obj_ids[1:] 
-            obj_i = obj_i[1:]
-            #torch.Size([19])
-            
-            masks = single_label_mask == obj_ids[:, None, None]
-            boxes_t = masks_to_boxes(masks.to(torch.float32))
-            # print ("boxes-lenght:", len(boxes_t))
-
-            # Sort the boxes                
-            # rr = ((bb_x[:, 2])-(bb_x[:, 0]))*((bb_x[:, 3])-(bb_x[:, 1]))
-            # rr_boxes = torch.argsort(rr,descending=True) # (decending order)
-            
-            rr_boxes = torch.argsort(torch.argsort(obj_i,descending=True)) # (decending order)
-
-            
-            # rr_boxes = torch.argsort(rr) # (decending order)
-
-            # boxes = (boxes_t/16).cpu().numpy().astype(int)
-            
-            boxes = boxes_t/16
-        
-        
-        # for jj in range(len(mask)):  #batch processing
-        
-        #     single_label_mask = relabel_merge(mask[jj])    # single image mask
-        #     # single_label_mask = mask[jj]
-        #     obj_ids = torch.unique(single_label_mask)
-        #     obj_ids = obj_ids[1:]      #torch.Size([19])
-        #     masks = single_label_mask == obj_ids[:, None, None]
-        #     boxes = masks_to_boxes(masks.to(torch.float32))
-        #     # boxes = masks_to_boxes(masks.to(torch.float32))/16
-        #     boxes_s = (boxes/16).cpu().numpy().astype(int)
-        #     #append boxes
-        #     print (len(boxes_s))
-        #     code.interact(local=locals())
-
-            
-        _, _, H, W = x.shape
-        patch_mask = torch.zeros((H, W)).cuda()
-        
-        # VGG 
-        pool_x, x = self.base_model(x)   
-        
-        N, C, H, W = x.shape
-
-        
-        # img_orig = to_tensor(Image.open(image_list[jj]).convert('RGB'))
-        # _, H, W = img_orig.shape
-
-        bb_x = [[int(W/4), int(H/4), int(3*W/4),int(3*H/4)],
-                [0, 0, int(W/3),H], 
-                [0, 0, W,int(H/3)], 
-                [int(2*W/3), 0, W,H], 
-                [0, int(2*H/3), W,H]]
-
-        # bb_x = [[0, 0, round(2*W/3), round(2*H/3)],  [round(W/3),  0,  W, round(2*H/3)], [0, round(H/3), round(2*W/3), H], [round(W/3), round(H/3), W, H]]
-            
-        # patch_mask = torch.zeros((H, W))
-        NB = 5
-        
-        graph_nodes = torch.zeros(N,NB,C,H,W).cuda()
-        rsizet = transforms.Resize((H,W)) #H W
-
-        # rsizet = transforms.Resize((427, 320)) #H W
-        # rsizet = transforms.Resize((round(2*W/3), round(2*H/3))) #H W
-        
-        for Nx in range(N):    
-            # img_stk = x[Nx].unsqueeze(0)
-            img_nodes = []
-            # print(Nx)
-            for idx in range(len(boxes)):
-                for b_idx in range(len(rr_boxes)):
-                    # print(idx, " ", b_idx)
-                    # code.interact(local=locals())
-
-                    if idx == rr_boxes[b_idx] and obj_i[b_idx] > 10000 and len(img_nodes) < NB-2:
-                        # print("found match")
-                        # print(idx, " ", b_idx)
-                        # print (img_nodes.shape)
-                        
-                        patch_mask = patch_mask*0
-
-                        # label obj_ids[rr_boxes[b_idx]]
-                        patch_mask[single_label_mask == obj_ids[b_idx]] = 1
-                        # box boxes[rr_boxes[b_idx]]
-
-                        # patch_mask = patch_mask.unsqueeze(0)
-                        patch_maskr = rsizet(patch_mask.unsqueeze(0))
-                        
-                        patch_maskr = patch_maskr.squeeze(0)
-
-                        boxesd = boxes.to(torch.long)
-                        x_min,y_min,x_max,y_max = boxesd[b_idx]
-                    
-                        # zero_img = patch_maskr[y_min:y_max,x_min:x_max]
-                    
-                        # imgg = img[0].permute(1, 2, 0).numpy().astype(int)
-                        c_img = x[Nx][:, y_min:y_max,x_min:x_max]
-                        
-                        # increase dimension
-                        # mmask = torch.stack((zero_img,)*512, axis=0)
-                        
-
-                        # Multiply arrays
-                        # code.interact(local=locals())
-                        # resultant = rsizet(c_img*mmask)
-                        resultant = rsizet(c_img)
- 
-                        img_nodes.append(resultant.unsqueeze(0))
-                        
-                        
-                        # img_nodes = torch.stack((img_nodes,resultant.unsqueeze(0)), 0)
-                        # code.interact(local=locals())
-                        # img_nodes.append(resultant.unsqueeze(0))
-                        
-
-                        # imgg = torch.permute(resultant, (1, 2, 0)).cpu().numpy()[0]
-                        # aa = img_orig.numpy()
-                        # imgg = to_image(aa)
-                        
-                        # cv2.imwrite(args.savedir + os.sep + 'img_'+str(idx)+'_' + name.replace(args.img_extn, 'png'), aa)
-                        # save_image(resultant, args.savedir + os.sep + 'img_'+str(idx)+'_' + name.replace(args.img_extn, 'png'))
-                        break                    
-            
-            # check the size
-            # print("first: ", len(img_nodes))
-            # code.interact(local=locals())
-            if len(img_nodes) < NB:
-                for i in range(len(bb_x)-len(img_nodes)):
-                    x_cropped =  x[Nx][: ,bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
-                    img_nodes.append(rsizet(x_cropped.unsqueeze(0)))
-                    
-                
-        
-            aa = torch.stack(img_nodes,1)
-            # code.interact(local=locals())
-            graph_nodes[Nx] = aa[0]
-            # graph_nodes.append(torch.stack(img_nodes,1))
-            # print("total: ", len(img_nodes))
-        # code.interact(local=locals())
-        
-        
-        node_features_list = []
-        neighborsFeat = []
-
-        x_cropped = graph_nodes.view(NB,N,C,H,W)
-        # xx = x.unsqueeze(0)
-        # Append root node
-        # print(x_cropped.shape)
-        # print(x.unsqueeze(0).shape)
-        # code.interact(local=locals())
-        x_cropped = torch.cat((graph_nodes.view(NB,N,C,H,W), x.unsqueeze(0)))
-        # x_call = x_cropped.append(x.unsqueeze(0))
-         
-        for i in range(NB+1):
-            
-            
-            vlad_x = self.net_vlad(x_cropped[i])
-            
-            # [IMPORTANT] normalize
-            vlad_x = F.normalize(vlad_x, p=2, dim=2)  # intra-normalization
-            vlad_x = vlad_x.view(x.size(0), -1)  # flatten
-            vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
-            # aa = vlad_x.shape #32, 32768
-            #vlad_x = vlad_x.view(-1,8192) # 8192
-            # print(i)
-            
-            neighborsFeat.append(vlad_x)
-
-        #code.interact(local=locals())
-        node_features_list.append(neighborsFeat[NB])
-        node_features_list.append(torch.concat(neighborsFeat[0:NB],0))
-        # code.interact(local=locals())
-        
-        
-        
-        neighborsFeat = []
-        #vlad_x = []
-        
-        ## Graphsage
-        gvlad = self.graph(node_features_list)
-
-        gvlad = torch.add(gvlad,vlad_x)
-
-        # gvlad = F.normalize(gvlad, p=2, dim=1)  # L2 normalize
-        
-        return pool_x, gvlad.view(-1,32768)
-
+        pool_x, x = self.base_model(x)
+        vlad_x = self.net_vlad(x)
+        vlad_x = F.normalize(vlad_x, p=2, dim=2)  
+        vlad_x = vlad_x.view(x.size(0), -1)  
+        vlad_x = F.normalize(vlad_x, p=2, dim=1)  
+        return pool_x, vlad_x
 class EmbedNetPCA(nn.Module):
     def __init__(self, base_model, net_vlad, dim=4096):
         super(EmbedNetPCA, self).__init__()
         self.base_model = base_model
         self.net_vlad = net_vlad
-        self.pca_layer = nn.Conv2d(net_vlad.num_clusters*net_vlad.dim, dim, 1, stride=1, padding=0)
-
+        self.pca_layer = nn.Conv2d(net_vlad.centroids.shape[0]*net_vlad.centroids.shape[1], dim, 1, stride=1, padding=0)
     def _init_params(self):
         self.base_model._init_params()
         self.net_vlad._init_params()
-
     def forward(self, x):
         _, x = self.base_model(x)
         vlad_x = self.net_vlad(x)
-
-        # [IMPORTANT] normalize
-        vlad_x = F.normalize(vlad_x, p=2, dim=2)  # intra-normalization
-        vlad_x = vlad_x.view(x.size(0), -1)  # flatten
-        vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
-
-        # reduction
+        vlad_x = F.normalize(vlad_x, p=2, dim=2)  
+        vlad_x = vlad_x.view(x.size(0), -1)  
+        vlad_x = F.normalize(vlad_x, p=2, dim=1)  
         N, D = vlad_x.size()
         vlad_x = vlad_x.view(N, D, 1, 1)
         vlad_x = self.pca_layer(vlad_x).view(N, -1)
-        vlad_x = F.normalize(vlad_x, p=2, dim=-1)  # L2 normalize
-
+        vlad_x = F.normalize(vlad_x, p=2, dim=-1)  
         return vlad_x
-
 class EmbedRegionNet(nn.Module):
     def __init__(self, base_model, net_vlad, tuple_size=1):
         super(EmbedRegionNet, self).__init__()
@@ -602,7 +330,7 @@ class EmbedRegionNet(nn.Module):
         return self._compute_region_sim(anchors, pairs)
 
     def forward(self, x):
-        pool_x, x = self.base_model(x)
+        pool_x, _, x = self.base_model(x)
 
         if (not self.training):
             vlad_x = self.net_vlad(x)
@@ -613,3 +341,140 @@ class EmbedRegionNet(nn.Module):
             return pool_x, vlad_x
 
         return self._forward_train(x)
+
+class applyGNN(nn.Module):
+    def __init__(self):
+        super(applyGNN, self).__init__()
+        self.input_dim = 8192 
+        self.hidden_dim = [4096,4096]
+        self.num_neighbors_list = [5]
+        self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
+                  num_neighbors_list=self.num_neighbors_list)
+    def forward(self, x):
+        gvlad = self.graph(x)
+        return gvlad
+class SelectRegions(nn.Module):
+    def __init__(self):
+        super(SelectRegions, self).__init__()
+    def forward(self, x, base_model, espnet):
+        sizeH = x.shape[2]
+        sizeW = x.shape[3]
+        if sizeH%2 != 0:
+            x = F.pad(input=x, pad=(0,0,1,2), mode='constant', value=0)
+        if sizeW%2 != 0:
+            x = F.pad(input=x, pad=(1,2), mode='constant', value=0)
+
+        with torch.no_grad():
+            b_out = espnet(x)
+        # b_out = espnet(x)
+
+
+        mask = b_out.max(1)[1]   
+        for jj in range(len(mask)):  
+            single_label_mask = mask[jj]
+            obj_ids, obj_i = single_label_mask.unique(return_counts=True)
+            obj_ids = obj_ids[1:] 
+            obj_i = obj_i[1:]
+            masks = single_label_mask == obj_ids[:, None, None]
+            boxes_t = masks_to_boxes(masks.to(torch.float32))
+            rr_boxes = torch.argsort(torch.argsort(obj_i,descending=True)) 
+            boxes = boxes_t/16
+        _, _, H, W = x.shape
+        patch_mask = torch.zeros((H, W)).cuda()
+        pool_x, x = base_model(x)   
+        N, C, H, W = x.shape
+        bb_x = [[int(W/4), int(H/4), int(3*W/4),int(3*H/4)],
+                [0, 0, int(W/3),H], 
+                [0, 0, W,int(H/3)], 
+                [int(2*W/3), 0, W,H], 
+                [0, int(2*H/3), W,H]]
+        NB = 5
+        graph_nodes = torch.zeros(N,NB,C,H,W).cuda()
+        rsizet = transforms.Resize((H,W)) 
+        for Nx in range(N):    
+            img_nodes = []
+            for idx in range(len(boxes)):
+                for b_idx in range(len(rr_boxes)):
+                    if idx == rr_boxes[b_idx] and obj_i[b_idx] > 10000 and len(img_nodes) < NB-2:
+                        patch_mask = patch_mask*0
+                        patch_mask[single_label_mask == obj_ids[b_idx]] = 1
+                        patch_maskr = rsizet(patch_mask.unsqueeze(0))
+                        patch_maskr = patch_maskr.squeeze(0)
+                        boxesd = boxes.to(torch.long)
+                        x_min,y_min,x_max,y_max = boxesd[b_idx]
+                        c_img = x[Nx][:, y_min:y_max,x_min:x_max]
+                        resultant = rsizet(c_img)
+                        img_nodes.append(resultant.unsqueeze(0))
+                        break                    
+            if len(img_nodes) < NB:
+                for i in range(len(bb_x)-len(img_nodes)):
+                    x_cropped =  x[Nx][: ,bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
+                    img_nodes.append(rsizet(x_cropped.unsqueeze(0)))
+            aa = torch.stack(img_nodes,1)
+            graph_nodes[Nx] = aa[0]
+        x_cropped = graph_nodes.view(NB,N,C,H,W)
+        x_cropped = torch.cat((graph_nodes.view(NB,N,C,H,W), x.unsqueeze(0)))
+        del graph_nodes
+        return pool_x, NB, x.size(0), x_cropped
+class GraphVLAD(nn.Module):
+    def __init__(self, base_model, net_vlad, esp_net):
+        super(GraphVLAD, self).__init__()
+        self.base_model = base_model
+        self.esp_net = esp_net
+        self.net_vlad = net_vlad
+        self.SelectRegions = SelectRegions()
+        self.applyGNN = applyGNN()
+    def _init_params(self):
+        self.base_model._init_params()
+        self.net_vlad._init_params()
+    def forward(self, x):
+        node_features_list = []
+        neighborsFeat = []
+        pool_x, NB, x_size, x_cropped = self.SelectRegions(x, self.base_model, self.esp_net)
+        for i in range(NB+1):
+            vlad_x = self.net_vlad(x_cropped[i])
+            vlad_x = F.normalize(vlad_x, p=2, dim=2)  
+            vlad_x = vlad_x.view(x_size, -1)  
+            vlad_x = F.normalize(vlad_x, p=2, dim=1)  
+            neighborsFeat.append(vlad_x)
+        node_features_list.append(neighborsFeat[NB])
+        node_features_list.append(torch.concat(neighborsFeat[0:NB],0))
+        neighborsFeat = []
+        gvlad = self.applyGNN(node_features_list)
+        gvlad = torch.add(gvlad,vlad_x)
+        # gvlad = gvlad.view(-1,vlad_x.shape[1])
+        return pool_x, gvlad.view(-1,32768)
+class GraphVLADPCA(nn.Module):
+    def __init__(self, base_model, net_vlad, esp_net, dim=4096):
+        super(GraphVLADPCA, self).__init__()
+        self.base_model = base_model
+        self.esp_net = esp_net
+        self.net_vlad = net_vlad
+        self.SelectRegions = SelectRegions()
+        self.applyGNN = applyGNN()
+        self.pca_layer = nn.Conv2d(net_vlad.centroids.shape[0]*net_vlad.centroids.shape[1], dim, 1, stride=1, padding=0)
+    def _init_params(self):
+        self.base_model._init_params()
+        self.net_vlad._init_params()
+    def forward(self, x):
+        node_features_list = []
+        neighborsFeat = []
+        NB, x_size, x_cropped = self.SelectRegions(x, self.base_model, self.esp_net)
+        for i in range(NB+1):
+            vlad_x = self.net_vlad(x_cropped[i])
+            vlad_x = F.normalize(vlad_x, p=2, dim=2)  
+            vlad_x = vlad_x.view(x_size, -1)  
+            vlad_x = F.normalize(vlad_x, p=2, dim=1)  
+            neighborsFeat.append(vlad_x)
+        node_features_list.append(neighborsFeat[NB])
+        node_features_list.append(torch.concat(neighborsFeat[0:NB],0))
+        neighborsFeat = []
+        gvlad = self.applyGNN(node_features_list)
+        gvlad = torch.add(gvlad,vlad_x)        
+        gvlad = gvlad.view(-1,vlad_x.shape[1])
+        N, D = gvlad.size()
+        gvlad = gvlad.view(N, D, 1, 1)
+        gvlad = self.pca_layer(gvlad).view(N, -1)
+        gvlad = F.normalize(gvlad, p=2, dim=-1)  
+        return gvlad
+    

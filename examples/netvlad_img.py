@@ -32,6 +32,14 @@ from ibl.utils.dist_utils import init_dist, synchronize, convert_sync_bn
 
 start_epoch = best_recall5 = 0
 
+
+def get_segmentation_model(encoderFile):
+    classes = 20
+    p = 2
+    q = 8
+    model = models.create('espnet', classes=classes, p=p, q=q, encoderFile=encoderFile)
+    return model
+
 def get_data(args, iters):
     root = osp.join(args.data_dir, args.dataset)
     dataset = datasets.create(args.dataset, root, scale=args.scale)
@@ -46,7 +54,6 @@ def get_data(args, iters):
                                         transform=train_transformer),
                             batch_size=args.tuple_size, num_workers=args.workers, sampler=sampler,
                             shuffle=False, pin_memory=True, drop_last=True), length=iters)
-
     train_extract_loader = DataLoader(
         Preprocessor(sorted(list(set(dataset.q_train) | set(dataset.db_train))),
                      root=dataset.images_dir, transform=test_transformer),
@@ -83,19 +90,33 @@ def update_sampler(sampler, model, loader, query, gallery, sub_set, vlad=True, g
     del distmat
 
 def get_model(args):
-    base_model = models.create(args.arch, train_layers=args.layers, matconvnet='logs/vd16_offtheshelf_conv5_3_max.pth')
+    base_model = models.create(args.arch, train_layers=args.layers, matconvnet=osp.join(args.init_dir, 'vd16_offtheshelf_conv5_3_max.pth'))
     if args.vlad:
+        print("No. of Clusters: ", args.num_clusters)
+        # pool_layer = models.create('netvlad', dim=base_model.feature_dim, num_clusters=args.num_clusters, vladv2=False)
         pool_layer = models.create('netvlad', dim=base_model.feature_dim)
+
+        
         # vgg16_pitts_64_desc_cen_mat.hdf5
         initcache = osp.join(args.init_dir, args.arch + '_' + args.dataset + '_' + str(args.num_clusters) + '_desc_cen.hdf5')
         if (dist.get_rank()==0):
             print ('Loading centroids from {}'.format(initcache))
         with h5py.File(initcache, mode='r') as h5:
+            # clsts = h5.get("centroids")[...]
+            # traindescs = h5.get("descriptors")[...]
+            # pool_layer.init_params(clsts, traindescs)
+            # del clsts, traindescs
             pool_layer.clsts = h5.get("centroids")[...]
             pool_layer.traindescs = h5.get("descriptors")[...]
             pool_layer._init_params()
 
-        model = models.create('embednet', base_model, pool_layer)
+        if(args.method=='netvlad'):
+            model = models.create('embednet', base_model, pool_layer)   
+        elif(args.method=='graphvlad'):
+            print('===> Loading segmentation model')
+            segmentation_model = get_segmentation_model(args.esp_encoder)
+            model = models.create('graphvlad', base_model, pool_layer, segmentation_model)
+
     else:
         model = base_model
 
@@ -283,6 +304,7 @@ if __name__ == '__main__':
     parser.add_argument('--deterministic', action='store_true')
     parser.add_argument('--print-freq', type=int, default=200)
     parser.add_argument('--margin', type=float, default=0.1, help='margin for the triplet loss with batch hard')
+    parser.add_argument('--method', type=str, default='netvlad', choices=['netvlad', 'graphvlad'])
     # path
     working_dir = osp.dirname(osp.abspath(__file__))
     parser.add_argument('--data-dir', type=str, metavar='PATH',
@@ -291,4 +313,5 @@ if __name__ == '__main__':
                         default=osp.join(working_dir, 'logs'))
     parser.add_argument('--init-dir', type=str, metavar='PATH',
                         default=osp.join(working_dir, '..', 'logs'))
+    parser.add_argument('--esp-encoder', type=str, default='', help='Path to ESPNet encoder file')
     main()

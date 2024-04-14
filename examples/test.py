@@ -55,11 +55,24 @@ def get_data(args):
 
     return dataset, pitts_train, train_extract_loader, test_loader_q, test_loader_db
 
+def get_segmentation_model(encoderFile):
+    classes = 20
+    p = 2
+    q = 8
+    model = models.create('espnet', classes=classes, p=p, q=q, encoderFile=encoderFile)
+    return model
+
 def get_model(args):
     base_model = models.create(args.arch)
+
     if args.vlad:
         pool_layer = models.create('netvlad', dim=base_model.feature_dim)
-        model = models.create('embednet', base_model, pool_layer)
+        if(args.method=='netvlad'):
+            model = models.create('embednet', base_model, pool_layer)   
+        elif(args.method=='graphvlad'):
+            print('===> Loading segmentation model')
+            segmentation_model = get_segmentation_model(args.esp_encoder)
+            model = models.create('graphvlad', base_model, pool_layer, segmentation_model)
     else:
         model = base_model
 
@@ -164,10 +177,14 @@ if __name__ == '__main__':
     parser.add_argument('--rr-topk', type=int, default=25)
     parser.add_argument('--lambda-value', type=float, default=0)
     parser.add_argument('--print-freq', type=int, default=10)
+    parser.add_argument('--method', type=str, default='netvlad', choices=['netvlad', 'graphvlad'])
+
     # path
     working_dir = osp.dirname(osp.abspath(__file__))
     parser.add_argument('--data-dir', type=str, metavar='PATH',
                         default=osp.join(working_dir, 'data'))
     parser.add_argument('--logs-dir', type=str, metavar='PATH',
                         default=osp.join(working_dir, 'logs'))
+    parser.add_argument('--esp-encoder', type=str, help='Path to the ESPNet encoder')
+
     main()
