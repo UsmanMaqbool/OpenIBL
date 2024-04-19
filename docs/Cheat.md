@@ -68,9 +68,300 @@ Location: /home/m.maqboolbhutta/usman_ws/models/openibl/vgg16-graphvlad-sare_ind
 
 ```
 
+## Debug
+
+### PC
+- GraphVLAD Train
+    ```json
+    {
+        // Use IntelliSense to learn about possible attributes.
+        // Hover to view descriptions of existing attributes.
+        // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "OpenIBL Train Debug",
+                "type": "python",
+                "request": "launch",
+                "program": "/home/leo/anaconda3/envs/openibl/lib/python3.8/site-packages/torch/distributed/launch.py",
+                "console": "integratedTerminal",
+                "args": [
+                    "--nproc_per_node=1 ",
+                    "--master_port=6010",
+                    "--use_env",
+                    "examples/netvlad_img.py",
+                    "--launcher=pytorch",
+                    "--logs-dir=/home/leo/usman_ws/models/openibl/debug", 
+                    "--data-dir=/home/leo/usman_ws/codes/OpenIBL/examples/data/",
+                    "--init-dir=/home/leo/usman_ws/datasets/openibl-init",
+                    "--esp-encoder=/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth",
+                    "--method=graphvlad",
+                ],
+            }
+        ]
+    }
+    ```
+- GraphVLAD Test
+    ```json
+    {
+        // Use IntelliSense to learn about possible attributes.
+        // Hover to view descriptions of existing attributes.
+        // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "Python: Module",
+                "type": "python",
+                "request": "launch",
+                "program": "/home/leo/anaconda3/lib/python3.1/site-packages/torch/distributed/launch.py",
+                "console": "integratedTerminal",
+                "args": [
+                    "--nproc_per_node=1 ",
+                    "--master_port=6010",
+                    "--use_env",
+                    "examples/test.py",
+                    "--vlad",
+                    "--reduction",
+                    "--resume=/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-07-Nov/checkpoint0.pth.tar",
+                ],
+            }
+        ]
+    }
+    ```
+
+- Extra
+
+    ```json
+    {
+        "version": "0.2.0",
+        "configurations": [
+        {
+            "name": "Python: Train Baseline Dist",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/netvlad_img.py",
+            "console": "integratedTerminal",
+            "env": {
+            "PYTHON": "python",
+            "GPUS": "1",
+            "NUMCLUSTER": "16",
+            "LAYERS": "conv5",
+            "LR": "0.001",
+            "INIT_DIR": "/home/leo/usman_ws/datasets/openibl-init",
+            "ESP_ENCODER": "/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth",
+            "DATASET_DIR": "/home/leo/usman_ws/codes/OpenIBL/examples/data/"
+            },
+            "args": [
+            "--nproc_per_node=1 ",
+            "--master_port=6010",
+            "--use_env",
+            "-d", "${input:dataset}",
+            "--scale", "${input:scale}",
+            "-a", "${input:arch}",
+            "--layers", "conv5",
+            "--vlad",
+            "--syncbn",
+            "--sync-gather",
+            "--width", "640",
+            "--height", "480",
+            "--tuple-size", "1",
+            "-j", "1",
+            "--neg-num", "10",
+            "--test-batch-size", "32",
+            "--margin", "0.1",
+            "--lr", "0.001",
+            "--weight-decay", "0.001",
+            "--loss-type", "${input:loss}",
+            "--eval-step", "1",
+            "--epochs", "5",
+            "--step-size", "5",
+            "--cache-size", "1000",
+            "--logs-dir", "/home/leo/usman_ws/models/openibl/vgg16-graphvlad-triplet-pitts30k-lr0.001-tuple1-11-Jun/",
+            "--data-dir", "/home/leo/usman_ws/codes/OpenIBL/examples/data/",
+            "--init-dir", "/home/leo/usman_ws/datasets/openibl-init",
+            "--esp-encoder", "/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth",
+            "--method", "${input:method}"
+            ],
+            "python": "${env:PYTHON}"
+        }
+        ],
+        "inputs": [
+        {
+            "id": "method",
+            "type": "promptString",
+            "description": "Enter the method",
+            "default": "graphvlad"
+        },
+        {
+            "id": "loss",
+            "type": "promptString",
+            "description": "Enter the loss type",
+            "default": "triplet"
+        },
+        {
+            "id": "arch",
+            "type": "promptString",
+            "description": "Enter the architecture",
+            "default": "vgg16"
+        },
+        {
+            "id": "dataset",
+            "type": "promptString",
+            "description": "Enter the dataset",
+            "default": "pitts"
+        },
+        {
+            "id": "scale",
+            "type": "promptString",
+            "description": "Enter the scale",
+            "default": "30k"
+        }
+        ]
+    }
+    
+
+    // {
+    //     // Use IntelliSense to learn about possible attributes.
+    //     // Hover to view descriptions of existing attributes.
+    //     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    //     "version": "0.2.0",
+    //     "configurations": [
+
+    //         {
+    //             "name": "Python: Module",
+    //             "type": "python",
+    //             "request": "launch",
+    //             "program": "/home/leo/anaconda3/lib/python3.1/site-packages/torch/distributed/launch.py",
+    //             "console": "integratedTerminal",
+    //             "args": [
+    //                 "--nproc_per_node=1 ",
+    //                 "--master_port=6010",
+    //                 "--use_env",
+    //                 "examples/test.py",
+    //                 "--vlad",
+    //                 "--reduction",
+    //                 "--resume=/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-triplet-lr0.0001-tuple1-07-Nov/checkpoint0.pth.tar",
+    //             ],
+    //         }
+    //     ]
+    // }
+    //Train
+    // {
+    //     // Use IntelliSense to learn about possible attributes.
+    //     // Hover to view descriptions of existing attributes.
+    //     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    //     "version": "0.2.0",
+    //     "configurations": [
+    //         {
+    //             "name": "Debugging Train Baseline Dist",
+    //             "type": "python",
+    //             "request": "launch",
+    //             "program": "/home/leo/anaconda3/envs/openibl/lib/python3.8/site-packages/torch/distributed/launch.py",
+    //             "console": "integratedTerminal",
+    //             "args": [
+    //                 "-m=torch.distributed.launch",
+    //                 "--nproc_per_node=1 ",
+    //                 "--master_port=6010",
+    //                 "--use_env",
+    //                 "examples/netvlad_img.py",
+    //                 "-d=pitts",
+    //                 "--scale=30k",
+    //                 "-a ${ARCH}",
+    //                 "--layers ${LAYERS}",
+    //                 "--vlad",
+    //                 "--syncbn",
+    //                 "--sync-gather",
+    //                 "--width 640",
+    //                 "--height 480",
+    //                 "--tuple-size=1",
+    //                 "-j=1",
+    //                 "--neg-num=10",
+    //                 "--test-batch-size=32",
+    //                 "--margin=0.1",
+    //                 "--lr=${LR}",
+    //                 "--weight-decay=0.001",
+    //                 "--loss-type=${LOSS}",          
+    //                 "--eval-step=1",
+    //                 "--epochs=5",
+    //                 "--step-size=5",
+    //                 "--cache-size=1000",
+    //                 "--logs-dir=/home/leo/usman_ws/models/openibl/debug/",
+    //                 "--data-dir=/home/leo/usman_ws/codes/OpenIBL/examples/data/",
+    //                 "--init-dir=/home/leo/usman_ws/datasets/openibl-init",
+    //                 "--esp-encoder=/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth",
+    //                 "--method=graphvlad",
+    //             ],
+    //             "stopOnEntry": true,
+    //             "debugOptions": [
+    //                 "WaitOnAbnormalExit",
+    //                 "WaitOnNormalExit",
+    //                 "RedirectOutput"
+    //             ]
+    //         }
+    //     ]
+    // }
 
 
-### Debug
+    "-d=pitts",
+    "--launcher=pytorch",
+    "--scale=30k",
+    "-a=vgg16",
+    "--vlad",
+    "--syncbn",
+    "--sync-gather",
+    "--width=640",
+    "--height=480",
+    "--tuple-size=1",
+    "-j=1",
+    "--neg-num=10",
+    "--test-batch-size=32",
+    "--margin=0.1",
+    "--lr=0.001",
+    "--weight-decay=0.001",
+    "--loss-type=triplet",          
+    "--eval-step=1",
+    "--epochs=5",
+    "--step-size=5",
+    "--cache-size=1000",
+    "--logs-dir=/home/leo/usman_ws/models/openibl/debug/",
+    "--data-dir=/home/leo/usman_ws/codes/OpenIBL/examples/data/",
+    "--init-dir=/home/leo/usman_ws/datasets/openibl-init",
+    "--esp-encoder=/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth",
+    "--method=graphvlad",
+    ```
+
+
+- SFRS
+    ```json
+    {
+        // Use IntelliSense to learn about possible attributes.
+        // Hover to view descriptions of existing attributes.
+        // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "OpenIBL Train Debug",
+                "type": "python",
+                "request": "launch",
+                "program": "/home/leo/anaconda3/envs/openibl/lib/python3.8/site-packages/torch/distributed/launch.py",
+                "console": "integratedTerminal",
+                "args": [
+                    "--nproc_per_node=1 ",
+                    "--master_port=6010",
+                    "--use_env",
+                    "examples/netvlad_img_sfrs.py",
+                    "--launcher=pytorch",
+                    "--init-dir=/home/leo/usman_ws/datasets/openibl-init",
+                    "--esp-encoder=/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth"
+                ],
+            }
+        ]
+    }
+
+
+    ```
+
+### Hipergator
 **Interactive:**
 ```sh
 srun --partition=gpu --gpus-per-node=a100:4 --cpus-per-task=24 --pty bash

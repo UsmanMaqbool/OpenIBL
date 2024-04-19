@@ -37,7 +37,7 @@ class VGG(nn.Module):
         # Construct base (pretrained) resnet
         if depth not in VGG.__factory:
             raise KeyError("Unsupported depth:", depth)
-        vgg = VGG.__factory[depth](weights=pretrained)
+        vgg = VGG.__factory[depth](pretrained=pretrained)
         layers = list(vgg.features.children())[:-2]
         self.base = nn.Sequential(*layers) # capture only feature part and remove last relu and maxpool
         self.gap = nn.AdaptiveMaxPool2d(1)
