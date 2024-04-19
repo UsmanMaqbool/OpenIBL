@@ -68,7 +68,8 @@ def get_model(args):
         if(args.method=='netvlad'):
             model = models.create('embednet', base_model, pool_layer)   
         elif(args.method=='graphvlad'):
-            print('===> Loading segmentation model')
+            if (args.rank==0):
+                print('===> Loading segmentation model')
             segmentation_model = get_segmentation_model(args.esp_encoder)
             model = models.create('graphvlad', base_model, pool_layer, segmentation_model)
     else:
@@ -117,8 +118,12 @@ def main_worker(args):
     # Evaluator
     evaluator = Evaluator(model)
     if (args.reduction):
-        pca_parameters_path = osp.join(osp.dirname(args.resume), 'pca_params_'+osp.basename(args.resume).split('.')[0]+'.h5')
-        print("PCA parameters path: ", pca_parameters_path)
+        if (args.pca_path is not None):
+            pca_parameters_path = args.pca_path
+        else:
+            pca_parameters_path = osp.join(osp.dirname(args.resume), 'pca_params_'+osp.basename(args.resume).split('.')[0]+'.h5')
+        if (args.rank==0):
+            print("PCA parameters path: ", pca_parameters_path)
         pca = PCA(args.features, (not args.nowhiten), pca_parameters_path)
         if (not osp.isfile(pca_parameters_path)):
             dict_f = extract_features(model, train_extract_loader, pitts_train,
@@ -204,5 +209,5 @@ if __name__ == '__main__':
     parser.add_argument('--logs-dir', type=str, metavar='PATH',
                         default=osp.join(working_dir, 'logs'))
     parser.add_argument('--esp-encoder', type=str, help='Path to the ESPNet encoder')
-
+    parser.add_argument('--pca-path', type=str, help='Path to the PCA parameters', default=None)
     main()
