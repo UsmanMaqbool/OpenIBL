@@ -94,11 +94,14 @@ def get_model(args):
     if args.vlad:
         print("No. of Clusters: ", args.num_clusters)
         # pool_layer = models.create('netvlad', dim=base_model.feature_dim, num_clusters=args.num_clusters, vladv2=False)
-        pool_layer = models.create('netvlad', dim=base_model.feature_dim)
+        pool_layer = models.create('netvlad', dim=base_model.feature_dim, num_clusters=args.num_clusters)
 
         
         # vgg16_pitts_64_desc_cen_mat.hdf5
-        initcache = osp.join(args.init_dir, args.arch + '_' + args.dataset + '_' + str(args.num_clusters) + '_desc_cen.hdf5')
+        # initcache = osp.join(args.init_dir, args.arch + '_' + args.dataset + '_' + str(args.num_clusters) + '_desc_cen.hdf5')
+        initcache = osp.join(args.init_dir,'centroids', args.arch + '_mapillary_' + str(args.num_clusters) + '_desc_cen.hdf5')
+
+        # /home/m.maqboolbhutta/usman_ws/datasets/openibl-init/centroids/vgg16_mapillary_16_desc_cen.hdf5
         if (dist.get_rank()==0):
             print ('Loading centroids from {}'.format(initcache))
         with h5py.File(initcache, mode='r') as h5:

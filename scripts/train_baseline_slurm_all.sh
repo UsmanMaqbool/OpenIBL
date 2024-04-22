@@ -13,7 +13,7 @@
 #SBATCH --output=R-%x.%j.out
 #SBATCH --error=R-%x.%j.err
 #SBATCH --nodes=1 
-#SBATCH --gpus-per-node=a100:8   
+#SBATCH --gpus-per-node=a100:4   
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=48    # There are 24 CPU cores on P100 Cedar GPU nodes
 #SBATCH --constraint=a100
@@ -70,11 +70,19 @@ SCALE=30k
 ARCH=vgg16
 LAYERS=conv5
 LR=0.01
-GPUS=8
+GPUS=4
 TUMPLESIZE=4
 CACHEBS=32
 NPOCH=5
 PORT=6010
+NUMCLUSTER=16
+
+
+### Create cluster
+# python -u examples/cluster.py -d pitts -a ${ARCH} -b 64 --num-clusters ${NUMCLUSTER} \
+# --width 640 --height 480 --data-dir ${DATASET_DIR} \
+# --init-dir ${INIT_DIR}
+
 
 #===================================================================================================
 # SARE Ind Loss
@@ -95,7 +103,8 @@ python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
   --eval-step 1 --epochs ${NPOCH} --step-size 5 --cache-size 1000 \
   --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
-  --init-dir ${INIT_DIR} --esp-encoder ${ESP_ENCODER} 
+  --init-dir ${INIT_DIR} --esp-encoder ${ESP_ENCODER} \
+  --num-clusters ${NUMCLUSTER}
 
 
 echo "==========Testing============="
@@ -113,7 +122,8 @@ SCALE
    examples/test_pitts_tokyo.py --launcher pytorch \
     -a ${ARCH} --test-batch-size 32 -j 4 \
     --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME} --esp-encoder ${ESP_ENCODER} 
+    --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
+    --num-clusters ${NUMCLUSTER}
   echo "==========################============="
   echo " Done Testing with $RESUME file..."
   echo "======================================="  
@@ -139,7 +149,8 @@ python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
   --eval-step 1 --epochs ${NPOCH} --step-size 5 --cache-size 1000 \
   --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
-  --init-dir ${INIT_DIR} --esp-encoder ${ESP_ENCODER} 
+  --init-dir ${INIT_DIR} --esp-encoder ${ESP_ENCODER} \
+  --num-clusters ${NUMCLUSTER}
 
 
 echo "==========Testing============="
@@ -157,7 +168,8 @@ do
    examples/test_pitts_tokyo.py --launcher pytorch \
     -a ${ARCH} --test-batch-size 32 -j 4 \
     --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME} --esp-encoder ${ESP_ENCODER} 
+    --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
+  --num-clusters ${NUMCLUSTER}
   echo "==========################============="
   echo " Done Testing with $RESUME file..."
   echo "======================================="  
@@ -183,7 +195,8 @@ python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
   --eval-step 1 --epochs ${NPOCH} --step-size 5 --cache-size 1000 \
   --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
-  --init-dir ${INIT_DIR} --esp-encoder ${ESP_ENCODER} 
+  --init-dir ${INIT_DIR} --esp-encoder ${ESP_ENCODER} \
+  --num-clusters ${NUMCLUSTER}
 
 
 echo "==========Testing============="
@@ -201,7 +214,8 @@ do
    examples/test_pitts_tokyo.py --launcher pytorch \
     -a ${ARCH} --test-batch-size 32 -j 4 \
     --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME} --esp-encoder ${ESP_ENCODER} 
+    --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
+  --num-clusters ${NUMCLUSTER}
   echo "==========################============="
   echo " Done Testing with $RESUME file..."
   echo "======================================="  

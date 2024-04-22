@@ -39,7 +39,7 @@ def get_data(args, nIm):
     return dataset, cluster_loader
 
 def get_model(args):
-    model = models.create(args.arch, pretrained=True, cut_at_pooling=True, matconvnet='logs/vd16_offtheshelf_conv5_3_max.pth')
+    model = models.create(args.arch, pretrained=True, cut_at_pooling=True, matconvnet=osp.join(args.init_dir, 'vd16_offtheshelf_conv5_3_max.pth'))
     model.cuda()
     model = nn.DataParallel(model)
     return model
@@ -78,10 +78,10 @@ def main_worker(args):
         checkpoint = load_checkpoint(args.resume)
         copy_state_dict(checkpoint['state_dict'], model)
 
-    if not osp.exists(osp.join(args.logs_dir)):
-        os.makedirs(osp.join(args.logs_dir))
+    if not osp.exists(osp.join(args.init_dir)):
+        os.makedirs(osp.join(args.init_dir))
 
-    initcache = osp.join(args.logs_dir, args.arch + '_' + 'pitts_' + str(args.num_clusters) + '_desc_cen.hdf5')
+    initcache = osp.join(args.init_dir, args.arch + '_' + 'pitts_' + str(args.num_clusters) + '_desc_cen.hdf5')
     with h5py.File(initcache, mode='w') as h5:
         with torch.no_grad():
             model.eval()
@@ -137,5 +137,7 @@ if __name__ == '__main__':
     parser.add_argument('--data-dir', type=str, metavar='PATH',
                         default=osp.join(working_dir, 'data'))
     parser.add_argument('--logs-dir', type=str, metavar='PATH',
+                        default=osp.join(working_dir, '..', 'logs'))
+    parser.add_argument('--init-dir', type=str, metavar='PATH',
                         default=osp.join(working_dir, '..', 'logs'))
     main()
