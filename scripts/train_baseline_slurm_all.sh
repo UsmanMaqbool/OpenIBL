@@ -13,7 +13,7 @@
 #SBATCH --output=R-%x.%j.out
 #SBATCH --error=R-%x.%j.err
 #SBATCH --nodes=1 
-#SBATCH --gpus-per-node=a100:4   
+#SBATCH --gpus-per-node=a100:8   
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=48    # There are 24 CPU cores on P100 Cedar GPU nodes
 #SBATCH --constraint=a100
@@ -70,7 +70,7 @@ SCALE=30k
 ARCH=vgg16
 LAYERS=conv5
 LR=0.01
-GPUS=4
+GPUS=8
 TUMPLESIZE=4
 CACHEBS=32
 NPOCH=5
