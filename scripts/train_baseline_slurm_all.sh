@@ -13,20 +13,33 @@
 #SBATCH --output=R-%x.%j.out
 #SBATCH --error=R-%x.%j.err
 #SBATCH --nodes=1 
+<<<<<<< HEAD
 #SBATCH --gpus-per-node=a100:8   
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=48    # There are 24 CPU cores on P100 Cedar GPU nodes
+=======
+#SBATCH --gpus-per-node=a100:1   
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=12    # There are 24 CPU cores on P100 Cedar GPU nodes
+>>>>>>> 4222da7 (added-slurm-script)
 #SBATCH --constraint=a100
 #SBATCH --mem-per-cpu=8GB
 #SBATCH --distribution=cyclic:cyclic
 
+<<<<<<< HEAD
 ## To RUN
 # sbatch --j graphvlad-v7 ./scripts/train_baseline_slurm_all.sh graphvlad pitts
 ####################################################################################################
+=======
+
+
+
+>>>>>>> 4222da7 (added-slurm-script)
 
 # PYTHON SCRIPT
 #==============
 
+<<<<<<< HEAD
 #This is the python script to run in the pytorch environment
 PYTHON=${PYTHON:-"python"}
 allowed_arguments_list1=("netvlad" "graphvlad")
@@ -42,6 +55,17 @@ fi
 METHOD="$1"
 DATASET="$2"
 DATE=$(date '+%d-%b')
+=======
+### To RUN
+# sbatch --j test ./scripts/test_baseline_slurm_multi.sh 
+
+#This is the python script to run in the pytorch environment
+PYTHON=${PYTHON:-"python"}
+
+GPUS=1
+
+# RESUME=$1
+>>>>>>> 4222da7 (added-slurm-script)
 
 
 
@@ -62,6 +86,7 @@ NODES=$(scontrol show hostnames | grep -v $HOST | tr '\n' ' ')
 echo "Host: $HOST" 
 echo "Other nodes: $NODES"
 
+<<<<<<< HEAD
 
 DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
 INIT_DIR="/blue/hmedeiros/m.maqboolbhutta/datasets/openibl-init"
@@ -75,10 +100,21 @@ TUMPLESIZE=4
 CACHEBS=32
 NPOCH=5
 PORT=6010
+=======
+ARCH=vgg16
+DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
+INIT_DIR="/blue/hmedeiros/m.maqboolbhutta/datasets/openibl-init"
+ESP_ENCODER="/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth"
+METHOD="graphvlad"
+PORT=6010
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/pitts-graphvlad-sare_joint-lr0.001-06-Apr"
+SCALE="30k"
+>>>>>>> 4222da7 (added-slurm-script)
 
 #===================================================================================================
 # SARE Ind Loss
 #===================================================================================================
+<<<<<<< HEAD
 LOSS="sare_ind"
 DATE=$(date '+%d-%b') 
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${DATASET}-${METHOD}-${LOSS}-lr${LR}-${DATE}"
@@ -141,6 +177,8 @@ python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
   --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
   --init-dir ${INIT_DIR} --esp-encoder ${ESP_ENCODER} 
 
+=======
+>>>>>>> 4222da7 (added-slurm-script)
 
 echo "==========Testing============="
 FILES="${FILES}/*.tar"
@@ -153,6 +191,7 @@ do
   echo "==========################============="
   echo " Testing $RESUME file..."
   echo "======================================="
+<<<<<<< HEAD
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test_pitts_tokyo.py --launcher pytorch \
     -a ${ARCH} --test-batch-size 32 -j 4 \
@@ -205,4 +244,25 @@ do
   echo "==========################============="
   echo " Done Testing with $RESUME file..."
   echo "======================================="  
+=======
+  DATASET="pitts"
+  srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
+  python -u examples/test.py --launcher slurm --tcp-port ${PORT} \
+      -d ${DATASET} --scale ${SCALE} -a ${ARCH} \
+      --test-batch-size 24 -j 2 \
+      --vlad --reduction \
+      --resume ${RESUME} --method ${METHOD} \
+      --esp-encoder ${ESP_ENCODER} --sync-gather
+
+  DATASET="tokyo"
+  srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
+  python -u examples/test.py --launcher slurm --tcp-port ${PORT} \
+      -d ${DATASET} --scale ${SCALE} -a ${ARCH} \
+      --test-batch-size 24 -j 2 \
+      --vlad --reduction \
+      --resume ${RESUME} --method ${METHOD} \
+      --esp-encoder ${ESP_ENCODER} --sync-gather
+
+  echo "==========################============="
+>>>>>>> 4222da7 (added-slurm-script)
 done
