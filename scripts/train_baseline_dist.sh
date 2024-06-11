@@ -1,24 +1,33 @@
 #!/bin/sh
+# ./scripts/train_baseline_dist.sh graphvlad triplet vgg16 pitts 30k
+
 PYTHON=${PYTHON:-"python"}
 GPUS=1
 DATE=$(date '+%d-%b') 
-DATASET=$1
-SCALE=30k
-ARCH=vgg16
+METHOD="$1"
+LOSS="$2"
+ARCH="$3"
+DATASET="$4"
+SCALE="$5"
+DATE=$(date '+%d-%b')
+
 LAYERS=conv5
-LOSS=$2
-LR=0.0001
-METHOD=graphvlad
-FILES="/home/leo/usman_ws/models/openibl/official/${DATASET}${SCALE}-${ARCH}/${LAYERS}-${LOSS}-lr${LR}-tuple${GPUS}-${DATE}"
+LR=0.001
+
+
+FILES="/home/leo/usman_ws/models/openibl/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 INIT_DIR="/home/leo/usman_ws/datasets/openibl-init"
 ESP_ENCODER="/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth"
 DATASET_DIR="/home/leo/usman_ws/codes/OpenIBL/examples/data/"
+
 # FILES="/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-sare_joint-lr0.0001-tuple1-12-Apr/"
+
 echo ${FILES}
 
-if [ $# -ne 2 ]
-  then
-    echo "Arguments error: <LOSS_TYPE (triplet|sare_ind|sare_joint)>"
+
+if [ $# -ne 5 ]
+  then    
+    echo "./scripts/train_baseline_dist.sh graphvlad triplet vgg16 pitts 30k"
     exit 1
 fi
 PORT=6010
