@@ -13,9 +13,9 @@
 #SBATCH --output=R-%x.%j.out
 #SBATCH --error=R-%x.%j.err
 #SBATCH --nodes=1 
-#SBATCH --gpus-per-node=a100:8   
+#SBATCH --gpus-per-node=a100:4   
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=48    # There are 24 CPU cores on P100 Cedar GPU nodes
+#SBATCH --cpus-per-task=24    # There are 24 CPU cores on P100 Cedar GPU nodes
 #SBATCH --constraint=a100
 #SBATCH --mem-per-cpu=8GB
 #SBATCH --distribution=cyclic:cyclic
@@ -39,9 +39,24 @@ if [ "$#" -lt 2 ]; then
     exit 1
 fi
 
+GPUS=4
 METHOD="$1"
-DATASET="$2"
-DATE=$(date '+%d-%b')
+LOSS="$2"
+ARCH="$3"
+DATASET="$4"
+SCALE="$5"
+NUMCLUSTER=64
+LAYERS=conv5
+LR=0.001
+TUMPLESIZE=4
+CACHEBS=32
+NPOCH=10
+PORT=6010
+
+
+INIT_DIR="/blue/hmedeiros/m.maqboolbhutta/datasets/openibl-init"
+ESP_ENCODER="/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth"
+DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
 
 
 
@@ -63,20 +78,6 @@ echo "Host: $HOST"
 echo "Other nodes: $NODES"
 
 
-DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
-INIT_DIR="/blue/hmedeiros/m.maqboolbhutta/datasets/openibl-init"
-ESP_ENCODER="/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth"
-SCALE=30k
-ARCH=vgg16
-LAYERS=conv5
-LR=0.01
-GPUS=8
-TUMPLESIZE=4
-CACHEBS=32
-NPOCH=5
-PORT=6010
-NUMCLUSTER=16
-
 
 ### Create cluster
 # python -u examples/cluster.py -d pitts -a ${ARCH} -b 64 --num-clusters ${NUMCLUSTER} \
@@ -89,7 +90,7 @@ NUMCLUSTER=16
 #===================================================================================================
 LOSS="sare_ind"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${DATASET}-${METHOD}-${LOSS}-lr${LR}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -135,7 +136,7 @@ done
 #===================================================================================================
 LOSS="sare_joint"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${DATASET}-${METHOD}-${LOSS}-lr${LR}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -181,7 +182,7 @@ done
 
 LOSS="triplet"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${DATASET}-${METHOD}-${LOSS}-lr${LR}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 

@@ -92,7 +92,8 @@ def update_sampler(sampler, model, loader, query, gallery, sub_set, vlad=True, g
 def get_model(args):
     base_model = models.create(args.arch, train_layers=args.layers, matconvnet=osp.join(args.init_dir, 'vd16_offtheshelf_conv5_3_max.pth'))
     if args.vlad:
-        print("No. of Clusters: ", args.num_clusters)
+        if (args.rank==0):
+            print("No. of Clusters: ", args.num_clusters)
         pool_layer = models.create('netvlad', dim=base_model.feature_dim, num_clusters=args.num_clusters)
 
         # initcache = osp.join(args.init_dir, args.arch + '_mapillary_' + str(args.num_clusters) + '_desc_cen.hdf5')
@@ -108,7 +109,8 @@ def get_model(args):
         if(args.method=='netvlad'):
             model = models.create('embednet', base_model, pool_layer)   
         elif(args.method=='graphvlad'):
-            print('===> Loading segmentation model')
+            if (args.rank==0):
+                print('===> Loading segmentation model')
             segmentation_model = get_segmentation_model(args.esp_encoder)
             model = models.create('graphvlad', base_model, pool_layer, segmentation_model)
 

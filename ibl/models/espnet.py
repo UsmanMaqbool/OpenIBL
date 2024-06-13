@@ -328,7 +328,7 @@ class ESPNet(nn.Module):
         self.encoder = ESPNet_Encoder(classes, p, q)
         if encoderFile != None:
             self.encoder.load_state_dict(torch.load(encoderFile))
-            print('Encoder loaded!')
+            # print('Encoder loaded!')
         # load the encoder modules
         self.my_modules = nn.ModuleList()
         for i, m in enumerate(self.encoder.children()):
