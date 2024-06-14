@@ -47,7 +47,7 @@ DATASET="$4"
 SCALE="$5"
 NUMCLUSTER=64
 LAYERS=conv5
-LR=0.001
+LR=0.01
 TUMPLESIZE=4
 CACHEBS=32
 NPOCH=10
@@ -100,7 +100,7 @@ srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
 python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
   -d ${DATASET} --scale ${SCALE} \
   -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
-  --width 640 --height 480 --tuple-size ${TUMPLESIZE} -j 4 --neg-num 10 --test-batch-size ${CACHEBS} \
+  --width 640 --height 480 --tuple-size ${TUMPLESIZE} -j 2 --neg-num 10 --test-batch-size ${CACHEBS} \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
   --eval-step 1 --epochs ${NPOCH} --step-size 5 --cache-size 1000 \
   --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
@@ -121,7 +121,7 @@ SCALE
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test_pitts_tokyo.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size 32 -j 4 \
+    -a ${ARCH} --test-batch-size 32 -j 2 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
     --num-clusters ${NUMCLUSTER}
@@ -146,7 +146,7 @@ srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
 python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
   -d ${DATASET} --scale ${SCALE} \
   -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
-  --width 640 --height 480 --tuple-size ${TUMPLESIZE} -j 4 --neg-num 10 --test-batch-size ${CACHEBS} \
+  --width 640 --height 480 --tuple-size ${TUMPLESIZE} -j 2 --neg-num 10 --test-batch-size ${CACHEBS} \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
   --eval-step 1 --epochs ${NPOCH} --step-size 5 --cache-size 1000 \
   --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
@@ -167,7 +167,7 @@ do
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test_pitts_tokyo.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size 32 -j 4 \
+    -a ${ARCH} --test-batch-size 32 -j 2 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
   --num-clusters ${NUMCLUSTER}
@@ -192,7 +192,7 @@ srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
 python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
   -d ${DATASET} --scale ${SCALE} \
   -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
-  --width 640 --height 480 --tuple-size ${TUMPLESIZE} -j 4 --neg-num 10 --test-batch-size ${CACHEBS} \
+  --width 640 --height 480 --tuple-size ${TUMPLESIZE} -j 2 --neg-num 10 --test-batch-size ${CACHEBS} \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
   --eval-step 1 --epochs ${NPOCH} --step-size 5 --cache-size 1000 \
   --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
@@ -213,7 +213,7 @@ do
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test_pitts_tokyo.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size 32 -j 4 \
+    -a ${ARCH} --test-batch-size 32 -j 2 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
   --num-clusters ${NUMCLUSTER}
