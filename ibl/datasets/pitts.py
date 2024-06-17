@@ -75,6 +75,14 @@ class Pittsburgh(Dataset):
         q_test_pids, db_test_pids = register('test')
         assert len(identities)==len(utms)
 
+
+        # q_train_pids = q_train_pids[:200]
+        # db_train_pids = db_train_pids[:500]
+        # q_val_pids = q_val_pids[:200]
+        # db_val_pids = db_val_pids[:500]
+        # q_test_pids = q_test_pids[:200]
+        # db_test_pids = db_test_pids[:500]
+        
         # for pid in q_test_pids:
         #     if (len(identities[pid])!=24):
         #         print (identities[pid])

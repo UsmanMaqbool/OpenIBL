@@ -14,7 +14,7 @@
                 "--nproc_per_node=1 ",
                 "--master_port=6010",
                 "--use_env",
-                "examples/netvlad_img.py",
+                "examples/netvlad_img_sfrs.py",
                 "--launcher=pytorch",
             ],
         }

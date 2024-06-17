@@ -12,6 +12,7 @@ __factory = {
     'netvlad': NetVLAD,
     'embednet': EmbedNet,
     'embednetpca': EmbedNetPCA,
+    'embedregionnet': EmbedRegionNet,
     'graphvlad': GraphVLAD,
     'graphvladpca': GraphVLADPCA,
     'espnet': ESPNet,

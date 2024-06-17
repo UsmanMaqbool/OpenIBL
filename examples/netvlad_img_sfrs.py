@@ -77,17 +77,11 @@ def update_sampler(sampler, model, loader, query, gallery, sub_set, rerank=False
         print ("===> Start extracting features for sorting gallery")
     features = extract_features(model, loader, sorted(list(set(query) | set(gallery))),
                                 vlad=vlad, gpu=gpu, sync_gather=sync_gather)
-    distmat = pairwise_distance(features, query, gallery)
-
+    distmat, _, _ = pairwise_distance(features, query, gallery)
     if rerank:
-        distmat_qq = pairwise_distance(features, query, query)
-
-        distmat_gg = pairwise_distance(features, gallery, gallery)
-
-        # m = {'distmat': distmat, 'distmat_qq': distmat_qq, 'distmat_gg': distmat_gg}
-        # torch.save(m, 'tensor.pt')
-
-        distmat_jac = re_ranking(distmat.cuda(), distmat_qq.cuda(), distmat_gg.cuda(),
+        distmat_qq, _, _ = pairwise_distance(features, query, query)
+        distmat_gg, _, _ = pairwise_distance(features, gallery, gallery)
+        distmat_jac = re_ranking(distmat.numpy(), distmat_qq.numpy(), distmat_gg.numpy(),
                                                     k1=20, k2=1, lambda_value=lambda_value)
         distmat_jac = torch.from_numpy(distmat_jac)
         del distmat_qq, distmat_gg
@@ -102,7 +96,7 @@ def update_sampler(sampler, model, loader, query, gallery, sub_set, rerank=False
 def get_model(args):
     base_model = models.create(args.arch, train_layers=args.layers, matconvnet='logs/vd16_offtheshelf_conv5_3_max.pth')
     pool_layer = models.create('netvlad', dim=base_model.feature_dim)
-    initcache = osp.join(args.init_dir, args.arch + '_' + 'pitts_' + str(args.num_clusters) + '_desc_cen.hdf5')
+    initcache = osp.join(args.init_dir, args.arch + '_' + args.dataset + '_' + str(args.num_clusters) + '_desc_cen.hdf5')
     if (dist.get_rank()==0):
         print ('Loading centroids from {}'.format(initcache))
     with h5py.File(initcache, mode='r') as h5:

@@ -10,7 +10,7 @@ ARCH="$3"
 DATASET="$4"
 SCALE="$5"
 DATE=$(date '+%d-%b')
-NUMCLUSTER=16
+NUMCLUSTER=64
 
 LAYERS=conv5
 LR=0.001
