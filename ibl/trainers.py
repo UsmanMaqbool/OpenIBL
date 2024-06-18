@@ -231,7 +231,7 @@ class SFRSTrainer(object):
 
     def _parse_data(self, inputs):
         imgs = [input[0] for input in inputs]
-        imgs = torch.stack(imgs).permute(1,0,2,3,4)
+        imgs = torch.stack(imgs).permute(1,0,2,3,4) # torch.Size([1, 22, 3, 480, 640])
         imgs_easy = imgs[:,:self.neg_num+2]
         imgs_diff = torch.cat((imgs[:,0].unsqueeze(1).contiguous(), imgs[:,self.neg_num+2:]), dim=1)
         return imgs_easy.cuda(self.gpu), imgs_diff.cuda(self.gpu)

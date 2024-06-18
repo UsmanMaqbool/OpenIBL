@@ -16,6 +16,8 @@
                 "--use_env",
                 "examples/netvlad_img_sfrs.py",
                 "--launcher=pytorch",
+                "--init-dir=/home/leo/usman_ws/datasets/openibl-init",
+                "--esp-encoder=/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth"
             ],
         }
     ]
