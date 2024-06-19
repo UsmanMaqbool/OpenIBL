@@ -625,8 +625,8 @@ class GraphVLADSFRS(nn.Module):
         gvlad = torch.add(gvlad,vlad_x)
         # print(vlad_x.shape[1])
         gvlad = gvlad.view(-1,vlad_x.shape[1])
-        anchors = gvlad[0, :]
-        pairs = gvlad[1:, :]
+        anchors = gvlad[0, :].unsqueeze(0)
+        pairs = gvlad[1:, :].unsqueeze(0)
         del gvlad
         # score = torch.bmm(vlad_A.expand_as(vlad_B).view(-1,B,L), vlad_B.view(-1,B,L).transpose(1,2))
         score = torch.matmul(pairs, anchors.unsqueeze(-1))

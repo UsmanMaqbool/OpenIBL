@@ -174,13 +174,13 @@ def main_worker(args):
                   .format(start_epoch, best_recall5))
 
     # Evaluator
-    evaluator = Evaluator(model)
+    # evaluator = Evaluator(model)
 
-    if (args.rank==0):
-        print("Test the initial model:")
-    recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
-                        dataset.q_val, dataset.db_val, dataset.val_pos,
-                        vlad=True, gpu=args.gpu, sync_gather=args.sync_gather)
+    # if (args.rank==0):
+    #     print("Test the initial model:")
+    # recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
+    #                     dataset.q_val, dataset.db_val, dataset.val_pos,
+    #                     vlad=True, gpu=args.gpu, sync_gather=args.sync_gather)
 
     # Trainer
     trainer = SFRSTrainer(model, model_cache, margin=args.margin**0.5,

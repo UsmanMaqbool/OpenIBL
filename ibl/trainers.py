@@ -254,13 +254,18 @@ class SFRSTrainer(object):
         # B
         # 1
         if (gen==0):
-            loss_hard = self._get_loss(vlad_anchors.unsqueeze(0), vlad_pairs[0].unsqueeze(0), vlad_pairs[1:].unsqueeze(0), B, loss_type)
+            loss_hard = self._get_loss(vlad_anchors, vlad_pairs[:,0,:], vlad_pairs[:,1:,:], B, loss_type)
         else:
             loss_hard = 0
             for tri_idx in range(B):
-                loss_hard += self._get_hard_loss(vlad_anchors[tri_idx,0,0].contiguous(), vlad_pairs[tri_idx,0,0].contiguous(), \
-                                                vlad_pairs[tri_idx,1:], sim_easy[tri_idx,1:,0].contiguous().detach(), loss_type)
-            loss_hard /= B
+                loss_hard += self._get_hard_loss(vlad_anchors[tri_idx].contiguous(), vlad_pairs[tri_idx,0].contiguous(), \
+                                                vlad_pairs[tri_idx,1:], sim_easy[tri_idx,1:].contiguous().detach(), loss_type)
+        
+        #Netvlad
+        # for tri_idx in range(B):
+        #         loss_hard += self._get_hard_loss(vlad_anchors[tri_idx,0,0].contiguous(), vlad_pairs[tri_idx,0,0].contiguous(), \
+        #                                         vlad_pairs[tri_idx,1:], sim_easy[tri_idx,1:,0].contiguous().detach(), loss_type)
+        loss_hard /= B
             
         # vlad_anchors: B*1*9*L
         # vlad_pairs: B*(1+neg_num)*9*L
@@ -282,11 +287,17 @@ class SFRSTrainer(object):
 
     def _get_hard_loss(self, anchors, positives, negatives, score_neg, loss_type):
         # select the most difficult regions for negatives
-        score_arg = score_neg.view(self.neg_num,-1).argmax(1)
-        score_arg = score_arg.unsqueeze(-1).unsqueeze(-1).expand_as(negatives).contiguous()
+        #for netvlad
+        # score_arg = score_neg.view(self.neg_num,-1).argmax(1)
+        # score_arg = score_arg.unsqueeze(-1).unsqueeze(-1).expand_as(negatives).contiguous()
+        # select_negatives = torch.gather(negatives,1,score_arg)
+        # select_negatives = select_negatives[:,0]
+        
+        score_arg = score_neg.unsqueeze(-1).expand_as(negatives).contiguous()
+        score_arg = score_arg.long()
         select_negatives = torch.gather(negatives,1,score_arg)
-        select_negatives = select_negatives[:,0]
-
+        #select_negatives.shape
+        #torch.Size([10, 32768])
         return self._get_loss(anchors.unsqueeze(0).contiguous(), \
                             positives.unsqueeze(0).contiguous(), \
                             select_negatives.unsqueeze(0).contiguous(), 1, loss_type)
