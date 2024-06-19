@@ -312,7 +312,7 @@ if __name__ == '__main__':
     parser.add_argument('--eval-step', type=int, default=1)
     parser.add_argument('--epochs', type=int, default=5)
     parser.add_argument('--generations', type=int, default=4)
-    parser.add_argument('--loss-type', type=str, default='triplet', help="[triplet|sare_ind|sare_joint]")
+    parser.add_argument('--loss-type', type=str, default='sare_ind', help="[triplet|sare_ind|sare_joint]")
     parser.add_argument('--temperature', nargs='+', type=float, default=[0.07,0.07,0.06,0.05])
     parser.add_argument('--soft-weight', type=float, default=0.5)
     parser.add_argument('--iters', type=int, default=0)

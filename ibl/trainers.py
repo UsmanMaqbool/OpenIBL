@@ -254,7 +254,7 @@ class SFRSTrainer(object):
         # B
         # 1
         if (gen==0):
-            loss_hard = self._get_loss(vlad_anchors[0].unsqueeze(0), vlad_pairs[0].unsqueeze(0), vlad_pairs[1:].unsqueeze(0), B, loss_type)
+            loss_hard = self._get_loss(vlad_anchors.unsqueeze(0), vlad_pairs[0].unsqueeze(0), vlad_pairs[1:].unsqueeze(0), B, loss_type)
         else:
             loss_hard = 0
             for tri_idx in range(B):
