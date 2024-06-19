@@ -242,23 +242,41 @@ class SFRSTrainer(object):
         inputs_diff = inputs_diff.view(-1, C, H, W)
 
         sim_easy, vlad_anchors, vlad_pairs = self.model(inputs_easy)
-        # vlad_anchors: B*1*9*L
-        # vlad_pairs: B*(1+neg_num)*9*L
-        with torch.no_grad():
-            sim_diff_label, _, _ = self.model_cache(inputs_diff) # B*diff_pos_num*9*9
-        sim_diff, _, _ = self.model(inputs_diff)
 
+        # vlad_anchors.shape
+        # torch.Size([1, 1, 9, 32768])
+        # vlad_anchors[:,0,0].shape
+        # torch.Size([1, 32768])
+        # vlad_pairs[:,0,0].shape
+        # torch.Size([1, 32768])
+        # vlad_pairs[:,1:,0].shape
+        # torch.Size([1, 10, 32768])
+        # B
+        # 1
         if (gen==0):
-            loss_hard = self._get_loss(vlad_anchors[:,0,0], vlad_pairs[:,0,0], vlad_pairs[:,1:,0], B, loss_type)
+            loss_hard = self._get_loss(vlad_anchors[0].unsqueeze(0), vlad_pairs[0].unsqueeze(0), vlad_pairs[1:].unsqueeze(0), B, loss_type)
         else:
             loss_hard = 0
             for tri_idx in range(B):
                 loss_hard += self._get_hard_loss(vlad_anchors[tri_idx,0,0].contiguous(), vlad_pairs[tri_idx,0,0].contiguous(), \
                                                 vlad_pairs[tri_idx,1:], sim_easy[tri_idx,1:,0].contiguous().detach(), loss_type)
             loss_hard /= B
-
-        log_sim_diff = F.log_softmax(sim_diff[:,:,0].contiguous().view(B,-1)/self.temp[0], dim=1)
-        loss_soft = (- F.softmax(sim_diff_label[:,:,0].contiguous().view(B,-1)/self.temp[gen], dim=1).detach() * log_sim_diff).mean(0).sum()
+            
+        # vlad_anchors: B*1*9*L
+        # vlad_pairs: B*(1+neg_num)*9*L
+        with torch.no_grad():
+            sim_diff_label, _, _ = self.model_cache(inputs_diff) # B*diff_pos_num*9*9
+        sim_diff, _, _ = self.model(inputs_diff)    
+        # sim_diff.shape
+        # torch.Size([1, 10, 9, 9])
+        # sim_diff[:,:,0].shape
+        # torch.Size([1, 10, 9])
+        # sim_diff[:,:,0].contiguous().view(B,-1).shape
+        # torch.Size([1, 90])
+        # sim_diff_label[:,:,0].contiguous().view(B,-1).shape
+        # torch.Size([1, 90])
+        log_sim_diff = F.log_softmax(sim_diff[:,0].contiguous().view(B,-1)/self.temp[0], dim=1)
+        loss_soft = (- F.softmax(sim_diff_label[:,0].contiguous().view(B,-1)/self.temp[gen], dim=1).detach() * log_sim_diff).mean(0).sum()
 
         return loss_hard, loss_soft
 
