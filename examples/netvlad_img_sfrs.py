@@ -118,7 +118,7 @@ def get_model(args):
         if (args.rank==0):
             print('===> Loading segmentation model')
         segmentation_model = get_segmentation_model(args.esp_encoder)
-        model = models.create('graphvladsfrs', base_model, pool_layer, segmentation_model, tuple_size=args.tuple_size)
+        model = models.create('graphvlad', base_model, pool_layer, segmentation_model, tuple_size=args.tuple_size, sfrs=True)
 
     if (args.syncbn):
         convert_sync_bn(model)
@@ -174,17 +174,17 @@ def main_worker(args):
                   .format(start_epoch, best_recall5))
 
     # Evaluator
-    evaluator = Evaluator(model)
+    # evaluator = Evaluator(model)
 
-    if (args.rank==0):
-        print("Test the initial model:")
-    recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
-                        dataset.q_val, dataset.db_val, dataset.val_pos,
-                        vlad=True, gpu=args.gpu, sync_gather=args.sync_gather)
+    # if (args.rank==0):
+    #     print("Test the initial model:")
+    # recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
+    #                     dataset.q_val, dataset.db_val, dataset.val_pos,
+    #                     vlad=True, gpu=args.gpu, sync_gather=args.sync_gather)
 
     # Trainer
     trainer = SFRSTrainer(model, model_cache, margin=args.margin**0.5,
-                                    neg_num=args.neg_num, gpu=args.gpu, temp=args.temperature)
+                                    neg_num=args.neg_num, gpu=args.gpu, temp=args.temperature, method=args.method)
     if ((args.cache_size<args.tuple_size) or (args.cache_size>len(dataset.q_train))):
         args.cache_size = len(dataset.q_train)
 
@@ -312,7 +312,7 @@ if __name__ == '__main__':
     parser.add_argument('--eval-step', type=int, default=1)
     parser.add_argument('--epochs', type=int, default=5)
     parser.add_argument('--generations', type=int, default=4)
-    parser.add_argument('--loss-type', type=str, default='sare_ind', help="[triplet|sare_ind|sare_joint]")
+    parser.add_argument('--loss-type', type=str, default='triplet', help="[triplet|sare_ind|sare_joint]")
     parser.add_argument('--temperature', nargs='+', type=float, default=[0.07,0.07,0.06,0.05])
     parser.add_argument('--soft-weight', type=float, default=0.5)
     parser.add_argument('--iters', type=int, default=0)

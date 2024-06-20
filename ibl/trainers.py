@@ -172,7 +172,7 @@ class SFRSTrainer(object):
     # "Self-supervising Fine-grained Region Similarities for Large-scale Image Localization"
     #############################
     def __init__(self, model, model_cache, margin=0.3,
-                    neg_num=10, gpu=None, temp=[0.07,]):
+                    neg_num=10, gpu=None, temp=[0.07,], method='netvlad'):
         super(SFRSTrainer, self).__init__()
         self.model = model
         self.model_cache = model_cache
@@ -181,6 +181,7 @@ class SFRSTrainer(object):
         self.gpu = gpu
         self.neg_num = neg_num
         self.temp = temp
+        self.method = method
 
     def train(self, gen, epoch, sub_id, data_loader, optimizer, train_iters,
                     print_freq=1, lambda_soft=0.5, loss_type='sare_ind'):
@@ -253,19 +254,36 @@ class SFRSTrainer(object):
         # torch.Size([1, 10, 32768])
         # B
         # 1
-        if (gen==0):
-            loss_hard = self._get_loss(vlad_anchors, vlad_pairs[:,0,:], vlad_pairs[:,1:,:], B, loss_type)
-        else:
-            loss_hard = 0
-            for tri_idx in range(B):
-                loss_hard += self._get_hard_loss(vlad_anchors[tri_idx].contiguous(), vlad_pairs[tri_idx,0].contiguous(), \
-                                                vlad_pairs[tri_idx,1:], sim_easy[tri_idx,1:].contiguous().detach(), loss_type)
         
-        #Netvlad
-        # for tri_idx in range(B):
-        #         loss_hard += self._get_hard_loss(vlad_anchors[tri_idx,0,0].contiguous(), vlad_pairs[tri_idx,0,0].contiguous(), \
-        #                                         vlad_pairs[tri_idx,1:], sim_easy[tri_idx,1:,0].contiguous().detach(), loss_type)
-        loss_hard /= B
+        if(self.method=='netvlad'):
+            if (gen==0):
+                # vlad_anchors[:,0,0].shape -> torch.Size([1, 32768])
+                # vlad_pairs[:,0,0].shape   -> torch.Size([1, 32768])
+                # vlad_pairs[:,1:,0].shape  -> torch.Size([1, 10, 32768])
+                loss_hard = self._get_loss(vlad_anchors[:,0,0], vlad_pairs[:,0,0], vlad_pairs[:,1:,0], B, loss_type)
+            else:
+                loss_hard = 0
+                # vlad_anchors[tri_idx,0,0].shape -> torch.Size([32768])
+                # vlad_pairs[tri_idx,0,0].shape   -> torch.Size([32768])
+                # vlad_pairs[tri_idx,1:].shape -> torch.Size([10, 9, 32768])
+                # sim_easy[tri_idx,1:,0].shape -> torch.Size([10, 9])
+                for tri_idx in range(B):
+                    loss_hard += self._get_hard_loss(vlad_anchors[tri_idx,0,0].contiguous(), vlad_pairs[tri_idx,0,0].contiguous(), \
+                                                    vlad_pairs[tri_idx,1:], sim_easy[tri_idx,1:,0].contiguous().detach(), loss_type)
+                loss_hard /= B
+        elif(self.method=='graphvlad'):
+
+            if (gen==0):
+                # vlad_anchors.shape -> torch.Size([1, 32768])
+                # vlad_pairs[:,0,:].shape -> torch.Size([1, 32768])
+                # vlad_pairs[:,1:,:].shape -> torch.Size([1, 10, 32768])
+                loss_hard = self._get_loss(vlad_anchors, vlad_pairs[:,0,:], vlad_pairs[:,1:,:], B, loss_type)
+            else:
+                loss_hard = 0
+                for tri_idx in range(B):
+                    loss_hard += self._get_hard_loss(vlad_anchors[tri_idx].contiguous(), vlad_pairs[tri_idx,0].contiguous(), \
+                                                    vlad_pairs[tri_idx,1:], sim_easy[tri_idx,1:].contiguous().detach(), loss_type)
+            loss_hard /= B
             
         # vlad_anchors: B*1*9*L
         # vlad_pairs: B*(1+neg_num)*9*L
@@ -287,15 +305,16 @@ class SFRSTrainer(object):
 
     def _get_hard_loss(self, anchors, positives, negatives, score_neg, loss_type):
         # select the most difficult regions for negatives
-        #for netvlad
-        # score_arg = score_neg.view(self.neg_num,-1).argmax(1)
-        # score_arg = score_arg.unsqueeze(-1).unsqueeze(-1).expand_as(negatives).contiguous()
-        # select_negatives = torch.gather(negatives,1,score_arg)
-        # select_negatives = select_negatives[:,0]
-        
-        score_arg = score_neg.unsqueeze(-1).expand_as(negatives).contiguous()
-        score_arg = score_arg.long()
-        select_negatives = torch.gather(negatives,1,score_arg)
+        if(self.method=='netvlad'):
+            score_arg = score_neg.view(self.neg_num,-1).argmax(1)
+            score_arg = score_arg.unsqueeze(-1).unsqueeze(-1).expand_as(negatives).contiguous()
+            select_negatives = torch.gather(negatives,1,score_arg)
+            select_negatives = select_negatives[:,0]
+        elif(self.method=='graphvlad'):    
+            score_arg = score_neg.unsqueeze(-1).expand_as(negatives).contiguous()
+            score_arg = score_arg.long()
+            select_negatives = torch.gather(negatives,1,score_arg)
+    
         #select_negatives.shape
         #torch.Size([10, 32768])
         return self._get_loss(anchors.unsqueeze(0).contiguous(), \
