@@ -40,8 +40,8 @@
 # 0620-v9-graphvlad-sort-gal 
 ## Training
 sbatch --j netvlad-triplet scripts/train_sfrs_slurm_all.sh graphvlad sare_ind vgg16 pitts 30k
-### Testing
-## checkpoints: /home/m.maqboolbhutta/usman_ws/models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.01-tuple4-19-Jun
+### Testin
+sbatch --j netvlad-triplet scripts/test_slurm_all.sh graphvlad vgg16 pitts 30k /home/m.maqboolbhutta/usman_ws/models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.01-tuple4-19-Jun/
 
 ```
 
