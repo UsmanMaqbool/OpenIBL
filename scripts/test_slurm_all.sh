@@ -57,7 +57,7 @@ PORT=6010
 INIT_DIR="/blue/hmedeiros/m.maqboolbhutta/datasets/openibl-init"
 ESP_ENCODER="/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth"
 DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.01-tuple4-19-Jun/"
+# FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.01-tuple4-20-Jun/"
 
 
 # LOAD PYTORCH SOFTWARE ENVIRONMENT
