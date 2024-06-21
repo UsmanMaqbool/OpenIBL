@@ -349,8 +349,9 @@ class EmbedRegionNet(nn.Module):
         return self._compute_region_sim(anchors, pairs)
 
     def forward(self, x):
-
-        if (not self.training):
+        if (self.training):
+            pool_x, x = self.base_model(x)
+        else:
             if self.graphvlad:
                 node_features_list = []
                 neighborsFeat = []
@@ -370,7 +371,6 @@ class EmbedRegionNet(nn.Module):
                 gvlad = gvlad.view(-1,vlad_x.shape[1])
                 return pool_x, gvlad
             else:
-                pool_x, x = self.base_model(x)
                 vlad_x = self.net_vlad(x)
                 # normalize
                 vlad_x = F.normalize(vlad_x, p=2, dim=2)  # intra-normalization
@@ -527,53 +527,3 @@ class GraphVLADPCA(nn.Module):
         gvlad = F.normalize(gvlad, p=2, dim=-1)  
         return gvlad
     
-class GraphVLADSFRS(nn.Module):
-    def __init__(self, base_model, net_vlad, esp_net, tuple_size=1):
-        super(GraphVLADSFRS, self).__init__()
-        self.base_model = base_model
-        self.esp_net = esp_net
-        self.net_vlad = net_vlad
-        self.tuple_size = tuple_size
-        self.SelectRegions = SelectRegions()
-        self.applyGNN = applyGNN()
-
-    def _init_params(self):
-        self.base_model._init_params()
-        self.net_vlad._init_params()
-
-    def forward(self, x):
-        if (not self.training):
-            pool_x, x = self.base_model(x)
-            vlad_x = self.net_vlad(x)
-            # normalize
-            vlad_x = F.normalize(vlad_x, p=2, dim=2)  # intra-normalization
-            vlad_x = vlad_x.view(x.size(0), -1)  # flatten
-            vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
-            return pool_x, vlad_x
-        
-        node_features_list = []
-        neighborsFeat = []
-        _, NB, x_size, x_cropped = self.SelectRegions(x, self.base_model, self.esp_net)
-        for i in range(NB+1):
-            vlad_x = self.net_vlad(x_cropped[i])
-            vlad_x = F.normalize(vlad_x, p=2, dim=2)  
-            vlad_x = vlad_x.view(x_size, -1)  
-            vlad_x = F.normalize(vlad_x, p=2, dim=1)  
-            neighborsFeat.append(vlad_x)
-        node_features_list.append(neighborsFeat[NB])
-        node_features_list.append(torch.concat(neighborsFeat[0:NB],0))
-        
-        gvlad = self.applyGNN(node_features_list)
-        del neighborsFeat
-        del x_cropped
-        del node_features_list
-        gvlad = torch.add(gvlad,vlad_x)
-        # print(vlad_x.shape[1])
-        gvlad = gvlad.view(-1,vlad_x.shape[1])
-        anchors = gvlad[0, :].unsqueeze(0)
-        pairs = gvlad[1:, :].unsqueeze(0)
-        del gvlad
-        # score = torch.bmm(vlad_A.expand_as(vlad_B).view(-1,B,L), vlad_B.view(-1,B,L).transpose(1,2))
-        score = torch.matmul(pairs, anchors.unsqueeze(-1))
-        score = score.view(self.tuple_size,-1)
-        return score, anchors, pairs

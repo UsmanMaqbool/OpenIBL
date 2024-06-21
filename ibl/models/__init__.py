@@ -15,7 +15,6 @@ __factory = {
     'embedregionnet': EmbedRegionNet,
     'graphvlad': GraphVLAD,
     'graphvladpca': GraphVLADPCA,
-    'graphvladsfrs': GraphVLADSFRS,
     'espnet': ESPNet,
 }
 
