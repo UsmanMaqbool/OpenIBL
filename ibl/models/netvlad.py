@@ -349,10 +349,7 @@ class EmbedRegionNet(nn.Module):
         return self._compute_region_sim(anchors, pairs)
 
     def forward(self, x):
-        if (self.training):
-            pool_x, x = self.base_model(x)
-        else:
-            if self.graphvlad:
+        if self.graphvlad:
                 node_features_list = []
                 neighborsFeat = []
                 pool_x, NB, x_size, x_cropped = self.SelectRegions(x, self.base_model, self.esp_net)
@@ -370,14 +367,17 @@ class EmbedRegionNet(nn.Module):
                 # print(vlad_x.shape[1])
                 gvlad = gvlad.view(-1,vlad_x.shape[1])
                 return pool_x, gvlad
-            else:
+        else: 
+            pool_x, x = self.base_model(x)
+            
+        if (not self.training):
                 vlad_x = self.net_vlad(x)
                 # normalize
                 vlad_x = F.normalize(vlad_x, p=2, dim=2)  # intra-normalization
                 vlad_x = vlad_x.view(x.size(0), -1)  # flatten
                 vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
                 return pool_x, vlad_x
-        ### TODO double check x
+
         return self._forward_train(x)
 
 class applyGNN(nn.Module):
