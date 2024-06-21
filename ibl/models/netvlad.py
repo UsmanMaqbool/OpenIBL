@@ -246,11 +246,15 @@ class EmbedNetPCA(nn.Module):
         vlad_x = F.normalize(vlad_x, p=2, dim=-1)  
         return vlad_x
 class EmbedRegionNet(nn.Module):
-    def __init__(self, base_model, net_vlad, tuple_size=1):
+    def __init__(self, base_model, net_vlad, tuple_size=1, graphvlad=False, esp_net=None):
         super(EmbedRegionNet, self).__init__()
         self.base_model = base_model
         self.net_vlad = net_vlad
         self.tuple_size = tuple_size
+        self.esp_net = esp_net
+        self.graphvlad = graphvlad
+        self.SelectRegions = SelectRegions()
+        self.applyGNN = applyGNN()
 
     def _init_params(self):
         self.base_model._init_params()
@@ -345,16 +349,35 @@ class EmbedRegionNet(nn.Module):
         return self._compute_region_sim(anchors, pairs)
 
     def forward(self, x):
-        pool_x, x = self.base_model(x)
 
         if (not self.training):
-            vlad_x = self.net_vlad(x)
-            # normalize
-            vlad_x = F.normalize(vlad_x, p=2, dim=2)  # intra-normalization
-            vlad_x = vlad_x.view(x.size(0), -1)  # flatten
-            vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
-            return pool_x, vlad_x
-
+            if self.graphvlad:
+                node_features_list = []
+                neighborsFeat = []
+                pool_x, NB, x_size, x_cropped = self.SelectRegions(x, self.base_model, self.esp_net)
+                for i in range(NB+1):
+                    vlad_x = self.net_vlad(x_cropped[i])
+                    vlad_x = F.normalize(vlad_x, p=2, dim=2)  
+                    vlad_x = vlad_x.view(x_size, -1)  
+                    vlad_x = F.normalize(vlad_x, p=2, dim=1)  
+                    neighborsFeat.append(vlad_x)
+                node_features_list.append(neighborsFeat[NB])
+                node_features_list.append(torch.concat(neighborsFeat[0:NB],0))
+                neighborsFeat = []
+                gvlad = self.applyGNN(node_features_list)
+                gvlad = torch.add(gvlad,vlad_x)
+                # print(vlad_x.shape[1])
+                gvlad = gvlad.view(-1,vlad_x.shape[1])
+                return pool_x, gvlad
+            else:
+                pool_x, x = self.base_model(x)
+                vlad_x = self.net_vlad(x)
+                # normalize
+                vlad_x = F.normalize(vlad_x, p=2, dim=2)  # intra-normalization
+                vlad_x = vlad_x.view(x.size(0), -1)  # flatten
+                vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
+                return pool_x, vlad_x
+        ### TODO double check x
         return self._forward_train(x)
 
 class applyGNN(nn.Module):

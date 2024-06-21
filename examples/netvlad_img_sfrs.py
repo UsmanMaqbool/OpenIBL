@@ -118,7 +118,7 @@ def get_model(args):
         if (args.rank==0):
             print('===> Loading segmentation model')
         segmentation_model = get_segmentation_model(args.esp_encoder)
-        model = models.create('graphvlad', base_model, pool_layer, segmentation_model, tuple_size=args.tuple_size, sfrs=True)
+        model = models.create('embedregionnet', base_model, pool_layer, tuple_size=args.tuple_size, graphvlad=True, esp_net=segmentation_model)
 
     if (args.syncbn):
         convert_sync_bn(model)
@@ -184,7 +184,7 @@ def main_worker(args):
 
     # Trainer
     trainer = SFRSTrainer(model, model_cache, margin=args.margin**0.5,
-                                    neg_num=args.neg_num, gpu=args.gpu, temp=args.temperature, method=args.method)
+                                    neg_num=args.neg_num, gpu=args.gpu, temp=args.temperature)
     if ((args.cache_size<args.tuple_size) or (args.cache_size>len(dataset.q_train))):
         args.cache_size = len(dataset.q_train)
 
