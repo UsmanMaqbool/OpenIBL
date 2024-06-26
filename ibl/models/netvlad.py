@@ -246,15 +246,11 @@ class EmbedNetPCA(nn.Module):
         vlad_x = F.normalize(vlad_x, p=2, dim=-1)  
         return vlad_x
 class EmbedRegionNet(nn.Module):
-    def __init__(self, base_model, net_vlad, tuple_size=1, graphvlad=False, esp_net=None):
+    def __init__(self, base_model, net_vlad, tuple_size=1):
         super(EmbedRegionNet, self).__init__()
         self.base_model = base_model
         self.net_vlad = net_vlad
         self.tuple_size = tuple_size
-        self.esp_net = esp_net
-        self.graphvlad = graphvlad
-        self.SelectRegions = SelectRegions()
-        self.applyGNN = applyGNN()
 
     def _init_params(self):
         self.base_model._init_params()
@@ -318,20 +314,10 @@ class EmbedRegionNet(nn.Module):
         _, B, L = vlad_B.size()
         vlad_A = vlad_A.view(self.tuple_size,-1,B,L)
         vlad_B = vlad_B.view(self.tuple_size,-1,B,L)
-        # vlad_B.shape
-        # torch.Size([1, 11, 9, 32768])
-        # vlad_A.shape
-        # torch.Size([1, 1, 9, 32768])
+
         score = torch.bmm(vlad_A.expand_as(vlad_B).view(-1,B,L), vlad_B.view(-1,B,L).transpose(1,2))
-        # score.shape
-        # torch.Size([11, 9, 9])
         score = score.view(self.tuple_size,-1,B,B)
-        # score.shape
-        # torch.Size([1, 11, 9, 9])
-        # vlad_A.shape
-        # torch.Size([1, 1, 9, 32768])
-        # vlad_B.shape
-        # torch.Size([1, 11, 9, 32768])
+
         return score, vlad_A, vlad_B
 
     def _forward_train(self, x):
@@ -340,43 +326,19 @@ class EmbedRegionNet(nn.Module):
 
         anchors = x[:, 0].unsqueeze(1).contiguous().view(-1,C,H,W) # B*C*H*W
         pairs = x[:, 1:].view(-1,C,H,W) # (B*(1+neg_num))*C*H*W
-        x.shape
-        # torch.Size([1, 12, 512, 30, 40])
-        # anchors.shape
-        # torch.Size([1, 512, 30, 40])
-        # pairs.shape
-        # torch.Size([11, 512, 30, 40]) 
+
         return self._compute_region_sim(anchors, pairs)
 
     def forward(self, x):
-        if self.graphvlad:
-                node_features_list = []
-                neighborsFeat = []
-                pool_x, NB, x_size, x_cropped = self.SelectRegions(x, self.base_model, self.esp_net)
-                for i in range(NB+1):
-                    vlad_x = self.net_vlad(x_cropped[i])
-                    vlad_x = F.normalize(vlad_x, p=2, dim=2)  
-                    vlad_x = vlad_x.view(x_size, -1)  
-                    vlad_x = F.normalize(vlad_x, p=2, dim=1)  
-                    neighborsFeat.append(vlad_x)
-                node_features_list.append(neighborsFeat[NB])
-                node_features_list.append(torch.concat(neighborsFeat[0:NB],0))
-                neighborsFeat = []
-                gvlad = self.applyGNN(node_features_list)
-                gvlad = torch.add(gvlad,vlad_x)
-                # print(vlad_x.shape[1])
-                gvlad = gvlad.view(-1,vlad_x.shape[1])
-                return pool_x, gvlad
-        else: 
-            pool_x, x = self.base_model(x)
-            
+        pool_x, x = self.base_model(x)
+
         if (not self.training):
-                vlad_x = self.net_vlad(x)
-                # normalize
-                vlad_x = F.normalize(vlad_x, p=2, dim=2)  # intra-normalization
-                vlad_x = vlad_x.view(x.size(0), -1)  # flatten
-                vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
-                return pool_x, vlad_x
+            vlad_x = self.net_vlad(x)
+            # normalize
+            vlad_x = F.normalize(vlad_x, p=2, dim=2)  # intra-normalization
+            vlad_x = vlad_x.view(x.size(0), -1)  # flatten
+            vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
+            return pool_x, vlad_x
 
         return self._forward_train(x)
 

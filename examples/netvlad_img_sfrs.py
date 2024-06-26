@@ -32,14 +32,6 @@ from ibl.utils.rerank import re_ranking
 
 start_epoch = start_gen = best_recall5 = 0
 
-
-def get_segmentation_model(encoderFile):
-    classes = 20
-    p = 2
-    q = 8
-    model = models.create('espnet', classes=classes, p=p, q=q, encoderFile=encoderFile)
-    return model
-
 def get_data(args, iters):
     root = osp.join(args.data_dir, args.dataset)
     dataset = datasets.create(args.dataset, root, scale=args.scale)
@@ -103,8 +95,8 @@ def update_sampler(sampler, model, loader, query, gallery, sub_set, rerank=False
 
 def get_model(args):
     base_model = models.create(args.arch, train_layers=args.layers, matconvnet=osp.join(args.init_dir, 'vd16_offtheshelf_conv5_3_max.pth'))
-    pool_layer = models.create('netvlad', dim=base_model.feature_dim, num_clusters=args.num_clusters)
-    initcache = osp.join(args.init_dir, args.arch + '_pitts_' + str(args.num_clusters) + '_desc_cen.hdf5')
+    pool_layer = models.create('netvlad', dim=base_model.feature_dim)
+    initcache = osp.join(args.init_dir, args.arch + '_' + args.dataset + '_' + str(args.num_clusters) + '_desc_cen.hdf5')
     if (dist.get_rank()==0):
         print ('Loading centroids from {}'.format(initcache))
     with h5py.File(initcache, mode='r') as h5:
@@ -112,13 +104,7 @@ def get_model(args):
         pool_layer.traindescs = h5.get("descriptors")[...]
         pool_layer._init_params()
 
-    if(args.method=='netvlad'):
-        model = models.create('embedregionnet', base_model, pool_layer, tuple_size=args.tuple_size)   
-    elif(args.method=='graphvlad'):
-        if (args.rank==0):
-            print('===> Loading segmentation model')
-        segmentation_model = get_segmentation_model(args.esp_encoder)
-        model = models.create('embedregionnet', base_model, pool_layer, tuple_size=args.tuple_size, graphvlad=True, esp_net=segmentation_model)
+    model = models.create('embedregionnet', base_model, pool_layer, tuple_size=args.tuple_size)
 
     if (args.syncbn):
         convert_sync_bn(model)
@@ -270,7 +256,7 @@ def main_worker(args):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="SFRS / training")
+    parser = argparse.ArgumentParser(description="SFRS training")
     parser.add_argument('--launcher', type=str,
                         choices=['none', 'pytorch', 'slurm'],
                         default='none', help='job launcher')
@@ -312,7 +298,7 @@ if __name__ == '__main__':
     parser.add_argument('--eval-step', type=int, default=1)
     parser.add_argument('--epochs', type=int, default=5)
     parser.add_argument('--generations', type=int, default=4)
-    parser.add_argument('--loss-type', type=str, default='triplet', help="[triplet|sare_ind|sare_joint]")
+    parser.add_argument('--loss-type', type=str, default='sare_ind')
     parser.add_argument('--temperature', nargs='+', type=float, default=[0.07,0.07,0.06,0.05])
     parser.add_argument('--soft-weight', type=float, default=0.5)
     parser.add_argument('--iters', type=int, default=0)
