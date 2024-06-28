@@ -17,12 +17,13 @@ class Trainer(object):
     # 1. "NetVLAD: CNN architecture for weakly supervised place recognition" (CVPR'16), loss_type='triplet'
     # 2. "Stochastic Attraction-Repulsion Embedding for Large Scale Localization" (ICCV'19), loss_type='sare_ind' or 'sare_joint'
     #############################
-    def __init__(self, model, margin=0.3, gpu=None, temp=0.07):
+    def __init__(self, model, margin=0.3, gpu=None, temp=0.07, method='netvlad'):
         super(Trainer, self).__init__()
         self.model = model
         self.gpu = gpu
         self.margin = margin
         self.temp = temp
+        self.method = method
 
     def train(self, epoch, sub_id, data_loader, optimizer, train_iters,
                         print_freq=1, vlad=True, loss_type='triplet'):
@@ -172,7 +173,7 @@ class SFRSTrainer(object):
     # "Self-supervising Fine-grained Region Similarities for Large-scale Image Localization"
     #############################
     def __init__(self, model, model_cache, margin=0.3,
-                    neg_num=10, gpu=None, temp=[0.07,]):
+                    neg_num=10, gpu=None, temp=[0.07,], method='netvlad'):
         super(SFRSTrainer, self).__init__()
         self.model = model
         self.model_cache = model_cache
@@ -181,6 +182,8 @@ class SFRSTrainer(object):
         self.gpu = gpu
         self.neg_num = neg_num
         self.temp = temp
+        self.method = method
+
 
     def train(self, gen, epoch, sub_id, data_loader, optimizer, train_iters,
                     print_freq=1, lambda_soft=0.5, loss_type='sare_ind'):
@@ -248,26 +251,60 @@ class SFRSTrainer(object):
             sim_diff_label, _, _ = self.model_cache(inputs_diff) # B*diff_pos_num*9*9
         sim_diff, _, _ = self.model(inputs_diff)
 
-        if (gen==0):
-            loss_hard = self._get_loss(vlad_anchors[:,0,0], vlad_pairs[:,0,0], vlad_pairs[:,1:,0], B, loss_type)
-        else:
-            loss_hard = 0
-            for tri_idx in range(B):
-                loss_hard += self._get_hard_loss(vlad_anchors[tri_idx,0,0].contiguous(), vlad_pairs[tri_idx,0,0].contiguous(), \
-                                                vlad_pairs[tri_idx,1:], sim_easy[tri_idx,1:,0].contiguous().detach(), loss_type)
-            loss_hard /= B
+        # if (gen==0):
+        #     loss_hard = self._get_loss(vlad_anchors[:,0,0], vlad_pairs[:,0,0], vlad_pairs[:,1:,0], B, loss_type)
+        # else:
+        #     loss_hard = 0
+        #     for tri_idx in range(B):
+        #         loss_hard += self._get_hard_loss(vlad_anchors[tri_idx,0,0].contiguous(), vlad_pairs[tri_idx,0,0].contiguous(), \
+        #                                         vlad_pairs[tri_idx,1:], sim_easy[tri_idx,1:,0].contiguous().detach(), loss_type)
+        #     loss_hard /= B
 
-        log_sim_diff = F.log_softmax(sim_diff[:,:,0].contiguous().view(B,-1)/self.temp[0], dim=1)
-        loss_soft = (- F.softmax(sim_diff_label[:,:,0].contiguous().view(B,-1)/self.temp[gen], dim=1).detach() * log_sim_diff).mean(0).sum()
-
+        if(self.method=='netvlad'):
+            if (gen==0):
+                loss_hard = self._get_loss(vlad_anchors[:,0,0], vlad_pairs[:,0,0], vlad_pairs[:,1:,0], B, loss_type)
+            else:
+                loss_hard = 0
+                for tri_idx in range(B):
+                    loss_hard += self._get_hard_loss(vlad_anchors[tri_idx,0,0].contiguous(), vlad_pairs[tri_idx,0,0].contiguous(), \
+                                                    vlad_pairs[tri_idx,1:], sim_easy[tri_idx,1:,0].contiguous().detach(), loss_type)
+                loss_hard /= B
+            log_sim_diff = F.log_softmax(sim_diff[:,:,0].contiguous().view(B,-1)/self.temp[0], dim=1)
+            loss_soft = (- F.softmax(sim_diff_label[:,:,0].contiguous().view(B,-1)/self.temp[gen], dim=1).detach() * log_sim_diff).mean(0).sum()
+            
+        elif(self.method=='graphvlad'):
+            if (gen==0):
+                loss_hard = self._get_loss(vlad_anchors, vlad_pairs[:,0,:], vlad_pairs[:,1:,:], B, loss_type)
+            else:
+                loss_hard = 0
+                for tri_idx in range(B):
+                    loss_hard += self._get_hard_loss(vlad_anchors[tri_idx].contiguous(), vlad_pairs[tri_idx,0].contiguous(), \
+                                                    vlad_pairs[tri_idx,1:], sim_easy[tri_idx,1:].contiguous().detach(), loss_type)
+                loss_hard /= B
+            log_sim_diff = F.log_softmax(sim_diff[:,0].contiguous().view(B,-1)/self.temp[0], dim=1)
+            loss_soft = (- F.softmax(sim_diff_label[:,0].contiguous().view(B,-1)/self.temp[gen], dim=1).detach() * log_sim_diff).mean(0).sum()
+        
         return loss_hard, loss_soft
 
     def _get_hard_loss(self, anchors, positives, negatives, score_neg, loss_type):
         # select the most difficult regions for negatives
-        score_arg = score_neg.view(self.neg_num,-1).argmax(1)
-        score_arg = score_arg.unsqueeze(-1).unsqueeze(-1).expand_as(negatives).contiguous()
-        select_negatives = torch.gather(negatives,1,score_arg)
-        select_negatives = select_negatives[:,0]
+       #     Yeh method _get_hard_loss ka kaam sab se mushkil negative regions ko select karna aur unko loss calculation ke liye use karna hai. Is method mein:
+
+        # Negative Regions ka Selection:
+            #     Pehle, score_neg jo ke negative samples ka score hai, usko reshape kiya jata hai taake wo neg_num by -1 matrix ban jaye.
+            #     Phir, argmax(1) use kiya jata hai taake har row ka maximum score wale index ko select kiya jaye. Yeh indices wo positions hain jahan sab se mushkil negative regions hain.
+            #     score_arg ko reshape kiya jata hai taake yeh negatives ki shape ke sath match kare aur expand kiya jata hai.
+            #     torch.gather function use karke, negatives mein se in indices ke sath corresponding negative regions ko select kiya jata hai.
+        # select_negatives mein ab sab se mushkil negative regions hain.
+        if(self.method=='netvlad'):
+            score_arg = score_neg.view(self.neg_num,-1).argmax(1)
+            score_arg = score_arg.unsqueeze(-1).unsqueeze(-1).expand_as(negatives).contiguous()
+            select_negatives = torch.gather(negatives,1,score_arg)
+            select_negatives = select_negatives[:,0]
+        elif(self.method=='graphvlad'):    
+            score_arg = score_neg.unsqueeze(-1).expand_as(negatives).contiguous()
+            score_arg = score_arg.long()
+            select_negatives = torch.gather(negatives,1,score_arg)
 
         return self._get_loss(anchors.unsqueeze(0).contiguous(), \
                             positives.unsqueeze(0).contiguous(), \
