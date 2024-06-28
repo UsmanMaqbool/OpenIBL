@@ -470,13 +470,6 @@ class GraphVLAD(nn.Module):
         gvlad = torch.add(gvlad,vlad_x)
         # print(vlad_x.shape[1])
         gvlad = gvlad.view(-1,vlad_x.shape[1])
-        if  (self.sfrs and self.training):      
-            anchors = gvlad[0, :].unsqueeze(0)
-            pairs = gvlad[1:, :].unsqueeze(0)
-            del gvlad
-            score = torch.matmul(pairs, anchors.unsqueeze(-1))
-            score = score.view(self.tuple_size,-1)
-            return score, anchors, pairs
         return pool_x, gvlad
 class GraphVLADPCA(nn.Module):
     def __init__(self, base_model, net_vlad, esp_net, dim=4096):
