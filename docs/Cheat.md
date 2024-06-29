@@ -30,7 +30,7 @@
 ```sh
 ### Data: 
 ## Training
-
+./scripts/train_sfrs_dist.sh graphvlad sare_ind vgg16 pitts 30k
 ## Testing
 
 ```
@@ -42,6 +42,13 @@
 sbatch --j netvlad-triplet scripts/train_sfrs_slurm_all.sh graphvlad sare_ind vgg16 pitts 30k
 ### Testin
 sbatch --j netvlad-triplet scripts/test_slurm_all.sh graphvlad vgg16 pitts 30k /home/m.maqboolbhutta/usman_ws/models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.01-tuple4-19-Jun/
+
+```
+**Interactive:**
+```sh
+srun --partition=gpu --gres=a100:4 --time=2:00:00 --nodes=1 --ntasks=1 --cpus-per-task=24 --constraint=a100 --mem-per-cpu=8GB --distribution=cyclic:cyclic --pty bash -i
+module load conda/24.1.2 intel/2019.1.144 openmpi/4.0.0
+conda activate openibl
 
 ```
 
