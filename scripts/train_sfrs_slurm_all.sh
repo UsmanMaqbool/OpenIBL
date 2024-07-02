@@ -8,7 +8,7 @@
 #SBATCH --job-name=
 #SBATCH --mail-type=END,FAIL          # Mail events (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=m.maqboolbhutta@ufl.edu
-#SBATCH --time=52:00:00
+#SBATCH --time=72:00:00
 #SBATCH --partition=gpu
 #SBATCH --output=R-%x.%j.out
 #SBATCH --error=R-%x.%j.err
@@ -88,7 +88,52 @@ echo "Other nodes: $NODES"
 #===================================================================================================
 # SARE Ind Loss
 #===================================================================================================
-LOSS="sare_ind"
+# LOSS="sare_ind"
+# DATE=$(date '+%d-%b') 
+# FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+
+# echo ${FILES}
+
+# echo "==========Starting Training============="
+# echo "========================================"
+# srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
+# python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
+#   -d ${DATASET} --scale ${SCALE} \
+#   -a ${ARCH} --layers ${LAYERS} --syncbn \
+#   --width 640 --height 480 --tuple-size 1 -j 2 --test-batch-size 16 \
+#   --neg-num 10  --pos-pool 20 --neg-pool 1000 --pos-num 10 \
+#   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} --soft-weight 0.5 \
+#   --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 --generations 4 --temperature 0.07 0.07 0.06 0.05 --logs-dir ${FILES} --data-dir ${DATASET_DIR} \
+#   --init-dir ${INIT_DIR} --esp-encoder=${ESP_ENCODER} \
+#    --method ${METHOD}
+
+
+# echo "==========Testing============="
+# FILES="${FILES}/*.tar"
+# echo ${FILES}
+# echo "=============================="
+# for RESUME in $FILES
+# do
+#   # take action on each file. $f store current file name
+#   echo "==========################============="
+#   echo " Testing $RESUME file..."
+#   echo "======================================="
+#   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+#    examples/test_pitts_tokyo.py --launcher pytorch \
+#     -a ${ARCH} --test-batch-size 32 -j 2 \
+#     --vlad --reduction --method ${METHOD} \
+#     --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
+#     --num-clusters ${NUMCLUSTER}
+#   echo "==========################============="
+#   echo " Done Testing with $RESUME file..."
+#   echo "======================================="  
+# done
+
+
+#===================================================================================================
+# SARE Joint Loss
+#===================================================================================================
+LOSS="sare_joint"
 DATE=$(date '+%d-%b') 
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
@@ -106,51 +151,6 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
   --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 --generations 4 --temperature 0.07 0.07 0.06 0.05 --logs-dir ${FILES} --data-dir ${DATASET_DIR} \
   --init-dir ${INIT_DIR} --esp-encoder=${ESP_ENCODER} \
    --method ${METHOD}
-
-
-echo "==========Testing============="
-FILES="${FILES}/*.tar"
-echo ${FILES}
-echo "=============================="
-for RESUME in $FILES
-do
-  # take action on each file. $f store current file name
-  echo "==========################============="
-  echo " Testing $RESUME file..."
-  echo "======================================="
-  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-   examples/test_pitts_tokyo.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size 32 -j 2 \
-    --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
-    --num-clusters ${NUMCLUSTER}
-  echo "==========################============="
-  echo " Done Testing with $RESUME file..."
-  echo "======================================="  
-done
-
-
-#===================================================================================================
-# SARE Joint Loss
-#===================================================================================================
-LOSS="sare_joint"
-DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
-
-echo ${FILES}
-
-echo "==========Starting Training============="
-echo "========================================"
-srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
-python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
-  -d ${DATASET} --scale ${SCALE} \
-  -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
-  --width 640 --height 480 --tuple-size ${TUMPLESIZE} -j 2 --neg-num 10 --test-batch-size ${CACHEBS} \
-  --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
-  --eval-step 1 --epochs ${NPOCH} --step-size 5 --cache-size 1000 \
-  --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
-  --init-dir ${INIT_DIR} --esp-encoder ${ESP_ENCODER} \
-  --num-clusters ${NUMCLUSTER}
 
 
 echo "==========Testing============="
@@ -188,15 +188,15 @@ echo ${FILES}
 echo "==========Starting Training============="
 echo "========================================"
 srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
-python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
-  -d $        loss_soft = (- F.softmax(sim_diff_label[:,0].contiguous().view(B,-1)/self.temp[gen], dim=1).detach() * log_sim_diff).mean(0).sum(){DATASET} --scale ${SCALE} \
-  -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
-  --width 640 --height 480 --tuple-size ${TUMPLESIZE} -j 2 --neg-num 10 --test-batch-size ${CACHEBS} \
-  --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
-  --eval-step 1 --epochs ${NPOCH} --step-size 5 --cache-size 1000 \
-  --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
-  --init-dir ${INIT_DIR} --esp-encoder ${ESP_ENCODER} \
-  --num-clusters ${NUMCLUSTER}
+python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
+  -d ${DATASET} --scale ${SCALE} \
+  -a ${ARCH} --layers ${LAYERS} --syncbn \
+  --width 640 --height 480 --tuple-size 1 -j 2 --test-batch-size 16 \
+  --neg-num 10  --pos-pool 20 --neg-pool 1000 --pos-num 10 \
+  --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} --soft-weight 0.5 \
+  --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 --generations 4 --temperature 0.07 0.07 0.06 0.05 --logs-dir ${FILES} --data-dir ${DATASET_DIR} \
+  --init-dir ${INIT_DIR} --esp-encoder=${ESP_ENCODER} \
+   --method ${METHOD}
 
 
 echo "==========Testing============="
