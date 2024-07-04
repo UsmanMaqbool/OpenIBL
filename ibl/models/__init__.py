@@ -16,6 +16,7 @@ __factory = {
     'graphvlad': GraphVLAD,
     'graphvladpca': GraphVLADPCA,
     'espnet': ESPNet,
+    'graphvladsfrs': GraphVLADSFRS,
 }
 
 

@@ -30,6 +30,7 @@ import torch.nn.init as init
 from torchvision import transforms
 from .espnet import *
 from torchvision.ops import masks_to_boxes
+import code
 class NeighborAggregator(nn.Module):
     def __init__(self, input_dim, output_dim,
                  use_bias=False, aggr_method="mean"):
@@ -379,6 +380,7 @@ class applyGNN(nn.Module):
 class SelectRegions(nn.Module):
     def __init__(self):
         super(SelectRegions, self).__init__()
+        self.NB = 5
     def forward(self, x, base_model, espnet):
         sizeH = x.shape[2]
         sizeW = x.shape[3]
@@ -389,9 +391,6 @@ class SelectRegions(nn.Module):
 
         with torch.no_grad():
             b_out = espnet(x)
-        # b_out = espnet(x)
-
-
         mask = b_out.max(1)[1]   
         for jj in range(len(mask)):  
             single_label_mask = mask[jj]
@@ -411,14 +410,13 @@ class SelectRegions(nn.Module):
                 [0, 0, W,int(H/3)], 
                 [int(2*W/3), 0, W,H], 
                 [0, int(2*H/3), W,H]]
-        NB = 5
-        graph_nodes = torch.zeros(N,NB,C,H,W).cuda()
+        graph_nodes = torch.zeros(N,self.NB,C,H,W).cuda()
         rsizet = transforms.Resize((H,W)) 
         for Nx in range(N):    
             img_nodes = []
             for idx in range(len(boxes)):
                 for b_idx in range(len(rr_boxes)):
-                    if idx == rr_boxes[b_idx] and obj_i[b_idx] > 10000 and len(img_nodes) < NB-2:
+                    if idx == rr_boxes[b_idx] and obj_i[b_idx] > 10000 and len(img_nodes) < self.NB-2:
                         patch_mask = patch_mask*0
                         patch_mask[single_label_mask == obj_ids[b_idx]] = 1
                         patch_maskr = rsizet(patch_mask.unsqueeze(0))
@@ -429,26 +427,24 @@ class SelectRegions(nn.Module):
                         resultant = rsizet(c_img)
                         img_nodes.append(resultant.unsqueeze(0))
                         break                    
-            if len(img_nodes) < NB:
+            if len(img_nodes) < self.NB:
                 for i in range(len(bb_x)-len(img_nodes)):
                     x_cropped =  x[Nx][: ,bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
                     img_nodes.append(rsizet(x_cropped.unsqueeze(0)))
             aa = torch.stack(img_nodes,1)
             graph_nodes[Nx] = aa[0]
-        x_cropped = graph_nodes.view(NB,N,C,H,W)
-        x_cropped = torch.cat((graph_nodes.view(NB,N,C,H,W), x.unsqueeze(0)))
+        x_cropped = graph_nodes.view(self.NB,N,C,H,W)
+        x_cropped = torch.cat((graph_nodes.view(self.NB,N,C,H,W), x.unsqueeze(0)))
         del graph_nodes
-        return pool_x, NB, x.size(0), x_cropped
+        return pool_x, self.NB, x.size(0), x_cropped
 class GraphVLAD(nn.Module):
-    def __init__(self, base_model, net_vlad, esp_net, sfrs=False, tuple_size=1):
+    def __init__(self, base_model, net_vlad, esp_net):
         super(GraphVLAD, self).__init__()
         self.base_model = base_model
         self.esp_net = esp_net
         self.net_vlad = net_vlad
         self.SelectRegions = SelectRegions()
         self.applyGNN = applyGNN()
-        self.sfrs = sfrs
-        self.tuple_size = tuple_size
 
     def _init_params(self):
         self.base_model._init_params()
@@ -504,4 +500,45 @@ class GraphVLADPCA(nn.Module):
         gvlad = self.pca_layer(gvlad).view(N, -1)
         gvlad = F.normalize(gvlad, p=2, dim=-1)  
         return gvlad
-    
+class GraphVLADSFRS(nn.Module):
+    def __init__(self, base_model, net_vlad, tuple_size=1, esp_net=None):
+        super(GraphVLADSFRS, self).__init__()
+        self.base_model = base_model
+        self.net_vlad = net_vlad
+        self.tuple_size = tuple_size
+
+        self.esp_net = esp_net
+        self.SelectRegions = SelectRegions()
+        self.applyGNN = applyGNN()
+        
+    def _init_params(self):
+        self.base_model._init_params()
+        self.net_vlad._init_params()
+
+    def forward(self, x):
+        node_features_list = []
+        neighborsFeat = []
+        pool_x, NB, x_size, x_cropped = self.SelectRegions(x, self.base_model, self.esp_net)
+        for i in range(NB+1):
+            vlad_x = self.net_vlad(x_cropped[i])
+            vlad_x = F.normalize(vlad_x, p=2, dim=2)  
+            vlad_x = vlad_x.view(x_size, -1)  
+            vlad_x = F.normalize(vlad_x, p=2, dim=1)  
+            neighborsFeat.append(vlad_x)
+        node_features_list.append(neighborsFeat[NB])
+        node_features_list.append(torch.concat(neighborsFeat[0:NB],0))
+        del neighborsFeat
+        gvlad = self.applyGNN(node_features_list)
+        gvlad = torch.add(gvlad,vlad_x)
+        gvlad = vlad_x
+        gvlad = gvlad.view(-1,vlad_x.shape[1])
+       
+        if (not self.training):
+            return pool_x, gvlad
+        else:
+            vlad_A = gvlad[0,:]
+            vlad_B = gvlad[1:,:]
+            B, L = vlad_B.size()
+            score = torch.bmm(vlad_A.expand_as(vlad_B).view(B,-1,L), vlad_B.view(B,-1,L).transpose(1,2))
+            score = score.view(B,-1)
+            return score, vlad_A, vlad_B

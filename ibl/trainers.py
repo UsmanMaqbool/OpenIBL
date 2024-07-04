@@ -251,15 +251,6 @@ class SFRSTrainer(object):
             sim_diff_label, _, _ = self.model_cache(inputs_diff) # B*diff_pos_num*9*9
         sim_diff, _, _ = self.model(inputs_diff)
 
-        # if (gen==0):
-        #     loss_hard = self._get_loss(vlad_anchors[:,0,0], vlad_pairs[:,0,0], vlad_pairs[:,1:,0], B, loss_type)
-        # else:
-        #     loss_hard = 0
-        #     for tri_idx in range(B):
-        #         loss_hard += self._get_hard_loss(vlad_anchors[tri_idx,0,0].contiguous(), vlad_pairs[tri_idx,0,0].contiguous(), \
-        #                                         vlad_pairs[tri_idx,1:], sim_easy[tri_idx,1:,0].contiguous().detach(), loss_type)
-        #     loss_hard /= B
-
         if(self.method=='netvlad'):
             if (gen==0):
                 loss_hard = self._get_loss(vlad_anchors[:,0,0], vlad_pairs[:,0,0], vlad_pairs[:,1:,0], B, loss_type)
@@ -274,12 +265,11 @@ class SFRSTrainer(object):
             
         elif(self.method=='graphvlad'):
             if (gen==0):
-                loss_hard = self._get_loss(vlad_anchors, vlad_pairs[:,0,:], vlad_pairs[:,1:,:], B, loss_type)
+                loss_hard = self._get_loss(vlad_anchors.unsqueeze(0).contiguous(), vlad_pairs[0,:].unsqueeze(0).contiguous(), vlad_pairs[1:,:].unsqueeze(0).contiguous(), B, loss_type)
             else:
                 loss_hard = 0
-                for tri_idx in range(B):
-                    loss_hard += self._get_hard_loss(vlad_anchors[tri_idx].contiguous(), vlad_pairs[tri_idx,0].contiguous(), \
-                                                    vlad_pairs[tri_idx,1:], sim_easy[tri_idx,1:].contiguous().detach(), loss_type)
+                loss_hard += self._get_hard_loss(vlad_anchors, vlad_pairs[0].contiguous(), \
+                                                vlad_pairs[1:], sim_easy[1:].contiguous().detach(), loss_type)
                 loss_hard /= B
             log_sim_diff = F.log_softmax(sim_diff[:,0].contiguous().view(B,-1)/self.temp[0], dim=1)
             loss_soft = (- F.softmax(sim_diff_label[:,0].contiguous().view(B,-1)/self.temp[gen], dim=1).detach() * log_sim_diff).mean(0).sum()
@@ -302,10 +292,9 @@ class SFRSTrainer(object):
             select_negatives = torch.gather(negatives,1,score_arg)
             select_negatives = select_negatives[:,0]
         elif(self.method=='graphvlad'):    
-            score_arg = score_neg.unsqueeze(-1).expand_as(negatives).contiguous()
-            score_arg = score_arg.long()
-            select_negatives = torch.gather(negatives,1,score_arg)
-
+            score_arg = score_neg.squeeze(1).contiguous()
+            score_arg = score_arg.unsqueeze(-1).expand_as(negatives).contiguous()
+            select_negatives = negatives
         return self._get_loss(anchors.unsqueeze(0).contiguous(), \
                             positives.unsqueeze(0).contiguous(), \
                             select_negatives.unsqueeze(0).contiguous(), 1, loss_type)
