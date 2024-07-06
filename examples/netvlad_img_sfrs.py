@@ -119,7 +119,7 @@ def get_model(args):
         if (args.rank==0):
             print('===> Loading segmentation model')
         segmentation_model = get_segmentation_model(args.esp_encoder)
-        model = models.create('embedregionnet', base_model, pool_layer, tuple_size=args.tuple_size, graphvlad=True, esp_net=segmentation_model)
+        model = models.create('graphvladembedregion', base_model, pool_layer, tuple_size=args.tuple_size, esp_net=segmentation_model)
 
 
     if (args.syncbn):

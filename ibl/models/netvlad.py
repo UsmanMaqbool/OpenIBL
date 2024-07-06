@@ -504,4 +504,56 @@ class GraphVLADPCA(nn.Module):
         gvlad = self.pca_layer(gvlad).view(N, -1)
         gvlad = F.normalize(gvlad, p=2, dim=-1)  
         return gvlad
-    
+class GraphVLADEmbedRegion(nn.Module):
+    def __init__(self, base_model, net_vlad, tuple_size=1, esp_net=None):
+        super(GraphVLADEmbedRegion, self).__init__()
+        self.base_model = base_model
+        self.net_vlad = net_vlad
+        self.tuple_size = tuple_size
+
+        self.esp_net = esp_net
+        self.SelectRegions = SelectRegions()
+        self.applyGNN = applyGNN()
+        
+    def _init_params(self):
+        self.base_model._init_params()
+        self.net_vlad._init_params()
+
+    def forward(self, x):
+        node_features_list = []
+        neighborsFeat = []
+        pool_x, NB, x_size, x_cropped = self.SelectRegions(
+            x, self.base_model, self.esp_net
+        )
+        for i in range(NB + 1):
+            vlad_x = self.net_vlad(x_cropped[i])
+            vlad_x = F.normalize(vlad_x, p=2, dim=2)
+            vlad_x = vlad_x.view(x_size, -1)
+            vlad_x = F.normalize(vlad_x, p=2, dim=1)
+            neighborsFeat.append(vlad_x)
+
+        if not self.training:
+            node_features_list.append(neighborsFeat[NB])
+            node_features_list.append(torch.cat(neighborsFeat[0:NB], 0))
+            del neighborsFeat
+            gvlad = self.applyGNN(node_features_list)
+            gvlad = torch.add(gvlad, vlad_x)
+            gvlad = vlad_x
+            gvlad = gvlad.view(-1, vlad_x.shape[1])
+            return pool_x, gvlad
+        else:
+            ## global_Feat = neighborsFeat[5]
+            global_local_Feat = [neighborsFeat[5], neighborsFeat[0], neighborsFeat[1], neighborsFeat[2], neighborsFeat[3], neighborsFeat[4]]
+            del neighborsFeat
+            vlad_A = torch.stack(global_local_Feat, dim=1)[0].unsqueeze(0)
+            vlad_B = torch.stack(global_local_Feat, dim=1)[1:]
+            del global_local_Feat
+            _, B, L = vlad_B.size()
+            vlad_A = vlad_A.view(self.tuple_size, -1, B, L)
+            vlad_B = vlad_B.view(self.tuple_size, -1, B, L)
+            score = torch.bmm(
+                vlad_A.expand_as(vlad_B).view(-1, B, L),
+                vlad_B.view(-1, B, L).transpose(1, 2),
+            )
+            score = score.view(self.tuple_size, -1, B, B)
+            return score, vlad_A, vlad_B
