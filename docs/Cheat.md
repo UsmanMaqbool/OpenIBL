@@ -31,7 +31,12 @@
 ### Data: 
 ## Training
 ./scripts/train_sfrs_dist.sh graphvlad sare_ind vgg16 pitts 30k
+
 ## Testing
+
+### Download to PC
+#### /home/m.maqboolbhutta/usman_ws/models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-06-Jul/checkpoint3_4.pth.tar
+./scripts/test_dist.sh graphvlad /home/leo/usman_ws/models/openibl/graphvlad/checkpoint3_4.pth.tar
 
 ```
 ##### Slurm
@@ -42,8 +47,8 @@
 sbatch --j netvlad-triplet scripts/train_sfrs_slurm_all.sh graphvlad sare_ind vgg16 pitts 30k
 sbatch --j sfrs-graphvlad-dev3-1355-2jul scripts/train_sfrs_slurm_all.sh graphvlad sare_joint vgg16 pitts 30k
 
-### Testin
-sbatch --j netvlad-triplet scripts/test_slurm_all.sh graphvlad vgg16 pitts 30k /home/m.maqboolbhutta/usman_ws/models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.01-tuple4-19-Jun/
+### Testing
+sbatch --j graphvlad-sare-ind scripts/test_slurm_all.sh graphvlad vgg16 pitts 30k /home/m.maqboolbhutta/usman_ws/models/openibl/graphvlad/
 
 ```
 **Interactive:**
