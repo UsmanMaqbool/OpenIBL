@@ -119,7 +119,7 @@ def get_model(args):
         if (args.rank==0):
             print('===> Loading segmentation model')
         segmentation_model = get_segmentation_model(args.esp_encoder)
-        model = models.create('embedregionnet', base_model, pool_layer, tuple_size=args.tuple_size, graphvlad=True, esp_net=segmentation_model)
+        model = models.create('embedregiongraphvlad', base_model, pool_layer, tuple_size=args.tuple_size, esp_net=segmentation_model)
 
 
     if (args.syncbn):
@@ -175,18 +175,18 @@ def main_worker(args):
             print("=> Start epoch {}  best recall5 {:.1%}"
                   .format(start_epoch, best_recall5))
 
-    # Evaluator
-    evaluator = Evaluator(model)
+    # # Evaluator
+    # evaluator = Evaluator(model)
 
-    if (args.rank==0):
-        print("Test the initial model:")
-    recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
-                        dataset.q_val, dataset.db_val, dataset.val_pos,
-                        vlad=True, gpu=args.gpu, sync_gather=args.sync_gather)
+    # if (args.rank==0):
+    #     print("Test the initial model:")
+    # recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
+    #                     dataset.q_val, dataset.db_val, dataset.val_pos,
+    #                     vlad=True, gpu=args.gpu, sync_gather=args.sync_gather)
 
     # Trainer
     trainer = SFRSTrainer(model, model_cache, margin=args.margin**0.5,
-                                    neg_num=args.neg_num, gpu=args.gpu, temp=args.temperature)
+                                    neg_num=args.neg_num, gpu=args.gpu, temp=args.temperature, method=args.method)
     if ((args.cache_size<args.tuple_size) or (args.cache_size>len(dataset.q_train))):
         args.cache_size = len(dataset.q_train)
 
@@ -194,17 +194,18 @@ def main_worker(args):
         # Update model cache and init model
         model_cache.load_state_dict(model.state_dict())
         model.module._init_params()
-
+        print(f"gen: {gen}")
         # Optimizer
         optimizer = torch.optim.SGD(filter(lambda p: p.requires_grad, model.parameters()),
                                     lr=args.lr, momentum=args.momentum, weight_decay=args.weight_decay)
         lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=args.step_size, gamma=0.5)
-
+        print(f"Optimizer and lr_scheduler")
         if (gen==0):
             start_epoch = args.epochs-1
 
         for epoch in range(start_epoch, args.epochs):
-
+            print(f"epoch: {gen}")
+            
             sampler.set_epoch(args.seed+epoch)
             if (epoch%args.step_size==0):
                 args.cache_size = args.cache_size * (2 ** (epoch // args.step_size))
@@ -212,18 +213,20 @@ def main_worker(args):
             g = torch.Generator()
             g.manual_seed(args.seed+epoch)
             subset_indices = torch.randperm(len(dataset.q_train), generator=g).long().split(args.cache_size)
-
+            print("create subset indices")
             for subid, subset in enumerate(subset_indices):
                 update_sampler(sampler, model, train_extract_loader, dataset.q_train, dataset.db_train, subset.tolist(),
                                 rerank=(gen>0), vlad=True, gpu=args.gpu, sync_gather=args.sync_gather)
                 synchronize()
-
+                print("update sampler")
                 trainer.train(gen, epoch, subid, train_loader, optimizer,
                                 train_iters=len(train_loader), print_freq=args.print_freq,
                                 lambda_soft=(args.soft_weight if gen>0 else 0), loss_type=args.loss_type)
                 synchronize()
+                print("train")
 
             if ((epoch+1)%args.eval_step==0 or (epoch==args.epochs-1)):
+                print("evaluate and calculate recall")
                 recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
                                         dataset.q_val, dataset.db_val, dataset.val_pos,
                                         vlad=True, gpu=args.gpu, sync_gather=args.sync_gather)
