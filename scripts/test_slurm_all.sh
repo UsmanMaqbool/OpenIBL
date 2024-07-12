@@ -90,11 +90,11 @@ SCALE
   echo " Testing $RESUME file..."
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-   examples/test_pitts_tokyo.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size 64 -j 8 \
-    --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
-    --num-clusters ${NUMCLUSTER}
+  examples/test_pitts_tokyo.py --launcher pytorch \
+  -a ${ARCH} --test-batch-size 64 -j 8 \
+  --vlad --reduction --method ${METHOD} \
+  --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
+  --num-clusters ${NUMCLUSTER}
   echo "==========################============="
   echo " Done Testing with $RESUME file..."
   echo "======================================="  

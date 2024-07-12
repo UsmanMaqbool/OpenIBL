@@ -1,0 +1,65 @@
+Tue Jul  9 06:24:17 EDT 2024
+/home/m.maqboolbhutta/usman_ws/codes/OpenIBL
+/home/m.maqboolbhutta/.conda/envs/openibl/bin/python
+Host: c1109a-s35
+Other nodes: 
+==========Testing=============
+/home/m.maqboolbhutta/usman_ws/models/openibl/graphvlad//checkpoint3_4.pth.tar
+==============================
+==========################=============
+ Testing /home/m.maqboolbhutta/usman_ws/models/openibl/graphvlad//checkpoint3_4.pth.tar file...
+=======================================
+Use GPU: 0 for testing, rank no.0 of world_size 4Use GPU: 1 for testing, rank no.1 of world_size 4Use GPU: 3 for testing, rank no.3 of world_size 4Use GPU: 2 for testing, rank no.2 of world_size 4
+
+
+
+==========
+Args:Namespace(arch='vgg16', data_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/data', dataset='pitts', esp_encoder='/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/home/m.maqboolbhutta/usman_ws/models/openibl/graphvlad//checkpoint3_4.pth.tar', rr_topk=25, scale='30k', sync_gather=False, tcp_port='5017', test_batch_size=64, vlad=True, width=640, workers=8, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+===> Loading segmentation model
+===> Loading segmentation model
+===> Loading segmentation model
+===> Loading segmentation model
+=> Loaded checkpoint '/home/m.maqboolbhutta/usman_ws/models/openibl/graphvlad//checkpoint3_4.pth.tar'
+PCA parameters path:  /home/m.maqboolbhutta/usman_ws/models/openibl/graphvlad/pca_params_checkpoint3_4.h5
+PCA parameters path:  /home/m.maqboolbhutta/usman_ws/models/openibl/graphvlad/pca_params_checkpoint3_4.h5
+PCA parameters path:  /home/m.maqboolbhutta/usman_ws/models/openibl/graphvlad/pca_params_checkpoint3_4.h5
+=> Start epoch 4  best recall5 96.4%
+PCA parameters path:  /home/m.maqboolbhutta/usman_ws/models/openibl/graphvlad/pca_params_checkpoint3_4.h5
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Evaluate on the test set:
+==========Test on Pitts250k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   332  |     7800
+  train_gallery |  3811  |    91464
+  val_query     |   319  |     7608
+  val_gallery   |  3277  |    78648
+  test_query    |   347  |     8280
+  test_gallery  |  3498  |    83952
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...

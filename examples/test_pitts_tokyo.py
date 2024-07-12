@@ -148,7 +148,7 @@ def main_worker(args):
                         vlad=args.vlad, pca=pca, rerank=args.rerank, gpu=args.gpu, sync_gather=args.sync_gather,
                         nms=(True if args.dataset=='tokyo' else False),
                         rr_topk=args.rr_topk, lambda_value=args.lambda_value)
-    
+    synchronize()
     
     if (args.rank==0):
         print("Evaluate on the test set:")
@@ -165,7 +165,7 @@ def main_worker(args):
                         nms=(True if args.dataset=='tokyo' else False),
                         rr_topk=args.rr_topk, lambda_value=args.lambda_value)
     
- 
+    synchronize()
     if (args.rank==0):
         print("==========Test on Tokyo247=============")
     
