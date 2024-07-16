@@ -45,20 +45,23 @@
 # 0620-v9-graphvlad-sort-gal 
 ## Training
 sbatch --j netvlad-triplet scripts/train_sfrs_slurm_all.sh graphvlad sare_ind vgg16 pitts 30k
-sbatch --j sfrs-graphvlad-dev3-1355-2jul scripts/train_sfrs_slurm_all.sh graphvlad sare_joint vgg16 pitts 30k
+sbatch --j v1.1-15jul scripts/train_sfrs_slurm_all.sh graphvlad sare_joint vgg16 pitts 30k
 
 ### Testing
 sbatch --j graphvlad-sare-ind scripts/test_slurm_all.sh graphvlad vgg16 pitts 30k /home/m.maqboolbhutta/usman_ws/models/openibl/graphvlad/
 
 ```
+###### Debug
 **Interactive:**
 ```sh
-srun --partition=gpu --gres=a100:4 --time=2:00:00 --nodes=1 --ntasks=1 --cpus-per-task=24 --constraint=a100 --mem-per-cpu=8GB --distribution=cyclic:cyclic --pty bash -i
+srun --partition=gpu --gpus-per-node=a100:4 --cpus-per-task=24 --pty bash
 module load conda/24.1.2 intel/2019.1.144 openmpi/4.0.0
 conda activate openibl
-
 ```
-
+Train file: `./scripts/debug_train_sfrs_dist_slurm.sh`
+```sh
+./scripts/debug_train_sfrs_dist_slurm.sh graphvlad sare_ind vgg16 pitts 30k
+```
 ## Install ⚙️
 
 ### Configure 🪛
