@@ -51,7 +51,21 @@ sbatch --j v1.1-15jul scripts/train_sfrs_slurm_all.sh graphvlad sare_joint vgg16
 sbatch --j graphvlad-sare-ind scripts/test_slurm_all.sh graphvlad vgg16 pitts 30k /home/m.maqboolbhutta/usman_ws/models/openibl/graphvlad/
 
 ```
-###### Debug
+
+#### Results
+
+##### July 15: SareIND : v1.1graphvlad-sfrs | Hipergator
+Location: /home/m.maqboolbhutta/usman_ws/models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-15-Jul
+```sh
+# tested on PC
+## location: /home/leo/usman_ws/models/openibl/graphvlad/hipergator/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-15-Jul 
+./scripts/test_dist_all.sh graphvlad /home/leo/usman_ws/models/openibl/graphvlad/hipergator/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-15-Jul
+
+```
+
+
+
+### Debug
 **Interactive:**
 ```sh
 srun --partition=gpu --gpus-per-node=a100:4 --cpus-per-task=24 --pty bash
