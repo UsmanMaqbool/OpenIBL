@@ -108,26 +108,26 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
    --method ${METHOD}
 
 
-echo "==========Testing============="
-FILES="${FILES}/*.tar"
-echo ${FILES}
-echo "=============================="
-for RESUME in $FILES
-do
-  # take action on each file. $f store current file name
-  echo "==========################============="
-  echo " Testing $RESUME file..."
-  echo "======================================="
-  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-   examples/test_pitts_tokyo.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size 32 -j 2 \
-    --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
-    --num-clusters ${NUMCLUSTER}
-  echo "==========################============="
-  echo " Done Testing with $RESUME file..."
-  echo "======================================="  
-done
+# echo "==========Testing============="
+# FILES="${FILES}/*.tar"
+# echo ${FILES}
+# echo "=============================="
+# for RESUME in $FILES
+# do
+#   # take action on each file. $f store current file name
+#   echo "==========################============="
+#   echo " Testing $RESUME file..."
+#   echo "======================================="
+#   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+#    examples/test_pitts_tokyo.py --launcher pytorch \
+#     -a ${ARCH} --test-batch-size 32 -j 2 \
+#     --vlad --reduction --method ${METHOD} \
+#     --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
+#     --num-clusters ${NUMCLUSTER}
+#   echo "==========################============="
+#   echo " Done Testing with $RESUME file..."
+#   echo "======================================="  
+# done
 
 
 #===================================================================================================
@@ -153,27 +153,27 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
    --method ${METHOD}
 
 
-echo "==========Testing============="
-FILES="${FILES}/*.tar"
-echo ${FILES}
-echo "=============================="
-for RESUME in $FILES
-do
-  # take action on each file. $f store current file name
+# echo "==========Testing============="
+# FILES="${FILES}/*.tar"
+# echo ${FILES}
+# echo "=============================="
+# for RESUME in $FILES
+# do
+#   # take action on each file. $f store current file name
 
-  echo "==========################============="
-  echo " Testing $RESUME file..."
-  echo "======================================="
-  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-   examples/test_pitts_tokyo.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size 32 -j 2 \
-    --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
-  --num-clusters ${NUMCLUSTER}
-  echo "==========################============="
-  echo " Done Testing with $RESUME file..."
-  echo "======================================="  
-done
+#   echo "==========################============="
+#   echo " Testing $RESUME file..."
+#   echo "======================================="
+#   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+#    examples/test_pitts_tokyo.py --launcher pytorch \
+#     -a ${ARCH} --test-batch-size 32 -j 2 \
+#     --vlad --reduction --method ${METHOD} \
+#     --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
+#   --num-clusters ${NUMCLUSTER}
+#   echo "==========################============="
+#   echo " Done Testing with $RESUME file..."
+#   echo "======================================="  
+# done
 
 #===================================================================================================
 # Tiplet Loss
@@ -199,24 +199,24 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
    --method ${METHOD}
 
 
-echo "==========Testing============="
-FILES="${FILES}/*.tar"
-echo ${FILES}
-echo "=============================="
-for RESUME in $FILES
-do
-  # take action on each file. $f store current file name
+# echo "==========Testing============="
+# FILES="${FILES}/*.tar"
+# echo ${FILES}
+# echo "=============================="
+# for RESUME in $FILES
+# do
+#   # take action on each file. $f store current file name
 
-  echo "==========################============="
-  echo " Testing $RESUME file..."
-  echo "======================================="
-  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-   examples/test_pitts_tokyo.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size 32 -j 2 \
-    --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
-  --num-clusters ${NUMCLUSTER}
-  echo "==========################============="
-  echo " Done Testing with $RESUME file..."
-  echo "======================================="  
-done
+#   echo "==========################============="
+#   echo " Testing $RESUME file..."
+#   echo "======================================="
+#   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+#    examples/test_pitts_tokyo.py --launcher pytorch \
+#     -a ${ARCH} --test-batch-size 32 -j 2 \
+#     --vlad --reduction --method ${METHOD} \
+#     --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
+#   --num-clusters ${NUMCLUSTER}
+#   echo "==========################============="
+#   echo " Done Testing with $RESUME file..."
+#   echo "======================================="  
+# done
