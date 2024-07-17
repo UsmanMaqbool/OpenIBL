@@ -594,7 +594,6 @@ class GraphVLADEmbedRegion(nn.Module):
             del neighborsFeat
             gvlad = self.applyGNN(node_features_list)
             gvlad = torch.add(gvlad,vlad_x)
-            gvlad = F.normalize(gvlad, p=2, dim=1)
             gvlad = gvlad.view(-1,vlad_x.shape[1])
             
             return pool_x, gvlad

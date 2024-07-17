@@ -320,7 +320,7 @@ if __name__ == '__main__':
     parser.add_argument('--iters', type=int, default=0)
     parser.add_argument('--seed', type=int, default=43)
     parser.add_argument('--deterministic', action='store_true')
-    parser.add_argument('--print-freq', type=int, default=200)
+    parser.add_argument('--print-freq', type=int, default=500)
     parser.add_argument('--margin', type=float, default=0.1, help='margin for the triplet loss with batch hard')
     parser.add_argument('--method', type=str, default='graphvlad', choices=['netvlad', 'graphvlad'])
     # path
