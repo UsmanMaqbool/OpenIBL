@@ -54,12 +54,17 @@ sbatch --j graphvlad-sare-ind scripts/test_slurm_all.sh graphvlad vgg16 pitts 30
 
 #### Results
 
+##### Copy
+```sh
+rsync -ah --progress -e 'ssh -p 2222' m.maqboolbhutta@hpg.rc.ufl.edu:/home/m.maqboolbhutta/usman_ws/models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-17-Jul ~/usman_ws/models/openibl/graphvlad/hipergator/
+```
+
 ##### July 15: SareIND : v1.1graphvlad-sfrs | Hipergator
 Location: /home/m.maqboolbhutta/usman_ws/models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-15-Jul
 ```sh
 # tested on PC
 ## location: /home/leo/usman_ws/models/openibl/graphvlad/hipergator/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-15-Jul 
-./scripts/test_dist_all.sh graphvlad /home/leo/usman_ws/models/openibl/graphvlad/hipergator/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-15-Jul
+./scripts/test_dist_all.sh graphvlad /home/leo/usman_ws/models/openibl/graphvlad/hipergator/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-17-Jul 
 
 ```
 
