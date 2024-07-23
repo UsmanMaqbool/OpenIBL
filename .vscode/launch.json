@@ -14,10 +14,13 @@
                 "--nproc_per_node=1 ",
                 "--master_port=6010",
                 "--use_env",
-                "examples/netvlad_img_sfrs.py",
+                "examples/netvlad_img.py",
                 "--launcher=pytorch",
+                "--logs-dir=/home/leo/usman_ws/models/openibl/debug", 
+                "--data-dir=/home/leo/usman_ws/codes/OpenIBL/examples/data/",
                 "--init-dir=/home/leo/usman_ws/datasets/openibl-init",
-                "--esp-encoder=/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth"
+                "--esp-encoder=/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth",
+                "--method=graphvlad",
             ],
         }
     ]
