@@ -18,7 +18,7 @@ LR=0.001
 
 FILES="/home/leo/usman_ws/models/openibl/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 INIT_DIR="/home/leo/usman_ws/datasets/openibl-init"
-ESP_ENCODER="/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth"
+FAST_SCNN="/home/leo/usman_ws/datasets/fast_scnn/fast_scnn_citys.pth"
 DATASET_DIR="/home/leo/usman_ws/codes/OpenIBL/examples/data/"
 FILES="/home/leo/usman_ws/models/openibl/vgg16-graphvlad-triplet-pitts30k-lr0.001-tuple1-11-Jun/"
 # FILES="/home/leo/usman_ws/models/openibl/official/pitts30k-vgg16/conv5-sare_joint-lr0.0001-tuple1-12-Apr/"
@@ -42,19 +42,19 @@ examples/netvlad_img.py --launcher pytorch --tcp-port ${PORT} \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
   --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 \
   --logs-dir ${FILES} --data-dir ${DATASET_DIR} \
-  --init-dir ${INIT_DIR} --esp-encoder=${ESP_ENCODER} \
+  --init-dir ${INIT_DIR} --fast-scnn=${FAST_SCNN} \
    --method ${METHOD}
 
-echo "==========Testing============="
-FILES="${FILES}/*.tar"
-echo ${FILES}
-echo "=============================="
-for RESUME in $FILES
-do
-  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-   examples/test_pitts_tokyo.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size 32 -j 4 \
-    --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
-    --num-clusters ${NUMCLUSTER}
-done
+# echo "==========Testing============="
+# FILES="${FILES}/*.tar"
+# echo ${FILES}
+# echo "=============================="
+# for RESUME in $FILES
+# do
+#   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+#    examples/test_pitts_tokyo.py --launcher pytorch \
+#     -a ${ARCH} --test-batch-size 32 -j 4 \
+#     --vlad --reduction --method ${METHOD} \
+#     --resume ${RESUME} --fast-scnn ${FAST_SCNN} \
+#     --num-clusters ${NUMCLUSTER}
+# done

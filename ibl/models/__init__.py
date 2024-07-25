@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from .vgg import *
 from .resnet import *
 from .netvlad import *
-from .espnet import *
+from .fast_scnn import *
 
 
 __factory = {
@@ -13,7 +13,7 @@ __factory = {
     'embednet': EmbedNet,
     'embednetpca': EmbedNetPCA,
     'embedregionnet': EmbedRegionNet,
-    'espnet': ESPNet,
+    'fastscnn': FastSCNN,
     'graphvlad': GraphVLAD,
     'graphvladpca': GraphVLADPCA,
     'graphvladembedregion': GraphVLADEmbedRegion,

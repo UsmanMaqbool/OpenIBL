@@ -40,7 +40,7 @@
             "--logs-dir", "/home/leo/usman_ws/models/openibl/debug",
             "--data-dir", "/home/leo/usman_ws/codes/OpenIBL/examples/data/",
             "--init-dir", "/home/leo/usman_ws/datasets/openibl-init",
-            "--esp-encoder", "/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth",
+            "--fast-scnn", "/home/leo/usman_ws/datasets/fast_scnn/fast_scnn_citys.pth",
             "--method", "graphvlad",
             ],
         }

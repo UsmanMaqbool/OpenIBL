@@ -34,10 +34,8 @@ start_epoch = best_recall5 = 0
 
 
 def get_segmentation_model(encoderFile):
-    classes = 20
-    p = 2
-    q = 8
-    model = models.create('espnet', classes=classes, p=p, q=q, encoderFile=encoderFile)
+    model = models.create('fastscnn', num_classes=19)
+    model.load_state_dict(torch.load(encoderFile))
     return model
 
 def get_data(args, iters):
@@ -111,8 +109,8 @@ def get_model(args):
         elif(args.method=='graphvlad'):
             if (args.rank==0):
                 print('===> Loading segmentation model')
-            segmentation_model = get_segmentation_model(args.esp_encoder)
-            model = models.create('graphvlad', base_model, pool_layer, segmentation_model)
+            segmentation_model = get_segmentation_model(args.fast_scnn)
+            model = models.create('graphvlad', base_model, pool_layer, segmentation_model, NB=5)
 
     else:
         model = base_model
@@ -310,5 +308,5 @@ if __name__ == '__main__':
                         default=osp.join(working_dir, 'logs'))
     parser.add_argument('--init-dir', type=str, metavar='PATH',
                         default=osp.join(working_dir, '..', 'logs'))
-    parser.add_argument('--esp-encoder', type=str, default='', help='Path to ESPNet encoder file')
+    parser.add_argument('--fast-scnn', type=str, default='', help='Path to Fast SCNN encoder file')
     main()
