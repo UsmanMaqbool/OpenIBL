@@ -45,7 +45,7 @@
 # 0620-v9-graphvlad-sort-gal 
 ## Training
 sbatch --j netvlad-triplet scripts/train_sfrs_slurm_all.sh graphvlad sare_ind vgg16 pitts 30k
-sbatch --j v1.1-15jul scripts/train_sfrs_slurm_all.sh graphvlad sare_joint vgg16 pitts 30k
+sbatch --j v1.3-17jul scripts/train_sfrs_slurm_all.sh graphvlad sare_joint vgg16 pitts 30k
 
 ### Testing
 sbatch --j graphvlad-sare-ind scripts/test_slurm_all.sh graphvlad vgg16 pitts 30k /home/m.maqboolbhutta/usman_ws/models/openibl/graphvlad/
