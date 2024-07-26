@@ -262,7 +262,7 @@ if __name__ == '__main__':
     parser.add_argument('--scale', type=str, default='30k')
     parser.add_argument('--tuple-size', type=int, default=1,
                         help="tuple numbers in a batch")
-    parser.add_argument('--test-batch-size', type=int, default=64,
+    parser.add_argument('--test-batch-size', type=int, default=32,
                         help="tuple numbers in a batch")
     parser.add_argument('--cache-size', type=int, default=1000)
     parser.add_argument('-j', '--workers', type=int, default=8)

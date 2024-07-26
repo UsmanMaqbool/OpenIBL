@@ -527,7 +527,7 @@ class GraphVLAD(nn.Module):
         del neighborsFeat
         
         gvlad = self.applyGNN(node_features_list)
-        gvlad = torch.add(gvlad, vlad_x)
+        # gvlad = torch.add(gvlad, vlad_x)
         gvlad = gvlad.view(-1, vlad_x.shape[1])
         
         # Clear node_features_list to free up memory
