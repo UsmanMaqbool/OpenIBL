@@ -56,6 +56,8 @@ PORT=6010
 
 INIT_DIR="/blue/hmedeiros/m.maqboolbhutta/datasets/openibl-init"
 ESP_ENCODER="/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth"
+FAST_SCNN="/home/m.maqboolbhutta/usman_ws/datasets/fast_scnn/fast_scnn_citys.pth"
+
 DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
 
 
@@ -90,7 +92,7 @@ echo "Other nodes: $NODES"
 #===================================================================================================
 LOSS="sare_ind"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/fastscnn/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -104,8 +106,8 @@ python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
   --eval-step 1 --epochs ${NPOCH} --step-size 5 --cache-size 1000 \
   --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
-  --init-dir ${INIT_DIR} --esp-encoder ${ESP_ENCODER} \
-  --num-clusters ${NUMCLUSTER}
+  --init-dir ${INIT_DIR} --fast-scnn=${FAST_SCNN} \
+  --num-clusters ${NUMCLUSTER} --esp-encoder=${ESP_ENCODER} \
 
 
 echo "==========Testing============="
@@ -123,7 +125,7 @@ SCALE
    examples/test_pitts_tokyo.py --launcher pytorch \
     -a ${ARCH} --test-batch-size 32 -j 2 \
     --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
+    --resume ${RESUME} --fast-scnn=${FAST_SCNN} \
     --num-clusters ${NUMCLUSTER}
   echo "==========################============="
   echo " Done Testing with $RESUME file..."
@@ -136,7 +138,7 @@ done
 #===================================================================================================
 LOSS="sare_joint"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/fastscnn/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -150,7 +152,7 @@ python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
   --eval-step 1 --epochs ${NPOCH} --step-size 5 --cache-size 1000 \
   --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
-  --init-dir ${INIT_DIR} --esp-encoder ${ESP_ENCODER} \
+  --init-dir ${INIT_DIR} --fast-scnn=${FAST_SCNN} \
   --num-clusters ${NUMCLUSTER}
 
 
@@ -169,7 +171,7 @@ do
    examples/test_pitts_tokyo.py --launcher pytorch \
     -a ${ARCH} --test-batch-size 32 -j 2 \
     --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
+    --resume ${RESUME} --fast-scnn=${FAST_SCNN} \
   --num-clusters ${NUMCLUSTER}
   echo "==========################============="
   echo " Done Testing with $RESUME file..."
@@ -182,7 +184,7 @@ done
 
 LOSS="triplet"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/fastscnn/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -196,7 +198,7 @@ python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
   --eval-step 1 --epochs ${NPOCH} --step-size 5 --cache-size 1000 \
   --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
-  --init-dir ${INIT_DIR} --esp-encoder ${ESP_ENCODER} \
+  --init-dir ${INIT_DIR} --fast-scnn=${FAST_SCNN} \
   --num-clusters ${NUMCLUSTER}
 
 
@@ -215,7 +217,7 @@ do
    examples/test_pitts_tokyo.py --launcher pytorch \
     -a ${ARCH} --test-batch-size 32 -j 2 \
     --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
+    --resume ${RESUME} --fast-scnn=${FAST_SCNN} \
   --num-clusters ${NUMCLUSTER}
   echo "==========################============="
   echo " Done Testing with $RESUME file..."

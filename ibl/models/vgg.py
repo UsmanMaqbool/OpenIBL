@@ -4,6 +4,7 @@ from torch import nn
 from torch.nn import functional as F
 from torch.nn import init
 import torchvision
+import torchvision.models as models
 import torch
 
 from ..utils.serialization import load_checkpoint, copy_state_dict

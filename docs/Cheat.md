@@ -19,6 +19,13 @@
 
 ## Training and Testing 🚀
 ### GraphVLAD
+##### Slurm
+
+```sh
+# 0620-v9-graphvlad-sort-gal 
+## Training
+sbatch --j netvlad-sare-ind scripts/train_baseline_slurm_all.sh graphvlad sare_ind vgg16 pitts 30k
+```
 #### Vanilla
 #### SFRS
 
@@ -404,7 +411,9 @@ examples/data
     │   ├── tokyoTM/
     │   ├── tokyoTM_train.mat
     └── └── tokyoTM_val.mat
-
+```
+### Copy weights from PC to Hipergator
+rsync -ah --progress -e 'ssh -p 2222' ~/usman_ws/datasets/fast_scnn m.maqboolbhutta@hpg.rc.ufl.edu:/home/m.maqboolbhutta/usman_ws/datasets/
 
 ## Copy to cluster
 ### PC 2 Cluster
