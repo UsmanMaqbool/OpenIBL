@@ -369,11 +369,11 @@ class SelectRegions(nn.Module):
         :return: The relabeled image array
         """
         ### Road 0 + Sidewalk 1
-        # img[img == 1] = 1
+        img[img == 1] = 1
         img[img == 0] = 1
 
         ### building 2 + wall 3 + fence 4
-        # img[img == 2] = 2
+        img[img == 2] = 2
         img[img == 3] = 2
         img[img == 4] = 2
 
@@ -402,7 +402,7 @@ class SelectRegions(nn.Module):
         img[img == 11] = 255
 
         ### Sky 10
-        img[img == 10] = 255
+        img[img == 10] = 5
         
         ### Don't need, make these 255
         ## Background
@@ -446,7 +446,7 @@ class SelectRegions(nn.Module):
             labels_all, label_count_all = all_label_mask.unique(return_counts=True)
             
             # Filter labels with counts >= 5000
-            mask_t = label_count_all >= 10000
+            mask_t = label_count_all >= 15000
             labels = labels_all[mask_t]
             
             # Create masks for each label and convert them to bounding boxes
@@ -456,17 +456,19 @@ class SelectRegions(nn.Module):
             all_label_mask = rsizet(all_label_mask.unsqueeze(0)).squeeze(0)
 
             sub_nodes = []
-            for i, label in enumerate(labels):
-                if len(sub_nodes) < self.NB:
-                    binary_mask = (all_label_mask == label).float()
-                    x_min, y_min, x_max, y_max = boxes[i]
-                    masked_image = x[img_i][:, y_min:y_max, x_min:x_max]
-                    if self.mask:
+            masked_image = x[img_i]
+            binary_label_mask = (all_label_mask <= 5).int()
+            filterd_img = x[img_i]*binary_label_mask
+            
+            if self.mask:
+                for i, label in enumerate(labels):
+                    if len(sub_nodes) < self.NB:
                         binary_mask = (all_label_mask == label).float()
-                        masked_image = masked_image * binary_mask[y_min:y_max, x_min:x_max]
-                    masked_image = rsizet(masked_image)*binary_mask
-                    sub_nodes.append(masked_image.unsqueeze(0))
+                        x_min, y_min, x_max, y_max = boxes[i]
+                        filterd_img += rsizet(masked_image[:, y_min:y_max, x_min:x_max])* binary_mask
+                sub_nodes.append(filterd_img.unsqueeze(0))
 
+            # sub_nodes.append(filterd_img.unsqueeze(0))
             # Add more patches by cropping predefined regions if needed
             if len(sub_nodes) < self.NB:
                 bb_x = [
@@ -477,7 +479,7 @@ class SelectRegions(nn.Module):
                     [int(W / 4), int(H / 4), int(3 * W / 4), int(3 * H / 4)],
                 ]
                 for i in range(len(bb_x) - len(sub_nodes)):
-                    x_nodes = x[img_i][:, bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
+                    x_nodes = masked_image[:, bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
                     sub_nodes.append(rsizet(x_nodes.unsqueeze(0)))
 
             # Stack the cropped patches and store them in graph_nodes
@@ -500,7 +502,7 @@ class GraphVLAD(nn.Module):
         self.net_vlad = net_vlad
         
         self.NB = NB
-        self.mask = False
+        self.mask = True
                 
         self.applyGNN = applyGNN()
         self.SelectRegions = SelectRegions(self.NB, self.mask)
