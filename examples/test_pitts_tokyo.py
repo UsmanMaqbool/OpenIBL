@@ -67,7 +67,7 @@ def get_model(args):
             model = models.create('embednet', base_model, pool_layer)   
         elif(args.method=='graphvlad'):
             print('===> Loading segmentation model')
-            segmentation_model = get_segmentation_model(args.esp_encoder)
+            segmentation_model = get_segmentation_model(args.fast_scnn)
             model = models.create('graphvlad', base_model, pool_layer, segmentation_model, NB=5)
     else:
         model = base_model
