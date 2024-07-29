@@ -1,5 +1,5 @@
 #!/bin/sh
-PARTITION=$1
+PARTITION=gpu
 GPUS=4
 GPUS_PER_NODE=4
 
@@ -10,9 +10,13 @@ LAYERS=conv5
 LOSS=$2
 LR=0.001
 
-if [ $# -ne 2 ]
+if [ $# -ne 5 ]
   then
-    echo "Arguments error: <PARTITION NAME> <LOSS_TYPE (triplet|sare_ind|sare_joint)>"
+    echo "Arguments error: <METHOD> <LOSS_TYPE (triplet|sare_ind|sare_joint)> <DATASET> <SCALE> "
+    echo "Try"
+    echo "./scripts/train_baseline_slurm.sh netvlad triplet vgg16 pitts 30k"
+    echo "or"
+    echo "./scripts/train_baseline_slurm.sh graphvlad triplet vgg16 pitts 30k"
     exit 1
 fi
 

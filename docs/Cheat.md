@@ -20,6 +20,10 @@
 init directory should have `vd16_offtheshelf_conv5_3_max.pth` file.
 ```shell
 ./scripts/cluster.sh vgg16 /home/leo/usman_ws/datasets/openibl-init
+
+## Transfer to Hipergator
+### 29 July
+rsync -ah --progress -e 'ssh -p 2222' ~/usman_ws/datasets/openibl-init/vgg16_pitts_64_desc_cen.hdf5 m.maqboolbhutta@hpg.rc.ufl.edu:/home/m.maqboolbhutta/usman_ws/datasets/openibl-init/
 ```
 
 ## Training and Testing 🚀
@@ -34,6 +38,8 @@ init directory should have `vd16_offtheshelf_conv5_3_max.pth` file.
 #### Slurm
 
 ```sh
+# Single
+sbatch --j graphvlad-triplet-29jul ./scripts/leo/train_baseline_slurm.sh graphvlad vgg16 pitts 30k triplet
 # 0620-v9-graphvlad-sort-gal 
 ## Training
 sbatch --j netvlad-sare-ind scripts/train_baseline_slurm_all.sh graphvlad sare_ind vgg16 pitts 30k
