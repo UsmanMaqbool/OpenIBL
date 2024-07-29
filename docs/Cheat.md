@@ -43,7 +43,14 @@ sbatch --j graphvlad-triplet-29jul ./scripts/leo/train_baseline_slurm.sh graphvl
 # 0620-v9-graphvlad-sort-gal 
 ## Training
 sbatch --j netvlad-sare-ind scripts/train_baseline_slurm_all.sh graphvlad sare_ind vgg16 pitts 30k
+
+## Testing
+### 29July,2024
+sbatch --j graphvlad-test scripts/leo/test_slurm_all.sh graphvlad vgg16 pitts 30k /home/m.maqboolbhutta/usman_ws/models/openibl/fastscnn/vgg16-graphvlad-triplet-pitts30k-lr0.01-tuple4-29-Jul
 ```
+
+
+
 #### Vanilla
 #### SFRS
 

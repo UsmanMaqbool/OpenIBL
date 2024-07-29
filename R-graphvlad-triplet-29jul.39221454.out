@@ -1,0 +1,210 @@
+Mon Jul 29 09:18:54 EDT 2024
+/home/m.maqboolbhutta/usman_ws/codes/OpenIBL
+/home/m.maqboolbhutta/.conda/envs/openibl/bin/python
+Host: c0801a-s11
+Other nodes: 
+/home/m.maqboolbhutta/usman_ws/models/openibl/fastscnn/vgg16-graphvlad-triplet-pitts30k-lr0.01-tuple4-29-Jul
+==========Starting Training=============
+========================================
+Use GPU: 0 for training, rank no.0 of world_size 4
+Use GPU: 1 for training, rank no.1 of world_size 4
+Use GPU: 3 for training, rank no.3 of world_size 4
+Use GPU: 2 for training, rank no.2 of world_size 4
+==========
+Args:Namespace(arch='vgg16', cache_size=1000, data_dir='/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/', dataset='pitts', deterministic=False, epochs=10, esp_encoder='', eval_step=1, fast_scnn='/home/m.maqboolbhutta/usman_ws/datasets/fast_scnn/fast_scnn_citys.pth', features=4096, gpu=0, height=480, init_dir='/blue/hmedeiros/m.maqboolbhutta/datasets/openibl-init', iters=0, launcher='slurm', layers='conv5', logs_dir='/home/m.maqboolbhutta/usman_ws/models/openibl/fastscnn/vgg16-graphvlad-triplet-pitts30k-lr0.01-tuple4-29-Jul', loss_type='triplet', lr=0.01, margin=0.1, method='graphvlad', momentum=0.9, neg_num=10, neg_pool=1000, ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=200, rank=0, rerank=False, resume='', scale='30k', seed=43, step_size=5, sync_gather=True, syncbn=True, tcp_port='6010', test_batch_size=32, total_gpus=4, tuple_size=4, vlad=True, weight_decay=0.001, width=640, workers=2, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+No. of Clusters:  64
+Loading centroids from /blue/hmedeiros/m.maqboolbhutta/datasets/openibl-init/vgg16_pitts_64_desc_cen.hdf5
+===> Loading segmentation model
+Test the initial model:
+Extract Features: [100/138]	Time 0.340 (0.440)	Data 0.000 (0.055)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          76.8%
+  top-5          90.1%
+  top-10         93.3%
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.379 (0.406)	Data 0.002 (0.048)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.368 (0.411)	Data 0.007 (0.051)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.354 (0.413)	Data 0.007 (0.051)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.353 (0.410)	Data 0.000 (0.051)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.359 (0.409)	Data 0.000 (0.053)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.352 (0.411)	Data 0.000 (0.051)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.371 (0.412)	Data 0.000 (0.053)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.353 (0.418)	Data 0.000 (0.053)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Extract Features: [100/138]	Time 0.346 (0.408)	Data 0.000 (0.050)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          85.8%
+  top-5          94.8%
+  top-10         96.6%
+
+ * Finished epoch   0 recall@1: 85.8%  recall@5: 94.8%  recall@10: 96.6%  best@5: 94.8% *
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.358 (0.416)	Data 0.000 (0.051)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.347 (0.414)	Data 0.000 (0.053)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.380 (0.415)	Data 0.000 (0.053)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.392 (0.417)	Data 0.000 (0.053)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.364 (0.419)	Data 0.005 (0.054)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.370 (0.415)	Data 0.000 (0.052)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.359 (0.416)	Data 0.000 (0.055)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.384 (0.422)	Data 0.000 (0.055)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Extract Features: [100/138]	Time 0.362 (0.414)	Data 0.000 (0.052)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          85.8%
+  top-5          94.7%
+  top-10         96.8%
+
+ * Finished epoch   1 recall@1: 85.8%  recall@5: 94.7%  recall@10: 96.8%  best@5: 94.8%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.354 (0.415)	Data 0.000 (0.055)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.354 (0.414)	Data 0.000 (0.053)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.361 (0.417)	Data 0.000 (0.051)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.358 (0.420)	Data 0.000 (0.052)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.390 (0.416)	Data 0.000 (0.053)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.375 (0.417)	Data 0.000 (0.052)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.357 (0.415)	Data 0.000 (0.055)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.349 (0.414)	Data 0.000 (0.053)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Extract Features: [100/138]	Time 0.381 (0.409)	Data 0.000 (0.049)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          86.6%
+  top-5          95.1%
+  top-10         97.1%
+
+ * Finished epoch   2 recall@1: 86.6%  recall@5: 95.1%  recall@10: 97.1%  best@5: 95.1% *
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.400 (0.427)	Data 0.000 (0.056)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.405 (0.418)	Data 0.000 (0.052)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.413 (0.418)	Data 0.000 (0.053)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.349 (0.414)	Data 0.000 (0.048)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.352 (0.409)	Data 0.000 (0.052)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.348 (0.410)	Data 0.000 (0.052)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.379 (0.423)	Data 0.006 (0.053)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.348 (0.419)	Data 0.000 (0.054)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Extract Features: [100/138]	Time 0.364 (0.417)	Data 0.001 (0.053)	
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          85.2%
+  top-5          94.4%
+  top-10         96.2%
+
+ * Finished epoch   3 recall@1: 85.2%  recall@5: 94.4%  recall@10: 96.2%  best@5: 95.1%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.363 (0.421)	Data 0.000 (0.054)	
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/136]	Time 0.346 (0.412)	Data 0.000 (0.053)	
+===> Start calculating pairwise distances
