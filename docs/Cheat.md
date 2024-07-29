@@ -16,10 +16,22 @@
     - [ ] Todo
 
 
+## Clustering
+init directory should have `vd16_offtheshelf_conv5_3_max.pth` file.
+```shell
+./scripts/cluster.sh vgg16 /home/leo/usman_ws/datasets/openibl-init
+```
 
 ## Training and Testing 🚀
 ### GraphVLAD
-##### Slurm
+#### PC
+```sh 
+# Single
+./scripts/train_baseline_dist.sh graphvlad triplet vgg16 pitts 30k
+# Training all
+./scripts/all/train_baseline_dist_all.sh graphvlad vgg16 pitts 30k
+```
+#### Slurm
 
 ```sh
 # 0620-v9-graphvlad-sort-gal 

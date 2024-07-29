@@ -39,7 +39,8 @@ def get_data(args, nIm):
     return dataset, cluster_loader
 
 def get_model(args):
-    model = models.create(args.arch, pretrained=True, cut_at_pooling=True, matconvnet=osp.join(args.init_dir, 'vd16_offtheshelf_conv5_3_max.pth'))
+    # model = models.create(args.arch, pretrained=True, cut_at_pooling=True, matconvnet=osp.join(args.init_dir, 'vd16_offtheshelf_conv5_3_max.pth'))
+    model = models.create(args.arch, pretrained=True, cut_at_pooling=True)
     model.cuda()
     model = nn.DataParallel(model)
     return model

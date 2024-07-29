@@ -93,7 +93,11 @@ def update_sampler(sampler, model, loader, query, gallery, sub_set, vlad=True, g
 
 def get_model(args):
     # base_model = models.create(args.arch, train_layers=args.layers, matconvnet=osp.join(args.init_dir, 'vd16_offtheshelf_conv5_3_max.pth'))
-    base_model = models.create(args.arch, train_layers=args.layers, matconvnet=osp.join(args.init_dir, 'vd16_offtheshelf_conv5_3_max.pth'))
+
+    # base_model = models.create(args.arch, train_layers=args.layers, matconvnet=osp.join(args.init_dir, 'vd16_offtheshelf_conv5_3_max.pth'))
+    
+    base_model = models.create(args.arch, train_layers=args.layers)
+    
     if args.vlad:
         if (args.rank==0):
             print("No. of Clusters: ", args.num_clusters)
