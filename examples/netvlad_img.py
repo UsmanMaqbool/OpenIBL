@@ -320,5 +320,4 @@ if __name__ == '__main__':
     parser.add_argument('--init-dir', type=str, metavar='PATH',
                         default=osp.join(working_dir, '..', 'logs'))
     parser.add_argument('--fast-scnn', type=str, default='', help='Path to Fast SCNN encoder file')
-    parser.add_argument('--esp-encoder', type=str, default='', help='Path to ESPNet encoder file')
     main()

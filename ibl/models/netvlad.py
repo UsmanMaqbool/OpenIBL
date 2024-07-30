@@ -571,14 +571,18 @@ class GraphVLADPCA(nn.Module):
         gvlad = F.normalize(gvlad, p=2, dim=-1)  
         return gvlad   
 class GraphVLADEmbedRegion(nn.Module):
-    def __init__(self, base_model, net_vlad, tuple_size=1, fastscnn=None):
+    def __init__(self, base_model, net_vlad, tuple_size, fastscnn, NB):
         super(GraphVLADEmbedRegion, self).__init__()
         self.base_model = base_model
         self.net_vlad = net_vlad
         self.tuple_size = tuple_size
         self.fastscnn = fastscnn
-        self.SelectRegions = SelectRegions()
+        
+        self.NB = NB
         self.applyGNN = applyGNN()
+        self.mask = True
+
+        self.SelectRegions = SelectRegions(self.NB, self.mask)
         
     def _init_params(self):
         self.base_model._init_params()
@@ -661,20 +665,27 @@ class GraphVLADEmbedRegion(nn.Module):
         if (not self.training):
             node_features_list = []
             neighborsFeat = []
-            pool_x, NB, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
-            for i in range(NB+1):
+
+            pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
+
+
+            for i in range(self.NB+1):
                 vlad_x = self.net_vlad(x_nodes[i])
                 vlad_x = F.normalize(vlad_x, p=2, dim=2)  
                 vlad_x = vlad_x.view(x_size, -1)  
                 vlad_x = F.normalize(vlad_x, p=2, dim=1)  
                 neighborsFeat.append(vlad_x)
-            node_features_list.append(neighborsFeat[NB])
-            node_features_list.append(torch.concat(neighborsFeat[0:NB],0))
+                
+            node_features_list.append(neighborsFeat[self.NB])
+            node_features_list.append(torch.concat(neighborsFeat[0:self.NB],0))
             del neighborsFeat
             gvlad = self.applyGNN(node_features_list)
             gvlad = torch.add(gvlad,vlad_x)
             gvlad = gvlad.view(-1,vlad_x.shape[1])
             
+            # Clear node_features_list to free up memory
+            del node_features_list
+        
             return pool_x, gvlad
         else:
             pool_x, x = self.base_model(x)

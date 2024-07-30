@@ -41,10 +41,10 @@ fi
 
 GPUS=4
 METHOD="$1"
-LOSS="$2"
-ARCH="$3"
-DATASET="$4"
-SCALE="$5"
+ARCH="$2"
+DATASET="$3"
+SCALE="$4"
+
 NUMCLUSTER=64
 LAYERS=conv5
 LR=0.001
@@ -55,7 +55,7 @@ PORT=6010
 
 
 INIT_DIR="/blue/hmedeiros/m.maqboolbhutta/datasets/openibl-init"
-ESP_ENCODER="/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth"
+FAST_SCNN="/home/m.maqboolbhutta/usman_ws/datasets/fast_scnn/fast_scnn_citys.pth"
 DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
 
 
@@ -90,7 +90,7 @@ echo "Other nodes: $NODES"
 ===================================================================================================
 LOSS="sare_ind"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/fastscnn-sfrs/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -104,30 +104,30 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
   --neg-num 10  --pos-pool 20 --neg-pool 1000 --pos-num 10 \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} --soft-weight 0.5 \
   --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 --generations 4 --temperature 0.07 0.07 0.06 0.05 --logs-dir ${FILES} --data-dir ${DATASET_DIR} \
-  --init-dir ${INIT_DIR} --esp-encoder=${ESP_ENCODER} \
-   --method ${METHOD}
+  --init-dir ${INIT_DIR} --fast-scnn=${FAST_SCNN} \
+  --method ${METHOD}
 
 
-# echo "==========Testing============="
-# FILES="${FILES}/*.tar"
-# echo ${FILES}
-# echo "=============================="
-# for RESUME in $FILES
-# do
-#   # take action on each file. $f store current file name
-#   echo "==========################============="
-#   echo " Testing $RESUME file..."
-#   echo "======================================="
-#   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-#    examples/test_pitts_tokyo.py --launcher pytorch \
-#     -a ${ARCH} --test-batch-size 32 -j 2 \
-#     --vlad --reduction --method ${METHOD} \
-#     --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
-#     --num-clusters ${NUMCLUSTER}
-#   echo "==========################============="
-#   echo " Done Testing with $RESUME file..."
-#   echo "======================================="  
-# done
+echo "==========Testing============="
+FILES="${FILES}/*.tar"
+echo ${FILES}
+echo "=============================="
+for RESUME in $FILES
+do
+  # take action on each file. $f store current file name
+  echo "==========################============="
+  echo " Testing $RESUME file..."
+  echo "======================================="
+  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+   examples/test_pitts_tokyo.py --launcher pytorch \
+    -a ${ARCH} --test-batch-size 32 -j 2 \
+    --vlad --reduction --method ${METHOD} \
+    --resume ${RESUME} --fast-scnn=${FAST_SCNN} \
+    --num-clusters ${NUMCLUSTER}
+  echo "==========################============="
+  echo " Done Testing with $RESUME file..."
+  echo "======================================="  
+done
 
 
 #===================================================================================================
@@ -149,31 +149,31 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
   --neg-num 10  --pos-pool 20 --neg-pool 1000 --pos-num 10 \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} --soft-weight 0.5 \
   --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 --generations 4 --temperature 0.07 0.07 0.06 0.05 --logs-dir ${FILES} --data-dir ${DATASET_DIR} \
-  --init-dir ${INIT_DIR} --esp-encoder=${ESP_ENCODER} \
-   --method ${METHOD}
+  --init-dir ${INIT_DIR} --fast-scnn=${FAST_SCNN} \
+  --method ${METHOD}
 
 
-# echo "==========Testing============="
-# FILES="${FILES}/*.tar"
-# echo ${FILES}
-# echo "=============================="
-# for RESUME in $FILES
-# do
-#   # take action on each file. $f store current file name
+echo "==========Testing============="
+FILES="${FILES}/*.tar"
+echo ${FILES}
+echo "=============================="
+for RESUME in $FILES
+do
+  # take action on each file. $f store current file name
 
-#   echo "==========################============="
-#   echo " Testing $RESUME file..."
-#   echo "======================================="
-#   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-#    examples/test_pitts_tokyo.py --launcher pytorch \
-#     -a ${ARCH} --test-batch-size 32 -j 2 \
-#     --vlad --reduction --method ${METHOD} \
-#     --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
-#   --num-clusters ${NUMCLUSTER}
-#   echo "==========################============="
-#   echo " Done Testing with $RESUME file..."
-#   echo "======================================="  
-# done
+  echo "==========################============="
+  echo " Testing $RESUME file..."
+  echo "======================================="
+  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+   examples/test_pitts_tokyo.py --launcher pytorch \
+    -a ${ARCH} --test-batch-size 32 -j 2 \
+    --vlad --reduction --method ${METHOD} \
+    --resume ${RESUME} --fast-scnn=${FAST_SCNN} \
+    --num-clusters ${NUMCLUSTER}
+  echo "==========################============="
+  echo " Done Testing with $RESUME file..."
+  echo "======================================="  
+done
 
 #===================================================================================================
 # Tiplet Loss
@@ -195,28 +195,28 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
   --neg-num 10  --pos-pool 20 --neg-pool 1000 --pos-num 10 \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} --soft-weight 0.5 \
   --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 --generations 4 --temperature 0.07 0.07 0.06 0.05 --logs-dir ${FILES} --data-dir ${DATASET_DIR} \
-  --init-dir ${INIT_DIR} --esp-encoder=${ESP_ENCODER} \
-   --method ${METHOD}
+  --init-dir ${INIT_DIR} --fast-scnn=${FAST_SCNN} \
+  --method ${METHOD}
 
 
-# echo "==========Testing============="
-# FILES="${FILES}/*.tar"
-# echo ${FILES}
-# echo "=============================="
-# for RESUME in $FILES
-# do
-#   # take action on each file. $f store current file name
+echo "==========Testing============="
+FILES="${FILES}/*.tar"
+echo ${FILES}
+echo "=============================="
+for RESUME in $FILES
+do
+  # take action on each file. $f store current file name
 
-#   echo "==========################============="
-#   echo " Testing $RESUME file..."
-#   echo "======================================="
-#   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-#    examples/test_pitts_tokyo.py --launcher pytorch \
-#     -a ${ARCH} --test-batch-size 32 -j 2 \
-#     --vlad --reduction --method ${METHOD} \
-#     --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
-#   --num-clusters ${NUMCLUSTER}
-#   echo "==========################============="
-#   echo " Done Testing with $RESUME file..."
-#   echo "======================================="  
-# done
+  echo "==========################============="
+  echo " Testing $RESUME file..."
+  echo "======================================="
+  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+   examples/test_pitts_tokyo.py --launcher pytorch \
+    -a ${ARCH} --test-batch-size 32 -j 2 \
+    --vlad --reduction --method ${METHOD} \
+    --resume ${RESUME} --fast-scnn=${FAST_SCNN} \
+    --num-clusters ${NUMCLUSTER}
+  echo "==========################============="
+  echo " Done Testing with $RESUME file..."
+  echo "======================================="  
+done

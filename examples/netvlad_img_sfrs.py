@@ -33,10 +33,8 @@ from ibl.utils.rerank import re_ranking
 start_epoch = start_gen = best_recall5 = 0
 
 def get_segmentation_model(encoderFile):
-    classes = 20
-    p = 2
-    q = 8
-    model = models.create('espnet', classes=classes, p=p, q=q, encoderFile=encoderFile)
+    model = models.create('fastscnn', num_classes=19)
+    model.load_state_dict(torch.load(encoderFile))
     return model
 
 def get_data(args, iters):
@@ -101,7 +99,7 @@ def update_sampler(sampler, model, loader, query, gallery, sub_set, rerank=False
     del distmat, distmat_jac
 
 def get_model(args):
-    base_model = models.create(args.arch, train_layers=args.layers, matconvnet=osp.join(args.init_dir, 'vd16_offtheshelf_conv5_3_max.pth'))
+    base_model = models.create(args.arch, train_layers=args.layers)
     # pool_layer = models.create('netvlad', dim=base_model.feature_dim)
     pool_layer = models.create('netvlad', dim=base_model.feature_dim, num_clusters=args.num_clusters)    
     initcache = osp.join(args.init_dir, args.arch + '_' + args.dataset + '_' + str(args.num_clusters) + '_desc_cen.hdf5')
@@ -118,8 +116,8 @@ def get_model(args):
     elif(args.method=='graphvlad'):
         if (args.rank==0):
             print('===> Loading segmentation model')
-        segmentation_model = get_segmentation_model(args.esp_encoder)
-        model = models.create('graphvladembedregion', base_model, pool_layer, tuple_size=args.tuple_size, esp_net=segmentation_model)
+        segmentation_model = get_segmentation_model(args.fast_scnn)
+        model = models.create('graphvladembedregion', base_model, pool_layer, tuple_size=args.tuple_size, fastscnn=segmentation_model, NB=5)
 
 
     if (args.syncbn):
@@ -331,5 +329,5 @@ if __name__ == '__main__':
                         default=osp.join(working_dir, 'logs'))
     parser.add_argument('--init-dir', type=str, metavar='PATH',
                         default=osp.join(working_dir, '..', 'logs'))
-    parser.add_argument('--esp-encoder', type=str, default='', help='Path to ESPNet encoder file')
+    parser.add_argument('--fast-scnn', type=str, default='', help='Path to Fast SCNN encoder file')
     main()
