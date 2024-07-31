@@ -203,6 +203,51 @@ class FeatureFusionModule(nn.Module):
             nn.BatchNorm2d(out_channels)
         )
         self.relu = nn.ReLU(True)
+    def make_equal_size_and_add(self,tensor1, tensor2):
+        # Get the shapes of both tensors
+        shape1 = tensor1.shape
+        shape2 = tensor2.shape
+
+        # Find the maximum size for each dimension
+        max_shape = [max(s1, s2) for s1, s2 in zip(shape1, shape2)]
+
+        # Calculate padding for each tensor
+        pad1 = [max(0, s2 - s1) for s1, s2 in zip(shape1, shape2)]
+        pad2 = [max(0, s1 - s2) for s1, s2 in zip(shape1, shape2)]
+
+        # Reverse the padding lists because F.pad expects them in reverse order
+        pad1 = [item for pair in reversed(pad1) for item in (0, pair)]
+        pad2 = [item for pair in reversed(pad2) for item in (0, pair)]
+
+        # Pad the tensors
+        padded1 = F.pad(tensor1, pad1)
+        padded2 = F.pad(tensor2, pad2)
+
+        # Add the padded tensors
+        result = padded1 + padded2
+
+        return result
+    
+    def make_equal_size_and_add_by_cropping(self,tensor1, tensor2):
+        # Get the shapes of both tensors
+        shape1 = tensor1.shape
+        shape2 = tensor2.shape
+
+        # Find the minimum size for each dimension
+        min_shape = [min(s1, s2) for s1, s2 in zip(shape1, shape2)]
+
+        # Create slices for each tensor
+        slices1 = tuple(slice(0, min_dim) for min_dim in min_shape)
+        slices2 = tuple(slice(0, min_dim) for min_dim in min_shape)
+
+        # Crop the tensors
+        cropped1 = tensor1[slices1]
+        cropped2 = tensor2[slices2]
+
+        # Add the cropped tensors
+        result = cropped1 + cropped2
+
+        return result
 
     def forward(self, higher_res_feature, lower_res_feature):
         lower_res_feature = F.interpolate(lower_res_feature, scale_factor=4, mode='bilinear', align_corners=True)
@@ -210,7 +255,8 @@ class FeatureFusionModule(nn.Module):
         lower_res_feature = self.conv_lower_res(lower_res_feature)
 
         higher_res_feature = self.conv_higher_res(higher_res_feature)
-        out = higher_res_feature + lower_res_feature
+        out = self.make_equal_size_and_add_by_cropping(higher_res_feature, lower_res_feature)
+        # out = higher_res_feature + lower_res_feature
         return self.relu(out)
 
 

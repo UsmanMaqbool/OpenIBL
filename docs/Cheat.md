@@ -103,7 +103,60 @@ Location: /home/m.maqboolbhutta/usman_ws/models/openibl/vgg16-graphvlad-sare_ind
 ## Debug
 
 ### PC
+
 - GraphVLAD Train
+- Recent
+    ```json
+    {
+        // Use IntelliSense to learn about possible attributes.
+        // Hover to view descriptions of existing attributes.
+        // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "OpenIBL Train Debug",
+                "type": "python",
+                "request": "launch",
+                "program": "/home/leo/anaconda3/envs/openibl/lib/python3.8/site-packages/torch/distributed/launch.py",
+                "console": "integratedTerminal",
+                "args": [
+                "--nproc_per_node=1 ",
+                "--master_port=6050",
+                "--use_env",
+                "examples/netvlad_img.py",
+                "--launcher=pytorch",
+                "-d", "pitts",
+                "--scale", "30k",
+                "-a", "vgg16",
+                "--layers", "conv5",
+                "--vlad",
+                "--syncbn",
+                "--sync-gather",
+                "--width", "640",
+                "--height", "480",
+                "--tuple-size", "1",
+                "-j", "1",
+                "--neg-num", "10",
+                "--test-batch-size", "32",
+                "--margin", "0.1",
+                "--lr", "0.001",
+                "--weight-decay", "0.001",
+                "--loss-type", "triplet",
+                "--eval-step", "1",
+                "--epochs", "5",
+                "--step-size", "5",
+                "--cache-size", "1000",
+                "--logs-dir", "/home/leo/usman_ws/models/openibl/debug",
+                "--data-dir", "/home/leo/usman_ws/codes/OpenIBL/examples/data/",
+                "--init-dir", "/home/leo/usman_ws/datasets/openibl-init",
+                "--fast-scnn", "/home/leo/usman_ws/datasets/fast_scnn/fast_scnn_citys.pth",
+                "--method", "graphvlad",
+                ],
+            }
+        ]
+    }
+    ```
+- Previous
     ```json
     {
         // Use IntelliSense to learn about possible attributes.
