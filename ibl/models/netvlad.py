@@ -386,29 +386,31 @@ class SelectRegions(nn.Module):
         img[img == 6] = 4
         img[img == 5] = 4
         
+        ### Sky 10
+        img[img == 10] = 5
+        
         ## Rider 12 + motorcycle 17 + bicycle 18
-        img[img == 18] = 255
-        img[img == 17] = 255
-        img[img == 12] = 255
+        img[img == 18] = 6
+        img[img == 17] = 6
+        img[img == 12] = 6
 
 
         # cars 13 + truck 14 + bus 15 + train 16
-        img[img == 16] = 255
-        img[img == 15] = 255
-        img[img == 14] = 255
-        img[img == 13] = 255
+        img[img == 16] = 7
+        img[img == 15] = 7
+        img[img == 14] = 7
+        img[img == 13] = 7
 
         ## Person
-        img[img == 11] = 255
+        img[img == 11] = 8
 
-        ### Sky 10
-        img[img == 10] = 5
+
         
         ### Don't need, make these 255
         ## Background
         img[img == 19] = 255
 
-        return img
+        return img                          
     
     def forward(self, x, base_model, fastscnn): 
         
@@ -445,8 +447,7 @@ class SelectRegions(nn.Module):
             all_label_mask = pred_all[img_i]
             labels_all, label_count_all = all_label_mask.unique(return_counts=True)
             
-            # Filter labels with counts >= 5000
-            mask_t = label_count_all >= 15000
+            mask_t = label_count_all >= 10000
             labels = labels_all[mask_t]
             
             # Create masks for each label and convert them to bounding boxes
@@ -456,17 +457,17 @@ class SelectRegions(nn.Module):
             all_label_mask = rsizet(all_label_mask.unsqueeze(0)).squeeze(0)
 
             sub_nodes = []
-            masked_image = x[img_i]
-            binary_label_mask = (all_label_mask <= 5).int()
-            filterd_img = x[img_i]*binary_label_mask
+            pre_l2 = x[img_i]
+
             
             if self.mask:
                 for i, label in enumerate(labels):
+                    binary_mask = (all_label_mask == label).float()
                     if len(sub_nodes) < self.NB:
-                        binary_mask = (all_label_mask == label).float()
                         x_min, y_min, x_max, y_max = boxes[i]
-                        filterd_img += rsizet(masked_image[:, y_min:y_max, x_min:x_max])* binary_mask
-                sub_nodes.append(filterd_img.unsqueeze(0))
+                        masked_image = pre_l2[:, y_min:y_max, x_min:x_max] * binary_mask[y_min:y_max, x_min:x_max]
+                        embed_image = rsizet(pre_l2[:, y_min:y_max, x_min:x_max] + masked_image)
+                sub_nodes.append(embed_image.unsqueeze(0))
 
             # sub_nodes.append(filterd_img.unsqueeze(0))
             # Add more patches by cropping predefined regions if needed
@@ -479,7 +480,7 @@ class SelectRegions(nn.Module):
                     [int(W / 4), int(H / 4), int(3 * W / 4), int(3 * H / 4)],
                 ]
                 for i in range(len(bb_x) - len(sub_nodes)):
-                    x_nodes = masked_image[:, bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
+                    x_nodes = pre_l2[:, bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
                     sub_nodes.append(rsizet(x_nodes.unsqueeze(0)))
 
             # Stack the cropped patches and store them in graph_nodes

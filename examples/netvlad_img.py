@@ -92,11 +92,8 @@ def update_sampler(sampler, model, loader, query, gallery, sub_set, vlad=True, g
     del distmat
 
 def get_model(args):
-    # base_model = models.create(args.arch, train_layers=args.layers, matconvnet=osp.join(args.init_dir, 'vd16_offtheshelf_conv5_3_max.pth'))
 
-    # base_model = models.create(args.arch, train_layers=args.layers, matconvnet=osp.join(args.init_dir, 'vd16_offtheshelf_conv5_3_max.pth'))
-    
-    base_model = models.create(args.arch, train_layers=args.layers)
+    base_model = models.create(args.arch, train_layers=args.layers, matconvnet=osp.join(args.init_dir, 'vd16_offtheshelf_conv5_3_max.pth'))
     
     if args.vlad:
         if (args.rank==0):

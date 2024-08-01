@@ -36,8 +36,8 @@
                 "--cache-size", "1000",
                 "--logs-dir", "/home/leo/usman_ws/models/openibl/debug",
                 "--data-dir", "/home/leo/usman_ws/codes/OpenIBL/examples/data/",
-                "--init-dir", "/home/leo/usman_ws/datasets/openibl-init",
-                "--fast-scnn", "/home/leo/usman_ws/datasets/fast_scnn/fast_scnn_citys.pth",
+                "--init-dir", "/home/leo/usman_ws/datasets/official/openibl-init",
+                "--fast-scnn", "/home/leo/usman_ws/datasets/official/fast-scnn/fast_scnn_citys.pth",
                 "--method", "graphvlad"
             ]
         },
