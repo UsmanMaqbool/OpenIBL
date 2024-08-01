@@ -99,8 +99,8 @@ def update_sampler(sampler, model, loader, query, gallery, sub_set, rerank=False
     del distmat, distmat_jac
 
 def get_model(args):
-    base_model = models.create(args.arch, train_layers=args.layers)
-    # pool_layer = models.create('netvlad', dim=base_model.feature_dim)
+    base_model = models.create(args.arch, train_layers=args.layers, matconvnet=osp.join(args.init_dir, 'vd16_offtheshelf_conv5_3_max.pth'))
+
     pool_layer = models.create('netvlad', dim=base_model.feature_dim, num_clusters=args.num_clusters)    
     initcache = osp.join(args.init_dir, args.arch + '_' + args.dataset + '_' + str(args.num_clusters) + '_desc_cen.hdf5')
     if (dist.get_rank()==0):

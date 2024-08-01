@@ -54,8 +54,8 @@ NPOCH=5
 PORT=6010
 
 
-INIT_DIR="/blue/hmedeiros/m.maqboolbhutta/datasets/openibl-init"
-FAST_SCNN="/home/m.maqboolbhutta/usman_ws/datasets/fast_scnn/fast_scnn_citys.pth"
+INIT_DIR="/home/m.maqboolbhutta/usman_ws/datasets/official/openibl-init"
+FAST_SCNN="/home/m.maqboolbhutta/usman_ws/datasets/official/fast_scnn/fast_scnn_citys.pth"
 DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
 
 
@@ -90,7 +90,7 @@ echo "Other nodes: $NODES"
 ===================================================================================================
 LOSS="sare_ind"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/fastscnn-sfrs/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/fastscnn-v2/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
