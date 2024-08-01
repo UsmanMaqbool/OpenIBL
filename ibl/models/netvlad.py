@@ -463,10 +463,7 @@ class SelectRegions(nn.Module):
             if self.mask:
                 for i, label in enumerate(labels):
                     binary_mask = (all_label_mask == label).float()
-                    if len(sub_nodes) < self.NB:
-                        x_min, y_min, x_max, y_max = boxes[i]
-                        masked_image = pre_l2[:, y_min:y_max, x_min:x_max] * binary_mask[y_min:y_max, x_min:x_max]
-                        embed_image = rsizet(pre_l2[:, y_min:y_max, x_min:x_max] + masked_image)
+                    embed_image = (pre_l2 * binary_mask) + pre_l2
                 sub_nodes.append(embed_image.unsqueeze(0))
 
             # sub_nodes.append(filterd_img.unsqueeze(0))
@@ -480,7 +477,7 @@ class SelectRegions(nn.Module):
                     [int(W / 4), int(H / 4), int(3 * W / 4), int(3 * H / 4)],
                 ]
                 for i in range(len(bb_x) - len(sub_nodes)):
-                    x_nodes = pre_l2[:, bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
+                    x_nodes = embed_image[:, bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
                     sub_nodes.append(rsizet(x_nodes.unsqueeze(0)))
 
             # Stack the cropped patches and store them in graph_nodes
