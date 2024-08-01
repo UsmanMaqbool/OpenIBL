@@ -55,7 +55,7 @@ PORT=6010
 
 
 INIT_DIR="/home/m.maqboolbhutta/usman_ws/datasets/official/openibl-init"
-FAST_SCNN="/home/m.maqboolbhutta/usman_ws/datasets/official/fast_scnn/fast_scnn_citys.pth"
+FAST_SCNN="/home/m.maqboolbhutta/usman_ws/datasets/official/fast-scnn/fast_scnn_citys.pth"
 DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
 
 
