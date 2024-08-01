@@ -16,10 +16,9 @@ LR=0.001
 
 
 
-INIT_DIR="/home/leo/usman_ws/datasets/openibl-init"
-FAST_SCNN="/home/leo/usman_ws/datasets/fast_scnn/fast_scnn_citys.pth"
+INIT_DIR="/home/leo/usman_ws/datasets/official/openibl-init"
+FAST_SCNN="/home/leo/usman_ws/datasets/official/fast-scnn/fast_scnn_citys.pth"
 DATASET_DIR="/home/leo/usman_ws/codes/OpenIBL/examples/data/"
-# FILES="/home/leo/usman_ws/models/openibl/vgg16-graphvlad-triplet-pitts30k-lr0.001-tuple1-11-Jun/"
 
 
 echo ${FILES}
