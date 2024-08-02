@@ -438,7 +438,7 @@ class SelectRegions(nn.Module):
         rsizet = transforms.Resize((H, W))
         
         # Process the output of fastscnn to get predicted labels
-        pred_all = torch.argmax(outputs[0], 1).squeeze(0)
+        pred_all = torch.argmax(outputs[0], 1)
         pred_all = self.relabel(pred_all)
 
         for img_i in range(N):

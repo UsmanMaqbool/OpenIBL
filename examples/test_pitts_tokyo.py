@@ -133,50 +133,50 @@ def main_worker(args):
         pca = None
 
 
-    if (args.rank==0):
-        print("Evaluate on the test set:")
-        print("==========Test on Pitts250k=============")
-
-    # Create data loaders for Pitts250k
-    args.dataset = 'pitts'    
-    args.scale = '250k'
-    dataset, pitts_train, train_extract_loader, test_loader_q, test_loader_db = get_data(args)
-    evaluator.evaluate(test_loader_q, sorted(list(set(dataset.q_test) | set(dataset.db_test))),
-                        dataset.q_test, dataset.db_test, dataset.test_pos, gallery_loader=test_loader_db,
-                        vlad=args.vlad, pca=pca, rerank=args.rerank, gpu=args.gpu, sync_gather=args.sync_gather,
-                        nms=(True if args.dataset=='tokyo' else False),
-                        rr_topk=args.rr_topk, lambda_value=args.lambda_value)
-    synchronize()
-    
-    if (args.rank==0):
-        print("Evaluate on the test set:")
-        print("==========Test on Pitts30k=============")
-        
-    # Create data loaders for Pitts30k
-    args.dataset = 'pitts'    
-    args.scale = '30k'
-    dataset, pitts_train, train_extract_loader, test_loader_q, test_loader_db = get_data(args)
-
-    evaluator.evaluate(test_loader_q, sorted(list(set(dataset.q_test) | set(dataset.db_test))),
-                        dataset.q_test, dataset.db_test, dataset.test_pos, gallery_loader=test_loader_db,
-                        vlad=args.vlad, pca=pca, rerank=args.rerank, gpu=args.gpu, sync_gather=args.sync_gather,
-                        nms=(True if args.dataset=='tokyo' else False),
-                        rr_topk=args.rr_topk, lambda_value=args.lambda_value)
-    
-    synchronize()
     # if (args.rank==0):
-    #     print("==========Test on Tokyo247=============")
-    
-    # # Create data loaders for Tokyo247
-    # args.dataset = 'tokyo'    
+    #     print("Evaluate on the test set:")
+    #     print("==========Test on Pitts250k=============")
+
+    # # Create data loaders for Pitts250k
+    # args.dataset = 'pitts'    
+    # args.scale = '250k'
     # dataset, pitts_train, train_extract_loader, test_loader_q, test_loader_db = get_data(args)
-    
     # evaluator.evaluate(test_loader_q, sorted(list(set(dataset.q_test) | set(dataset.db_test))),
     #                     dataset.q_test, dataset.db_test, dataset.test_pos, gallery_loader=test_loader_db,
     #                     vlad=args.vlad, pca=pca, rerank=args.rerank, gpu=args.gpu, sync_gather=args.sync_gather,
     #                     nms=(True if args.dataset=='tokyo' else False),
     #                     rr_topk=args.rr_topk, lambda_value=args.lambda_value)
     # synchronize()
+    
+    # if (args.rank==0):
+    #     print("Evaluate on the test set:")
+    #     print("==========Test on Pitts30k=============")
+        
+    # # Create data loaders for Pitts30k
+    # args.dataset = 'pitts'    
+    # args.scale = '30k'
+    # dataset, pitts_train, train_extract_loader, test_loader_q, test_loader_db = get_data(args)
+
+    # evaluator.evaluate(test_loader_q, sorted(list(set(dataset.q_test) | set(dataset.db_test))),
+    #                     dataset.q_test, dataset.db_test, dataset.test_pos, gallery_loader=test_loader_db,
+    #                     vlad=args.vlad, pca=pca, rerank=args.rerank, gpu=args.gpu, sync_gather=args.sync_gather,
+    #                     nms=(True if args.dataset=='tokyo' else False),
+    #                     rr_topk=args.rr_topk, lambda_value=args.lambda_value)
+    
+    # synchronize()
+    if (args.rank==0):
+        print("==========Test on Tokyo247=============")
+    
+    # Create data loaders for Tokyo247
+    args.dataset = 'tokyo'    
+    dataset, pitts_train, train_extract_loader, test_loader_q, test_loader_db = get_data(args)
+    
+    evaluator.evaluate(test_loader_q, sorted(list(set(dataset.q_test) | set(dataset.db_test))),
+                        dataset.q_test, dataset.db_test, dataset.test_pos, gallery_loader=test_loader_db,
+                        vlad=args.vlad, pca=pca, rerank=args.rerank, gpu=args.gpu, sync_gather=args.sync_gather,
+                        nms=(True if args.dataset=='tokyo' else False),
+                        rr_topk=args.rr_topk, lambda_value=args.lambda_value)
+    synchronize()
     return
 
 if __name__ == '__main__':
