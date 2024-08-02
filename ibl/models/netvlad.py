@@ -429,6 +429,7 @@ class SelectRegions(nn.Module):
         with torch.no_grad():
             outputs = fastscnn(x)
 
+        # save_image(x[0], 'output-image.png')
         # Forward pass through base_model
         pool_x, x = base_model(x)
         N, C, H, W = x.shape
@@ -439,8 +440,19 @@ class SelectRegions(nn.Module):
         
         # Process the output of fastscnn to get predicted labels
         pred_all = torch.argmax(outputs[0], 1)
+        # mask = get_color_pallete(pred_all[0].cpu().numpy(), 'citys')
+        # mask.save('output.png')
+        
+        
+        # pred_all_c = torch.argmax(outputs[0], 1).squeeze(0).cpu().data.numpy()
+        # mask = get_color_pallete(pred_all_c[0], 'citys')
+        # mask.save('output.png')
+        
+        
         pred_all = self.relabel(pred_all)
 
+        # mask = get_color_pallete(pred_all[0].cpu().numpy(), 'citys')
+        # mask.save('output-m.png')
         for img_i in range(N):
             all_label_mask = pred_all[img_i]
             labels_all, label_count_all = all_label_mask.unique(return_counts=True)
@@ -456,7 +468,6 @@ class SelectRegions(nn.Module):
 
             sub_nodes = []
             pre_l2 = x[img_i]
-
             
             if self.mask:
                 for i, label in enumerate(labels):

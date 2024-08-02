@@ -55,9 +55,9 @@
                 "--vlad",
                 "--reduction",
                 "--test-batch-size", "32",
-                "--fast-scnn", "/home/leo/usman_ws/datasets/fast_scnn/fast_scnn_citys.pth",
+                "--fast-scnn", "/home/leo/usman_ws/datasets/official/fast-scnn/fast_scnn_citys.pth",
                 "--method", "graphvlad",
-                "--resume=/home/leo/usman_ws/models/openibl/fastscnn/vgg16-graphvlad-triplet-pitts30k-lr0.001-tuple1-29-Jul/model_best.pth.tar",
+                "--resume", "/home/leo/usman_ws/models/openibl/fastscnn/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple1-01-Aug/checkpoint4.pth.tar",
             ]
         }
     ],
