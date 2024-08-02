@@ -390,22 +390,20 @@ class SelectRegions(nn.Module):
         img[img == 10] = 5
         
         ## Rider 12 + motorcycle 17 + bicycle 18
-        img[img == 18] = 6
-        img[img == 17] = 6
-        img[img == 12] = 6
+        img[img == 18] = 255
+        img[img == 17] = 255
+        img[img == 12] = 255
 
 
         # cars 13 + truck 14 + bus 15 + train 16
-        img[img == 16] = 7
-        img[img == 15] = 7
-        img[img == 14] = 7
-        img[img == 13] = 7
+        img[img == 16] = 255
+        img[img == 15] = 255
+        img[img == 14] = 255
+        img[img == 13] = 255
 
         ## Person
-        img[img == 11] = 8
+        img[img == 11] = 255
 
-
-        
         ### Don't need, make these 255
         ## Background
         img[img == 19] = 255
