@@ -464,16 +464,18 @@ class SelectRegions(nn.Module):
             masks = all_label_mask == labels[:, None, None]
             regions = masks_to_boxes(masks.to(torch.float32))
             boxes = (regions / 16).to(torch.long)
-            all_label_mask = rsizet(all_label_mask.unsqueeze(0)).squeeze(0)
+            # all_label_mask = rsizet(all_label_mask.unsqueeze(0)).squeeze(0)
 
             sub_nodes = []
             pre_l2 = x[img_i]
             
             if self.mask:
                 for i, label in enumerate(labels):
-                    binary_mask = (all_label_mask == label).float()
-                    embed_image = (pre_l2 * binary_mask) + pre_l2
-                sub_nodes.append(embed_image.unsqueeze(0))
+                    if len(sub_nodes) < self.NB:
+                        x_min, y_min, x_max, y_max = boxes[i]
+                        # binary_mask = (all_label_mask == label).float()
+                        embed_image = rsizet(pre_l2[:, y_min:y_max, x_min:x_max])
+                        sub_nodes.append(embed_image.unsqueeze(0))
 
             # sub_nodes.append(filterd_img.unsqueeze(0))
             # Add more patches by cropping predefined regions if needed
@@ -486,12 +488,12 @@ class SelectRegions(nn.Module):
                     [int(W / 4), int(H / 4), int(3 * W / 4), int(3 * H / 4)],
                 ]
                 for i in range(len(bb_x) - len(sub_nodes)):
-                    x_nodes = embed_image[:, bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
+                    x_nodes = pre_l2[:, bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
                     sub_nodes.append(rsizet(x_nodes.unsqueeze(0)))
 
-            # Stack the cropped patches and store them in graph_nodes
-            aa = torch.stack(sub_nodes, 1)
-            graph_nodes[img_i] = aa[0]
+        # Stack the cropped patches and store them in graph_nodes
+        aa = torch.stack(sub_nodes, 1)
+        graph_nodes[img_i] = aa[0]
 
         # Reshape and concatenate graph_nodes with the original tensor x
         x_nodes = graph_nodes.view(self.NB, N, C, H, W)
