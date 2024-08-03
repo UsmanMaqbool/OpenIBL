@@ -457,7 +457,7 @@ class SelectRegions(nn.Module):
             all_label_mask = pred_all[img_i]
             labels_all, label_count_all = all_label_mask.unique(return_counts=True)
             
-            mask_t = label_count_all >= 10000
+            mask_t = label_count_all >= 15000
             labels = labels_all[mask_t]
             
             # Create masks for each label and convert them to bounding boxes
