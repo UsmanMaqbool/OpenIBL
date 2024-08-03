@@ -32,8 +32,8 @@ rsync -ah --progress -e 'ssh -p 2222' ~/usman_ws/datasets/openibl-init/vgg16_pit
 ```sh 
 # Single
 ./scripts/train_baseline_dist.sh graphvlad triplet vgg16 pitts 30k
-# Training all
-./scripts/all/train_baseline_dist_all.sh graphvlad vgg16 pitts 30k
+# Training all 2 Aug
+./scripts/leo/train_baseline_dist_all.sh graphvlad vgg16 pitts 30k | tee graphvlad-fastscnn-v2.out
 ```
 #### Slurm
 
@@ -74,9 +74,9 @@ sbatch --j graphvlad-test scripts/leo/test_slurm_all.sh graphvlad vgg16 pitts 30
 ##### Slurm
 
 ```sh
-# fastscnn-v2 - 1Aug
+# fastscnn-v2 - 2Aug
 ## Training
-sbatch --j fastscnn-v2 scripts/leo/train_sfrs_slurm_all.sh graphvlad vgg16 pitts 30k
+sbatch --j fastscnn-v2-train-sfrs scripts/leo/train_sfrs_slurm_all.sh graphvlad vgg16 pitts 30k
 
 ### Testing
 sbatch --j graphvlad-sare-ind scripts/test_slurm_all.sh graphvlad vgg16 pitts 30k /home/m.maqboolbhutta/usman_ws/models/openibl/graphvlad/
