@@ -66,7 +66,8 @@ def get_model(args):
         if(args.method=='netvlad'):
             model = models.create('embednet', base_model, pool_layer)   
         elif(args.method=='graphvlad'):
-            print('===> Loading segmentation model')
+            if (args.rank==0):
+                print('===> Loading segmentation model')
             segmentation_model = get_segmentation_model(args.fast_scnn)
             model = models.create('graphvlad', base_model, pool_layer, segmentation_model, NB=5)
     else:
@@ -116,7 +117,8 @@ def main_worker(args):
     evaluator = Evaluator(model)
     if (args.reduction):
         pca_parameters_path = osp.join(osp.dirname(args.resume), 'pca_params_'+osp.basename(args.resume).split('.')[0]+'.h5')
-        print("PCA parameters path: ", pca_parameters_path)
+        if (args.rank==0):
+            print("PCA parameters path: ", pca_parameters_path)
         pca = PCA(args.features, (not args.nowhiten), pca_parameters_path)
         if (not osp.isfile(pca_parameters_path)):
             dict_f = extract_features(model, train_extract_loader, pitts_train,
@@ -133,35 +135,35 @@ def main_worker(args):
         pca = None
 
 
-    # if (args.rank==0):
-    #     print("Evaluate on the test set:")
-    #     print("==========Test on Pitts250k=============")
+    if (args.rank==0):
+        print("Evaluate on the test set:")
+        print("==========Test on Pitts250k=============")
 
-    # # Create data loaders for Pitts250k
-    # args.dataset = 'pitts'    
-    # args.scale = '250k'
-    # dataset, pitts_train, train_extract_loader, test_loader_q, test_loader_db = get_data(args)
-    # evaluator.evaluate(test_loader_q, sorted(list(set(dataset.q_test) | set(dataset.db_test))),
-    #                     dataset.q_test, dataset.db_test, dataset.test_pos, gallery_loader=test_loader_db,
-    #                     vlad=args.vlad, pca=pca, rerank=args.rerank, gpu=args.gpu, sync_gather=args.sync_gather,
-    #                     nms=(True if args.dataset=='tokyo' else False),
-    #                     rr_topk=args.rr_topk, lambda_value=args.lambda_value)
-    # synchronize()
+    # Create data loaders for Pitts250k
+    args.dataset = 'pitts'    
+    args.scale = '250k'
+    dataset, pitts_train, train_extract_loader, test_loader_q, test_loader_db = get_data(args)
+    evaluator.evaluate(test_loader_q, sorted(list(set(dataset.q_test) | set(dataset.db_test))),
+                        dataset.q_test, dataset.db_test, dataset.test_pos, gallery_loader=test_loader_db,
+                        vlad=args.vlad, pca=pca, rerank=args.rerank, gpu=args.gpu, sync_gather=args.sync_gather,
+                        nms=(True if args.dataset=='tokyo' else False),
+                        rr_topk=args.rr_topk, lambda_value=args.lambda_value)
+    synchronize()
     
-    # if (args.rank==0):
-    #     print("Evaluate on the test set:")
-    #     print("==========Test on Pitts30k=============")
+    if (args.rank==0):
+        print("Evaluate on the test set:")
+        print("==========Test on Pitts30k=============")
         
-    # # Create data loaders for Pitts30k
-    # args.dataset = 'pitts'    
-    # args.scale = '30k'
-    # dataset, pitts_train, train_extract_loader, test_loader_q, test_loader_db = get_data(args)
+    # Create data loaders for Pitts30k
+    args.dataset = 'pitts'    
+    args.scale = '30k'
+    dataset, pitts_train, train_extract_loader, test_loader_q, test_loader_db = get_data(args)
 
-    # evaluator.evaluate(test_loader_q, sorted(list(set(dataset.q_test) | set(dataset.db_test))),
-    #                     dataset.q_test, dataset.db_test, dataset.test_pos, gallery_loader=test_loader_db,
-    #                     vlad=args.vlad, pca=pca, rerank=args.rerank, gpu=args.gpu, sync_gather=args.sync_gather,
-    #                     nms=(True if args.dataset=='tokyo' else False),
-    #                     rr_topk=args.rr_topk, lambda_value=args.lambda_value)
+    evaluator.evaluate(test_loader_q, sorted(list(set(dataset.q_test) | set(dataset.db_test))),
+                        dataset.q_test, dataset.db_test, dataset.test_pos, gallery_loader=test_loader_db,
+                        vlad=args.vlad, pca=pca, rerank=args.rerank, gpu=args.gpu, sync_gather=args.sync_gather,
+                        nms=(True if args.dataset=='tokyo' else False),
+                        rr_topk=args.rr_topk, lambda_value=args.lambda_value)
     
     # synchronize()
     if (args.rank==0):

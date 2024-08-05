@@ -42,9 +42,7 @@ fi
 GPUS=4
 METHOD="$1"
 ARCH="$2"
-DATASET="$3"
-SCALE="$4"
-FILES="$5"
+FILES="$3"
 
 NUMCLUSTER=64
 TUMPLESIZE=4
@@ -52,8 +50,9 @@ CACHEBS=32
 PORT=6010
 
 
-INIT_DIR="/blue/hmedeiros/m.maqboolbhutta/datasets/openibl-init"
-FAST_SCNN="/home/m.maqboolbhutta/usman_ws/datasets/fast_scnn/fast_scnn_citys.pth"
+
+INIT_DIR="/home/m.maqboolbhutta/usman_ws/datasets/official/openibl-init"
+FAST_SCNN="/home/m.maqboolbhutta/usman_ws/datasets/official/fast-scnn/fast_scnn_citys.pth"
 DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
 
 

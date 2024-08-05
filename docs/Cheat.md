@@ -45,8 +45,8 @@ sbatch --j graphvlad-triplet-29jul ./scripts/leo/train_baseline_slurm.sh graphvl
 sbatch --j netvlad-sare-ind scripts/train_baseline_slurm_all.sh graphvlad sare_ind vgg16 pitts 30k
 
 ## Testing
-### 29July,2024
-sbatch --j graphvlad-test scripts/leo/test_slurm_all.sh graphvlad vgg16 pitts 30k /home/m.maqboolbhutta/usman_ws/models/openibl/fastscnn/vgg16-graphvlad-triplet-pitts30k-lr0.01-tuple4-29-Jul
+### 03Aug,2024
+sbatch --j graphvlad-sfrs-sare-ind scripts/leo/test_slurm_all.sh graphvlad vgg16 /home/m.maqboolbhutta/usman_ws/models/openibl/fastscnn-v2/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-02-Aug
 ```
 
 
