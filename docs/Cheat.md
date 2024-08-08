@@ -40,6 +40,8 @@ rsync -ah --progress -e 'ssh -p 2222' ~/usman_ws/datasets/openibl-init/vgg16_pit
 ```sh
 # Single
 sbatch --j graphvlad-triplet-29jul ./scripts/leo/train_baseline_slurm.sh graphvlad vgg16 pitts 30k triplet
+# Aug 8
+sbatch --j fastscnn-v2-train-baseline-triplet scripts/leo/train_baseline_slurm_all.sh graphvlad vgg16 pitts 30k
 # 0620-v9-graphvlad-sort-gal 
 ## Training
 sbatch --j netvlad-sare-ind scripts/train_baseline_slurm_all.sh graphvlad sare_ind vgg16 pitts 30k

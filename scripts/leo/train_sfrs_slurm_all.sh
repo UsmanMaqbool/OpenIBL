@@ -85,27 +85,27 @@ echo "Other nodes: $NODES"
 # --init-dir ${INIT_DIR}
 
 
-#===================================================================================================
-# SARE Ind Loss
-#===================================================================================================
-LOSS="sare_ind"
-DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/fastscnn-v2/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+# #===================================================================================================
+# # SARE Ind Loss
+# #===================================================================================================
+# LOSS="sare_ind"
+# DATE=$(date '+%d-%b') 
+# FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/fastscnn-v2/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
-echo ${FILES}
+# echo ${FILES}
 
-echo "==========Starting Training============="
-echo "========================================"
-srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
-python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
-  -d ${DATASET} --scale ${SCALE} \
-  -a ${ARCH} --layers ${LAYERS} --syncbn \
-  --width 640 --height 480 --tuple-size 1 -j 2 --test-batch-size 16 \
-  --neg-num 10  --pos-pool 20 --neg-pool 1000 --pos-num 10 \
-  --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} --soft-weight 0.5 \
-  --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 --generations 4 --temperature 0.07 0.07 0.06 0.05 --logs-dir ${FILES} --data-dir ${DATASET_DIR} \
-  --init-dir ${INIT_DIR} --fast-scnn=${FAST_SCNN} \
-  --method ${METHOD}
+# echo "==========Starting Training============="
+# echo "========================================"
+# srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
+# python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
+#   -d ${DATASET} --scale ${SCALE} \
+#   -a ${ARCH} --layers ${LAYERS} --syncbn \
+#   --width 640 --height 480 --tuple-size 1 -j 2 --test-batch-size 16 \
+#   --neg-num 10  --pos-pool 20 --neg-pool 1000 --pos-num 10 \
+#   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} --soft-weight 0.5 \
+#   --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 --generations 4 --temperature 0.07 0.07 0.06 0.05 --logs-dir ${FILES} --data-dir ${DATASET_DIR} \
+#   --init-dir ${INIT_DIR} --fast-scnn=${FAST_SCNN} \
+#   --method ${METHOD}
 
 
 # echo "==========Testing============="

@@ -29,7 +29,6 @@ import numpy as np
 import torch.nn.init as init
 from torchvision import transforms
 from torchvision.ops import masks_to_boxes
-from .espnet import *
 from .visualize import get_color_pallete, save_image
 from PIL import Image
 
