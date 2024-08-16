@@ -1,0 +1,147 @@
+==========Testing=============
+/home/leo/usman_ws/models/trained-models-graphvlad/pitts30k_triplet_openibl//graphvlad_pitts30k_openibl.pth.tar
+==============================
+==========################=============
+ Testing /home/leo/usman_ws/models/trained-models-graphvlad/pitts30k_triplet_openibl//graphvlad_pitts30k_openibl.pth.tar file...
+=======================================
+Use GPU: 0 for testing, rank no.0 of world_size 1
+==========
+Args:Namespace(arch='vgg16', data_dir='/home/leo/usman_ws/codes/OpenIBL/examples/data', dataset='pitts', fast_scnn='/home/leo/usman_ws/datasets/official/fast-scnn/fast_scnn_citys.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/home/leo/usman_ws/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=1, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/home/leo/usman_ws/models/trained-models-graphvlad/pitts30k_triplet_openibl//graphvlad_pitts30k_openibl.pth.tar', rr_topk=25, scale='30k', sync_gather=False, tcp_port='5017', test_batch_size=32, vlad=True, width=640, workers=2, world_size=1)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+===> Loading segmentation model
+=> Loaded checkpoint '/home/leo/usman_ws/models/trained-models-graphvlad/pitts30k_triplet_openibl//graphvlad_pitts30k_openibl.pth.tar'
+=> Start epoch 0  best recall5 93.0%
+PCA parameters path:  /home/leo/usman_ws/models/trained-models-graphvlad/pitts30k_triplet_openibl/pca_params_graphvlad_pitts30k_openibl.h5
+Evaluate on the test set:
+==========Test on Pitts250k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   332  |     7800
+  train_gallery |  3811  |    91464
+  val_query     |   319  |     7608
+  val_gallery   |  3277  |    78648
+  test_query    |   347  |     8280
+  test_gallery  |  3498  |    83952
+load PCA parameters...
+Extract Features: [100/259]	Time 0.410 (0.458)	Data 0.000 (0.018)	
+Extract Features: [200/259]	Time 0.399 (0.441)	Data 0.000 (0.009)	
+gathering features from rank no.0
+load PCA parameters...
+Extract Features: [100/2624]	Time 0.393 (0.417)	Data 0.000 (0.018)	
+Extract Features: [200/2624]	Time 0.391 (0.406)	Data 0.000 (0.009)	
+Extract Features: [300/2624]	Time 0.399 (0.404)	Data 0.000 (0.006)	
+Extract Features: [400/2624]	Time 0.389 (0.402)	Data 0.000 (0.005)	
+Extract Features: [500/2624]	Time 0.388 (0.401)	Data 0.000 (0.004)	
+Extract Features: [600/2624]	Time 0.395 (0.400)	Data 0.000 (0.003)	
+Extract Features: [700/2624]	Time 0.395 (0.399)	Data 0.000 (0.003)	
+Extract Features: [800/2624]	Time 0.393 (0.399)	Data 0.000 (0.002)	
+Extract Features: [900/2624]	Time 0.415 (0.399)	Data 0.000 (0.002)	
+Extract Features: [1000/2624]	Time 0.388 (0.399)	Data 0.000 (0.002)	
+Extract Features: [1100/2624]	Time 0.385 (0.399)	Data 0.000 (0.002)	
+Extract Features: [1200/2624]	Time 0.391 (0.399)	Data 0.000 (0.002)	
+Extract Features: [1300/2624]	Time 0.394 (0.400)	Data 0.000 (0.002)	
+Extract Features: [1400/2624]	Time 0.418 (0.401)	Data 0.000 (0.001)	
+Extract Features: [1500/2624]	Time 0.421 (0.401)	Data 0.000 (0.001)	
+Extract Features: [1600/2624]	Time 0.402 (0.401)	Data 0.000 (0.001)	
+Extract Features: [1700/2624]	Time 0.392 (0.401)	Data 0.000 (0.001)	
+Extract Features: [1800/2624]	Time 0.391 (0.402)	Data 0.000 (0.001)	
+Extract Features: [1900/2624]	Time 0.396 (0.402)	Data 0.000 (0.001)	
+Extract Features: [2000/2624]	Time 0.422 (0.402)	Data 0.000 (0.001)	
+Extract Features: [2100/2624]	Time 0.400 (0.402)	Data 0.000 (0.001)	
+Extract Features: [2200/2624]	Time 0.415 (0.402)	Data 0.000 (0.001)	
+Extract Features: [2300/2624]	Time 0.428 (0.402)	Data 0.000 (0.001)	
+Extract Features: [2400/2624]	Time 0.399 (0.402)	Data 0.000 (0.001)	
+Extract Features: [2500/2624]	Time 0.395 (0.402)	Data 0.000 (0.001)	
+Extract Features: [2600/2624]	Time 0.391 (0.402)	Data 0.000 (0.001)	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.7%
+  top-5          95.0%
+  top-10         96.7%
+Evaluate on the test set:
+==========Test on Pitts30k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+load PCA parameters...
+Extract Features: [100/213]	Time 0.377 (0.410)	Data 0.000 (0.020)	
+Extract Features: [200/213]	Time 0.386 (0.401)	Data 0.000 (0.010)	
+gathering features from rank no.0
+load PCA parameters...
+Extract Features: [100/313]	Time 0.375 (0.409)	Data 0.000 (0.018)	
+Extract Features: [200/313]	Time 0.380 (0.400)	Data 0.000 (0.009)	
+Extract Features: [300/313]	Time 0.413 (0.396)	Data 0.000 (0.006)	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          87.7%
+  top-5          93.9%
+  top-10         95.7%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+Extract Features: [100/315]	Time 0.151 (0.089)	Data 0.111 (0.047)	
+Extract Features: [200/315]	Time 0.144 (0.075)	Data 0.112 (0.037)	
+Extract Features: [300/315]	Time 0.041 (0.079)	Data 0.000 (0.037)	
+gathering features from rank no.0
+load PCA parameters...
+Extract Features: [100/2375]	Time 0.409 (0.412)	Data 0.000 (0.020)	
+Extract Features: [200/2375]	Time 0.415 (0.405)	Data 0.000 (0.010)	
+Extract Features: [300/2375]	Time 0.411 (0.401)	Data 0.000 (0.007)	
+Extract Features: [400/2375]	Time 0.382 (0.399)	Data 0.000 (0.005)	
+Extract Features: [500/2375]	Time 0.380 (0.399)	Data 0.000 (0.004)	
+Extract Features: [600/2375]	Time 0.388 (0.397)	Data 0.000 (0.003)	
+Extract Features: [700/2375]	Time 0.377 (0.395)	Data 0.000 (0.003)	
+Extract Features: [800/2375]	Time 0.381 (0.393)	Data 0.000 (0.003)	
+Extract Features: [900/2375]	Time 0.381 (0.393)	Data 0.000 (0.002)	
+Extract Features: [1000/2375]	Time 0.394 (0.392)	Data 0.000 (0.002)	
+Extract Features: [1100/2375]	Time 0.392 (0.392)	Data 0.000 (0.002)	
+Extract Features: [1200/2375]	Time 0.394 (0.391)	Data 0.000 (0.002)	
+Extract Features: [1300/2375]	Time 0.380 (0.390)	Data 0.000 (0.002)	
+Extract Features: [1400/2375]	Time 0.390 (0.390)	Data 0.000 (0.002)	
+Extract Features: [1500/2375]	Time 0.390 (0.391)	Data 0.000 (0.001)	
+Extract Features: [1600/2375]	Time 0.394 (0.392)	Data 0.000 (0.001)	
+Extract Features: [1700/2375]	Time 0.399 (0.392)	Data 0.000 (0.001)	
+Extract Features: [1800/2375]	Time 0.393 (0.393)	Data 0.000 (0.001)	
+Extract Features: [1900/2375]	Time 0.422 (0.394)	Data 0.000 (0.001)	
+Extract Features: [2000/2375]	Time 0.396 (0.395)	Data 0.000 (0.001)	
+Extract Features: [2100/2375]	Time 0.390 (0.395)	Data 0.000 (0.001)	
+Extract Features: [2200/2375]	Time 0.396 (0.395)	Data 0.000 (0.001)	
+Extract Features: [2300/2375]	Time 0.396 (0.395)	Data 0.000 (0.001)	
+gathering features from rank no.0
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          78.1%
+  top-5          86.0%
+  top-10         89.5%
+==========################=============
+ Done Testing with /home/leo/usman_ws/models/trained-models-graphvlad/pitts30k_triplet_openibl//graphvlad_pitts30k_openibl.pth.tar file...
+=======================================

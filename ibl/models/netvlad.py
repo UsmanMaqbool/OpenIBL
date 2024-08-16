@@ -29,9 +29,10 @@ import numpy as np
 import torch.nn.init as init
 from torchvision import transforms
 from torchvision.ops import masks_to_boxes
-from .visualize import get_color_pallete, save_image
+from .visualize import get_color_pallete, save_batch_images, save_batch_masks, save_image_with_heatmap,     save_x_nodes_patches
 from PIL import Image
-
+import matplotlib.pyplot as plt
+import os
 class NeighborAggregator(nn.Module):
     def __init__(self, input_dim, output_dim,
                  use_bias=False, aggr_method="mean"):
@@ -360,6 +361,7 @@ class SelectRegions(nn.Module):
         super(SelectRegions, self).__init__()
         self.NB = NB
         self.mask = Mask
+        self.visualize = False
         
     def relabel(self, img):
         """
@@ -375,19 +377,22 @@ class SelectRegions(nn.Module):
         img[img == 2] = 2
         img[img == 3] = 2
         img[img == 4] = 2
+        
 
         ### vegetation 8 + Terrain 9
         img[img == 9] = 3
         img[img == 8] = 3
 
-        ### Pole 5 + Traffic Light 6 + Traffic Signal 7
+        ### Pole 5 + Traffic Light 6 + Traffic Signal 7 + Background
         img[img == 7] = 4
         img[img == 6] = 4
         img[img == 5] = 4
+        img[img == 19] = 4
         
         ### Sky 10
         img[img == 10] = 5
         
+
         ## Rider 12 + motorcycle 17 + bicycle 18
         img[img == 18] = 255
         img[img == 17] = 255
@@ -403,9 +408,7 @@ class SelectRegions(nn.Module):
         ## Person
         img[img == 11] = 255
 
-        ### Don't need, make these 255
-        ## Background
-        img[img == 19] = 255
+
 
         return img                          
     
@@ -425,10 +428,14 @@ class SelectRegions(nn.Module):
             x = F.pad(input=x, pad=(1, 2), mode="constant", value=0)
 
         # Forward pass through fastscnn without gradients
-        with torch.no_grad():
-            outputs = fastscnn(x)
+        # with torch.no_grad():
+        outputs = fastscnn(x)
 
-        # save_image(x[0], 'output-image.png')
+        if self.visualize:
+            # save_image(x[0], 'output-image.png')
+            xx = x
+            save_batch_images(x)
+        
         # Forward pass through base_model
         pool_x, x = base_model(x)
         N, C, H, W = x.shape
@@ -439,44 +446,55 @@ class SelectRegions(nn.Module):
         
         # Process the output of fastscnn to get predicted labels
         pred_all = torch.argmax(outputs[0], 1)
-        # mask = get_color_pallete(pred_all[0].cpu().numpy(), 'citys')
-        # mask.save('output.png')
         
-        
-        # pred_all_c = torch.argmax(outputs[0], 1).squeeze(0).cpu().data.numpy()
-        # mask = get_color_pallete(pred_all_c[0], 'citys')
-        # mask.save('output.png')
+        if self.visualize:
+            # Assuming `pred_all` is your batch of predictions
+            save_batch_masks(pred_all, 'stage2-mask-real.png')
         
         
         pred_all = self.relabel(pred_all)
 
-        # mask = get_color_pallete(pred_all[0].cpu().numpy(), 'citys')
-        # mask.save('output-m.png')
+        if self.visualize:
+            # Assuming `pred_all` is your batch of predictions
+            save_batch_masks(pred_all, 'stage3-mask-merge.png')
+        
         for img_i in range(N):
             all_label_mask = pred_all[img_i]
             labels_all, label_count_all = all_label_mask.unique(return_counts=True)
             
-            mask_t = label_count_all >= 10000
-            labels = labels_all[mask_t]
+            labels_all = labels_all[:-1] # dont consider other cat
+            # mask_t = label_count_all >= 5000
+            # labels = labels_all[mask_t]
             
             # Create masks for each label and convert them to bounding boxes
-            masks = all_label_mask == labels[:, None, None]
-            regions = masks_to_boxes(masks.to(torch.float32))
-            boxes = (regions / 16).to(torch.long)
+            masks = all_label_mask == labels_all[:, None, None]
             all_label_mask = rsizet(all_label_mask.unsqueeze(0)).squeeze(0)
+
+             # regions = masks_to_boxes(masks.to(torch.float32))
+            # boxes = (regions / 16).to(torch.long)
 
             sub_nodes = []
             pre_l2 = x[img_i]
+            # embed_image = pre_l2
+            if self.visualize:
+                save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=pre_l2, img_i=img_i)
             
             if self.mask:
-                for i, label in enumerate(labels):
+                for i, label in enumerate(labels_all):
                     binary_mask = (all_label_mask == label).float()
-                    embed_image = (pre_l2 * binary_mask) + pre_l2
-                sub_nodes.append(embed_image.unsqueeze(0))
+                    embed_image = pre_l2 * (binary_mask - 1)
+                    if self.visualize:
+                        embed_file_name = f'embed_{i}.png'  # Customize the naming pattern as needed
+                        save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name=embed_file_name)
+                    sub_nodes.append(embed_image.unsqueeze(0))
 
             # sub_nodes.append(filterd_img.unsqueeze(0))
             # Add more patches by cropping predefined regions if needed
             if len(sub_nodes) < self.NB:
+                embed_image = torch.stack(sub_nodes, dim=0)  # Shape will be [4, 1, 512, 30, 40]
+                embed_image = torch.sum(embed_image, dim=0).squeeze(0)  # Shape will be [1, 512, 30, 40]
+                if self.visualize:
+                    save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name='embed_image.png')
                 bb_x = [
                     [0, 0, int(2 * W / 3), H],
                     [int(W / 3), 0, W, H],
@@ -486,6 +504,10 @@ class SelectRegions(nn.Module):
                 ]
                 for i in range(len(bb_x) - len(sub_nodes)):
                     x_nodes = embed_image[:, bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
+                    patch_file_name = f'patch_{i}.png'  # Customize the naming pattern as needed
+                    save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name=patch_file_name, patch_idx=i)
+
+                    # save_x_nodes_patches(rsizet(x_nodes.unsqueeze(0)), img_i=img_i, patch_idx=i)
                     sub_nodes.append(rsizet(x_nodes.unsqueeze(0)))
 
             # Stack the cropped patches and store them in graph_nodes
@@ -497,7 +519,7 @@ class SelectRegions(nn.Module):
         x_nodes = torch.cat((x_nodes, x.unsqueeze(0)))
         
         # Clean up
-        del graph_nodes, sub_nodes, pred_all, labels_all, label_count_all, masks, regions, boxes, all_label_mask
+        del graph_nodes, sub_nodes, pred_all, labels_all, label_count_all, masks, all_label_mask
         
         return pool_x, x.size(0), x_nodes
 class GraphVLAD(nn.Module):
@@ -544,38 +566,51 @@ class GraphVLAD(nn.Module):
         
         return pool_x, gvlad
 class GraphVLADPCA(nn.Module):
-    def __init__(self, base_model, net_vlad, esp_net, dim=4096):
+    def __init__(self, base_model, net_vlad, fastscnn, NB, dim=4096):
         super(GraphVLADPCA, self).__init__()
         self.base_model = base_model
-        self.esp_net = esp_net
+        self.fastscnn = fastscnn
         self.net_vlad = net_vlad
-        self.SelectRegions = SelectRegions()
+        self.NB = NB
+        self.mask = True
+                
         self.applyGNN = applyGNN()
+        self.SelectRegions = SelectRegions(self.NB, self.mask)
+        
         self.pca_layer = nn.Conv2d(net_vlad.centroids.shape[0]*net_vlad.centroids.shape[1], dim, 1, stride=1, padding=0)
     def _init_params(self):
         self.base_model._init_params()
         self.net_vlad._init_params()
     def forward(self, x):
         node_features_list = []
+        _, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
+        
         neighborsFeat = []
-        NB, x_size, x_cropped = self.SelectRegions(x, self.base_model, self.esp_net)
-        for i in range(NB+1):
-            vlad_x = self.net_vlad(x_cropped[i])
-            vlad_x = F.normalize(vlad_x, p=2, dim=2)  
-            vlad_x = vlad_x.view(x_size, -1)  
-            vlad_x = F.normalize(vlad_x, p=2, dim=1)  
+        for i in range(self.NB + 1):
+            vlad_x = self.net_vlad(x_nodes[i])
+            vlad_x = F.normalize(vlad_x, p=2, dim=2)
+            vlad_x = vlad_x.view(x_size, -1)
+            vlad_x = F.normalize(vlad_x, p=2, dim=1)
             neighborsFeat.append(vlad_x)
-        node_features_list.append(neighborsFeat[NB])
-        node_features_list.append(torch.concat(neighborsFeat[0:NB],0))
-        neighborsFeat = []
+        
+        node_features_list.append(neighborsFeat[self.NB])
+        node_features_list.append(torch.cat(neighborsFeat[0:self.NB], 0))
+        
+        # Clear neighborsFeat to free up memory
+        del neighborsFeat
+        
         gvlad = self.applyGNN(node_features_list)
-        gvlad = torch.add(gvlad,vlad_x)        
-        gvlad = gvlad.view(-1,vlad_x.shape[1])
+        gvlad = torch.add(gvlad, vlad_x)
+        gvlad = gvlad.view(-1, vlad_x.shape[1])
+        
+        # Clear node_features_list to free up memory
+        del node_features_list
+        
         N, D = gvlad.size()
         gvlad = gvlad.view(N, D, 1, 1)
         gvlad = self.pca_layer(gvlad).view(N, -1)
         gvlad = F.normalize(gvlad, p=2, dim=-1)  
-        return gvlad   
+        return gvlad 
 class GraphVLADEmbedRegion(nn.Module):
     def __init__(self, base_model, net_vlad, tuple_size, fastscnn, NB):
         super(GraphVLADEmbedRegion, self).__init__()

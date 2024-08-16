@@ -33,6 +33,8 @@ def extract_cnn_feature(model, inputs, vlad=True, gpu=None):
         outputs = F.normalize(outputs, p=2, dim=-1)
     return outputs
 
+
+
 def extract_features(model, data_loader, dataset, print_freq=100,
                 vlad=True, pca=None, gpu=None, sync_gather=False):
     model.eval()
@@ -41,7 +43,6 @@ def extract_features(model, data_loader, dataset, print_freq=100,
 
     rank = dist.get_rank()
     world_size = dist.get_world_size()
-
     features = []
 
     if (pca is not None):
@@ -52,11 +53,15 @@ def extract_features(model, data_loader, dataset, print_freq=100,
         for i, (imgs, fnames, _, _, _) in enumerate(data_loader):
             data_time.update(time.time() - end)
 
-            outputs = extract_cnn_feature(model, imgs, vlad, gpu=gpu)
             if (pca is not None):
+                outputs = extract_cnn_feature(model, imgs, vlad, gpu=gpu)
                 outputs = pca.infer(outputs)
+            else:
+                inputs = to_torch(imgs).cuda(gpu)
+                outputs = model(inputs) 
+                
             outputs = outputs.data.cpu()
-
+            # print(outputs.shape)
             features.append(outputs)
 
             batch_time.update(time.time() - end)

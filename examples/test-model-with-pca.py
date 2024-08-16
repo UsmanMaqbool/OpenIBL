@@ -25,10 +25,6 @@ from ibl.pca import PCA
 from ibl.utils.serialization import load_checkpoint, save_checkpoint, copy_state_dict, write_json
 from ibl.utils.dist_utils import init_dist, synchronize
 
-def get_segmentation_model(encoderFile):
-    model = models.create('fastscnn', num_classes=19)
-    model.load_state_dict(torch.load(encoderFile))
-    return model
 
 def get_data(args):
     root = osp.join(args.data_dir, args.dataset)
@@ -59,17 +55,22 @@ def get_data(args):
 
     return dataset, pitts_train, train_extract_loader, test_loader_q, test_loader_db
 
+def get_segmentation_model(encoderFile):
+    model = models.create('fastscnn', num_classes=19)
+    model.load_state_dict(torch.load(encoderFile))
+    return model
+
 def get_model(args):
     base_model = models.create(args.arch)
+
     if args.vlad:
         pool_layer = models.create('netvlad', dim=base_model.feature_dim)
         if(args.method=='netvlad'):
-            model = models.create('embednet', base_model, pool_layer)   
+            model = models.create('embednetpca', base_model, pool_layer)   
         elif(args.method=='graphvlad'):
-            if (args.rank==0):
-                print('===> Loading segmentation model')
+            print('===> Loading segmentation model')
             segmentation_model = get_segmentation_model(args.fast_scnn)
-            model = models.create('graphvlad', base_model, pool_layer, segmentation_model, NB=5)
+            model = models.create('graphvladpca', base_model, pool_layer, segmentation_model, NB=5)
     else:
         model = base_model
 
@@ -97,7 +98,7 @@ def main_worker(args):
         sys.stdout = Logger(osp.join(log_dir, 'log_test_'+args.dataset+'.txt'))
         print("==========\nArgs:{}\n==========".format(args))
 
-    # Create data loaders 
+    # Create data loaders
     dataset, pitts_train, train_extract_loader, test_loader_q, test_loader_db = get_data(args)
 
     # Create model
@@ -106,76 +107,23 @@ def main_worker(args):
     # Load from checkpoint
     if args.resume:
         checkpoint = load_checkpoint(args.resume)
-        copy_state_dict(checkpoint['state_dict'], model)
-        start_epoch = checkpoint['epoch']
-        best_recall5 = checkpoint['best_recall5']
-        if (args.rank==0):
-            print("=> Start epoch {}  best recall5 {:.1%}"
-                  .format(start_epoch, best_recall5))
+        # fix the DataParallel issue
+        state_dict = checkpoint['state_dict']
+        new_state_dict = {}
+        for k, v in state_dict.items():
+            new_key = "module." + k
+            new_state_dict[new_key] = v
+        copy_state_dict(new_state_dict, model)
+        
 
     # Evaluator
     evaluator = Evaluator(model)
-    if (args.reduction):
-        pca_parameters_path = osp.join(osp.dirname(args.resume), 'pca_params_'+osp.basename(args.resume).split('.')[0]+'.h5')
-        if (args.rank==0):
-            print("PCA parameters path: ", pca_parameters_path)
-        pca = PCA(args.features, (not args.nowhiten), pca_parameters_path)
-        if (not osp.isfile(pca_parameters_path)):
-            dict_f = extract_features(model, train_extract_loader, pitts_train,
-                    vlad=args.vlad, gpu=args.gpu, sync_gather=args.sync_gather)
-            features = list(dict_f.values())
-            if (len(features)>10000):
-                features = random.sample(features, 10000)
-            features = torch.stack(features)
-            if (args.rank==0):
-                pca.train(features)
-            synchronize()
-            del features
-    else:
-        pca = None
-
 
     if (args.rank==0):
         print("Evaluate on the test set:")
-        print("==========Test on Pitts250k=============")
-
-    # Create data loaders for Pitts250k
-    args.dataset = 'pitts'    
-    args.scale = '250k'
-    dataset, pitts_train, train_extract_loader, test_loader_q, test_loader_db = get_data(args)
     evaluator.evaluate(test_loader_q, sorted(list(set(dataset.q_test) | set(dataset.db_test))),
                         dataset.q_test, dataset.db_test, dataset.test_pos, gallery_loader=test_loader_db,
-                        vlad=args.vlad, pca=pca, rerank=args.rerank, gpu=args.gpu, sync_gather=args.sync_gather,
-                        nms=(True if args.dataset=='tokyo' else False),
-                        rr_topk=args.rr_topk, lambda_value=args.lambda_value)
-    synchronize()
-    
-    if (args.rank==0):
-        print("Evaluate on the test set:")
-        print("==========Test on Pitts30k=============")
-        
-    # Create data loaders for Pitts30k
-    args.dataset = 'pitts'    
-    args.scale = '30k'
-    dataset, pitts_train, train_extract_loader, test_loader_q, test_loader_db = get_data(args)
-
-    evaluator.evaluate(test_loader_q, sorted(list(set(dataset.q_test) | set(dataset.db_test))),
-                        dataset.q_test, dataset.db_test, dataset.test_pos, gallery_loader=test_loader_db,
-                        vlad=args.vlad, pca=pca, rerank=args.rerank, gpu=args.gpu, sync_gather=args.sync_gather,
-                        nms=(True if args.dataset=='tokyo' else False),
-                        rr_topk=args.rr_topk, lambda_value=args.lambda_value)
-    
-    synchronize()
-    if (args.rank==0):
-        print("==========Test on Tokyo247=============")
-    
-    # Create data loaders for Tokyo247
-    args.dataset = 'tokyo'    
-    dataset, pitts_train, train_extract_loader, test_loader_q, test_loader_db = get_data(args)
-    
-    evaluator.evaluate(test_loader_q, sorted(list(set(dataset.q_test) | set(dataset.db_test))),
-                        dataset.q_test, dataset.db_test, dataset.test_pos, gallery_loader=test_loader_db,
-                        vlad=args.vlad, pca=pca, rerank=args.rerank, gpu=args.gpu, sync_gather=args.sync_gather,
+                        vlad=args.vlad, pca=None, rerank=args.rerank, gpu=args.gpu, sync_gather=args.sync_gather,
                         nms=(True if args.dataset=='tokyo' else False),
                         rr_topk=args.rr_topk, lambda_value=args.lambda_value)
     synchronize()
@@ -222,5 +170,4 @@ if __name__ == '__main__':
     parser.add_argument('--logs-dir', type=str, metavar='PATH',
                         default=osp.join(working_dir, 'logs'))
     parser.add_argument('--fast-scnn', type=str, default='', help='Path to Fast SCNN encoder file')
-
     main()

@@ -34,6 +34,11 @@ rsync -ah --progress -e 'ssh -p 2222' ~/usman_ws/datasets/openibl-init/vgg16_pit
 ./scripts/train_baseline_dist.sh graphvlad triplet vgg16 pitts 30k
 # Training all 2 Aug
 ./scripts/leo/train_baseline_dist_all.sh graphvlad vgg16 pitts 30k | tee graphvlad-fastscnn-v2.out
+
+# Testing grad: Aug 9
+./scripts/leo/test_dist_all.sh graphvlad /home/leo/usman_ws/models/openibl/fastscnn-grad/vgg16-graphvlad-triplet-pitts30k-lr0.001-tuple1-08-Aug
+
+
 ```
 #### Slurm
 

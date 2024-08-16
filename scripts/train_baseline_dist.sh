@@ -16,7 +16,7 @@ LAYERS=conv5
 LR=0.001
 
 
-FILES="/home/leo/usman_ws/models/openibl/fastscnn/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/leo/usman_ws/models/openibl/fastscnn_v4_16Aug/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 INIT_DIR="/home/leo/usman_ws/datasets/official/openibl-init"
 FAST_SCNN="/home/leo/usman_ws/datasets/official/fast-scnn/fast_scnn_citys.pth"
 DATASET_DIR="/home/leo/usman_ws/codes/OpenIBL/examples/data/"

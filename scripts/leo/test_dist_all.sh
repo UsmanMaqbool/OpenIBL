@@ -6,14 +6,12 @@ GPUS=1
 METHOD="$1"
 FILES="$2"
 NUMCLUSTER="64"
-
 PORT=6010
 
-ESP_ENCODER="/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth"
-#DATASET_DIR="/home/leo/usman_ws/codes/OpenIBL/examples/data/"
+FAST_SCNN="/home/leo/usman_ws/datasets/official/fast-scnn/fast_scnn_citys.pth"
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+FILES=$(ls -r ${FILES}/*.tar)
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
@@ -26,7 +24,7 @@ do
    examples/test_pitts_tokyo.py --launcher pytorch \
     -a ${ARCH} --test-batch-size 32 -j 2 \
     --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
+    --resume ${RESUME} --fast-scnn ${FAST_SCNN} \
     --num-clusters ${NUMCLUSTER}
   echo "==========################============="
   echo " Done Testing with $RESUME file..."
