@@ -462,37 +462,30 @@ class SelectRegions(nn.Module):
             all_label_mask = pred_all[img_i]
             labels_all, label_count_all = all_label_mask.unique(return_counts=True)
             
-            labels_all = labels_all[:-1] # dont consider other cat
-            # mask_t = label_count_all >= 5000
-            # labels = labels_all[mask_t]
+            mask_t = label_count_all >= 10000
+            labels = labels_all[mask_t]
             
             # Create masks for each label and convert them to bounding boxes
             masks = all_label_mask == labels_all[:, None, None]
             all_label_mask = rsizet(all_label_mask.unsqueeze(0)).squeeze(0)
 
-             # regions = masks_to_boxes(masks.to(torch.float32))
-            # boxes = (regions / 16).to(torch.long)
 
             sub_nodes = []
             pre_l2 = x[img_i]
-            # embed_image = pre_l2
             if self.visualize:
                 save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=pre_l2, img_i=img_i)
             
             if self.mask:
                 for i, label in enumerate(labels_all):
                     binary_mask = (all_label_mask == label).float()
-                    embed_image = pre_l2 * (binary_mask - 1)
+                    embed_image = (pre_l2 * binary_mask) + pre_l2
                     if self.visualize:
                         embed_file_name = f'embed_{i}.png'  # Customize the naming pattern as needed
                         save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name=embed_file_name)
-                    sub_nodes.append(embed_image.unsqueeze(0))
+                sub_nodes.append(embed_image.unsqueeze(0))
 
-            # sub_nodes.append(filterd_img.unsqueeze(0))
-            # Add more patches by cropping predefined regions if needed
+
             if len(sub_nodes) < self.NB:
-                embed_image = torch.stack(sub_nodes, dim=0)  # Shape will be [4, 1, 512, 30, 40]
-                embed_image = torch.sum(embed_image, dim=0).squeeze(0)  # Shape will be [1, 512, 30, 40]
                 if self.visualize:
                     save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name='embed_image.png')
                 bb_x = [
