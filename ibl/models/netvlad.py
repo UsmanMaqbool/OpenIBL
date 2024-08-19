@@ -361,7 +361,7 @@ class SelectRegions(nn.Module):
         super(SelectRegions, self).__init__()
         self.NB = NB
         self.mask = Mask
-        self.visualize = False
+        self.visualize = True
         
     def relabel(self, img):
         """
@@ -408,6 +408,9 @@ class SelectRegions(nn.Module):
         ## Person
         img[img == 11] = 255
 
+        ### Don't need, make these 255
+        ## Background
+        img[img == 19] = 255
 
 
         return img                          
@@ -497,12 +500,10 @@ class SelectRegions(nn.Module):
                 ]
                 for i in range(len(bb_x) - len(sub_nodes)):
                     x_nodes = embed_image[:, bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
+                    sub_nodes.append(rsizet(x_nodes.unsqueeze(0)))
                     if self.visualize:
                         patch_file_name = f'patch_{i}.png'  # Customize the naming pattern as needed
                         save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name=patch_file_name, patch_idx=i)
-
-                    # save_x_nodes_patches(rsizet(x_nodes.unsqueeze(0)), img_i=img_i, patch_idx=i)
-                    sub_nodes.append(rsizet(x_nodes.unsqueeze(0)))
 
             # Stack the cropped patches and store them in graph_nodes
             aa = torch.stack(sub_nodes, 1)
