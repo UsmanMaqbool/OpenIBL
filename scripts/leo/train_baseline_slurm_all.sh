@@ -8,7 +8,7 @@
 #SBATCH --job-name=
 #SBATCH --mail-type=END,FAIL          # Mail events (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=m.maqboolbhutta@ufl.edu
-#SBATCH --time=52:00:00
+#SBATCH --time=90:00:00
 #SBATCH --partition=gpu
 #SBATCH --output=R-%x.%j.out
 #SBATCH --error=R-%x.%j.err
@@ -90,7 +90,7 @@ echo "Other nodes: $NODES"
 #===================================================================================================
 LOSS="sare_ind"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/fastscnn-v2/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0819-4-fastscnn-agg/${ARCH}-${METHOD}-baseline-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -136,7 +136,7 @@ done
 #===================================================================================================
 LOSS="sare_joint"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/fastscnn-v2/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0819-4-fastscnn-agg/${ARCH}-${METHOD}-baseline-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -182,7 +182,7 @@ done
 
 LOSS="triplet"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/fastscnn-v2/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0819-4-fastscnn-agg/${ARCH}-${METHOD}-baseline-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
