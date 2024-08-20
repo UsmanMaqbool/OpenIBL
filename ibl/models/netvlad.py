@@ -348,8 +348,8 @@ class EmbedRegionNet(nn.Module):
 class applyGNN(nn.Module):
     def __init__(self):
         super(applyGNN, self).__init__()
-        self.input_dim = 4096 
-        self.hidden_dim = [2048,2048]
+        self.input_dim = 8192 
+        self.hidden_dim = [4096,4096]
         self.num_neighbors_list = [5]
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
                   num_neighbors_list=self.num_neighbors_list)
