@@ -25,6 +25,10 @@ from ibl.pca import PCA
 from ibl.utils.serialization import load_checkpoint, save_checkpoint, copy_state_dict, write_json
 from ibl.utils.dist_utils import init_dist, synchronize
 
+import os
+import csv
+import subprocess
+import re
 def get_segmentation_model(encoderFile):
     model = models.create('fastscnn', num_classes=19)
     model.load_state_dict(torch.load(encoderFile))
@@ -78,6 +82,95 @@ def get_model(args):
                 model, device_ids=[args.gpu], output_device=args.gpu, find_unused_parameters=True
             )
     return model
+
+def append_recall_results(checkpoint, dataset, method=None, loss=None, lr=None, gpus=None, git_commit=None, dataset_scale=None, recalls=None, filename='test_result/recall_results.csv'):
+    """
+    Append recall results and associated metadata to a CSV file.
+    
+    :param checkpoint: str, checkpoint location
+    :param dataset: str, dataset name
+    :param method: str, method used (optional, extracted from checkpoint path if not provided)
+    :param loss: str, loss function (optional, extracted from checkpoint path if not provided)
+    :param lr: str, learning rate (optional, extracted from checkpoint path if not provided)
+    :param gpus: str, number of GPUs used (optional, extracted from checkpoint path if not provided)
+    :param git_commit: str, git commit name (optional, extracted from current git repo if not provided)
+    :param dataset_scale: str, scale of the dataset
+    :param recalls: list of float, recall values [recall@1, recall@5, recall@10]
+    :param filename: str, name of the CSV file to append to (default: 'recall_results.csv')
+    """
+
+    name, _ = os.path.splitext(os.path.basename(checkpoint))
+    epoch = name.rsplit('.', 1)[0]  # This will remove the last extension
+    dir_name = os.path.basename(os.path.dirname(checkpoint))
+
+    # Extract git commit if not provided
+    if git_commit is None:
+        try:
+            git_commit = subprocess.check_output(['git', 'log', '-1', '--pretty=%B']).decode('utf-8').strip()
+        except subprocess.CalledProcessError:
+            git_commit = 'N/A'
+
+    # Extract specific parts using regex
+    match = re.search(r'(vgg\d+)-([\w-]+)-(\w+)-(\w+)-(\w+)-lr([\d.]+)-tuple(\d+)-(\d+)-(\w+)', dir_name)
+
+    if match:
+        _, extracted_method, _, extracted_loss, _, extracted_lr, extracted_gpus, date_day, date_month = match.groups()
+
+        # Use extracted values if not provided as arguments
+        method = method or extracted_method
+        loss = loss or extracted_loss
+        lr = lr or extracted_lr
+        gpus = gpus or extracted_gpus
+
+        # Construct the full date string
+        date_str = f"{date_day}-{date_month}"
+
+    else:
+        raise ValueError("Unable to extract information from the checkpoint path")
+
+    # Convert recalls to percentages and round to two decimal places
+    recalls_percentage = [round(value * 100, 2) for value in recalls]
+
+    # The column names
+    columns = [
+        "Date",
+        "Method",
+        "Loss",
+        "Learning Rate",
+        "GPUs",
+        "Epoch",
+        "Pitts250k R @ 1",
+        "Pitts250k R @ 5",
+        "Pitts250k R @ 10",
+        "Pitts30k R @ 1",
+        "Pitts30k R @ 5",
+        "Pitts30k R @ 10",
+        "Tokyo247 R @ 1",
+        "Tokyo247 R @ 5",
+        "Tokyo247 R @ 10",
+        "Git Commit",
+        "Checkpoint",
+    ]
+
+    # Check if the file already exists
+    file_exists = os.path.isfile(filename)
+
+    # Prepare the row to be written
+    row = [date_str, method, loss, lr, gpus, epoch] + recalls_percentage + [git_commit, checkpoint]
+
+    # Open the file in append mode
+    with open(filename, 'a', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+
+        # If the file doesn't exist, write the header
+        if not file_exists:
+            writer.writerow(columns)
+
+        # Write the data row
+        writer.writerow(row)
+
+    print(f"Data has been appended to {filename}")
+
 
 def main():
     args = parser.parse_args()
@@ -133,22 +226,8 @@ def main_worker(args):
             del features
     else:
         pca = None
-        
-        
-    if (args.rank==0):
-        print("==========Test on Tokyo247=============")
     
-    # Create data loaders for Tokyo247
-    args.dataset = 'tokyo'    
-    dataset, pitts_train, train_extract_loader, test_loader_q, test_loader_db = get_data(args)
     
-    evaluator.evaluate(test_loader_q, sorted(list(set(dataset.q_test) | set(dataset.db_test))),
-                        dataset.q_test, dataset.db_test, dataset.test_pos, gallery_loader=test_loader_db,
-                        vlad=args.vlad, pca=pca, rerank=args.rerank, gpu=args.gpu, sync_gather=args.sync_gather,
-                        nms=(True if args.dataset=='tokyo' else False),
-                        rr_topk=args.rr_topk, lambda_value=args.lambda_value)
-    synchronize()
-
     if (args.rank==0):
         print("Evaluate on the test set:")
         print("==========Test on Pitts250k=============")
@@ -157,12 +236,14 @@ def main_worker(args):
     args.dataset = 'pitts'    
     args.scale = '250k'
     dataset, pitts_train, train_extract_loader, test_loader_q, test_loader_db = get_data(args)
-    evaluator.evaluate(test_loader_q, sorted(list(set(dataset.q_test) | set(dataset.db_test))),
+    recallpitts250k = evaluator.evaluate(test_loader_q, sorted(list(set(dataset.q_test) | set(dataset.db_test))),
                         dataset.q_test, dataset.db_test, dataset.test_pos, gallery_loader=test_loader_db,
                         vlad=args.vlad, pca=pca, rerank=args.rerank, gpu=args.gpu, sync_gather=args.sync_gather,
                         nms=(True if args.dataset=='tokyo' else False),
                         rr_topk=args.rr_topk, lambda_value=args.lambda_value)
+    
     synchronize()
+    
     
     if (args.rank==0):
         print("Evaluate on the test set:")
@@ -173,7 +254,7 @@ def main_worker(args):
     args.scale = '30k'
     dataset, pitts_train, train_extract_loader, test_loader_q, test_loader_db = get_data(args)
 
-    evaluator.evaluate(test_loader_q, sorted(list(set(dataset.q_test) | set(dataset.db_test))),
+    recallpitts30k = evaluator.evaluate(test_loader_q, sorted(list(set(dataset.q_test) | set(dataset.db_test))),
                         dataset.q_test, dataset.db_test, dataset.test_pos, gallery_loader=test_loader_db,
                         vlad=args.vlad, pca=pca, rerank=args.rerank, gpu=args.gpu, sync_gather=args.sync_gather,
                         nms=(True if args.dataset=='tokyo' else False),
@@ -181,6 +262,25 @@ def main_worker(args):
     
     synchronize()
 
+        
+        
+    if (args.rank==0):
+        print("==========Test on Tokyo247=============")
+    
+    # Create data loaders for Tokyo247
+    args.dataset = 'tokyo'    
+    dataset, pitts_train, train_extract_loader, test_loader_q, test_loader_db = get_data(args)
+    
+    recallpittstokyo = evaluator.evaluate(test_loader_q, sorted(list(set(dataset.q_test) | set(dataset.db_test))),
+                        dataset.q_test, dataset.db_test, dataset.test_pos, gallery_loader=test_loader_db,
+                        vlad=args.vlad, pca=pca, rerank=args.rerank, gpu=args.gpu, sync_gather=args.sync_gather,
+                        nms=(True if args.dataset=='tokyo' else False),
+                        rr_topk=args.rr_topk, lambda_value=args.lambda_value)
+
+    synchronize()
+
+    recalls = np.concatenate((recallpitts250k, recallpitts30k, recallpittstokyo))
+    append_recall_results(checkpoint=args.resume,dataset=args.dataset,dataset_scale=args.scale, recalls=recalls)
     return
 
 if __name__ == '__main__':

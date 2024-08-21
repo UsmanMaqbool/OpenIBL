@@ -54,10 +54,10 @@
                 "examples/test_pitts_tokyo.py",
                 "--vlad",
                 "--reduction",
-                "--test-batch-size", "5",
+                "--test-batch-size", "32",
                 "--fast-scnn", "/home/leo/usman_ws/datasets/official/fast-scnn/fast_scnn_citys.pth",
                 "--method", "graphvlad",
-                "--resume", "/home/leo/usman_ws/models/trained-models-graphvlad/pitts30k_sare_ind_openibl/graphvlad_sfrs_pitts30k_openibl.pth.tar",
+                "--resume", "/home/leo/usman_ws/models/openibl/0819-4-fastscnn-agg/vgg16-graphvlad-baseline-sare_ind-pitts30k-lr0.001-tuple4-20-Aug/checkpoint0.pth.tar",
             ]
         }
     ],
