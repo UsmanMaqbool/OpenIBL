@@ -54,7 +54,7 @@ PORT=6010
 
 
 INIT_DIR="/home/m.maqboolbhutta/usman_ws/datasets/official/openibl-init"
-FAST_SCNN="/home/m.maqboolbhutta/usman_ws/datasets/official/fast-scnn/fast_scnn_citys.pth"
+FAST_SCNN="/home/m.maqboolbhutta/usman_ws/datasets/official/fast_scnn/fast_scnn_citys.pth"
 DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
 
 
@@ -84,97 +84,6 @@ echo "Other nodes: $NODES"
 # --width 640 --height 480 --data-dir ${DATASET_DIR} \
 # --init-dir ${INIT_DIR}
 
-
-#===================================================================================================
-# SARE Ind Loss
-#===================================================================================================
-LOSS="sare_ind"
-DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0819-4-fastscnn-agg/${ARCH}-${METHOD}-baseline-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
-
-echo ${FILES}
-
-echo "==========Starting Training============="
-echo "========================================"
-srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
-python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
-  -d ${DATASET} --scale ${SCALE} \
-  -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
-  --width 640 --height 480 --tuple-size ${TUMPLESIZE} -j 2 --neg-num 10 --test-batch-size ${CACHEBS} \
-  --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
-  --eval-step 1 --epochs ${NPOCH} --step-size 5 --cache-size 1000 \
-  --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
-  --init-dir ${INIT_DIR} --fast-scnn=${FAST_SCNN} \
-  --num-clusters ${NUMCLUSTER} 
-
-
-echo "==========Testing============="
-FILES="${FILES}/*.tar"
-echo ${FILES}
-echo "=============================="
-for RESUME in $FILES
-do
-  # take action on each file. $f store current file name
-SCALE
-  echo "==========################============="
-  echo " Testing $RESUME file..."
-  echo "======================================="
-  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-   examples/test_pitts_tokyo.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size 32 -j 2 \
-    --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME} --fast-scnn=${FAST_SCNN} \
-    --num-clusters ${NUMCLUSTER}
-  echo "==========################============="
-  echo " Done Testing with $RESUME file..."
-  echo "======================================="  
-done
-
-
-#===================================================================================================
-# SARE Joint Loss
-#===================================================================================================
-LOSS="sare_joint"
-DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0819-4-fastscnn-agg/${ARCH}-${METHOD}-baseline-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
-
-echo ${FILES}
-
-echo "==========Starting Training============="
-echo "========================================"
-srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
-python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
-  -d ${DATASET} --scale ${SCALE} \
-  -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
-  --width 640 --height 480 --tuple-size ${TUMPLESIZE} -j 2 --neg-num 10 --test-batch-size ${CACHEBS} \
-  --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
-  --eval-step 1 --epochs ${NPOCH} --step-size 5 --cache-size 1000 \
-  --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
-  --init-dir ${INIT_DIR} --fast-scnn=${FAST_SCNN} \
-  --num-clusters ${NUMCLUSTER}
-
-
-echo "==========Testing============="
-FILES="${FILES}/*.tar"
-echo ${FILES}
-echo "=============================="
-for RESUME in $FILES
-do
-  # take action on each file. $f store current file name
-
-  echo "==========################============="
-  echo " Testing $RESUME file..."
-  echo "======================================="
-  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-   examples/test_pitts_tokyo.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size 32 -j 2 \
-    --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME} --fast-scnn=${FAST_SCNN} \
-  --num-clusters ${NUMCLUSTER}
-  echo "==========################============="
-  echo " Done Testing with $RESUME file..."
-  echo "======================================="  
-done
 
 #===================================================================================================
 # Tiplet Loss
@@ -221,3 +130,94 @@ do
   echo " Done Testing with $RESUME file..."
   echo "======================================="  
 done
+
+# #===================================================================================================
+# # SARE Ind Loss
+# #===================================================================================================
+# LOSS="sare_ind"
+# DATE=$(date '+%d-%b') 
+# FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0819-4-fastscnn-agg/${ARCH}-${METHOD}-baseline-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+
+# echo ${FILES}
+
+# echo "==========Starting Training============="
+# echo "========================================"
+# srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
+# python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
+#   -d ${DATASET} --scale ${SCALE} \
+#   -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
+#   --width 640 --height 480 --tuple-size ${TUMPLESIZE} -j 2 --neg-num 10 --test-batch-size ${CACHEBS} \
+#   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
+#   --eval-step 1 --epochs ${NPOCH} --step-size 5 --cache-size 1000 \
+#   --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
+#   --init-dir ${INIT_DIR} --fast-scnn=${FAST_SCNN} \
+#   --num-clusters ${NUMCLUSTER} 
+
+
+# echo "==========Testing============="
+# FILES="${FILES}/*.tar"
+# echo ${FILES}
+# echo "=============================="
+# for RESUME in $FILES
+# do
+#   # take action on each file. $f store current file name
+
+#   echo "==========################============="
+#   echo " Testing $RESUME file..."
+#   echo "======================================="
+#   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+#    examples/test_pitts_tokyo.py --launcher pytorch \
+#     -a ${ARCH} --test-batch-size 32 -j 2 \
+#     --vlad --reduction --method ${METHOD} \
+#     --resume ${RESUME} --fast-scnn=${FAST_SCNN} \
+#     --num-clusters ${NUMCLUSTER}
+#   echo "==========################============="
+#   echo " Done Testing with $RESUME file..."
+#   echo "======================================="  
+# done
+
+
+# #===================================================================================================
+# # SARE Joint Loss
+# #===================================================================================================
+# LOSS="sare_joint"
+# DATE=$(date '+%d-%b') 
+# FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0819-4-fastscnn-agg/${ARCH}-${METHOD}-baseline-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+
+# echo ${FILES}
+
+# echo "==========Starting Training============="
+# echo "========================================"
+# srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
+# python -u examples/netvlad_img.py --launcher slurm --tcp-port ${PORT} \
+#   -d ${DATASET} --scale ${SCALE} \
+#   -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
+#   --width 640 --height 480 --tuple-size ${TUMPLESIZE} -j 2 --neg-num 10 --test-batch-size ${CACHEBS} \
+#   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
+#   --eval-step 1 --epochs ${NPOCH} --step-size 5 --cache-size 1000 \
+#   --logs-dir ${FILES} --method ${METHOD} --data-dir ${DATASET_DIR} \
+#   --init-dir ${INIT_DIR} --fast-scnn=${FAST_SCNN} \
+#   --num-clusters ${NUMCLUSTER}
+
+
+# echo "==========Testing============="
+# FILES="${FILES}/*.tar"
+# echo ${FILES}
+# echo "=============================="
+# for RESUME in $FILES
+# do
+#   # take action on each file. $f store current file name
+
+#   echo "==========################============="
+#   echo " Testing $RESUME file..."
+#   echo "======================================="
+#   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+#    examples/test_pitts_tokyo.py --launcher pytorch \
+#     -a ${ARCH} --test-batch-size 32 -j 2 \
+#     --vlad --reduction --method ${METHOD} \
+#     --resume ${RESUME} --fast-scnn=${FAST_SCNN} \
+#   --num-clusters ${NUMCLUSTER}
+#   echo "==========################============="
+#   echo " Done Testing with $RESUME file..."
+#   echo "======================================="  
+# done
