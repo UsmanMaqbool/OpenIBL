@@ -279,8 +279,11 @@ def main_worker(args):
 
     synchronize()
 
-    recalls = np.concatenate((recallpitts250k, recallpitts30k, recallpittstokyo))
-    append_recall_results(checkpoint=args.resume,dataset=args.dataset,dataset_scale=args.scale, recalls=recalls)
+    if (args.rank==0):     
+        recalls = np.concatenate((recallpitts250k, recallpitts30k, recallpittstokyo))
+        append_recall_results(checkpoint=args.resume,dataset=args.dataset,dataset_scale=args.scale, recalls=recalls)
+        
+        
     return
 
 if __name__ == '__main__':
