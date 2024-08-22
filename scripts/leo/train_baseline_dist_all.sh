@@ -45,7 +45,7 @@ $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT -
 examples/netvlad_img.py --launcher pytorch --tcp-port ${PORT} \
   -d ${DATASET} --scale ${SCALE} \
   -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
-  --width 640 --height 480 --tuple-size 1 -j 1 --neg-num 10 --test-batch-size 32 \
+  --width 640 --height 480 --tuple-size 1 -j 1 --neg-num 10 --test-batch-size 24 \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
   --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 \
   --logs-dir ${FILES} --data-dir ${DATASET_DIR} \
@@ -60,7 +60,7 @@ for RESUME in $FILES
 do
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test_pitts_tokyo.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size 32 -j 4 \
+    -a ${ARCH} --test-batch-size 24 -j 4 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME} --fast-scnn ${FAST_SCNN} \
     --num-clusters ${NUMCLUSTER}
@@ -80,7 +80,7 @@ done
 # examples/netvlad_img.py --launcher pytorch --tcp-port ${PORT} \
 #   -d ${DATASET} --scale ${SCALE} \
 #   -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
-#   --width 640 --height 480 --tuple-size 1 -j 1 --neg-num 10 --test-batch-size 32 \
+#   --width 640 --height 480 --tuple-size 1 -j 1 --neg-num 10 --test-batch-size 24 \
 #   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
 #   --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 \
 #   --logs-dir ${FILES} --data-dir ${DATASET_DIR} \
@@ -95,7 +95,7 @@ done
 # do
 #   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
 #    examples/test_pitts_tokyo.py --launcher pytorch \
-#     -a ${ARCH} --test-batch-size 32 -j 4 \
+#     -a ${ARCH} --test-batch-size 24 -j 4 \
 #     --vlad --reduction --method ${METHOD} \
 #     --resume ${RESUME} --fast-scnn ${FAST_SCNN} \
 #     --num-clusters ${NUMCLUSTER}
@@ -114,7 +114,7 @@ done
 # examples/netvlad_img.py --launcher pytorch --tcp-port ${PORT} \
 #   -d ${DATASET} --scale ${SCALE} \
 #   -a ${ARCH} --layers ${LAYERS} --vlad --syncbn --sync-gather \
-#   --width 640 --height 480 --tuple-size 1 -j 1 --neg-num 10 --test-batch-size 32 \
+#   --width 640 --height 480 --tuple-size 1 -j 1 --neg-num 10 --test-batch-size 24 \
 #   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} \
 #   --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 \
 #   --logs-dir ${FILES} --data-dir ${DATASET_DIR} \
@@ -129,7 +129,7 @@ done
 # do
 #   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
 #    examples/test_pitts_tokyo.py --launcher pytorch \
-#     -a ${ARCH} --test-batch-size 32 -j 4 \
+#     -a ${ARCH} --test-batch-size 24 -j 4 \
 #     --vlad --reduction --method ${METHOD} \
 #     --resume ${RESUME} --fast-scnn ${FAST_SCNN} \
 #     --num-clusters ${NUMCLUSTER}
