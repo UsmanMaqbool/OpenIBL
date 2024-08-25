@@ -383,11 +383,10 @@ class SelectRegions(nn.Module):
         img[img == 9] = 3
         img[img == 8] = 3
 
-        ### Pole 5 + Traffic Light 6 + Traffic Signal 7 + Background
+        ### Pole 5 + Traffic Light 6 + Traffic Signal 7
         img[img == 7] = 4
         img[img == 6] = 4
         img[img == 5] = 4
-        img[img == 19] = 4
         
         ### Sky 10
         img[img == 10] = 5
@@ -431,8 +430,8 @@ class SelectRegions(nn.Module):
             x = F.pad(input=x, pad=(1, 2), mode="constant", value=0)
 
         # Forward pass through fastscnn without gradients
-        # with torch.no_grad():
-        outputs = fastscnn(x)
+        with torch.no_grad():
+            outputs = fastscnn(x)
 
         if self.visualize:
             # save_image(x[0], 'output-image.png')
