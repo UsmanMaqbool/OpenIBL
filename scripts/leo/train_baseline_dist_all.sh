@@ -36,7 +36,7 @@ PORT=6010
 #===================================================================================================
 
 LOSS="triplet"
-FILES="/home/leo/usman_ws/models/openibl/fastscnn-grad/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/leo/usman_ws/models/openibl/0828-p1/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -71,7 +71,7 @@ done
 # # SARE Ind Loss
 # #===================================================================================================
 # LOSS="sare_ind"
-# FILES="/home/leo/usman_ws/models/openibl/fastscnn-grad/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+# FILES="/home/leo/usman_ws/models/openibl/0828-p1/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 # echo ${FILES}
 
@@ -105,7 +105,7 @@ done
 # # SARE Joint Loss
 # #===================================================================================================
 # LOSS="sare_joint"
-# FILES="/home/leo/usman_ws/models/openibl/fastscnn-grad/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+# FILES="/home/leo/usman_ws/models/openibl/0828-p1/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 # echo ${FILES}
 

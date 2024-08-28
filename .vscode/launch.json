@@ -57,7 +57,7 @@
                 "--test-batch-size", "32",
                 "--fast-scnn", "/home/leo/usman_ws/datasets/official/fast-scnn/fast_scnn_citys.pth",
                 "--method", "graphvlad",
-                "--resume", "/home/leo/usman_ws/models/openibl/0819-4-fastscnn-agg/vgg16-graphvlad-baseline-sare_ind-pitts30k-lr0.001-tuple4-20-Aug/checkpoint0.pth.tar",
+                "--resume", "--resume", "/home/leo/usman_ws/models/openibl/fastscnn-real-v4/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-26-Aug/model_best.pth.tar",
             ]
         }
     ],
