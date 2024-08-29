@@ -39,7 +39,7 @@ if [ "$#" -lt 2 ]; then
     exit 1
 fi
 
-GPUS=4
+GPUS=8
 METHOD="$1"
 ARCH="$2"
 DATASET="$3"
@@ -100,7 +100,7 @@ srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
 python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
   -d ${DATASET} --scale ${SCALE} \
   -a ${ARCH} --layers ${LAYERS} --syncbn \
-  --width 640 --height 480 --tuple-size ${TUMPLESIZE} -j 4 \
+  --width 640 --height 480 --tuple-size ${TUMPLESIZE} -j 2 \
   --test-batch-size ${CACHEBS} \
   --neg-num 10  --pos-pool 20 --neg-pool 1000 --pos-num 10 \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} --soft-weight 0.5 \
