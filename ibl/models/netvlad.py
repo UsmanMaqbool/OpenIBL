@@ -680,7 +680,7 @@ class GraphVLADEmbedRegion(nn.Module):
         vlad_A = vlad_A.view(self.tuple_size,-1,B,L)
         vlad_B = vlad_B.view(self.tuple_size,-1,B,L)
 
-        score = torch.bmm(vlad_A.expand_as(vlad_B).view(-1,B,L), vlad_B.view(-1,B,L).transpose(1,2))
+        score = torch.bmm(vlad_A.expand_as(vlad_B).reshape(-1,B,L), vlad_B.reshape(-1,B,L).transpose(1,2))
         score = score.view(self.tuple_size,-1,B,B)
 
         return score, vlad_A, vlad_B
@@ -714,7 +714,6 @@ class GraphVLADEmbedRegion(nn.Module):
             del neighborsFeat
             gvlad = self.applyGNN(node_features_list)
             gvlad = torch.add(gvlad,vlad_x)
-            print(gvlad.shape)
             gvlad = gvlad.view(-1,vlad_x.shape[1])
             
             # Clear node_features_list to free up memory
