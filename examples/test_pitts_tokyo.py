@@ -111,10 +111,10 @@ def append_recall_results(checkpoint, dataset, method=None, loss=None, lr=None, 
             git_commit = 'N/A'
 
     # Extract specific parts using regex
-    match = re.search(r'(vgg\d+)-([\w-]+)-(\w+)-(\w+)-(\w+)-lr([\d.]+)-tuple(\d+)-(\d+)-(\w+)', dir_name)
+    match = re.search(r'(vgg\d+)-([\w-]+)-([\w_]+)-([\w\d]+)-lr([\d.]+)-tuple(\d+)-(\d+)-(\w+)', dir_name)
 
     if match:
-        _, extracted_method, _, extracted_loss, _, extracted_lr, extracted_gpus, date_day, date_month = match.groups()
+        _, extracted_method, extracted_loss, _, extracted_lr, extracted_gpus, date_day, date_month = match.groups()
 
         # Use extracted values if not provided as arguments
         method = method or extracted_method
@@ -281,7 +281,7 @@ def main_worker(args):
 
     if (args.rank==0):     
         recalls = np.concatenate((recallpitts250k, recallpitts30k, recallpittstokyo))
-        append_recall_results(checkpoint=args.resume,dataset=args.dataset,dataset_scale="None", recalls=recalls)
+        append_recall_results(checkpoint=args.resume,dataset=args.dataset,dataset_scale=args.scale, recalls=recalls)
         
         
     return
