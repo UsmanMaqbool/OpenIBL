@@ -111,7 +111,7 @@ def append_recall_results(checkpoint, dataset, method=None, loss=None, lr=None, 
             git_commit = 'N/A'
 
     # Extract specific parts using regex
-    match = re.search(r'(vgg\d+)-([\w-]+)-(\w+)-(\w+)-(\w+)-lr([\d.]+)-tuple(\d+)-(\d+)-(\w+)', dir_name)
+    match = re.search(r'(vgg\d+)-([\w-]+)-([\w_]+)-([\w\d]+)-lr([\d.]+)-tuple(\d+)-(\d+)-(\w+)', dir_name)
 
     if match:
         _, extracted_method, _, extracted_loss, _, extracted_lr, extracted_gpus, date_day, date_month = match.groups()
