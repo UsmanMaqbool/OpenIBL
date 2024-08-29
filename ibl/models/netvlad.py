@@ -318,7 +318,7 @@ class EmbedRegionNet(nn.Module):
         vlad_A = vlad_A.view(self.tuple_size,-1,B,L)
         vlad_B = vlad_B.view(self.tuple_size,-1,B,L)
 
-        score = torch.bmm(vlad_A.expand_as(vlad_B).view(-1,B,L), vlad_B.view(-1,B,L).transpose(1,2))
+        score = torch.bmm(vlad_A.expand_as(vlad_B).reshape(-1,B,L), vlad_B.reshape(-1,B,L).transpose(1,2))
         score = score.view(self.tuple_size,-1,B,B)
 
         return score, vlad_A, vlad_B
@@ -328,7 +328,7 @@ class EmbedRegionNet(nn.Module):
         x = x.view(self.tuple_size, -1, C, H, W)
 
         anchors = x[:, 0].unsqueeze(1).contiguous().view(-1,C,H,W) # B*C*H*W
-        pairs = x[:, 1:].view(-1,C,H,W) # (B*(1+neg_num))*C*H*W
+        pairs = x[:, 1:].reshape(-1,C,H,W) # (B*(1+neg_num))*C*H*W
 
         return self._compute_region_sim(anchors, pairs)
 
@@ -714,6 +714,7 @@ class GraphVLADEmbedRegion(nn.Module):
             del neighborsFeat
             gvlad = self.applyGNN(node_features_list)
             gvlad = torch.add(gvlad,vlad_x)
+            print(gvlad.shape)
             gvlad = gvlad.view(-1,vlad_x.shape[1])
             
             # Clear node_features_list to free up memory
