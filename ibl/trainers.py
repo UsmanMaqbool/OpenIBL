@@ -238,8 +238,8 @@ class SFRSTrainer(object):
 
     def _forward(self, inputs_easy, inputs_diff, loss_type, gen):
         B, _, C, H, W = inputs_easy.size()
-        inputs_easy = inputs_easy.view(-1, C, H, W)
-        inputs_diff = inputs_diff.view(-1, C, H, W)
+        inputs_easy = inputs_easy.reshape(-1, C, H, W)
+        inputs_diff = inputs_diff.reshape(-1, C, H, W)
 
         sim_easy, vlad_anchors, vlad_pairs = self.model(inputs_easy)
         # vlad_anchors: B*1*9*L
