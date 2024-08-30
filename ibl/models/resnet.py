@@ -95,7 +95,7 @@ class ResNet(nn.Module):
                 self.model.layer3.requires_grad_(False)
 
         # remove the avgpool and most importantly the fc layer
-        self.model.avgpool = None
+        self.model.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.model.fc = None
 
         if 4 in layers_to_crop:
@@ -121,26 +121,8 @@ class ResNet(nn.Module):
             x = self.model.layer3(x)
         if self.model.layer4 is not None:
             x = self.model.layer4(x)
-        return x
-
-
-# def print_nb_params(m):
-#     model_parameters = filter(lambda p: p.requires_grad, m.parameters())
-#     params = sum([np.prod(p.size()) for p in model_parameters])
-#     print(f'Trainable parameters: {params/1e6:.3}M')
-
-
-# def main():
-#     x = torch.randn(1, 3, 320, 320)
-#     m = ResNet(model_name='resnet50',
-#                pretrained=True,
-#                layers_to_freeze=2,
-#                layers_to_crop=[],)
-#     r = m(x)
-#     helper.print_nb_params(m)
-#     print(f'Input shape is {x.shape}')
-#     print(f'Output shape is {r.shape}')
-
-
-# if __name__ == '__main__':
-#     main()
+            
+        pool_x = self.model.avgpool(x)
+        pool_x = torch.flatten(pool_x, 1)
+        
+        return pool_x, x

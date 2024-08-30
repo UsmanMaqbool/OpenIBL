@@ -39,8 +39,15 @@ def get_data(args, nIm):
     return dataset, cluster_loader
 
 def get_model(args):
-    model = models.create(args.arch, pretrained=True, cut_at_pooling=True, matconvnet=osp.join(args.init_dir, 'vd16_offtheshelf_conv5_3_max.pth'))
-    # model = models.create(args.arch, pretrained=True, cut_at_pooling=True)
+    if args.arch == 'vgg16':
+        model = models.create('vgg16', pretrained=True, cut_at_pooling=True)
+    elif args.arch == 'resnet50':
+        model = models.create(
+        'resnet50',layers_to_crop=[5]  # Crop at layer 4
+        )
+        model.feature_dim = 2048
+
+    #
     model.cuda()
     model = nn.DataParallel(model)
     return model
@@ -93,7 +100,7 @@ def main_worker(args):
 
             for iteration, (input, _, _, _, _) in enumerate(data_loader, 1):
                 input = input.cuda()
-                image_descriptors = model(input)
+                _, image_descriptors = model(input)
                 # normalization is IMPORTANT!
                 image_descriptors = F.normalize(image_descriptors, p=2, dim=1).view(input.size(0), encoder_dim, -1).permute(0, 2, 1)
 

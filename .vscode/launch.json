@@ -15,7 +15,7 @@
                 "--launcher=pytorch",
                 "-d", "pitts",
                 "--scale", "30k",
-                "-a", "vgg16",
+                "-a", "resnet50",
                 "--layers", "conv5",
                 "--vlad",
                 "--syncbn",
@@ -38,7 +38,7 @@
                 "--data-dir", "/home/leo/usman_ws/codes/OpenIBL/examples/data/",
                 "--init-dir", "/home/leo/usman_ws/datasets/official/openibl-init",
                 "--fast-scnn", "/home/leo/usman_ws/datasets/official/fast-scnn/fast_scnn_citys.pth",
-                "--method", "graphvlad"
+                "--method", "netvlad"
             ]
         },
         {
