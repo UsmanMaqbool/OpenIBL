@@ -452,14 +452,13 @@ class SelectRegions(nn.Module):
                 [0, 0, W,int(H/3)], 
                 [int(2*W/3), 0, W,H], 
                 [0, int(2*H/3), W,H]]
-        NB = 5
-        graph_nodes = torch.zeros(N,NB,C,H,W).cuda()
+        graph_nodes = torch.zeros(N,self.NB,C,H,W).cuda()
         rsizet = transforms.Resize((H,W)) 
         for Nx in range(N):    
             img_nodes = []
             for idx in range(len(boxes)):
                 for b_idx in range(len(rr_boxes)):
-                    if idx == rr_boxes[b_idx] and obj_i[b_idx] > 10000 and len(img_nodes) < NB-2:
+                    if idx == rr_boxes[b_idx] and obj_i[b_idx] > 10000 and len(img_nodes) < self.NB-2:
                         patch_mask = patch_mask*0
                         patch_mask[single_label_mask == obj_ids[b_idx]] = 1
                         patch_maskr = rsizet(patch_mask.unsqueeze(0))
@@ -470,16 +469,16 @@ class SelectRegions(nn.Module):
                         resultant = rsizet(c_img)
                         img_nodes.append(resultant.unsqueeze(0))
                         break                    
-            if len(img_nodes) < NB:
+            if len(img_nodes) < self.NB:
                 for i in range(len(bb_x)-len(img_nodes)):
                     x_cropped =  x[Nx][: ,bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
                     img_nodes.append(rsizet(x_cropped.unsqueeze(0)))
             aa = torch.stack(img_nodes,1)
             graph_nodes[Nx] = aa[0]
-        x_cropped = graph_nodes.view(NB,N,C,H,W)
-        x_cropped = torch.cat((graph_nodes.view(NB,N,C,H,W), x.unsqueeze(0)))
+        x_cropped = graph_nodes.view(self.NB,N,C,H,W)
+        x_cropped = torch.cat((graph_nodes.view(self.NB,N,C,H,W), x.unsqueeze(0)))
         del graph_nodes
-        return pool_x, NB, x.size(0), x_cropped
+        return pool_x, x.size(0), x_cropped
 class GraphVLAD(nn.Module):
     def __init__(self, base_model, net_vlad, fastscnn, NB):
         super(GraphVLAD, self).__init__()
