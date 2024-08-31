@@ -93,7 +93,13 @@ def update_sampler(sampler, model, loader, query, gallery, sub_set, vlad=True, g
 
 def get_model(args):
 
-    base_model = models.create(args.arch, train_layers=args.layers, matconvnet=osp.join(args.init_dir, 'vd16_offtheshelf_conv5_3_max.pth'))
+    if args.arch == 'vgg16':
+        base_model = models.create('vgg16', train_layers=args.layers, matconvnet=osp.join(args.init_dir, 'vd16_offtheshelf_conv5_3_max.pth'))
+    elif args.arch == 'resnet50':
+        base_model = models.create(
+        'resnet50',layers_to_crop=[5]  # Crop at layer 4
+        )
+        base_model.feature_dim = 2048
     
     if args.vlad:
         if (args.rank==0):
@@ -282,7 +288,7 @@ if __name__ == '__main__':
     parser.add_argument('--neg-pool', type=int, default=1000)
     # model
     parser.add_argument('-a', '--arch', type=str, default='vgg16',
-                        choices=models.names())
+                        choices=['vgg16', 'resnet50'])  # Add 'resnet50' to the choices
     parser.add_argument('--layers', type=str, default='conv5')
     parser.add_argument('--nowhiten', action='store_true')
     parser.add_argument('--syncbn', action='store_true')
