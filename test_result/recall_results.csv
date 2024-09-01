@@ -1,0 +1,1 @@
+Date,Method,Loss,Learning Rate,GPUs,Epoch,Pitts250k R @ 1,Pitts250k R @ 5,Pitts250k R @ 10,Pitts30k R @ 1,Pitts30k R @ 5,Pitts30k R @ 10,Tokyo247 R @ 1,Tokyo247 R @ 5,Tokyo247 R @ 10,Git Commit,Checkpoint
