@@ -1,0 +1,1848 @@
+Tue Sep  3 08:29:47 EDT 2024
+/home/m.maqboolbhutta/usman_ws/codes/OpenIBL
+/home/m.maqboolbhutta/.conda/envs/openibl/bin/python
+Host: c0804a-s17
+Other nodes: 
+==========Testing=============
+/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint0_4.pth.tar /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_0.pth.tar /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_1.pth.tar /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_2.pth.tar /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_3.pth.tar /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_4.pth.tar /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_0.pth.tar /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_1.pth.tar /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_2.pth.tar /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_3.pth.tar /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_4.pth.tar /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_0.pth.tar /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_1.pth.tar /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_2.pth.tar /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_3.pth.tar /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_4.pth.tar /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//model_best.pth.tar
+==============================
+==========################=============
+ Testing /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint0_4.pth.tar file...
+=======================================
+Use GPU: 0 for testing, rank no.0 of world_size 4Use GPU: 3 for testing, rank no.3 of world_size 4Use GPU: 1 for testing, rank no.1 of world_size 4Use GPU: 2 for testing, rank no.2 of world_size 4
+
+
+
+==========
+Args:Namespace(arch='vgg16', data_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/data', dataset='pitts', esp_encoder='/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint0_4.pth.tar', rr_topk=25, scale='30k', sync_gather=False, tcp_port='5017', test_batch_size=64, vlad=True, width=640, workers=4, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+===> Loading segmentation model
+=> Loaded checkpoint '/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint0_4.pth.tar'
+=> Start epoch 4  best recall5 95.1%
+PCA parameters path:  /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun/pca_params_checkpoint0_4.h5
+Evaluate on the test set:
+==========Test on Pitts250k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   332  |     7800
+  train_gallery |  3811  |    91464
+  val_query     |   319  |     7608
+  val_gallery   |  3277  |    78648
+  test_query    |   347  |     8280
+  test_gallery  |  3498  |    83952
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/328]	Time 1.514 (1.563)	Data 0.000 (0.095)	
+Extract Features: [200/328]	Time 1.499 (1.506)	Data 0.000 (0.048)	
+Extract Features: [300/328]	Time 1.425 (1.499)	Data 0.000 (0.032)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          89.5%
+  top-5          95.3%
+  top-10         96.6%
+Evaluate on the test set:
+==========Test on Pitts30k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          87.9%
+  top-5          94.0%
+  top-10         95.5%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/297]	Time 1.456 (1.575)	Data 0.000 (0.102)	
+Extract Features: [200/297]	Time 1.448 (1.513)	Data 0.000 (0.051)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          79.4%
+  top-5          88.9%
+  top-10         90.5%
+Data has been appended to test_result/recall_results.csv
+==========################=============
+ Done Testing with /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint0_4.pth.tar file...
+=======================================
+==========################=============
+ Testing /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_0.pth.tar file...
+=======================================
+Use GPU: 2 for testing, rank no.2 of world_size 4Use GPU: 0 for testing, rank no.0 of world_size 4Use GPU: 3 for testing, rank no.3 of world_size 4Use GPU: 1 for testing, rank no.1 of world_size 4
+
+
+
+==========
+Args:Namespace(arch='vgg16', data_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/data', dataset='pitts', esp_encoder='/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_0.pth.tar', rr_topk=25, scale='30k', sync_gather=False, tcp_port='5017', test_batch_size=64, vlad=True, width=640, workers=4, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+===> Loading segmentation model
+=> Loaded checkpoint '/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_0.pth.tar'
+=> Start epoch 0  best recall5 95.8%
+PCA parameters path:  /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun/pca_params_checkpoint1_0.h5
+Evaluate on the test set:
+==========Test on Pitts250k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   332  |     7800
+  train_gallery |  3811  |    91464
+  val_query     |   319  |     7608
+  val_gallery   |  3277  |    78648
+  test_query    |   347  |     8280
+  test_gallery  |  3498  |    83952
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/328]	Time 1.440 (1.592)	Data 0.000 (0.096)	
+Extract Features: [200/328]	Time 1.539 (1.552)	Data 0.000 (0.048)	
+Extract Features: [300/328]	Time 1.499 (1.541)	Data 0.000 (0.032)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          89.5%
+  top-5          95.7%
+  top-10         97.1%
+Evaluate on the test set:
+==========Test on Pitts30k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.1%
+  top-5          94.4%
+  top-10         96.0%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/297]	Time 1.576 (1.641)	Data 0.000 (0.096)	
+Extract Features: [200/297]	Time 1.479 (1.571)	Data 0.000 (0.048)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          81.3%
+  top-5          86.0%
+  top-10         89.5%
+Data has been appended to test_result/recall_results.csv
+==========################=============
+ Done Testing with /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_0.pth.tar file...
+=======================================
+==========################=============
+ Testing /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_1.pth.tar file...
+=======================================
+Use GPU: 1 for testing, rank no.1 of world_size 4Use GPU: 2 for testing, rank no.2 of world_size 4Use GPU: 3 for testing, rank no.3 of world_size 4Use GPU: 0 for testing, rank no.0 of world_size 4
+
+
+
+==========
+Args:Namespace(arch='vgg16', data_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/data', dataset='pitts', esp_encoder='/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_1.pth.tar', rr_topk=25, scale='30k', sync_gather=False, tcp_port='5017', test_batch_size=64, vlad=True, width=640, workers=4, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+===> Loading segmentation model
+=> Loaded checkpoint '/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_1.pth.tar'
+=> Start epoch 1  best recall5 96.0%
+PCA parameters path:  /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun/pca_params_checkpoint1_1.h5
+Evaluate on the test set:
+==========Test on Pitts250k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   332  |     7800
+  train_gallery |  3811  |    91464
+  val_query     |   319  |     7608
+  val_gallery   |  3277  |    78648
+  test_query    |   347  |     8280
+  test_gallery  |  3498  |    83952
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/328]	Time 1.468 (1.584)	Data 0.000 (0.102)	
+Extract Features: [200/328]	Time 1.552 (1.547)	Data 0.000 (0.051)	
+Extract Features: [300/328]	Time 3.784 (2.059)	Data 0.000 (0.034)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          90.1%
+  top-5          96.0%
+  top-10         97.1%
+Evaluate on the test set:
+==========Test on Pitts30k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.4%
+  top-5          94.0%
+  top-10         95.6%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/297]	Time 2.449 (3.073)	Data 0.000 (0.094)	
+Extract Features: [200/297]	Time 2.260 (2.863)	Data 0.000 (0.047)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          82.2%
+  top-5          89.2%
+  top-10         90.2%
+Data has been appended to test_result/recall_results.csv
+==========################=============
+ Done Testing with /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_1.pth.tar file...
+=======================================
+==========################=============
+ Testing /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_2.pth.tar file...
+=======================================
+Use GPU: 0 for testing, rank no.0 of world_size 4Use GPU: 3 for testing, rank no.3 of world_size 4Use GPU: 2 for testing, rank no.2 of world_size 4Use GPU: 1 for testing, rank no.1 of world_size 4
+
+
+
+==========
+Args:Namespace(arch='vgg16', data_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/data', dataset='pitts', esp_encoder='/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_2.pth.tar', rr_topk=25, scale='30k', sync_gather=False, tcp_port='5017', test_batch_size=64, vlad=True, width=640, workers=4, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+===> Loading segmentation model
+=> Loaded checkpoint '/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_2.pth.tar'
+=> Start epoch 2  best recall5 96.1%
+PCA parameters path:  /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun/pca_params_checkpoint1_2.h5
+Evaluate on the test set:
+==========Test on Pitts250k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   332  |     7800
+  train_gallery |  3811  |    91464
+  val_query     |   319  |     7608
+  val_gallery   |  3277  |    78648
+  test_query    |   347  |     8280
+  test_gallery  |  3498  |    83952
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/328]	Time 1.488 (1.934)	Data 0.000 (0.097)	
+Extract Features: [200/328]	Time 1.500 (1.720)	Data 0.000 (0.049)	
+Extract Features: [300/328]	Time 1.472 (1.644)	Data 0.000 (0.033)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          90.8%
+  top-5          96.2%
+  top-10         97.3%
+Evaluate on the test set:
+==========Test on Pitts30k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          89.0%
+  top-5          94.3%
+  top-10         95.6%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/297]	Time 1.522 (1.615)	Data 0.000 (0.099)	
+Extract Features: [200/297]	Time 1.447 (1.540)	Data 0.000 (0.050)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          83.5%
+  top-5          91.4%
+  top-10         93.3%
+Data has been appended to test_result/recall_results.csv
+==========################=============
+ Done Testing with /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_2.pth.tar file...
+=======================================
+==========################=============
+ Testing /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_3.pth.tar file...
+=======================================
+Use GPU: 3 for testing, rank no.3 of world_size 4Use GPU: 0 for testing, rank no.0 of world_size 4Use GPU: 1 for testing, rank no.1 of world_size 4Use GPU: 2 for testing, rank no.2 of world_size 4
+
+
+
+==========
+Args:Namespace(arch='vgg16', data_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/data', dataset='pitts', esp_encoder='/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_3.pth.tar', rr_topk=25, scale='30k', sync_gather=False, tcp_port='5017', test_batch_size=64, vlad=True, width=640, workers=4, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+===> Loading segmentation model
+=> Loaded checkpoint '/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_3.pth.tar'
+=> Start epoch 3  best recall5 96.1%
+PCA parameters path:  /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun/pca_params_checkpoint1_3.h5
+Evaluate on the test set:
+==========Test on Pitts250k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   332  |     7800
+  train_gallery |  3811  |    91464
+  val_query     |   319  |     7608
+  val_gallery   |  3277  |    78648
+  test_query    |   347  |     8280
+  test_gallery  |  3498  |    83952
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/328]	Time 1.539 (1.591)	Data 0.000 (0.094)	
+Extract Features: [200/328]	Time 1.502 (1.555)	Data 0.000 (0.047)	
+Extract Features: [300/328]	Time 1.537 (1.549)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          90.5%
+  top-5          96.1%
+  top-10         97.3%
+Evaluate on the test set:
+==========Test on Pitts30k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.7%
+  top-5          94.2%
+  top-10         95.6%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/297]	Time 1.500 (1.610)	Data 0.000 (0.096)	
+Extract Features: [200/297]	Time 1.470 (1.563)	Data 0.000 (0.048)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          82.5%
+  top-5          90.2%
+  top-10         92.7%
+Data has been appended to test_result/recall_results.csv
+==========################=============
+ Done Testing with /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_3.pth.tar file...
+=======================================
+==========################=============
+ Testing /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_4.pth.tar file...
+=======================================
+Use GPU: 3 for testing, rank no.3 of world_size 4Use GPU: 2 for testing, rank no.2 of world_size 4Use GPU: 1 for testing, rank no.1 of world_size 4Use GPU: 0 for testing, rank no.0 of world_size 4
+
+
+
+==========
+Args:Namespace(arch='vgg16', data_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/data', dataset='pitts', esp_encoder='/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_4.pth.tar', rr_topk=25, scale='30k', sync_gather=False, tcp_port='5017', test_batch_size=64, vlad=True, width=640, workers=4, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+===> Loading segmentation model
+=> Loaded checkpoint '/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_4.pth.tar'
+=> Start epoch 4  best recall5 96.1%
+PCA parameters path:  /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun/pca_params_checkpoint1_4.h5
+Evaluate on the test set:
+==========Test on Pitts250k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   332  |     7800
+  train_gallery |  3811  |    91464
+  val_query     |   319  |     7608
+  val_gallery   |  3277  |    78648
+  test_query    |   347  |     8280
+  test_gallery  |  3498  |    83952
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/328]	Time 1.536 (1.606)	Data 0.000 (0.097)	
+Extract Features: [200/328]	Time 1.507 (1.562)	Data 0.000 (0.048)	
+Extract Features: [300/328]	Time 1.509 (1.545)	Data 0.000 (0.032)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          90.3%
+  top-5          96.4%
+  top-10         97.2%
+Evaluate on the test set:
+==========Test on Pitts30k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.6%
+  top-5          94.3%
+  top-10         95.7%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/297]	Time 1.426 (1.580)	Data 0.000 (0.097)	
+Extract Features: [200/297]	Time 1.457 (1.518)	Data 0.000 (0.048)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          81.9%
+  top-5          90.2%
+  top-10         92.7%
+Data has been appended to test_result/recall_results.csv
+==========################=============
+ Done Testing with /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint1_4.pth.tar file...
+=======================================
+==========################=============
+ Testing /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_0.pth.tar file...
+=======================================
+Use GPU: 3 for testing, rank no.3 of world_size 4Use GPU: 1 for testing, rank no.1 of world_size 4Use GPU: 0 for testing, rank no.0 of world_size 4Use GPU: 2 for testing, rank no.2 of world_size 4
+
+
+
+==========
+Args:Namespace(arch='vgg16', data_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/data', dataset='pitts', esp_encoder='/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_0.pth.tar', rr_topk=25, scale='30k', sync_gather=False, tcp_port='5017', test_batch_size=64, vlad=True, width=640, workers=4, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+===> Loading segmentation model
+=> Loaded checkpoint '/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_0.pth.tar'
+=> Start epoch 0  best recall5 96.1%
+PCA parameters path:  /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun/pca_params_checkpoint2_0.h5
+Evaluate on the test set:
+==========Test on Pitts250k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   332  |     7800
+  train_gallery |  3811  |    91464
+  val_query     |   319  |     7608
+  val_gallery   |  3277  |    78648
+  test_query    |   347  |     8280
+  test_gallery  |  3498  |    83952
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/328]	Time 1.528 (1.557)	Data 0.000 (0.100)	
+Extract Features: [200/328]	Time 1.454 (1.534)	Data 0.000 (0.050)	
+Extract Features: [300/328]	Time 1.568 (1.527)	Data 0.000 (0.033)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          90.2%
+  top-5          95.9%
+  top-10         97.2%
+Evaluate on the test set:
+==========Test on Pitts30k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.7%
+  top-5          94.2%
+  top-10         95.8%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/297]	Time 1.423 (1.532)	Data 0.000 (0.096)	
+Extract Features: [200/297]	Time 1.474 (1.489)	Data 0.000 (0.048)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          83.5%
+  top-5          89.8%
+  top-10         92.7%
+Data has been appended to test_result/recall_results.csv
+==========################=============
+ Done Testing with /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_0.pth.tar file...
+=======================================
+==========################=============
+ Testing /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_1.pth.tar file...
+=======================================
+Use GPU: 2 for testing, rank no.2 of world_size 4Use GPU: 0 for testing, rank no.0 of world_size 4Use GPU: 3 for testing, rank no.3 of world_size 4Use GPU: 1 for testing, rank no.1 of world_size 4
+
+
+
+==========
+Args:Namespace(arch='vgg16', data_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/data', dataset='pitts', esp_encoder='/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_1.pth.tar', rr_topk=25, scale='30k', sync_gather=False, tcp_port='5017', test_batch_size=64, vlad=True, width=640, workers=4, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+===> Loading segmentation model
+=> Loaded checkpoint '/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_1.pth.tar'
+=> Start epoch 1  best recall5 96.1%
+PCA parameters path:  /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun/pca_params_checkpoint2_1.h5
+Evaluate on the test set:
+==========Test on Pitts250k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   332  |     7800
+  train_gallery |  3811  |    91464
+  val_query     |   319  |     7608
+  val_gallery   |  3277  |    78648
+  test_query    |   347  |     8280
+  test_gallery  |  3498  |    83952
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/328]	Time 1.504 (1.623)	Data 0.000 (0.096)	
+Extract Features: [200/328]	Time 1.532 (1.567)	Data 0.000 (0.048)	
+Extract Features: [300/328]	Time 1.503 (1.545)	Data 0.000 (0.032)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          90.5%
+  top-5          96.0%
+  top-10         97.1%
+Evaluate on the test set:
+==========Test on Pitts30k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.8%
+  top-5          93.9%
+  top-10         95.5%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/297]	Time 1.436 (1.560)	Data 0.000 (0.093)	
+Extract Features: [200/297]	Time 1.464 (1.510)	Data 0.000 (0.047)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          84.1%
+  top-5          89.8%
+  top-10         92.4%
+Data has been appended to test_result/recall_results.csv
+==========################=============
+ Done Testing with /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_1.pth.tar file...
+=======================================
+==========################=============
+ Testing /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_2.pth.tar file...
+=======================================
+Use GPU: 3 for testing, rank no.3 of world_size 4Use GPU: 2 for testing, rank no.2 of world_size 4Use GPU: 1 for testing, rank no.1 of world_size 4Use GPU: 0 for testing, rank no.0 of world_size 4
+
+
+
+==========
+Args:Namespace(arch='vgg16', data_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/data', dataset='pitts', esp_encoder='/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_2.pth.tar', rr_topk=25, scale='30k', sync_gather=False, tcp_port='5017', test_batch_size=64, vlad=True, width=640, workers=4, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+===> Loading segmentation model
+=> Loaded checkpoint '/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_2.pth.tar'
+=> Start epoch 2  best recall5 96.1%
+PCA parameters path:  /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun/pca_params_checkpoint2_2.h5
+Evaluate on the test set:
+==========Test on Pitts250k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   332  |     7800
+  train_gallery |  3811  |    91464
+  val_query     |   319  |     7608
+  val_gallery   |  3277  |    78648
+  test_query    |   347  |     8280
+  test_gallery  |  3498  |    83952
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/328]	Time 1.451 (1.600)	Data 0.000 (0.096)	
+Extract Features: [200/328]	Time 1.483 (1.538)	Data 0.000 (0.048)	
+Extract Features: [300/328]	Time 1.547 (1.528)	Data 0.000 (0.032)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          91.1%
+  top-5          96.3%
+  top-10         97.4%
+Evaluate on the test set:
+==========Test on Pitts30k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          89.1%
+  top-5          94.2%
+  top-10         95.8%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/297]	Time 1.467 (1.584)	Data 0.000 (0.097)	
+Extract Features: [200/297]	Time 1.468 (1.549)	Data 0.000 (0.049)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          81.9%
+  top-5          88.9%
+  top-10         91.7%
+Data has been appended to test_result/recall_results.csv
+==========################=============
+ Done Testing with /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_2.pth.tar file...
+=======================================
+==========################=============
+ Testing /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_3.pth.tar file...
+=======================================
+Use GPU: 2 for testing, rank no.2 of world_size 4Use GPU: 3 for testing, rank no.3 of world_size 4Use GPU: 0 for testing, rank no.0 of world_size 4Use GPU: 1 for testing, rank no.1 of world_size 4
+
+
+
+==========
+Args:Namespace(arch='vgg16', data_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/data', dataset='pitts', esp_encoder='/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_3.pth.tar', rr_topk=25, scale='30k', sync_gather=False, tcp_port='5017', test_batch_size=64, vlad=True, width=640, workers=4, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+===> Loading segmentation model
+=> Loaded checkpoint '/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_3.pth.tar'
+=> Start epoch 3  best recall5 96.1%
+PCA parameters path:  /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun/pca_params_checkpoint2_3.h5
+Evaluate on the test set:
+==========Test on Pitts250k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   332  |     7800
+  train_gallery |  3811  |    91464
+  val_query     |   319  |     7608
+  val_gallery   |  3277  |    78648
+  test_query    |   347  |     8280
+  test_gallery  |  3498  |    83952
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/328]	Time 1.500 (1.622)	Data 0.000 (0.095)	
+Extract Features: [200/328]	Time 1.474 (1.563)	Data 0.000 (0.047)	
+Extract Features: [300/328]	Time 1.499 (1.542)	Data 0.000 (0.032)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          91.4%
+  top-5          96.3%
+  top-10         97.3%
+Evaluate on the test set:
+==========Test on Pitts30k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          89.6%
+  top-5          94.4%
+  top-10         95.7%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/297]	Time 1.443 (1.571)	Data 0.000 (0.097)	
+Extract Features: [200/297]	Time 1.471 (1.522)	Data 0.000 (0.049)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          84.1%
+  top-5          91.1%
+  top-10         93.3%
+Data has been appended to test_result/recall_results.csv
+==========################=============
+ Done Testing with /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_3.pth.tar file...
+=======================================
+==========################=============
+ Testing /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_4.pth.tar file...
+=======================================
+Use GPU: 1 for testing, rank no.1 of world_size 4Use GPU: 0 for testing, rank no.0 of world_size 4Use GPU: 3 for testing, rank no.3 of world_size 4Use GPU: 2 for testing, rank no.2 of world_size 4
+
+
+
+==========
+Args:Namespace(arch='vgg16', data_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/data', dataset='pitts', esp_encoder='/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_4.pth.tar', rr_topk=25, scale='30k', sync_gather=False, tcp_port='5017', test_batch_size=64, vlad=True, width=640, workers=4, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+===> Loading segmentation model
+=> Loaded checkpoint '/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_4.pth.tar'
+=> Start epoch 4  best recall5 96.4%
+PCA parameters path:  /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun/pca_params_checkpoint2_4.h5
+Evaluate on the test set:
+==========Test on Pitts250k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   332  |     7800
+  train_gallery |  3811  |    91464
+  val_query     |   319  |     7608
+  val_gallery   |  3277  |    78648
+  test_query    |   347  |     8280
+  test_gallery  |  3498  |    83952
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/328]	Time 1.496 (1.594)	Data 0.000 (0.096)	
+Extract Features: [200/328]	Time 1.502 (1.550)	Data 0.000 (0.048)	
+Extract Features: [300/328]	Time 1.475 (1.535)	Data 0.000 (0.032)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          90.9%
+  top-5          96.3%
+  top-10         97.4%
+Evaluate on the test set:
+==========Test on Pitts30k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          89.1%
+  top-5          94.3%
+  top-10         95.7%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/297]	Time 1.522 (1.584)	Data 0.000 (0.095)	
+Extract Features: [200/297]	Time 1.474 (1.547)	Data 0.000 (0.048)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          82.9%
+  top-5          90.5%
+  top-10         92.4%
+Data has been appended to test_result/recall_results.csv
+==========################=============
+ Done Testing with /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint2_4.pth.tar file...
+=======================================
+==========################=============
+ Testing /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_0.pth.tar file...
+=======================================
+Use GPU: 3 for testing, rank no.3 of world_size 4Use GPU: 2 for testing, rank no.2 of world_size 4Use GPU: 0 for testing, rank no.0 of world_size 4Use GPU: 1 for testing, rank no.1 of world_size 4
+
+
+
+==========
+Args:Namespace(arch='vgg16', data_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/data', dataset='pitts', esp_encoder='/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_0.pth.tar', rr_topk=25, scale='30k', sync_gather=False, tcp_port='5017', test_batch_size=64, vlad=True, width=640, workers=4, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+===> Loading segmentation model
+=> Loaded checkpoint '/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_0.pth.tar'
+=> Start epoch 0  best recall5 96.4%
+PCA parameters path:  /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun/pca_params_checkpoint3_0.h5
+Evaluate on the test set:
+==========Test on Pitts250k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   332  |     7800
+  train_gallery |  3811  |    91464
+  val_query     |   319  |     7608
+  val_gallery   |  3277  |    78648
+  test_query    |   347  |     8280
+  test_gallery  |  3498  |    83952
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/328]	Time 1.480 (1.630)	Data 0.000 (0.095)	
+Extract Features: [200/328]	Time 1.594 (1.596)	Data 0.000 (0.047)	
+Extract Features: [300/328]	Time 1.506 (1.583)	Data 0.000 (0.032)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          90.1%
+  top-5          95.8%
+  top-10         97.0%
+Evaluate on the test set:
+==========Test on Pitts30k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.4%
+  top-5          94.1%
+  top-10         95.6%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/297]	Time 1.452 (1.550)	Data 0.000 (0.100)	
+Extract Features: [200/297]	Time 1.542 (1.523)	Data 0.000 (0.051)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          83.2%
+  top-5          92.1%
+  top-10         93.7%
+Data has been appended to test_result/recall_results.csv
+==========################=============
+ Done Testing with /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_0.pth.tar file...
+=======================================
+==========################=============
+ Testing /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_1.pth.tar file...
+=======================================
+Use GPU: 3 for testing, rank no.3 of world_size 4Use GPU: 0 for testing, rank no.0 of world_size 4Use GPU: 2 for testing, rank no.2 of world_size 4Use GPU: 1 for testing, rank no.1 of world_size 4
+
+
+
+==========
+Args:Namespace(arch='vgg16', data_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/data', dataset='pitts', esp_encoder='/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_1.pth.tar', rr_topk=25, scale='30k', sync_gather=False, tcp_port='5017', test_batch_size=64, vlad=True, width=640, workers=4, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+===> Loading segmentation model
+=> Loaded checkpoint '/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_1.pth.tar'
+=> Start epoch 1  best recall5 96.4%
+PCA parameters path:  /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun/pca_params_checkpoint3_1.h5
+Evaluate on the test set:
+==========Test on Pitts250k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   332  |     7800
+  train_gallery |  3811  |    91464
+  val_query     |   319  |     7608
+  val_gallery   |  3277  |    78648
+  test_query    |   347  |     8280
+  test_gallery  |  3498  |    83952
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/328]	Time 1.444 (1.632)	Data 0.000 (0.095)	
+Extract Features: [200/328]	Time 1.619 (1.569)	Data 0.000 (0.048)	
+Extract Features: [300/328]	Time 1.481 (1.563)	Data 0.000 (0.032)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          90.2%
+  top-5          95.9%
+  top-10         97.2%
+Evaluate on the test set:
+==========Test on Pitts30k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.3%
+  top-5          94.1%
+  top-10         95.7%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/297]	Time 1.465 (1.610)	Data 0.000 (0.098)	
+Extract Features: [200/297]	Time 1.475 (1.538)	Data 0.000 (0.049)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          85.1%
+  top-5          91.1%
+  top-10         93.0%
+Data has been appended to test_result/recall_results.csv
+==========################=============
+ Done Testing with /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_1.pth.tar file...
+=======================================
+==========################=============
+ Testing /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_2.pth.tar file...
+=======================================
+Use GPU: 2 for testing, rank no.2 of world_size 4Use GPU: 1 for testing, rank no.1 of world_size 4
+Use GPU: 3 for testing, rank no.3 of world_size 4
+Use GPU: 0 for testing, rank no.0 of world_size 4
+
+==========
+Args:Namespace(arch='vgg16', data_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/data', dataset='pitts', esp_encoder='/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_2.pth.tar', rr_topk=25, scale='30k', sync_gather=False, tcp_port='5017', test_batch_size=64, vlad=True, width=640, workers=4, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+===> Loading segmentation model
+=> Loaded checkpoint '/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_2.pth.tar'
+=> Start epoch 2  best recall5 96.4%
+PCA parameters path:  /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun/pca_params_checkpoint3_2.h5
+Evaluate on the test set:
+==========Test on Pitts250k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   332  |     7800
+  train_gallery |  3811  |    91464
+  val_query     |   319  |     7608
+  val_gallery   |  3277  |    78648
+  test_query    |   347  |     8280
+  test_gallery  |  3498  |    83952
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/328]	Time 1.500 (1.621)	Data 0.000 (0.090)	
+Extract Features: [200/328]	Time 1.491 (1.564)	Data 0.000 (0.045)	
+Extract Features: [300/328]	Time 1.488 (1.541)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          90.7%
+  top-5          96.2%
+  top-10         97.5%
+Evaluate on the test set:
+==========Test on Pitts30k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.6%
+  top-5          94.3%
+  top-10         95.7%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/297]	Time 1.501 (1.609)	Data 0.000 (0.100)	
+Extract Features: [200/297]	Time 1.484 (1.551)	Data 0.000 (0.051)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          84.4%
+  top-5          90.5%
+  top-10         92.4%
+Data has been appended to test_result/recall_results.csv
+==========################=============
+ Done Testing with /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_2.pth.tar file...
+=======================================
+==========################=============
+ Testing /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_3.pth.tar file...
+=======================================
+Use GPU: 3 for testing, rank no.3 of world_size 4Use GPU: 2 for testing, rank no.2 of world_size 4Use GPU: 0 for testing, rank no.0 of world_size 4Use GPU: 1 for testing, rank no.1 of world_size 4
+
+
+
+==========
+Args:Namespace(arch='vgg16', data_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/data', dataset='pitts', esp_encoder='/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_3.pth.tar', rr_topk=25, scale='30k', sync_gather=False, tcp_port='5017', test_batch_size=64, vlad=True, width=640, workers=4, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+===> Loading segmentation model
+=> Loaded checkpoint '/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_3.pth.tar'
+=> Start epoch 3  best recall5 96.4%
+PCA parameters path:  /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun/pca_params_checkpoint3_3.h5
+Evaluate on the test set:
+==========Test on Pitts250k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   332  |     7800
+  train_gallery |  3811  |    91464
+  val_query     |   319  |     7608
+  val_gallery   |  3277  |    78648
+  test_query    |   347  |     8280
+  test_gallery  |  3498  |    83952
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/328]	Time 1.517 (1.563)	Data 0.000 (0.093)	
+Extract Features: [200/328]	Time 1.450 (1.516)	Data 0.000 (0.046)	
+Extract Features: [300/328]	Time 1.444 (1.511)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          91.1%
+  top-5          96.3%
+  top-10         97.4%
+Evaluate on the test set:
+==========Test on Pitts30k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          89.5%
+  top-5          94.3%
+  top-10         95.9%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/297]	Time 1.401 (1.579)	Data 0.000 (0.099)	
+Extract Features: [200/297]	Time 1.438 (1.517)	Data 0.000 (0.050)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          82.9%
+  top-5          90.8%
+  top-10         92.4%
+Data has been appended to test_result/recall_results.csv
+==========################=============
+ Done Testing with /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_3.pth.tar file...
+=======================================
+==========################=============
+ Testing /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_4.pth.tar file...
+=======================================
+Use GPU: 1 for testing, rank no.1 of world_size 4Use GPU: 0 for testing, rank no.0 of world_size 4Use GPU: 3 for testing, rank no.3 of world_size 4Use GPU: 2 for testing, rank no.2 of world_size 4
+
+
+
+==========
+Args:Namespace(arch='vgg16', data_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/data', dataset='pitts', esp_encoder='/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_4.pth.tar', rr_topk=25, scale='30k', sync_gather=False, tcp_port='5017', test_batch_size=64, vlad=True, width=640, workers=4, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+===> Loading segmentation model
+=> Loaded checkpoint '/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_4.pth.tar'
+=> Start epoch 4  best recall5 96.4%
+PCA parameters path:  /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun/pca_params_checkpoint3_4.h5
+Evaluate on the test set:
+==========Test on Pitts250k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   332  |     7800
+  train_gallery |  3811  |    91464
+  val_query     |   319  |     7608
+  val_gallery   |  3277  |    78648
+  test_query    |   347  |     8280
+  test_gallery  |  3498  |    83952
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/328]	Time 1.414 (1.577)	Data 0.000 (0.097)	
+Extract Features: [200/328]	Time 1.513 (1.546)	Data 0.000 (0.049)	
+Extract Features: [300/328]	Time 1.502 (1.534)	Data 0.000 (0.034)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          91.5%
+  top-5          96.7%
+  top-10         97.5%
+Evaluate on the test set:
+==========Test on Pitts30k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          89.5%
+  top-5          94.8%
+  top-10         96.0%
+==========Test on Tokyo247=============
+Tokyo dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |  4035  |    48420
+  train_gallery |  4092  |    49104
+  val_query     |  1308  |    15696
+  val_gallery   |  2780  |    33360
+  test_query    |    35  |      315
+  test_gallery  |  6254  |    75984
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/297]	Time 1.448 (1.582)	Data 0.000 (0.097)	
+Extract Features: [200/297]	Time 1.569 (1.553)	Data 0.000 (0.049)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          87.3%
+  top-5          91.1%
+  top-10         92.4%
+Data has been appended to test_result/recall_results.csv
+==========################=============
+ Done Testing with /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//checkpoint3_4.pth.tar file...
+=======================================
+==========################=============
+ Testing /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//model_best.pth.tar file...
+=======================================
+Use GPU: 1 for testing, rank no.1 of world_size 4Use GPU: 0 for testing, rank no.0 of world_size 4Use GPU: 3 for testing, rank no.3 of world_size 4Use GPU: 2 for testing, rank no.2 of world_size 4
+
+
+
+==========
+Args:Namespace(arch='vgg16', data_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/data', dataset='pitts', esp_encoder='/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//model_best.pth.tar', rr_topk=25, scale='30k', sync_gather=False, tcp_port='5017', test_batch_size=64, vlad=True, width=640, workers=4, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+===> Loading segmentation model
+=> Loaded checkpoint '/orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun//model_best.pth.tar'
+=> Start epoch 4  best recall5 96.4%
+PCA parameters path:  /orange/hmedeiros/m.maqboolbhutta/old-models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-27-Jun/pca_params_model_best.h5
+Evaluate on the test set:
+==========Test on Pitts250k=============
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   332  |     7800
+  train_gallery |  3811  |    91464
+  val_query     |   319  |     7608
+  val_gallery   |  3277  |    78648
+  test_query    |   347  |     8280
+  test_gallery  |  3498  |    83952
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/328]	Time 1.490 (1.586)	Data 0.000 (0.098)	
+Extract Features: [200/328]	Time 1.528 (1.546)	Data 0.000 (0.049)	
+Extract Features: [300/328]	Time 1.571 (1.534)	Data 0.000 (0.033)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
