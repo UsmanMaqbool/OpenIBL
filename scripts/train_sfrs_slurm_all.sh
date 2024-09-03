@@ -54,7 +54,7 @@ NPOCH=5
 PORT=6010
 
 
-INIT_DIR="/blue/hmedeiros/m.maqboolbhutta/datasets/openibl-init"
+INIT_DIR="/blue/hmedeiros/m.maqboolbhutta/datasets/official/openibl-init"
 ESP_ENCODER="/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth"
 DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
 
