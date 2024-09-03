@@ -39,7 +39,7 @@ if [ "$#" -lt 2 ]; then
     exit 1
 fi
 
-GPUS=8
+GPUS=4
 METHOD="$1"
 ARCH="$2"
 DATASET="$3"
