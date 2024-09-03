@@ -110,7 +110,7 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+FILES=$(ls -t -r ${FILES}/*.tar)
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
@@ -157,7 +157,7 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+FILES=$(ls -t -r ${FILES}/*.tar)
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
@@ -206,7 +206,7 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+FILES=$(ls -t -r ${FILES}/*.tar)
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
