@@ -432,7 +432,8 @@ class SelectRegions(nn.Module):
         # Forward pass through fastscnn without gradients
         with torch.no_grad():
             outputs = fastscnn(x)
-        mask = outputs.max(1)[1]
+        mask = outputs[0].max(1)[1]
+
         # mask = torch.argmax(outputs[0], 1) 
         for jj in range(len(mask)):  
             single_label_mask = mask[jj]
