@@ -21,7 +21,7 @@
 #SBATCH --distribution=cyclic:cyclic
 
 ## To RUN
-# sbatch --j graphvlad-v7 ./scripts/train_baseline_slurm_all.sh graphvlad pitts
+# sbatch --j 0904-s1 scripts/leo/train_sfrs_slurm_all.sh graphvlad vgg16 pitts 30k
 ####################################################################################################
 
 # PYTHON SCRIPT
@@ -41,10 +41,9 @@ fi
 
 GPUS=4
 METHOD="$1"
-LOSS="$2"
-ARCH="$3"
-DATASET="$4"
-SCALE="$5"
+ARCH="$2"
+DATASET="$3"
+SCALE="$4"
 NUMCLUSTER=64
 LAYERS=conv5
 LR=0.001
@@ -85,9 +84,9 @@ echo "Other nodes: $NODES"
 # --init-dir ${INIT_DIR}
 
 
-===================================================================================================
-SARE Ind Loss
-===================================================================================================
+# ===================================================================================================
+#SARE Ind Loss
+# ===================================================================================================
 LOSS="sare_ind"
 DATE=$(date '+%d-%b') 
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
