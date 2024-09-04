@@ -32,11 +32,16 @@ from ibl.utils.rerank import re_ranking
 
 start_epoch = start_gen = best_recall5 = 0
 
+# def get_segmentation_model(encoderFile):
+#     classes = 20
+#     p = 2
+#     q = 8
+#     model = models.create('espnet', classes=classes, p=p, q=q, encoderFile=encoderFile)
+#     return model
+
 def get_segmentation_model(encoderFile):
-    classes = 20
-    p = 2
-    q = 8
-    model = models.create('espnet', classes=classes, p=p, q=q, encoderFile=encoderFile)
+    model = models.create('fastscnn', num_classes=19)
+    model.load_state_dict(torch.load(encoderFile))
     return model
 
 def get_data(args, iters):

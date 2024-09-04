@@ -379,7 +379,58 @@ class applyGNN(nn.Module):
 class SelectRegions(nn.Module):
     def __init__(self):
         super(SelectRegions, self).__init__()
-    def forward(self, x, base_model, espnet):
+        
+    def relabel(self, img):
+        """
+        This function relabels the predicted labels so that cityscape dataset can process
+        :param img: The image array to be relabeled
+        :return: The relabeled image array
+        """
+        ### Road 0 + Sidewalk 1
+        img[img == 1] = 1
+        img[img == 0] = 1
+
+        ### building 2 + wall 3 + fence 4
+        img[img == 2] = 2
+        img[img == 3] = 2
+        img[img == 4] = 2
+        
+
+        ### vegetation 8 + Terrain 9
+        img[img == 9] = 3
+        img[img == 8] = 3
+
+        ### Pole 5 + Traffic Light 6 + Traffic Signal
+        img[img == 7] = 4
+        img[img == 6] = 4
+        img[img == 5] = 4
+        
+        ### Sky 10
+        img[img == 10] = 5
+        
+
+        ## Rider 12 + motorcycle 17 + bicycle 18
+        img[img == 18] = 255
+        img[img == 17] = 255
+        img[img == 12] = 255
+
+
+        # cars 13 + truck 14 + bus 15 + train 16
+        img[img == 16] = 255
+        img[img == 15] = 255
+        img[img == 14] = 255
+        img[img == 13] = 255
+
+        ## Person
+        img[img == 11] = 255
+
+        ### Don't need, make these 255
+        ## Background
+        img[img == 19] = 255
+
+        return img  
+    
+    def forward(self, x, base_model, fastscnn):
         sizeH = x.shape[2]
         sizeW = x.shape[3]
         if sizeH%2 != 0:
@@ -387,12 +438,16 @@ class SelectRegions(nn.Module):
         if sizeW%2 != 0:
             x = F.pad(input=x, pad=(1,2), mode='constant', value=0)
 
+        # with torch.no_grad():
+        #     b_out = espnet(x)
+        # # b_out = espnet(x)
+        # mask = b_out.max(1)[1] 
+          
         with torch.no_grad():
-            b_out = espnet(x)
-        # b_out = espnet(x)
-
-
-        mask = b_out.max(1)[1]   
+            outputs = fastscnn(x)
+        # mask = outputs[0].max(1)[1]
+        mask = torch.argmax(outputs[0], 1)
+        mask = self.relabel(mask)
         for jj in range(len(mask)):  
             single_label_mask = mask[jj]
             obj_ids, obj_i = single_label_mask.unique(return_counts=True)
@@ -440,10 +495,10 @@ class SelectRegions(nn.Module):
         del graph_nodes
         return pool_x, NB, x.size(0), x_cropped
 class GraphVLAD(nn.Module):
-    def __init__(self, base_model, net_vlad, esp_net, sfrs=False, tuple_size=1):
+    def __init__(self, base_model, net_vlad, fastscnn, sfrs=False, tuple_size=1):
         super(GraphVLAD, self).__init__()
         self.base_model = base_model
-        self.esp_net = esp_net
+        self.fastscnn = fastscnn
         self.net_vlad = net_vlad
         self.SelectRegions = SelectRegions()
         self.applyGNN = applyGNN()
@@ -456,7 +511,7 @@ class GraphVLAD(nn.Module):
     def forward(self, x):
         node_features_list = []
         neighborsFeat = []
-        pool_x, NB, x_size, x_cropped = self.SelectRegions(x, self.base_model, self.esp_net)
+        pool_x, NB, x_size, x_cropped = self.SelectRegions(x, self.base_model, self.fastscnn)
         for i in range(NB+1):
             vlad_x = self.net_vlad(x_cropped[i])
             vlad_x = F.normalize(vlad_x, p=2, dim=2)  
