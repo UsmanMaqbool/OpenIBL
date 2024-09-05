@@ -1,0 +1,41 @@
+Wed Sep  4 20:47:33 EDT 2024
+/home/m.maqboolbhutta/usman_ws/codes/OpenIBL
+/home/m.maqboolbhutta/.conda/envs/openibl/bin/python
+Host: c1006a-s11
+Other nodes: 
+/home/m.maqboolbhutta/usman_ws/models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-04-Sep
+==========Starting Training=============
+========================================
+Use GPU: 0 for training, rank no.0 of world_size 4
+Use GPU: 1 for training, rank no.1 of world_size 4
+Use GPU: 2 for training, rank no.2 of world_size 4
+Use GPU: 3 for training, rank no.3 of world_size 4
+==========
+Args:Namespace(arch='vgg16', cache_size=1000, data_dir='/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/', dataset='pitts', deterministic=False, epochs=5, eval_step=1, features=4096, generations=4, gpu=0, height=480, init_dir='/blue/hmedeiros/m.maqboolbhutta/datasets/official/openibl-init', iters=0, launcher='slurm', layers='conv5', logs_dir='/home/m.maqboolbhutta/usman_ws/models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-04-Sep', loss_type='sare_ind', lr=0.001, margin=0.1, method='graphvlad', momentum=0.9, neg_num=10, neg_pool=1000, ngpus_per_node=4, nowhiten=False, num_clusters=64, pos_num=10, pos_pool=20, print_freq=500, rank=0, resume='', scale='30k', seed=43, segmentation_head='/home/m.maqboolbhutta/usman_ws/datasets/official/fast_scnn/fast_scnn_citys.pth', soft_weight=0.5, step_size=5, sync_gather=False, syncbn=True, tcp_port='6010', temperature=[0.07, 0.07, 0.06, 0.05], test_batch_size=32, total_gpus=4, tuple_size=1, weight_decay=0.001, width=640, workers=2, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+Loading centroids from /blue/hmedeiros/m.maqboolbhutta/datasets/official/openibl-init/vgg16_pitts_64_desc_cen.hdf5
+===> Loading segmentation model
+Loading centroids from /blue/hmedeiros/m.maqboolbhutta/datasets/official/openibl-init/vgg16_pitts_64_desc_cen.hdf5
+===> Loading segmentation model
+Test the initial model:
+Extract Features: [100/138]	Time 0.346 (0.445)	Data 0.000 (0.059)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          82.1%
+  top-5          92.5%
+  top-10         95.2%
+===> Start extracting features for sorting gallery
