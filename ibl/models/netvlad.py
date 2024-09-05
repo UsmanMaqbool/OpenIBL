@@ -348,8 +348,8 @@ class EmbedRegionNet(nn.Module):
 class applyGNN(nn.Module):
     def __init__(self):
         super(applyGNN, self).__init__()
-        self.input_dim = 8192 
-        self.hidden_dim = [4096,4096]
+        self.input_dim = 4096 
+        self.hidden_dim = [2048,2048]
         self.num_neighbors_list = [5]
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
                   num_neighbors_list=self.num_neighbors_list)
@@ -383,7 +383,7 @@ class SelectRegions(nn.Module):
         img[img == 9] = 3
         img[img == 8] = 3
 
-        ### Pole 5 + Traffic Light 6 + Traffic Signal 7
+        ### Pole 5 + Traffic Light 6 + Traffic Signal
         img[img == 7] = 4
         img[img == 6] = 4
         img[img == 5] = 4
@@ -464,9 +464,6 @@ class SelectRegions(nn.Module):
             all_label_mask = pred_all[img_i]
             labels_all, label_count_all = all_label_mask.unique(return_counts=True)
             
-            mask_t = label_count_all >= 10000
-            labels = labels_all[mask_t]
-            
             # Create masks for each label and convert them to bounding boxes
             masks = all_label_mask == labels_all[:, None, None]
             all_label_mask = rsizet(all_label_mask.unsqueeze(0)).squeeze(0)
@@ -484,6 +481,7 @@ class SelectRegions(nn.Module):
                     if self.visualize:
                         embed_file_name = f'embed_{i}.png'  # Customize the naming pattern as needed
                         save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name=embed_file_name)
+                embed_image = F.normalize(embed_image, p=2, dim=2)    
                 sub_nodes.append(embed_image.unsqueeze(0))
 
 
