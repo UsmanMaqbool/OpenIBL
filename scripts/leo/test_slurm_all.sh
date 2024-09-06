@@ -21,7 +21,7 @@
 #SBATCH --distribution=cyclic:cyclic
 
 ## To RUN
-# sbatch --j graphvlad-v7 ./scripts/train_baseline_slurm_all.sh graphvlad pitts
+#  sbatch --j 0903-s2 scripts/leo/test_slurm_all.sh graphvlad vgg16 /home/m.maqboolbhutta/usman_ws/models/openibl/0828-s-1/vgg16-graphvlad_sfrs-sare_ind-pitts30k-lr0.001-tuple4-03-Sep/
 ####################################################################################################
 
 # PYTHON SCRIPT
@@ -52,7 +52,7 @@ PORT=6010
 
 
 INIT_DIR="/home/m.maqboolbhutta/usman_ws/datasets/official/openibl-init"
-FAST_SCNN="/home/m.maqboolbhutta/usman_ws/datasets/official/fast-scnn/fast_scnn_citys.pth"
+FAST_SCNN="/home/m.maqboolbhutta/usman_ws/datasets/official/fast_scnn/fast_scnn_citys.pth"
 DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
 
 
@@ -76,7 +76,9 @@ echo "Other nodes: $NODES"
 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+# FILES="${FILES}/*.tar"
+FILES=$(ls -r ${FILES}/*.tar)
+
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
