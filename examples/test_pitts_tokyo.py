@@ -29,9 +29,15 @@ import os
 import csv
 import subprocess
 import re
+# def get_segmentation_model(encoderFile):
+#     model = models.create('fastscnn', num_classes=19)
+#     model.load_state_dict(torch.load(encoderFile))
+#     return model
 def get_segmentation_model(encoderFile):
-    model = models.create('fastscnn', num_classes=19)
-    model.load_state_dict(torch.load(encoderFile))
+    classes = 20
+    p = 2
+    q = 8
+    model = models.create('espnet', classes=classes, p=p, q=q, encoderFile=encoderFile)
     return model
 
 def get_data(args):
@@ -72,7 +78,7 @@ def get_model(args):
         elif(args.method=='graphvlad'):
             if (args.rank==0):
                 print('===> Loading segmentation model')
-            segmentation_model = get_segmentation_model(args.fast_scnn)
+            segmentation_model = get_segmentation_model(args.segmentation_head)
             model = models.create('graphvlad', base_model, pool_layer, segmentation_model, NB=5)
     else:
         model = base_model
@@ -326,6 +332,5 @@ if __name__ == '__main__':
                         default=osp.join(working_dir, 'data'))
     parser.add_argument('--logs-dir', type=str, metavar='PATH',
                         default=osp.join(working_dir, 'logs'))
-    parser.add_argument('--fast-scnn', type=str, default='', help='Path to Fast SCNN encoder file')
-
+    parser.add_argument('--segmentation-head', type=str, default='', help='Path to segmentation head weights')
     main()

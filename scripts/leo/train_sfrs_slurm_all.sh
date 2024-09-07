@@ -54,8 +54,8 @@ PORT=6010
 
 
 INIT_DIR="/blue/hmedeiros/m.maqboolbhutta/datasets/official/openibl-init"
-# SHEADWEIGHTS="/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth"
-SHEADWEIGHTS="/home/m.maqboolbhutta/usman_ws/datasets/official/fast_scnn/fast_scnn_citys.pth"
+SHEADWEIGHTS="/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth"
+# SHEADWEIGHTS="/home/m.maqboolbhutta/usman_ws/datasets/official/fast_scnn/fast_scnn_citys.pth"
 DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
 
 
@@ -90,7 +90,7 @@ echo "Other nodes: $NODES"
 # ===================================================================================================
 LOSS="sare_ind"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0906/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -105,11 +105,13 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} --soft-weight 0.5 \
   --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 --generations 4 --temperature 0.07 0.07 0.06 0.05 --logs-dir ${FILES} --data-dir ${DATASET_DIR} \
   --init-dir ${INIT_DIR} --segmentation-head=${SHEADWEIGHTS} \
-  --method ${METHOD} --resume="/home/m.maqboolbhutta/usman_ws/models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-04-Sep/checkpoint3_2.pth.tar"
+  --method ${METHOD} 
 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+FILES=$(ls -r ${FILES}/*.tar)
+
+# FILES="${FILES}/*.tar"
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
@@ -135,7 +137,7 @@ done
 #===================================================================================================
 LOSS="sare_joint"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0906/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -154,7 +156,9 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+FILES=$(ls -r ${FILES}/*.tar)
+
+# FILES="${FILES}/*.tar"
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
@@ -181,7 +185,7 @@ done
 
 LOSS="triplet"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0906/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -200,7 +204,9 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+FILES=$(ls -r ${FILES}/*.tar)
+
+# FILES="${FILES}/*.tar"
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES

@@ -414,7 +414,7 @@ class SelectRegions(nn.Module):
 
         return img                          
     
-    def forward(self, x, base_model, fastscnn): 
+    def forward(self, x, base_model, SH): 
         
         ## debug
         # save_image(x[0], 'output-image.png')
@@ -429,9 +429,9 @@ class SelectRegions(nn.Module):
         if sizeW % 2 != 0:
             x = F.pad(input=x, pad=(1, 2), mode="constant", value=0)
 
-        # Forward pass through fastscnn without gradients
+        # Forward pass through SH without gradients
         with torch.no_grad():
-            outputs = fastscnn(x)
+            outputs = SH(x)
 
         if self.visualize:
             # save_image(x[0], 'output-image.png')
@@ -447,7 +447,7 @@ class SelectRegions(nn.Module):
         rsizet = transforms.Resize((H, W))
         
         # Process the output of fastscnn to get predicted labels
-        pred_all = torch.argmax(outputs[0], 1)
+        pred_all = outputs.max(1)[1] 
         
         if self.visualize:
             # Assuming `pred_all` is your batch of predictions
@@ -515,10 +515,10 @@ class SelectRegions(nn.Module):
         
         return pool_x, x.size(0), x_nodes
 class GraphVLAD(nn.Module):
-    def __init__(self, base_model, net_vlad, fastscnn, NB):
+    def __init__(self, base_model, net_vlad, SH, NB):
         super(GraphVLAD, self).__init__()
         self.base_model = base_model
-        self.fastscnn = fastscnn
+        self.SH = SH
         self.net_vlad = net_vlad
         
         self.NB = NB
@@ -533,7 +533,7 @@ class GraphVLAD(nn.Module):
 
     def forward(self, x):
         node_features_list = []
-        pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
+        pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.SH)
         
         neighborsFeat = []
         for i in range(self.NB + 1):
@@ -608,12 +608,12 @@ class GraphVLADPCA(nn.Module):
         gvlad = F.normalize(gvlad, p=2, dim=-1)  
         return gvlad 
 class GraphVLADEmbedRegion(nn.Module):
-    def __init__(self, base_model, net_vlad, tuple_size, fastscnn, NB):
+    def __init__(self, base_model, net_vlad, tuple_size, SH, NB):
         super(GraphVLADEmbedRegion, self).__init__()
         self.base_model = base_model
         self.net_vlad = net_vlad
         self.tuple_size = tuple_size
-        self.fastscnn = fastscnn
+        self.SH = SH
         
         self.NB = NB
         self.applyGNN = applyGNN()
@@ -703,7 +703,7 @@ class GraphVLADEmbedRegion(nn.Module):
             node_features_list = []
             neighborsFeat = []
 
-            pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
+            pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.SH)
 
 
             for i in range(self.NB+1):

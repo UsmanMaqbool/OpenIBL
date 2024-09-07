@@ -32,10 +32,17 @@ from ibl.utils.rerank import re_ranking
 
 start_epoch = start_gen = best_recall5 = 0
 
+# def get_segmentation_model(encoderFile):
+#     model = models.create('fastscnn', num_classes=19)
+#     model.load_state_dict(torch.load(encoderFile))
+#     return model
 def get_segmentation_model(encoderFile):
-    model = models.create('fastscnn', num_classes=19)
-    model.load_state_dict(torch.load(encoderFile))
+    classes = 20
+    p = 2
+    q = 8
+    model = models.create('espnet', classes=classes, p=p, q=q, encoderFile=encoderFile)
     return model
+
 
 def get_data(args, iters):
     root = osp.join(args.data_dir, args.dataset)
@@ -117,7 +124,7 @@ def get_model(args):
         if (args.rank==0):
             print('===> Loading segmentation model')
         segmentation_model = get_segmentation_model(args.segmentation_head)
-        model = models.create('graphvladembedregion', base_model, pool_layer, tuple_size=args.tuple_size, fastscnn=segmentation_model, NB=5)
+        model = models.create('graphvladembedregion', base_model, pool_layer, tuple_size=args.tuple_size, SH=segmentation_model, NB=5)
 
 
     if (args.syncbn):
