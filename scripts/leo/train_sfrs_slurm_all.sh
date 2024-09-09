@@ -66,7 +66,7 @@ DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
 ## You can load a software environment or use a singularity container.
 ## CONTAINER="singularity exec --nv /path/to/container.sif" (--nv option is to enable gpu)
 module purge
-module load conda/24.1.2 intel/2019.1.144 openmpi/4.0.0
+module load conda/24.3.0 intel/2019.1.144 openmpi/4.0.0
 conda activate openibl
 
 # PRINTS
@@ -91,7 +91,7 @@ echo "Other nodes: $NODES"
 LOSS="sare_ind"
 DATE=$(date '+%d-%b') 
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0906/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
-
+RESUME="/home/m.maqboolbhutta/usman_ws/models/openibl/0906/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-08-Sep/checkpoint2_3.pth.tar"
 echo ${FILES}
 
 echo "==========Starting Training============="
@@ -105,7 +105,7 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} --soft-weight 0.5 \
   --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 --generations 4 --temperature 0.07 0.07 0.06 0.05 --logs-dir ${FILES} --data-dir ${DATASET_DIR} \
   --init-dir ${INIT_DIR} --segmentation-head=${SHEADWEIGHTS} \
-  --method ${METHOD} 
+  --method ${METHOD}  --resume ${RESUME}
 
 
 echo "==========Testing============="

@@ -550,7 +550,7 @@ class GraphVLAD(nn.Module):
         del neighborsFeat
         
         gvlad = self.applyGNN(node_features_list)
-        gvlad = F.normalize(gvlad, p=2, dim=1)
+        # gvlad = F.normalize(gvlad, p=2, dim=1)
 
         gvlad = torch.add(gvlad, vlad_x)
         gvlad = F.normalize(gvlad, p=2, dim=1)
@@ -717,7 +717,7 @@ class GraphVLADEmbedRegion(nn.Module):
             node_features_list.append(torch.concat(neighborsFeat[0:self.NB],0))
             del neighborsFeat
             gvlad = self.applyGNN(node_features_list)
-            gvlad = F.normalize(gvlad, p=2, dim=1)
+            # gvlad = F.normalize(gvlad, p=2, dim=1)
 
             gvlad = torch.add(gvlad,vlad_x)
             gvlad = F.normalize(gvlad, p=2, dim=1)
