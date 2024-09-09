@@ -34,9 +34,29 @@ def get_transformer_train(height, width):
                                     std=[0.00392156862745098, 0.00392156862745098, 0.00392156862745098])]
     return T.Compose(train_transformer)
 
+
 def get_transformer_test(height, width, tokyo=False):
     test_transformer = [T.Resize(max(height,width) if tokyo else (height, width)),
                         T.ToTensor(),
                         T.Normalize(mean=[0.48501960784313836, 0.4579568627450961, 0.4076039215686255],
                                    std=[0.00392156862745098, 0.00392156862745098, 0.00392156862745098])]
-    return T.Compose(test_transformer)
+    
+#     return T.Compose(test_transformer)
+# def get_transformer_test(height, width, tokyo=False):
+#     test_transformer = [T.Resize(max(height,width) if tokyo else (height, width)),
+#                         T.ToTensor(),
+#                         T.Normalize(mean=[0.485, 0.456, 0.406],                             std=[0.229, 0.224, 0.225])]
+#     return T.Compose(test_transformer)
+
+
+# def get_transformer_test(height, width, tokyo=False):
+#     test_transformer = [T.Resize(max(height,width) if tokyo else (height, width)),
+#                         T.ToTensor(),
+#                         T.Normalize(mean = [72.3923111, 82.90893555, 73.15840149], 
+#                                     std = [45.3192215, 46.15289307, 44.91483307])]
+#     return T.Compose(test_transformer)
+
+
+
+
+

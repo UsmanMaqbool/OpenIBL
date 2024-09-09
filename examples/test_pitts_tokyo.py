@@ -33,7 +33,12 @@ def get_segmentation_model(encoderFile):
     model = models.create('fastscnn', num_classes=19)
     model.load_state_dict(torch.load(encoderFile))
     return model
-
+def get_espnet_model(encoderFile):
+    classes = 20
+    p = 2
+    q = 8
+    model = models.create('espnet', classes=classes, p=p, q=q, encoderFile=encoderFile)
+    return model
 def get_data(args):
     root = osp.join(args.data_dir, args.dataset)
     dataset = datasets.create(args.dataset, root, scale=args.scale)
@@ -73,7 +78,8 @@ def get_model(args):
             if (args.rank==0):
                 print('===> Loading segmentation model')
             segmentation_model = get_segmentation_model(args.fast_scnn)
-            model = models.create('graphvlad', base_model, pool_layer, segmentation_model, NB=5)
+            espnet_model = get_espnet_model("/home/leo/usman_ws/datasets/espnet-encoder/espnet_p_2_q_8.pth")
+            model = models.create('graphvlad', base_model, pool_layer, segmentation_model, espnet_model,NB=5)
     else:
         model = base_model
 

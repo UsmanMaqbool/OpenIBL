@@ -100,7 +100,9 @@ cityspallete = [
     0, 80, 100,
     0, 0, 230,
     119, 11, 32,
+    0, 0, 0,
 ]
+
 
 def save_image(tensor_image, file_name):
     """

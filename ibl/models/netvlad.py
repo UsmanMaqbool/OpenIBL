@@ -361,7 +361,28 @@ class SelectRegions(nn.Module):
         super(SelectRegions, self).__init__()
         self.NB = NB
         self.mask = Mask
-        self.visualize = False
+        self.visualize = True
+        self.pallete = [[128, 64, 128],
+           [244, 35, 232],
+           [70, 70, 70],
+           [102, 102, 156],
+           [190, 153, 153],
+           [153, 153, 153],
+           [250, 170, 30],
+           [220, 220, 0],
+           [107, 142, 35],
+           [152, 251, 152],
+           [70, 130, 180],
+           [220, 20, 60],
+           [255, 0, 0],
+           [0, 0, 142],
+           [0, 0, 70],
+           [0, 60, 100],
+           [0, 80, 100],
+           [0, 0, 230],
+           [119, 11, 32],
+           [0, 0, 0]]
+
         
     def relabel(self, img):
         """
@@ -414,7 +435,40 @@ class SelectRegions(nn.Module):
 
         return img                          
     
-    def forward(self, x, base_model, fastscnn): 
+    
+    
+    
+    def relabelesp(self, img):
+        '''
+        This function relabels the predicted labels so that cityscape dataset can process
+        :param img:
+        :return:
+        '''
+        img[img == 19] = 255
+        img[img == 18] = 33
+        img[img == 17] = 32
+        img[img == 16] = 31
+        img[img == 15] = 28
+        img[img == 14] = 27
+        img[img == 13] = 26
+        img[img == 12] = 25
+        img[img == 11] = 24
+        img[img == 10] = 23
+        img[img == 9] = 22
+        img[img == 8] = 21
+        img[img == 7] = 20
+        img[img == 6] = 19
+        img[img == 5] = 17
+        img[img == 4] = 13
+        img[img == 3] = 12
+        img[img == 2] = 11
+        img[img == 1] = 8
+        img[img == 0] = 7
+        img[img == 255] = 0
+        return img
+    
+    
+    def forward(self, x, base_model, fastscnn, espnet): 
         
         ## debug
         # save_image(x[0], 'output-image.png')
@@ -434,6 +488,35 @@ class SelectRegions(nn.Module):
             outputs = fastscnn(x)
         mask = outputs[0].max(1)[1]
 
+        if self.visualize:
+            # save_image(x[0], 'output-image.png')
+            xx = x
+            save_batch_images(x)
+        
+        if self.visualize:
+            # Assuming `pred_all` is your batch of predictions
+            save_batch_masks(mask, 'stage2-mask-real.png')
+        
+
+        with torch.no_grad():
+            output_esp = espnet(x)
+            # works mask = b_out.max(1)[1] 
+        # classMap_numpy = output_esp.max(0)[1]
+        mask_esp = output_esp.max(1)[1] 
+        classMap_numpy = output_esp.max(1)[1].byte().cpu().data.numpy()
+        classMap_numpy1 = output_esp.max(1)[1].byte().cpu().data
+        classMap_numpy2 = output_esp.max(1)[1].byte()
+        classMap_numpy4 = output_esp.max(1)[1]
+            # Assuming `pred_all` is your batch of predictions
+            # save_batch_masks(classMap_numpy, 'stage2-mask-real-esp-classnmumpy.png')
+        save_batch_masks(mask_esp, 'stage2-mask-real-esp-mask_esp.png')
+        save_batch_masks(classMap_numpy4, 'stage2-mask-real-esp-mask_esp4.png')
+        
+        rmask_esp = self.relabelesp(mask_esp)
+        
+        
+        save_batch_images(rmask_esp, 'stage2-mask-real-esp-mask_esp-r.png')
+            
         # mask = torch.argmax(outputs[0], 1) 
         for jj in range(len(mask)):  
             single_label_mask = mask[jj]
@@ -481,12 +564,13 @@ class SelectRegions(nn.Module):
         del graph_nodes
         return pool_x, x.size(0), x_cropped
 class GraphVLAD(nn.Module):
-    def __init__(self, base_model, net_vlad, fastscnn, NB):
+    def __init__(self, base_model, net_vlad, fastscnn, espnet, NB):
         super(GraphVLAD, self).__init__()
         self.base_model = base_model
         self.fastscnn = fastscnn
         self.net_vlad = net_vlad
-        
+        self.espnet = espnet
+
         self.NB = NB
         self.mask = True
                 
@@ -499,7 +583,7 @@ class GraphVLAD(nn.Module):
 
     def forward(self, x):
         node_features_list = []
-        pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
+        pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn, self.espnet)
         
         neighborsFeat = []
         for i in range(self.NB + 1):
@@ -541,7 +625,7 @@ class GraphVLADPCA(nn.Module):
         self.net_vlad._init_params()
     def forward(self, x):
         node_features_list = []
-        _, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
+        _, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn, self.espnet)
         
         neighborsFeat = []
         for i in range(self.NB + 1):

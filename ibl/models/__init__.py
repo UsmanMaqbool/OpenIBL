@@ -4,7 +4,7 @@ from .vgg import *
 from .resnet import *
 from .netvlad import *
 from .fast_scnn import *
-
+from .espnet import *
 
 __factory = {
     'vgg16': vgg16,
@@ -17,7 +17,7 @@ __factory = {
     'graphvlad': GraphVLAD,
     'graphvladpca': GraphVLADPCA,
     'graphvladembedregion': GraphVLADEmbedRegion,
-    
+    'espnet': ESPNet,
 }
 
 
