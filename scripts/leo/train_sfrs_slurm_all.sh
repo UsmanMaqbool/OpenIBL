@@ -90,7 +90,7 @@ echo "Other nodes: $NODES"
 # ===================================================================================================
 LOSS="sare_ind"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0910-fastscnn/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -135,7 +135,7 @@ done
 #===================================================================================================
 LOSS="sare_joint"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0910-fastscnn/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -181,7 +181,7 @@ done
 
 LOSS="triplet"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0910-fastscnn/${ARCH}-${METHOD}-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
