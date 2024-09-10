@@ -66,7 +66,7 @@ DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
 ## You can load a software environment or use a singularity container.
 ## CONTAINER="singularity exec --nv /path/to/container.sif" (--nv option is to enable gpu)
 module purge
-module load conda/24.1.2 intel/2019.1.144 openmpi/4.0.0
+module load conda/24.3.0 intel/2019.1.144 openmpi/4.0.0
 conda activate openibl
 
 # PRINTS
