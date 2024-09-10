@@ -477,19 +477,18 @@ class SelectRegions(nn.Module):
             pre_l2 = x[img_i]
             if self.visualize:
                 save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=pre_l2, img_i=img_i)
-            embed_image = torch.zeros_like(pre_l2)
 
-            if self.mask:
-                for i, label in enumerate(labels):
-                    binary_mask = (all_label_mask == label).float()
-                    embed_image = (pre_l2 * binary_mask) + embed_image
-                    if self.visualize:
-                        embed_file_name = f'embed_{i}.png'  # Customize the naming pattern as needed
-                        save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name=embed_file_name)
-                embed_image = F.normalize(embed_image, p=2, dim=2)    
-                if self.visualize:
-                    embed_file_name = f'embed_normlalized{i}.png'  # Customize the naming pattern as needed
-                    save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name=embed_file_name)
+            # if self.mask:
+            #     for i, label in enumerate(labels):
+            #         binary_mask = (all_label_mask == label).float()
+            #         embed_image = (pre_l2 * binary_mask) + embed_image
+            #         if self.visualize:
+            #             embed_file_name = f'embed_{i}.png'  # Customize the naming pattern as needed
+            #             save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name=embed_file_name)
+            #     embed_image = F.normalize(embed_image, p=2, dim=2)    
+            #     if self.visualize:
+            #         embed_file_name = f'embed_normlalized{i}.png'  # Customize the naming pattern as needed
+            #         save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name=embed_file_name)
             
             ### Crop regions
             regions = masks_to_boxes(masks.to(torch.float32))
@@ -497,15 +496,19 @@ class SelectRegions(nn.Module):
             
             # sub_nodes.append(embed_image.unsqueeze(0))
             if self.mask:
-                for i, label in enumerate(labels):
+                for i, _ in enumerate(labels):
                     x_min, y_min, x_max, y_max = boxes[i]
                     # binary_mask = (all_label_mask == label).float()
-                    embed_image_c = rsizet(embed_image[:, y_min:y_max, x_min:x_max])
+                    embed_image_c = rsizet(pre_l2[:, y_min:y_max, x_min:x_max])
+                    if self.visualize:
+                        embed_file_name = f'embed_{i}.png'  # Customize the naming pattern as needed
+                        x_min, y_min, x_max, y_max = regions[i].to(torch.long)
+                        save_image_with_heatmap(tensor_image=xx[img_i][:, y_min:y_max, x_min:x_max], pre_l2=embed_image_c, img_i=img_i, file_name=embed_file_name)
                     sub_nodes.append(embed_image_c.unsqueeze(0))
 
             if len(sub_nodes) < self.NB:
                 if self.visualize:
-                    save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name='embed_image.png')
+                    save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=pre_l2, img_i=img_i, file_name='pre_l2.png')
                 bb_x = [
                     [int(W / 4), int(H / 4), int(3 * W / 4), int(3 * H / 4)],
                     [0, 0, int(2 * W / 3), H],
@@ -514,11 +517,11 @@ class SelectRegions(nn.Module):
                     [0, int(H / 3), W, H]                    
                 ]
                 for i in range(len(bb_x) - len(sub_nodes)):
-                    x_nodes = embed_image[:, bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
+                    x_nodes = pre_l2[:, bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
                     sub_nodes.append(rsizet(x_nodes.unsqueeze(0)))
                     if self.visualize:
                         patch_file_name = f'patch_{i}.png'  # Customize the naming pattern as needed
-                        save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name=patch_file_name, patch_idx=i)
+                        save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=pre_l2, img_i=img_i, file_name=patch_file_name, patch_idx=i)
 
             # Stack the cropped patches and store them in graph_nodes
             aa = torch.stack(sub_nodes, 1)
