@@ -361,7 +361,7 @@ class SelectRegions(nn.Module):
         super(SelectRegions, self).__init__()
         self.NB = NB
         self.mask = Mask
-        self.visualize = False
+        self.visualize = True
         
     def relabel(self, img):
         """
@@ -464,8 +464,12 @@ class SelectRegions(nn.Module):
             all_label_mask = pred_all[img_i]
             labels_all, label_count_all = all_label_mask.unique(return_counts=True)
             
+            mask_t = label_count_all >= 10000
+            labels = labels_all[mask_t][:-1]
+
+
             # Create masks for each label and convert them to bounding boxes
-            masks = all_label_mask == labels_all[:, None, None]
+            masks = all_label_mask == labels[:, None, None]
             all_label_mask = rsizet(all_label_mask.unsqueeze(0)).squeeze(0)
 
 
@@ -473,27 +477,41 @@ class SelectRegions(nn.Module):
             pre_l2 = x[img_i]
             if self.visualize:
                 save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=pre_l2, img_i=img_i)
-            
+            embed_image = torch.zeros_like(pre_l2)
+
             if self.mask:
-                for i, label in enumerate(labels_all):
+                for i, label in enumerate(labels):
                     binary_mask = (all_label_mask == label).float()
-                    embed_image = (pre_l2 * binary_mask) + pre_l2
+                    embed_image = (pre_l2 * binary_mask) + embed_image
                     if self.visualize:
                         embed_file_name = f'embed_{i}.png'  # Customize the naming pattern as needed
                         save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name=embed_file_name)
                 embed_image = F.normalize(embed_image, p=2, dim=2)    
-                sub_nodes.append(embed_image.unsqueeze(0))
-
+                if self.visualize:
+                    embed_file_name = f'embed_normlalized{i}.png'  # Customize the naming pattern as needed
+                    save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name=embed_file_name)
+            
+            ### Crop regions
+            regions = masks_to_boxes(masks.to(torch.float32))
+            boxes = (regions / 16).to(torch.long)
+            
+            # sub_nodes.append(embed_image.unsqueeze(0))
+            if self.mask:
+                for i, label in enumerate(labels):
+                    x_min, y_min, x_max, y_max = boxes[i]
+                    # binary_mask = (all_label_mask == label).float()
+                    embed_image_c = rsizet(embed_image[:, y_min:y_max, x_min:x_max])
+                    sub_nodes.append(embed_image_c.unsqueeze(0))
 
             if len(sub_nodes) < self.NB:
                 if self.visualize:
                     save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name='embed_image.png')
                 bb_x = [
+                    [int(W / 4), int(H / 4), int(3 * W / 4), int(3 * H / 4)],
                     [0, 0, int(2 * W / 3), H],
                     [int(W / 3), 0, W, H],
                     [0, 0, W, int(2 * H / 3)],
-                    [0, int(H / 3), W, H],
-                    [int(W / 4), int(H / 4), int(3 * W / 4), int(3 * H / 4)],
+                    [0, int(H / 3), W, H]                    
                 ]
                 for i in range(len(bb_x) - len(sub_nodes)):
                     x_nodes = embed_image[:, bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
