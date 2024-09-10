@@ -361,7 +361,7 @@ class SelectRegions(nn.Module):
         super(SelectRegions, self).__init__()
         self.NB = NB
         self.mask = Mask
-        self.visualize = True
+        self.visualize = False
         
     def relabel(self, img):
         """
