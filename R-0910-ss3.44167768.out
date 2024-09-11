@@ -1,0 +1,1408 @@
+Tue Sep 10 11:45:50 EDT 2024
+/home/m.maqboolbhutta/usman_ws/codes/openibl2
+/home/m.maqboolbhutta/.conda/envs/openibl2/bin/python
+Host: c0800a-s23
+Other nodes: 
+/home/m.maqboolbhutta/usman_ws/models/openibl/0910-ss1-fastscnn/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-10-Sep
+==========Starting Training=============
+========================================
+Use GPU: 0 for training, rank no.0 of world_size 4
+Use GPU: 2 for training, rank no.2 of world_size 4
+Use GPU: 3 for training, rank no.3 of world_size 4
+Use GPU: 1 for training, rank no.1 of world_size 4
+==========
+Args:Namespace(arch='vgg16', cache_size=1000, data_dir='/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/', dataset='pitts', deterministic=False, epochs=5, eval_step=1, features=4096, generations=4, gpu=0, height=480, init_dir='/blue/hmedeiros/m.maqboolbhutta/datasets/official/openibl-init', iters=0, launcher='slurm', layers='conv5', logs_dir='/home/m.maqboolbhutta/usman_ws/models/openibl/0910-ss1-fastscnn/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-10-Sep', loss_type='sare_ind', lr=0.001, margin=0.1, method='graphvlad', momentum=0.9, neg_num=10, neg_pool=1000, ngpus_per_node=4, nowhiten=False, num_clusters=64, pos_num=10, pos_pool=20, print_freq=500, rank=0, resume='', scale='30k', seed=43, segmentation_head='/home/m.maqboolbhutta/usman_ws/datasets/official/fast_scnn/fast_scnn_citys.pth', soft_weight=0.5, step_size=5, sync_gather=False, syncbn=True, tcp_port='6010', temperature=[0.07, 0.07, 0.06, 0.05], test_batch_size=50, total_gpus=4, tuple_size=1, weight_decay=0.001, width=640, workers=2, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+Loading centroids from /blue/hmedeiros/m.maqboolbhutta/datasets/official/openibl-init/vgg16_pitts_64_desc_cen.hdf5
+===> Loading segmentation model
+Loading centroids from /blue/hmedeiros/m.maqboolbhutta/datasets/official/openibl-init/vgg16_pitts_64_desc_cen.hdf5
+===> Loading segmentation model
+Test the initial model:
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          79.0%
+  top-5          92.2%
+  top-10         95.6%
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          87.7%
+  top-5          96.0%
+  top-10         97.7%
+
+ * Finished generation   0 epoch   4 recall@1: 87.7%  recall@5: 96.0%  recall@10: 97.7%  best@5: 96.0% *
+
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.0%
+  top-5          95.8%
+  top-10         97.6%
+
+ * Finished generation   1 epoch   0 recall@1: 88.0%  recall@5: 95.8%  recall@10: 97.6%  best@5: 96.0%
+
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.5%
+  top-5          96.4%
+  top-10         97.9%
+
+ * Finished generation   1 epoch   1 recall@1: 88.5%  recall@5: 96.4%  recall@10: 97.9%  best@5: 96.4% *
+
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.9%
+  top-5          96.3%
+  top-10         97.9%
+
+ * Finished generation   1 epoch   2 recall@1: 88.9%  recall@5: 96.3%  recall@10: 97.9%  best@5: 96.4%
+
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          89.0%
+  top-5          96.5%
+  top-10         98.0%
+
+ * Finished generation   1 epoch   3 recall@1: 89.0%  recall@5: 96.5%  recall@10: 98.0%  best@5: 96.5% *
+
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.6%
+  top-5          96.2%
+  top-10         97.9%
+
+ * Finished generation   1 epoch   4 recall@1: 88.6%  recall@5: 96.2%  recall@10: 97.9%  best@5: 96.5%
+
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          86.6%
+  top-5          95.2%
+  top-10         97.1%
+
+ * Finished generation   2 epoch   0 recall@1: 86.6%  recall@5: 95.2%  recall@10: 97.1%  best@5: 96.5%
+
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.8%
+  top-5          96.2%
+  top-10         97.7%
+
+ * Finished generation   2 epoch   1 recall@1: 88.8%  recall@5: 96.2%  recall@10: 97.7%  best@5: 96.5%
+
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.6%
+  top-5          96.1%
+  top-10         97.7%
+
+ * Finished generation   2 epoch   2 recall@1: 88.6%  recall@5: 96.1%  recall@10: 97.7%  best@5: 96.5%
+
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          89.0%
+  top-5          96.3%
+  top-10         97.8%
+
+ * Finished generation   2 epoch   3 recall@1: 89.0%  recall@5: 96.3%  recall@10: 97.8%  best@5: 96.5%
+
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.9%
+  top-5          96.3%
+  top-10         97.9%
+
+ * Finished generation   2 epoch   4 recall@1: 88.9%  recall@5: 96.3%  recall@10: 97.9%  best@5: 96.5%
+
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          87.1%
+  top-5          95.2%
+  top-10         96.9%
+
+ * Finished generation   3 epoch   0 recall@1: 87.1%  recall@5: 95.2%  recall@10: 96.9%  best@5: 96.5%
+
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.0%
+  top-5          95.5%
+  top-10         97.3%
+
+ * Finished generation   3 epoch   1 recall@1: 88.0%  recall@5: 95.5%  recall@10: 97.3%  best@5: 96.5%
+
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.3%
+  top-5          95.8%
+  top-10         97.4%
+
+ * Finished generation   3 epoch   2 recall@1: 88.3%  recall@5: 95.8%  recall@10: 97.4%  best@5: 96.5%
+
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.1%
+  top-5          95.6%
+  top-10         97.4%
+
+ * Finished generation   3 epoch   3 recall@1: 88.1%  recall@5: 95.6%  recall@10: 97.4%  best@5: 96.5%
+
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.0%
+  top-5          95.7%
+  top-10         97.4%
+
+ * Finished generation   3 epoch   4 recall@1: 88.0%  recall@5: 95.7%  recall@10: 97.4%  best@5: 96.5%
+
+Performing PCA reduction on the best model:
+=> Loaded checkpoint '/home/m.maqboolbhutta/usman_ws/models/openibl/0910-ss1-fastscnn/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-10-Sep/model_best.pth.tar'
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+calculating PCA parameters...
+================= PCA RESULT ==================
+U: (32768, 4096)
+lams: (4096,)
+mu: (32768, 1)
+Utmu: (4096, 1)
+===============================================
+Testing on Pitts30k-test:
+load PCA parameters...
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.8%
+  top-5          94.4%
+  top-10         96.0%

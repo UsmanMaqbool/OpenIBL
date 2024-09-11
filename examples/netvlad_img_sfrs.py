@@ -116,7 +116,7 @@ def get_model(args):
     elif(args.method=='graphvlad'):
         if (args.rank==0):
             print('===> Loading segmentation model')
-        segmentation_model = get_segmentation_model(args.segmentation_head)
+        segmentation_model = get_segmentation_model(args.fast_scnn)
         model = models.create('graphvladembedregion', base_model, pool_layer, tuple_size=args.tuple_size, fastscnn=segmentation_model, NB=5)
 
 
@@ -329,5 +329,5 @@ if __name__ == '__main__':
                         default=osp.join(working_dir, 'logs'))
     parser.add_argument('--init-dir', type=str, metavar='PATH',
                         default=osp.join(working_dir, '..', 'logs'))
-    parser.add_argument('--segmentation-head', type=str, default='', help='Path to segmentation head weights')
+    parser.add_argument('--fast-scnn', type=str, default='', help='Path to Fast SCNN encoder file')
     main()
