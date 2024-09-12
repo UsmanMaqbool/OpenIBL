@@ -463,9 +463,18 @@ class SelectRegions(nn.Module):
         for img_i in range(N):
             all_label_mask = pred_all[img_i]
             labels_all, label_count_all = all_label_mask.unique(return_counts=True)
+            ## remove 255 labels
+            labels_all = labels_all[:-1]
+            label_count_all = label_count_all[:-1]
+
+            # Sort the filtered counts in descending order and get the sorted indices
+            sorted_counts, sorted_indices = torch.sort(label_count_all, descending=True)
             
-            mask_t = label_count_all >= 10000
-            labels = labels_all[mask_t][:-1]
+            # Reorder the filtered labels based on the sorted indices
+            sorted_labels = labels_all[sorted_indices]
+            # Apply the mask after sorting
+            mask_t = sorted_counts >= 10000
+            labels = sorted_labels[mask_t]
 
 
             # Create masks for each label and convert them to bounding boxes
