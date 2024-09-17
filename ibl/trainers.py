@@ -251,61 +251,27 @@ class SFRSTrainer(object):
             sim_diff_label, _, _ = self.model_cache(inputs_diff) # B*diff_pos_num*9*9
         sim_diff, _, _ = self.model(inputs_diff)
 
-        # if (gen==0):
-        #     loss_hard = self._get_loss(vlad_anchors[:,0,0], vlad_pairs[:,0,0], vlad_pairs[:,1:,0], B, loss_type)
-        # else:
-        #     loss_hard = 0
-        #     for tri_idx in range(B):
-        #         loss_hard += self._get_hard_loss(vlad_anchors[tri_idx,0,0].contiguous(), vlad_pairs[tri_idx,0,0].contiguous(), \
-        #                                         vlad_pairs[tri_idx,1:], sim_easy[tri_idx,1:,0].contiguous().detach(), loss_type)
-        #     loss_hard /= B
 
-        if(self.method=='netvlad'):
-            if (gen==0):
-                loss_hard = self._get_loss(vlad_anchors[:,0,0], vlad_pairs[:,0,0], vlad_pairs[:,1:,0], B, loss_type)
-            else:
-                loss_hard = 0
-                for tri_idx in range(B):
-                    loss_hard += self._get_hard_loss(vlad_anchors[tri_idx,0,0].contiguous(), vlad_pairs[tri_idx,0,0].contiguous(), \
-                                                    vlad_pairs[tri_idx,1:], sim_easy[tri_idx,1:,0].contiguous().detach(), loss_type)
-                loss_hard /= B
-            log_sim_diff = F.log_softmax(sim_diff[:,:,0].contiguous().view(B,-1)/self.temp[0], dim=1)
-            loss_soft = (- F.softmax(sim_diff_label[:,:,0].contiguous().view(B,-1)/self.temp[gen], dim=1).detach() * log_sim_diff).mean(0).sum()
-            
-        elif(self.method=='graphvlad'):
-            if (gen==0):
-                loss_hard = self._get_loss(vlad_anchors, vlad_pairs[:,0,:], vlad_pairs[:,1:,:], B, loss_type)
-            else:
-                loss_hard = 0
-                for tri_idx in range(B):
-                    loss_hard += self._get_hard_loss(vlad_anchors[tri_idx].contiguous(), vlad_pairs[tri_idx,0].contiguous(), \
-                                                    vlad_pairs[tri_idx,1:], sim_easy[tri_idx,1:].contiguous().detach(), loss_type)
-                loss_hard /= B
-            log_sim_diff = F.log_softmax(sim_diff[:,0].contiguous().view(B,-1)/self.temp[0], dim=1)
-            loss_soft = (- F.softmax(sim_diff_label[:,0].contiguous().view(B,-1)/self.temp[gen], dim=1).detach() * log_sim_diff).mean(0).sum()
+        if (gen==0):
+            loss_hard = self._get_loss(vlad_anchors[:,0,0], vlad_pairs[:,0,0], vlad_pairs[:,1:,0], B, loss_type)
+        else:
+            loss_hard = 0
+            for tri_idx in range(B):
+                loss_hard += self._get_hard_loss(vlad_anchors[tri_idx,0,0].contiguous(), vlad_pairs[tri_idx,0,0].contiguous(), \
+                                                vlad_pairs[tri_idx,1:], sim_easy[tri_idx,1:,0].contiguous().detach(), loss_type)
+            loss_hard /= B
+        log_sim_diff = F.log_softmax(sim_diff[:,:,0].contiguous().view(B,-1)/self.temp[0], dim=1)
+        loss_soft = (- F.softmax(sim_diff_label[:,:,0].contiguous().view(B,-1)/self.temp[gen], dim=1).detach() * log_sim_diff).mean(0).sum()
         
         return loss_hard, loss_soft
 
     def _get_hard_loss(self, anchors, positives, negatives, score_neg, loss_type):
-        # select the most difficult regions for negatives
-       #     Yeh method _get_hard_loss ka kaam sab se mushkil negative regions ko select karna aur unko loss calculation ke liye use karna hai. Is method mein:
-
-        # Negative Regions ka Selection:
-            #     Pehle, score_neg jo ke negative samples ka score hai, usko reshape kiya jata hai taake wo neg_num by -1 matrix ban jaye.
-            #     Phir, argmax(1) use kiya jata hai taake har row ka maximum score wale index ko select kiya jaye. Yeh indices wo positions hain jahan sab se mushkil negative regions hain.
-            #     score_arg ko reshape kiya jata hai taake yeh negatives ki shape ke sath match kare aur expand kiya jata hai.
-            #     torch.gather function use karke, negatives mein se in indices ke sath corresponding negative regions ko select kiya jata hai.
-        # select_negatives mein ab sab se mushkil negative regions hain.
-        if(self.method=='netvlad'):
-            score_arg = score_neg.view(self.neg_num,-1).argmax(1)
-            score_arg = score_arg.unsqueeze(-1).unsqueeze(-1).expand_as(negatives).contiguous()
-            select_negatives = torch.gather(negatives,1,score_arg)
-            select_negatives = select_negatives[:,0]
-        elif(self.method=='graphvlad'):    
-            score_arg = score_neg.unsqueeze(-1).expand_as(negatives).contiguous()
-            score_arg = score_arg.long()
-            select_negatives = torch.gather(negatives,1,score_arg)
-
+       
+        score_arg = score_neg.view(self.neg_num,-1).argmax(1)
+        score_arg = score_arg.unsqueeze(-1).unsqueeze(-1).expand_as(negatives).contiguous()
+        select_negatives = torch.gather(negatives,1,score_arg)
+        select_negatives = select_negatives[:,0]
+       
         return self._get_loss(anchors.unsqueeze(0).contiguous(), \
                             positives.unsqueeze(0).contiguous(), \
                             select_negatives.unsqueeze(0).contiguous(), 1, loss_type)
