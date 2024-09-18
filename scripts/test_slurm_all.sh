@@ -42,22 +42,16 @@ fi
 GPUS=4
 METHOD="$1"
 ARCH="$2"
-DATASET="$3"
-SCALE="$4"
-FILES="$5"
+FILES="$3"
 NUMCLUSTER=64
 LAYERS=conv5
-LR=0.01
-TUMPLESIZE=4
 CACHEBS=32
-NPOCH=10
 PORT=6010
 
 
 INIT_DIR="/blue/hmedeiros/m.maqboolbhutta/datasets/openibl-init"
 ESP_ENCODER="/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth"
 DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
-# FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.01-tuple4-20-Jun/"
 
 
 # LOAD PYTORCH SOFTWARE ENVIRONMENT
@@ -66,8 +60,8 @@ DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
 ## You can load a software environment or use a singularity container.
 ## CONTAINER="singularity exec --nv /path/to/container.sif" (--nv option is to enable gpu)
 module purge
-module load conda/24.1.2 intel/2019.1.144 openmpi/4.0.0
-conda activate openibl
+module load conda/24.3.0 intel/2019.1.144 openmpi/4.0.0
+conda activate openibl2
 
 # PRINTS
 #=======
@@ -79,24 +73,52 @@ echo "Other nodes: $NODES"
 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+if [ -d "${FILES}" ]; then
+  FILES="${FILES}/*.tar"
+else
+  FILES="${FILES}"
+fi
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
 do
   # take action on each file. $f store current file name
-SCALE
   echo "==========################============="
-  echo " Testing $RESUME file..."
+  echo " Testing $RESUME file on Pitts250k..."
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-   examples/test_pitts_tokyo.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size 32 -j 2 \
+   examples/test.py --launcher pytorch \
+    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
-    --num-clusters ${NUMCLUSTER}
+    --num-clusters ${NUMCLUSTER} -d pitts --scale 250k
   echo "==========################============="
-  echo " Done Testing with $RESUME file..."
+  echo " Done Testing with $RESUME file on Pitts250k..."
+  echo "======================================="  
+
+  echo "==========################============="
+  echo " Testing $RESUME file on Pitts30k..."
+  echo "======================================="
+  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+   examples/test.py --launcher pytorch \
+    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    --vlad --reduction --method ${METHOD} \
+    --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
+    --num-clusters ${NUMCLUSTER} -d pitts --scale 30k
+  echo "==========################============="
+  echo " Done Testing with $RESUME file on Pitts30k..."
+  echo "======================================="  
+
+  echo "==========################============="
+  echo " Testing $RESUME file on Tokyo..."
+  echo "======================================="
+  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+   examples/test.py --launcher pytorch \
+    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    --vlad --reduction --method ${METHOD} \
+    --resume ${RESUME} --esp-encoder ${ESP_ENCODER} \
+    --num-clusters ${NUMCLUSTER} -d tokyo
+  echo "==========################============="
+  echo " Done Testing with $RESUME file on Tokyo..."
   echo "======================================="  
 done
-
