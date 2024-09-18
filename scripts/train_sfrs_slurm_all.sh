@@ -48,13 +48,12 @@ NUMCLUSTER=64
 LAYERS=conv5
 LR=0.001
 TUMPLESIZE=1
-CACHEBS=50
+CACHEBS=16
 NPOCH=5
 PORT=6010
 
 
 INIT_DIR="/blue/hmedeiros/m.maqboolbhutta/datasets/official/openibl-init"
-# SHEADWEIGHTS="/home/m.maqboolbhutta/usman_ws/datasets/netvlad-official/espnet-encoder/espnet_p_2_q_8.pth"
 DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
 FAST_SCNN="/home/m.maqboolbhutta/usman_ws/datasets/official/fast_scnn/fast_scnn_citys.pth"
 
@@ -66,7 +65,7 @@ FAST_SCNN="/home/m.maqboolbhutta/usman_ws/datasets/official/fast_scnn/fast_scnn_
 ## CONTAINER="singularity exec --nv /path/to/container.sif" (--nv option is to enable gpu)
 module purge
 module load conda/24.3.0 intel/2019.1.144 openmpi/4.0.0
-conda activate openibl2
+conda activate openibl3
 
 # PRINTS
 #=======
@@ -89,7 +88,7 @@ echo "Other nodes: $NODES"
 # ===================================================================================================
 LOSS="sare_ind"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0911-s1-fastscnn/${ARCH}-${METHOD}_sfrs-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0915-try1/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -105,9 +104,7 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
   --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 --generations 4 --temperature 0.07 0.07 0.06 0.05 --logs-dir ${FILES} --data-dir ${DATASET_DIR} \
   --init-dir ${INIT_DIR} --fast-scnn=${FAST_SCNN} \
   --method ${METHOD} 
-  # --resume="/home/m.maqboolbhutta/usman_ws/models/openibl/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-04-Sep/checkpoint3_2.pth.tar"
 
-# FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0910-fastscnn/vgg16-graphvlad-sare_ind-pitts30k-lr0.001-tuple4-10-Sep/checkpoint_others"
 echo "==========Testing============="
 FILES="${FILES}/*.tar"
 echo ${FILES}
@@ -116,16 +113,42 @@ for RESUME in $FILES
 do
   # take action on each file. $f store current file name
   echo "==========################============="
-  echo " Testing $RESUME file..."
+  echo " Testing $RESUME file on Pitts250k..."
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-   examples/test_pitts_tokyo.py --launcher pytorch \
+   examples/test.py --launcher pytorch \
     -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
     --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME} --fast-scnn=${FAST_SCNN} \
-    --num-clusters ${NUMCLUSTER}
+    --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
+    --num-clusters ${NUMCLUSTER} -d pitts --scale 250k
   echo "==========################============="
-  echo " Done Testing with $RESUME file..."
+  echo " Done Testing with $RESUME file on Pitts250k..."
+  echo "======================================="  
+
+  echo "==========################============="
+  echo " Testing $RESUME file on Pitts30k..."
+  echo "======================================="
+  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+   examples/test.py --launcher pytorch \
+    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    --vlad --reduction --method ${METHOD} \
+    --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
+    --num-clusters ${NUMCLUSTER} -d pitts --scale 30k
+  echo "==========################============="
+  echo " Done Testing with $RESUME file on Pitts30k..."
+  echo "======================================="  
+
+  echo "==========################============="
+  echo " Testing $RESUME file on Tokyo..."
+  echo "======================================="
+  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+   examples/test.py --launcher pytorch \
+    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    --vlad --reduction --method ${METHOD} \
+    --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
+    --num-clusters ${NUMCLUSTER} -d tokyo
+  echo "==========################============="
+  echo " Done Testing with $RESUME file on Tokyo..."
   echo "======================================="  
 done
 
@@ -135,7 +158,7 @@ done
 #===================================================================================================
 LOSS="sare_joint"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0911-s1-fastscnn/${ARCH}-${METHOD}_sfrs-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0915-try1/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -160,18 +183,43 @@ echo "=============================="
 for RESUME in $FILES
 do
   # take action on each file. $f store current file name
-
   echo "==========################============="
-  echo " Testing $RESUME file..."
+  echo " Testing $RESUME file on Pitts250k..."
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-   examples/test_pitts_tokyo.py --launcher pytorch \
+   examples/test.py --launcher pytorch \
     -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
     --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME} --fast-scnn=${FAST_SCNN} \
-  --num-clusters ${NUMCLUSTER}
+    --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
+    --num-clusters ${NUMCLUSTER} -d pitts --scale 250k
   echo "==========################============="
-  echo " Done Testing with $RESUME file..."
+  echo " Done Testing with $RESUME file on Pitts250k..."
+  echo "======================================="  
+
+  echo "==========################============="
+  echo " Testing $RESUME file on Pitts30k..."
+  echo "======================================="
+  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+   examples/test.py --launcher pytorch \
+    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    --vlad --reduction --method ${METHOD} \
+    --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
+    --num-clusters ${NUMCLUSTER} -d pitts --scale 30k
+  echo "==========################============="
+  echo " Done Testing with $RESUME file on Pitts30k..."
+  echo "======================================="  
+
+  echo "==========################============="
+  echo " Testing $RESUME file on Tokyo..."
+  echo "======================================="
+  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+   examples/test.py --launcher pytorch \
+    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    --vlad --reduction --method ${METHOD} \
+    --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
+    --num-clusters ${NUMCLUSTER} -d tokyo
+  echo "==========################============="
+  echo " Done Testing with $RESUME file on Tokyo..."
   echo "======================================="  
 done
 
@@ -181,7 +229,7 @@ done
 
 LOSS="triplet"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0911-s1-fastscnn/${ARCH}-${METHOD}_sfrs-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0915-try1/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -206,17 +254,42 @@ echo "=============================="
 for RESUME in $FILES
 do
   # take action on each file. $f store current file name
-
   echo "==========################============="
-  echo " Testing $RESUME file..."
+  echo " Testing $RESUME file on Pitts250k..."
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-   examples/test_pitts_tokyo.py --launcher pytorch \
+   examples/test.py --launcher pytorch \
     -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
     --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME} --fast-scnn=${FAST_SCNN} \
-  --num-clusters ${NUMCLUSTER}
+    --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
+    --num-clusters ${NUMCLUSTER} -d pitts --scale 250k
   echo "==========################============="
-  echo " Done Testing with $RESUME file..."
+  echo " Done Testing with $RESUME file on Pitts250k..."
+  echo "======================================="  
+
+  echo "==========################============="
+  echo " Testing $RESUME file on Pitts30k..."
+  echo "======================================="
+  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+   examples/test.py --launcher pytorch \
+    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    --vlad --reduction --method ${METHOD} \
+    --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
+    --num-clusters ${NUMCLUSTER} -d pitts --scale 30k
+  echo "==========################============="
+  echo " Done Testing with $RESUME file on Pitts30k..."
+  echo "======================================="  
+
+  echo "==========################============="
+  echo " Testing $RESUME file on Tokyo..."
+  echo "======================================="
+  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+   examples/test.py --launcher pytorch \
+    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    --vlad --reduction --method ${METHOD} \
+    --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
+    --num-clusters ${NUMCLUSTER} -d tokyo
+  echo "==========################============="
+  echo " Done Testing with $RESUME file on Tokyo..."
   echo "======================================="  
 done

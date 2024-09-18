@@ -21,7 +21,7 @@
 #SBATCH --distribution=cyclic:cyclic
 
 ## To RUN
-#  sbatch --j 0903-s2 scripts/leo/test_slurm_all.sh graphvlad vgg16 /home/m.maqboolbhutta/usman_ws/models/openibl/0828-s-1/vgg16-graphvlad_sfrs-sare_ind-pitts30k-lr0.001-tuple4-03-Sep/
+#  sbatch --j 0903-s2 scripts/leo/test_slurm_all.sh graphvlad vgg16 
 ####################################################################################################
 
 # PYTHON SCRIPT
@@ -30,11 +30,9 @@
 #This is the python script to run in the pytorch environment
 PYTHON=${PYTHON:-"python"}
 allowed_arguments_list1=("netvlad" "graphvlad")
-allowed_arguments_list2=("triplet" "sare_ind" "sare_joint")
 
 if [ "$#" -lt 2 ]; then
     echo "Arguments error: <METHOD (netvlad|graphvlad>"
-    echo "Arguments error: <DATASET (pitts|tokyo)>"
     echo "./train_baseline_dist.sh netvlad triplet pitts"    
     exit 1
 fi
@@ -43,10 +41,9 @@ GPUS=4
 METHOD="$1"
 ARCH="$2"
 FILES="$3"
-
 NUMCLUSTER=64
-TUMPLESIZE=4
-CACHEBS=32
+LAYERS=conv5
+CACHEBS=16
 PORT=6010
 
 
@@ -63,7 +60,7 @@ DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
 ## You can load a software environment or use a singularity container.
 ## CONTAINER="singularity exec --nv /path/to/container.sif" (--nv option is to enable gpu)
 module purge
-module load conda/24.1.2 intel/2019.1.144 openmpi/4.0.0
+module load conda/24.3.0 intel/2019.1.144 openmpi/4.0.0
 conda activate openibl
 
 # PRINTS
@@ -75,27 +72,55 @@ echo "Host: $HOST"
 echo "Other nodes: $NODES"
 
 
-echo "==========Testing============="
-# FILES="${FILES}/*.tar"
-FILES=$(ls -r ${FILES}/*.tar)
 
+echo "==========Testing============="
+if [ -d "${FILES}" ]; then
+  FILES="${FILES}/*.tar"
+else
+  FILES="${FILES}"
+fi
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
 do
   # take action on each file. $f store current file name
-SCALE
   echo "==========################============="
-  echo " Testing $RESUME file..."
+  echo " Testing $RESUME file on Pitts250k..."
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-  examples/test_pitts_tokyo.py --launcher pytorch \
-  -a ${ARCH} --test-batch-size 64 -j 8 \
-  --vlad --reduction --method ${METHOD} \
-  --resume ${RESUME} --fast-scnn=${FAST_SCNN} \
-  --num-clusters ${NUMCLUSTER}
+   examples/test.py --launcher pytorch \
+    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    --vlad --reduction --method ${METHOD} \
+    --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
+    --num-clusters ${NUMCLUSTER} -d pitts --scale 250k
   echo "==========################============="
-  echo " Done Testing with $RESUME file..."
+  echo " Done Testing with $RESUME file on Pitts250k..."
+  echo "======================================="  
+
+  echo "==========################============="
+  echo " Testing $RESUME file on Pitts30k..."
+  echo "======================================="
+  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+   examples/test.py --launcher pytorch \
+    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    --vlad --reduction --method ${METHOD} \
+    --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
+    --num-clusters ${NUMCLUSTER} -d pitts --scale 30k
+  echo "==========################============="
+  echo " Done Testing with $RESUME file on Pitts30k..."
+  echo "======================================="  
+
+  echo "==========################============="
+  echo " Testing $RESUME file on Tokyo..."
+  echo "======================================="
+  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+   examples/test.py --launcher pytorch \
+    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    --vlad --reduction --method ${METHOD} \
+    --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
+    --num-clusters ${NUMCLUSTER} -d tokyo
+  echo "==========################============="
+  echo " Done Testing with $RESUME file on Tokyo..."
   echo "======================================="  
 done
 

@@ -362,57 +362,7 @@ class SelectRegions(nn.Module):
         self.NB = NB
         self.mask = Mask
         self.visualize = False
-        
-    def relabel(self, img):
-        """
-        This function relabels the predicted labels so that cityscape dataset can process
-        :param img: The image array to be relabeled
-        :return: The relabeled image array
-        """
-        ### Road 0 + Sidewalk 1
-        img[img == 1] = 1
-        img[img == 0] = 1
-
-        ### building 2 + wall 3 + fence 4
-        img[img == 2] = 2
-        img[img == 3] = 2
-        img[img == 4] = 2
-        
-
-        ### vegetation 8 + Terrain 9
-        img[img == 9] = 3
-        img[img == 8] = 3
-
-        ### Pole 5 + Traffic Light 6 + Traffic Signal
-        img[img == 7] = 4
-        img[img == 6] = 4
-        img[img == 5] = 4
-        
-        ### Sky 10
-        img[img == 10] = 5
-        
-
-        ## Rider 12 + motorcycle 17 + bicycle 18
-        img[img == 18] = 255
-        img[img == 17] = 255
-        img[img == 12] = 255
-
-
-        # cars 13 + truck 14 + bus 15 + train 16
-        img[img == 16] = 255
-        img[img == 15] = 255
-        img[img == 14] = 255
-        img[img == 13] = 255
-
-        ## Person
-        img[img == 11] = 255
-
-        ### Don't need, make these 255
-        ## Background
-        img[img == 19] = 255
-
-
-        return img                          
+                   
     
     def forward(self, x, base_model, fastscnn): 
         
@@ -453,13 +403,6 @@ class SelectRegions(nn.Module):
             # Assuming `pred_all` is your batch of predictions
             save_batch_masks(pred_all, 'stage2-mask-real.png')
         
-        
-        pred_all = self.relabel(pred_all)
-
-        if self.visualize:
-            # Assuming `pred_all` is your batch of predictions
-            save_batch_masks(pred_all, 'stage3-mask-merge.png')
-        
         for img_i in range(N):
             all_label_mask = pred_all[img_i]
             labels_all, label_count_all = all_label_mask.unique(return_counts=True)
@@ -467,20 +410,12 @@ class SelectRegions(nn.Module):
             labels_all = labels_all[:-1]
             label_count_all = label_count_all[:-1]
 
-            # Sort the filtered counts in descending order and get the sorted indices
-            sorted_counts, sorted_indices = torch.sort(label_count_all, descending=True)
-            
-            # Reorder the filtered labels based on the sorted indices
-            sorted_labels = labels_all[sorted_indices]
-            # Apply the mask after sorting
-            mask_t = sorted_counts >= 10000
-            labels = sorted_labels[mask_t]
-
+            mask_t = label_count_all >= 10000
+            labels = labels_all[mask_t]
 
             # Create masks for each label and convert them to bounding boxes
             masks = all_label_mask == labels[:, None, None]
             all_label_mask = rsizet(all_label_mask.unsqueeze(0)).squeeze(0)
-
 
             sub_nodes = []
             pre_l2 = x[img_i]
@@ -492,7 +427,6 @@ class SelectRegions(nn.Module):
             regions = masks_to_boxes(masks.to(torch.float32))
             boxes = (regions / 16).to(torch.long)
             
-            # sub_nodes.append(embed_image.unsqueeze(0))
             for i, _ in enumerate(labels[:min(2, len(labels))]):
                 x_min, y_min, x_max, y_max = boxes[i]
                 embed_image_c = rsizet(pre_l2[:, y_min:y_max, x_min:x_max])
