@@ -370,26 +370,28 @@ class SelectRegions(nn.Module):
         :return: The relabeled image array
         """
         ### Road 0 + Sidewalk 1
-        img[img == 1] = 1
-        img[img == 0] = 1
+        img[img == 1] = 255
+        img[img == 0] = 255
 
-        ### building 2 + wall 3 + fence 4
+        ### building 2 + wall 3
         img[img == 2] = 2
-        img[img == 3] = 2
-        img[img == 4] = 2
+        img[img == 3] = 3
+        
+        ### fence 4
+        img[img == 4] = 255
         
 
         ### vegetation 8 + Terrain 9
-        img[img == 9] = 3
-        img[img == 8] = 3
+        img[img == 9] = 255
+        img[img == 8] = 255
 
         ### Pole 5 + Traffic Light 6 + Traffic Signal
-        img[img == 7] = 4
-        img[img == 6] = 4
-        img[img == 5] = 4
+        img[img == 7] = 255
+        img[img == 6] = 255
+        img[img == 5] = 255
         
         ### Sky 10
-        img[img == 10] = 5
+        img[img == 10] = 255
         
 
         ## Rider 12 + motorcycle 17 + bicycle 18
@@ -413,6 +415,7 @@ class SelectRegions(nn.Module):
 
 
         return img                          
+                    
     
     def forward(self, x, base_model, fastscnn): 
         
@@ -472,7 +475,7 @@ class SelectRegions(nn.Module):
             masks = all_label_mask == labels[:, None, None]
             all_label_mask = rsizet(all_label_mask.unsqueeze(0)).squeeze(0)
 
-
+            
             sub_nodes = []
             pre_l2 = x[img_i]
             if self.visualize:
@@ -481,17 +484,19 @@ class SelectRegions(nn.Module):
 
             if self.mask:
                 for i, label in enumerate(labels):
-                    binary_mask = (all_label_mask == label).float()
+                    ## Fusing
+                    binary_mask = (all_label_mask == label).float()                    
                     embed_image = (pre_l2 * binary_mask) + embed_image
                     if self.visualize:
                         embed_file_name = f'embed_{i}.png'  # Customize the naming pattern as needed
                         save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name=embed_file_name)
+                        
                 embed_image = F.normalize(embed_image, p=2, dim=2)    
                 if self.visualize:
                     embed_file_name = f'embed_normlalized{i}.png'  # Customize the naming pattern as needed
                     save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name=embed_file_name)
             
-            ### Crop regions
+            ## Crop regions
             regions = masks_to_boxes(masks.to(torch.float32))
             boxes = (regions / 16).to(torch.long)
             

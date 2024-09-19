@@ -1,0 +1,1653 @@
+Wed Sep 18 12:49:28 EDT 2024
+/home/m.maqboolbhutta/usman_ws/codes/openibl5
+/home/m.maqboolbhutta/.conda/envs/openibl/bin/python
+Host: c1009a-s35
+Other nodes: 
+/home/m.maqboolbhutta/usman_ws/models/openibl/openibl5-9d8f-try2/vgg16-graphvlad_SFRS-sare_ind-pitts30k-lr0.001-tuple4-18-Sep
+==========Starting Training=============
+========================================
+Use GPU: 0 for training, rank no.0 of world_size 4
+Use GPU: 2 for training, rank no.2 of world_size 4
+Use GPU: 3 for training, rank no.3 of world_size 4
+Use GPU: 1 for training, rank no.1 of world_size 4
+==========
+Args:Namespace(arch='vgg16', cache_size=1000, data_dir='/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/', dataset='pitts', deterministic=False, epochs=5, eval_step=1, fast_scnn='/home/m.maqboolbhutta/usman_ws/datasets/official/fast_scnn/fast_scnn_citys.pth', features=4096, generations=4, gpu=0, height=480, init_dir='/blue/hmedeiros/m.maqboolbhutta/datasets/official/openibl-init', iters=0, launcher='slurm', layers='conv5', logs_dir='/home/m.maqboolbhutta/usman_ws/models/openibl/openibl5-9d8f-try2/vgg16-graphvlad_SFRS-sare_ind-pitts30k-lr0.001-tuple4-18-Sep', loss_type='sare_ind', lr=0.001, margin=0.1, method='graphvlad', momentum=0.9, neg_num=10, neg_pool=1000, ngpus_per_node=4, nowhiten=False, num_clusters=64, pos_num=10, pos_pool=20, print_freq=500, rank=0, resume='', scale='30k', seed=43, soft_weight=0.5, step_size=5, sync_gather=False, syncbn=True, tcp_port='6010', temperature=[0.07, 0.07, 0.06, 0.05], test_batch_size=16, total_gpus=4, tuple_size=1, weight_decay=0.001, width=640, workers=2, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+Loading centroids from /blue/hmedeiros/m.maqboolbhutta/datasets/official/openibl-init/vgg16_pitts_64_desc_cen.hdf5
+===> Loading segmentation model
+Loading centroids from /blue/hmedeiros/m.maqboolbhutta/datasets/official/openibl-init/vgg16_pitts_64_desc_cen.hdf5
+===> Loading segmentation model
+Test the initial model:
+Extract Features: [100/276]	Time 0.184 (0.268)	Data 0.000 (0.061)	
+Extract Features: [200/276]	Time 0.184 (0.229)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          79.5%
+  top-5          92.2%
+  top-10         95.2%
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.201 (0.244)	Data 0.001 (0.058)	
+Extract Features: [200/271]	Time 0.204 (0.215)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.201 (0.249)	Data 0.000 (0.060)	
+Extract Features: [200/271]	Time 0.186 (0.218)	Data 0.003 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.197 (0.253)	Data 0.000 (0.063)	
+Extract Features: [200/271]	Time 0.190 (0.221)	Data 0.011 (0.032)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.195 (0.251)	Data 0.000 (0.062)	
+Extract Features: [200/271]	Time 0.203 (0.219)	Data 0.001 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.193 (0.262)	Data 0.000 (0.075)	
+Extract Features: [200/271]	Time 0.200 (0.226)	Data 0.000 (0.038)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.177 (0.259)	Data 0.000 (0.072)	
+Extract Features: [200/271]	Time 0.195 (0.228)	Data 0.000 (0.037)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.190 (0.264)	Data 0.001 (0.071)	
+Extract Features: [200/271]	Time 0.186 (0.226)	Data 0.000 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.177 (0.259)	Data 0.000 (0.072)	
+Extract Features: [200/271]	Time 0.188 (0.226)	Data 0.000 (0.037)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Extract Features: [100/276]	Time 0.180 (0.261)	Data 0.000 (0.071)	
+Extract Features: [200/276]	Time 0.180 (0.227)	Data 0.001 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.8%
+  top-5          96.0%
+  top-10         97.5%
+
+ * Finished generation   0 epoch   4 recall@1: 88.8%  recall@5: 96.0%  recall@10: 97.5%  best@5: 96.0% *
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.209 (0.258)	Data 0.000 (0.071)	
+Extract Features: [200/271]	Time 0.183 (0.222)	Data 0.000 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.183 (0.261)	Data 0.000 (0.068)	
+Extract Features: [200/271]	Time 0.215 (0.226)	Data 0.000 (0.035)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.186 (0.260)	Data 0.000 (0.070)	
+Extract Features: [200/271]	Time 0.188 (0.225)	Data 0.000 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.256 (0.263)	Data 0.002 (0.070)	
+Extract Features: [200/271]	Time 0.207 (0.226)	Data 0.000 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.179 (0.262)	Data 0.000 (0.071)	
+Extract Features: [200/271]	Time 0.185 (0.226)	Data 0.006 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.193 (0.261)	Data 0.006 (0.071)	
+Extract Features: [200/271]	Time 0.185 (0.226)	Data 0.008 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.202 (0.266)	Data 0.000 (0.074)	
+Extract Features: [200/271]	Time 0.205 (0.229)	Data 0.000 (0.038)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.178 (0.262)	Data 0.000 (0.071)	
+Extract Features: [200/271]	Time 0.189 (0.227)	Data 0.000 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Extract Features: [100/276]	Time 0.185 (0.259)	Data 0.000 (0.072)	
+Extract Features: [200/276]	Time 0.194 (0.223)	Data 0.000 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          89.4%
+  top-5          96.6%
+  top-10         97.9%
+
+ * Finished generation   1 epoch   0 recall@1: 89.4%  recall@5: 96.6%  recall@10: 97.9%  best@5: 96.6% *
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.174 (0.258)	Data 0.000 (0.069)	
+Extract Features: [200/271]	Time 0.177 (0.223)	Data 0.000 (0.035)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.171 (0.260)	Data 0.000 (0.070)	
+Extract Features: [200/271]	Time 0.172 (0.225)	Data 0.000 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.178 (0.260)	Data 0.000 (0.072)	
+Extract Features: [200/271]	Time 0.222 (0.225)	Data 0.000 (0.037)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.186 (0.259)	Data 0.000 (0.070)	
+Extract Features: [200/271]	Time 0.194 (0.225)	Data 0.011 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.191 (0.257)	Data 0.000 (0.070)	
+Extract Features: [200/271]	Time 0.192 (0.224)	Data 0.000 (0.035)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.176 (0.261)	Data 0.000 (0.070)	
+Extract Features: [200/271]	Time 0.182 (0.227)	Data 0.001 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.181 (0.256)	Data 0.000 (0.069)	
+Extract Features: [200/271]	Time 0.210 (0.221)	Data 0.000 (0.035)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.200 (0.256)	Data 0.000 (0.070)	
+Extract Features: [200/271]	Time 0.187 (0.223)	Data 0.000 (0.035)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Extract Features: [100/276]	Time 0.226 (0.385)	Data 0.000 (0.201)	
+Extract Features: [200/276]	Time 0.186 (0.287)	Data 0.000 (0.101)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          89.4%
+  top-5          96.4%
+  top-10         97.8%
+
+ * Finished generation   1 epoch   1 recall@1: 89.4%  recall@5: 96.4%  recall@10: 97.8%  best@5: 96.6%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.174 (0.262)	Data 0.000 (0.069)	
+Extract Features: [200/271]	Time 0.202 (0.226)	Data 0.010 (0.035)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.192 (0.245)	Data 0.000 (0.059)	
+Extract Features: [200/271]	Time 0.186 (0.217)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.186 (0.261)	Data 0.000 (0.073)	
+Extract Features: [200/271]	Time 0.182 (0.224)	Data 0.000 (0.037)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.176 (0.250)	Data 0.001 (0.060)	
+Extract Features: [200/271]	Time 0.172 (0.221)	Data 0.002 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.191 (0.257)	Data 0.001 (0.069)	
+Extract Features: [200/271]	Time 0.199 (0.223)	Data 0.000 (0.035)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.184 (0.252)	Data 0.006 (0.059)	
+Extract Features: [200/271]	Time 0.177 (0.220)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.192 (0.260)	Data 0.001 (0.072)	
+Extract Features: [200/271]	Time 0.183 (0.226)	Data 0.000 (0.037)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.217 (0.250)	Data 0.010 (0.062)	
+Extract Features: [200/271]	Time 0.221 (0.220)	Data 0.006 (0.032)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Extract Features: [100/276]	Time 0.175 (0.253)	Data 0.007 (0.059)	
+Extract Features: [200/276]	Time 0.183 (0.220)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          89.4%
+  top-5          96.7%
+  top-10         98.0%
+
+ * Finished generation   1 epoch   2 recall@1: 89.4%  recall@5: 96.7%  recall@10: 98.0%  best@5: 96.7% *
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.191 (0.253)	Data 0.013 (0.062)	
+Extract Features: [200/271]	Time 0.189 (0.223)	Data 0.000 (0.032)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.181 (0.253)	Data 0.000 (0.061)	
+Extract Features: [200/271]	Time 0.185 (0.221)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.168 (0.249)	Data 0.000 (0.061)	
+Extract Features: [200/271]	Time 0.204 (0.219)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.211 (0.252)	Data 0.000 (0.059)	
+Extract Features: [200/271]	Time 0.193 (0.220)	Data 0.008 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.185 (0.249)	Data 0.000 (0.060)	
+Extract Features: [200/271]	Time 0.205 (0.220)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.205 (0.251)	Data 0.002 (0.060)	
+Extract Features: [200/271]	Time 0.186 (0.222)	Data 0.002 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.176 (0.250)	Data 0.001 (0.060)	
+Extract Features: [200/271]	Time 0.255 (0.219)	Data 0.020 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.178 (0.248)	Data 0.000 (0.060)	
+Extract Features: [200/271]	Time 0.191 (0.220)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Extract Features: [100/276]	Time 0.186 (0.249)	Data 0.000 (0.060)	
+Extract Features: [200/276]	Time 0.234 (0.222)	Data 0.039 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          89.6%
+  top-5          96.6%
+  top-10         98.1%
+
+ * Finished generation   1 epoch   3 recall@1: 89.6%  recall@5: 96.6%  recall@10: 98.1%  best@5: 96.7%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.186 (0.253)	Data 0.000 (0.059)	
+Extract Features: [200/271]	Time 0.191 (0.220)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.207 (0.252)	Data 0.000 (0.062)	
+Extract Features: [200/271]	Time 0.196 (0.222)	Data 0.000 (0.032)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.195 (0.244)	Data 0.000 (0.057)	
+Extract Features: [200/271]	Time 0.172 (0.218)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.202 (0.249)	Data 0.017 (0.060)	
+Extract Features: [200/271]	Time 0.188 (0.219)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.177 (0.248)	Data 0.000 (0.060)	
+Extract Features: [200/271]	Time 0.195 (0.219)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.212 (0.251)	Data 0.000 (0.059)	
+Extract Features: [200/271]	Time 0.186 (0.222)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.192 (0.250)	Data 0.000 (0.059)	
+Extract Features: [200/271]	Time 0.192 (0.219)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.193 (0.246)	Data 0.002 (0.062)	
+Extract Features: [200/271]	Time 0.174 (0.219)	Data 0.000 (0.032)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Extract Features: [100/276]	Time 0.178 (0.247)	Data 0.001 (0.059)	
+Extract Features: [200/276]	Time 0.192 (0.219)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          90.1%
+  top-5          96.8%
+  top-10         98.0%
+
+ * Finished generation   1 epoch   4 recall@1: 90.1%  recall@5: 96.8%  recall@10: 98.0%  best@5: 96.8% *
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.186 (0.250)	Data 0.000 (0.059)	
+Extract Features: [200/271]	Time 0.170 (0.219)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.198 (0.249)	Data 0.000 (0.059)	
+Extract Features: [200/271]	Time 0.178 (0.219)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.196 (0.247)	Data 0.000 (0.058)	
+Extract Features: [200/271]	Time 0.237 (0.220)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.192 (0.251)	Data 0.002 (0.059)	
+Extract Features: [200/271]	Time 0.171 (0.218)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.214 (0.250)	Data 0.000 (0.060)	
+Extract Features: [200/271]	Time 0.200 (0.218)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.203 (0.245)	Data 0.012 (0.058)	
+Extract Features: [200/271]	Time 0.186 (0.219)	Data 0.006 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.190 (0.252)	Data 0.012 (0.061)	
+Extract Features: [200/271]	Time 0.186 (0.222)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.184 (0.245)	Data 0.014 (0.059)	
+Extract Features: [200/271]	Time 0.174 (0.217)	Data 0.001 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Extract Features: [100/276]	Time 0.197 (0.251)	Data 0.000 (0.062)	
+Extract Features: [200/276]	Time 0.202 (0.222)	Data 0.000 (0.032)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.7%
+  top-5          96.2%
+  top-10         97.8%
+
+ * Finished generation   2 epoch   0 recall@1: 88.7%  recall@5: 96.2%  recall@10: 97.8%  best@5: 96.8%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.207 (0.245)	Data 0.006 (0.059)	
+Extract Features: [200/271]	Time 0.201 (0.217)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.168 (0.247)	Data 0.001 (0.058)	
+Extract Features: [200/271]	Time 0.187 (0.219)	Data 0.006 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.188 (0.263)	Data 0.002 (0.074)	
+Extract Features: [200/271]	Time 0.185 (0.227)	Data 0.000 (0.038)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.182 (0.262)	Data 0.000 (0.071)	
+Extract Features: [200/271]	Time 0.192 (0.229)	Data 0.000 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.181 (0.258)	Data 0.000 (0.069)	
+Extract Features: [200/271]	Time 0.191 (0.223)	Data 0.000 (0.035)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.202 (0.262)	Data 0.000 (0.072)	
+Extract Features: [200/271]	Time 0.190 (0.228)	Data 0.001 (0.037)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.189 (0.262)	Data 0.000 (0.072)	
+Extract Features: [200/271]	Time 0.198 (0.227)	Data 0.000 (0.037)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.195 (0.261)	Data 0.000 (0.071)	
+Extract Features: [200/271]	Time 0.179 (0.227)	Data 0.010 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Extract Features: [100/276]	Time 0.191 (0.261)	Data 0.003 (0.071)	
+Extract Features: [200/276]	Time 0.199 (0.225)	Data 0.001 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          89.7%
+  top-5          96.9%
+  top-10         98.1%
+
+ * Finished generation   2 epoch   1 recall@1: 89.7%  recall@5: 96.9%  recall@10: 98.1%  best@5: 96.9% *
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.172 (0.261)	Data 0.000 (0.071)	
+Extract Features: [200/271]	Time 0.200 (0.227)	Data 0.001 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.193 (0.257)	Data 0.000 (0.070)	
+Extract Features: [200/271]	Time 0.206 (0.223)	Data 0.000 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.180 (0.256)	Data 0.000 (0.070)	
+Extract Features: [200/271]	Time 0.176 (0.224)	Data 0.000 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.188 (0.263)	Data 0.001 (0.069)	
+Extract Features: [200/271]	Time 0.193 (0.229)	Data 0.000 (0.035)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.209 (0.262)	Data 0.000 (0.071)	
+Extract Features: [200/271]	Time 0.180 (0.227)	Data 0.000 (0.037)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.183 (0.263)	Data 0.000 (0.070)	
+Extract Features: [200/271]	Time 0.173 (0.226)	Data 0.000 (0.035)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.172 (0.262)	Data 0.001 (0.071)	
+Extract Features: [200/271]	Time 0.183 (0.224)	Data 0.000 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.185 (0.260)	Data 0.000 (0.070)	
+Extract Features: [200/271]	Time 0.209 (0.225)	Data 0.000 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Extract Features: [100/276]	Time 0.188 (0.266)	Data 0.000 (0.073)	
+Extract Features: [200/276]	Time 0.192 (0.228)	Data 0.000 (0.037)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          89.7%
+  top-5          96.7%
+  top-10         98.1%
+
+ * Finished generation   2 epoch   2 recall@1: 89.7%  recall@5: 96.7%  recall@10: 98.1%  best@5: 96.9%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.193 (0.253)	Data 0.012 (0.070)	
+Extract Features: [200/271]	Time 0.188 (0.222)	Data 0.000 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.201 (0.259)	Data 0.000 (0.069)	
+Extract Features: [200/271]	Time 0.210 (0.225)	Data 0.000 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.179 (0.254)	Data 0.002 (0.069)	
+Extract Features: [200/271]	Time 0.172 (0.223)	Data 0.000 (0.035)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.173 (0.260)	Data 0.001 (0.071)	
+Extract Features: [200/271]	Time 0.168 (0.226)	Data 0.000 (0.037)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.190 (0.262)	Data 0.007 (0.070)	
+Extract Features: [200/271]	Time 0.187 (0.228)	Data 0.000 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.188 (0.263)	Data 0.000 (0.071)	
+Extract Features: [200/271]	Time 0.189 (0.224)	Data 0.000 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.198 (0.263)	Data 0.015 (0.073)	
+Extract Features: [200/271]	Time 0.209 (0.227)	Data 0.000 (0.037)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.188 (0.262)	Data 0.000 (0.074)	
+Extract Features: [200/271]	Time 0.211 (0.227)	Data 0.036 (0.038)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Extract Features: [100/276]	Time 0.198 (0.265)	Data 0.020 (0.073)	
+Extract Features: [200/276]	Time 0.192 (0.228)	Data 0.000 (0.037)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          89.8%
+  top-5          96.8%
+  top-10         98.0%
+
+ * Finished generation   2 epoch   3 recall@1: 89.8%  recall@5: 96.8%  recall@10: 98.0%  best@5: 96.9%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.179 (0.261)	Data 0.000 (0.069)	
+Extract Features: [200/271]	Time 0.182 (0.226)	Data 0.000 (0.035)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.184 (0.261)	Data 0.000 (0.072)	
+Extract Features: [200/271]	Time 0.204 (0.224)	Data 0.007 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.220 (0.260)	Data 0.000 (0.071)	
+Extract Features: [200/271]	Time 0.195 (0.224)	Data 0.011 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.178 (0.261)	Data 0.001 (0.071)	
+Extract Features: [200/271]	Time 0.207 (0.226)	Data 0.000 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.196 (0.250)	Data 0.000 (0.061)	
+Extract Features: [200/271]	Time 0.185 (0.220)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.176 (0.262)	Data 0.002 (0.071)	
+Extract Features: [200/271]	Time 0.180 (0.226)	Data 0.000 (0.036)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.175 (0.247)	Data 0.000 (0.061)	
+Extract Features: [200/271]	Time 0.218 (0.221)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.181 (0.249)	Data 0.000 (0.060)	
+Extract Features: [200/271]	Time 0.183 (0.221)	Data 0.001 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Extract Features: [100/276]	Time 0.182 (0.249)	Data 0.001 (0.060)	
+Extract Features: [200/276]	Time 0.196 (0.219)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          89.7%
+  top-5          96.8%
+  top-10         98.1%
+
+ * Finished generation   2 epoch   4 recall@1: 89.7%  recall@5: 96.8%  recall@10: 98.1%  best@5: 96.9%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.195 (0.247)	Data 0.001 (0.058)	
+Extract Features: [200/271]	Time 0.171 (0.219)	Data 0.001 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.174 (0.259)	Data 0.000 (0.069)	
+Extract Features: [200/271]	Time 0.183 (0.224)	Data 0.001 (0.037)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.193 (0.247)	Data 0.000 (0.062)	
+Extract Features: [200/271]	Time 0.218 (0.218)	Data 0.000 (0.032)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.184 (0.256)	Data 0.000 (0.064)	
+Extract Features: [200/271]	Time 0.183 (0.224)	Data 0.000 (0.032)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.196 (0.243)	Data 0.000 (0.058)	
+Extract Features: [200/271]	Time 0.180 (0.216)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.194 (0.253)	Data 0.000 (0.060)	
+Extract Features: [200/271]	Time 0.192 (0.222)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.192 (0.249)	Data 0.006 (0.061)	
+Extract Features: [200/271]	Time 0.185 (0.219)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.184 (0.246)	Data 0.006 (0.058)	
+Extract Features: [200/271]	Time 0.193 (0.217)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Extract Features: [100/276]	Time 0.203 (0.248)	Data 0.000 (0.058)	
+Extract Features: [200/276]	Time 0.187 (0.221)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.2%
+  top-5          95.5%
+  top-10         97.1%
+
+ * Finished generation   3 epoch   0 recall@1: 88.2%  recall@5: 95.5%  recall@10: 97.1%  best@5: 96.9%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.173 (0.244)	Data 0.000 (0.058)	
+Extract Features: [200/271]	Time 0.226 (0.216)	Data 0.001 (0.029)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.186 (0.253)	Data 0.000 (0.061)	
+Extract Features: [200/271]	Time 0.199 (0.221)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.177 (0.244)	Data 0.001 (0.058)	
+Extract Features: [200/271]	Time 0.177 (0.215)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.185 (0.248)	Data 0.006 (0.061)	
+Extract Features: [200/271]	Time 0.191 (0.218)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.175 (0.257)	Data 0.000 (0.063)	
+Extract Features: [200/271]	Time 0.193 (0.224)	Data 0.006 (0.032)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.217 (0.250)	Data 0.000 (0.059)	
+Extract Features: [200/271]	Time 0.204 (0.221)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.183 (0.251)	Data 0.000 (0.060)	
+Extract Features: [200/271]	Time 0.216 (0.223)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.181 (0.246)	Data 0.006 (0.061)	
+Extract Features: [200/271]	Time 0.196 (0.217)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Extract Features: [100/276]	Time 0.178 (0.248)	Data 0.006 (0.059)	
+Extract Features: [200/276]	Time 0.189 (0.219)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.8%
+  top-5          96.1%
+  top-10         97.6%
+
+ * Finished generation   3 epoch   1 recall@1: 88.8%  recall@5: 96.1%  recall@10: 97.6%  best@5: 96.9%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.169 (0.250)	Data 0.001 (0.061)	
+Extract Features: [200/271]	Time 0.183 (0.221)	Data 0.006 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.188 (0.245)	Data 0.000 (0.059)	
+Extract Features: [200/271]	Time 0.182 (0.218)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.179 (0.249)	Data 0.000 (0.059)	
+Extract Features: [200/271]	Time 0.204 (0.218)	Data 0.002 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.217 (0.251)	Data 0.000 (0.058)	
+Extract Features: [200/271]	Time 0.174 (0.220)	Data 0.002 (0.029)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.193 (0.245)	Data 0.000 (0.060)	
+Extract Features: [200/271]	Time 0.186 (0.217)	Data 0.007 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.178 (0.252)	Data 0.006 (0.061)	
+Extract Features: [200/271]	Time 0.194 (0.219)	Data 0.006 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.179 (0.246)	Data 0.001 (0.059)	
+Extract Features: [200/271]	Time 0.175 (0.216)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.185 (0.252)	Data 0.006 (0.060)	
+Extract Features: [200/271]	Time 0.199 (0.224)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Extract Features: [100/276]	Time 0.180 (0.245)	Data 0.000 (0.058)	
+Extract Features: [200/276]	Time 0.191 (0.218)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.8%
+  top-5          96.2%
+  top-10         97.8%
+
+ * Finished generation   3 epoch   2 recall@1: 88.8%  recall@5: 96.2%  recall@10: 97.8%  best@5: 96.9%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.180 (0.246)	Data 0.000 (0.059)	
+Extract Features: [200/271]	Time 0.178 (0.219)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.215 (0.252)	Data 0.000 (0.059)	
+Extract Features: [200/271]	Time 0.201 (0.223)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.188 (0.250)	Data 0.000 (0.061)	
+Extract Features: [200/271]	Time 0.202 (0.221)	Data 0.015 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.172 (0.249)	Data 0.000 (0.059)	
+Extract Features: [200/271]	Time 0.168 (0.218)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.178 (0.248)	Data 0.000 (0.059)	
+Extract Features: [200/271]	Time 0.188 (0.221)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.197 (0.248)	Data 0.001 (0.060)	
+Extract Features: [200/271]	Time 0.200 (0.219)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.180 (0.250)	Data 0.000 (0.059)	
+Extract Features: [200/271]	Time 0.180 (0.220)	Data 0.001 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.167 (0.250)	Data 0.001 (0.059)	
+Extract Features: [200/271]	Time 0.200 (0.220)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+Extract Features: [100/276]	Time 0.219 (0.252)	Data 0.000 (0.060)	
+Extract Features: [200/276]	Time 0.197 (0.222)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          88.5%
+  top-5          96.2%
+  top-10         97.6%
+
+ * Finished generation   3 epoch   3 recall@1: 88.5%  recall@5: 96.2%  recall@10: 97.6%  best@5: 96.9%
+
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.204 (0.245)	Data 0.009 (0.059)	
+Extract Features: [200/271]	Time 0.191 (0.219)	Data 0.001 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.191 (0.249)	Data 0.000 (0.058)	
+Extract Features: [200/271]	Time 0.175 (0.218)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.196 (0.251)	Data 0.000 (0.059)	
+Extract Features: [200/271]	Time 0.176 (0.220)	Data 0.007 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.207 (0.254)	Data 0.013 (0.061)	
+Extract Features: [200/271]	Time 0.186 (0.222)	Data 0.001 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.182 (0.252)	Data 0.000 (0.061)	
+Extract Features: [200/271]	Time 0.172 (0.221)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.195 (0.265)	Data 0.002 (0.072)	
+Extract Features: [200/271]	Time 0.191 (0.229)	Data 0.000 (0.037)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.180 (0.252)	Data 0.000 (0.059)	
+Extract Features: [200/271]	Time 0.201 (0.220)	Data 0.000 (0.030)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start calculating pairwise distances
+===> Start sorting gallery
+===> Start extracting features for sorting gallery
+Extract Features: [100/271]	Time 0.198 (0.257)	Data 0.000 (0.061)	
+Extract Features: [200/271]	Time 0.234 (0.226)	Data 0.000 (0.031)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
