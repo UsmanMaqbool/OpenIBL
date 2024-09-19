@@ -512,7 +512,7 @@ class SelectRegions(nn.Module):
                 if self.visualize:
                     save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name='embed_image.png')
                 bb_x = [
-                    [int(W / 4), int(H / 4), int(3 * W / 4), int(3 * H / 4)],
+                    [int(W / 3), int(H / 3), int(2 * W / 3), int(2 * H / 3)],
                     [0, 0, int(2 * W / 3), H],
                     [int(W / 3), 0, W, H],
                     [0, 0, W, int(2 * H / 3)],
@@ -573,11 +573,7 @@ class GraphVLAD(nn.Module):
         del neighborsFeat
         
         gvlad = self.applyGNN(node_features_list)
-        gvlad = F.normalize(gvlad, p=2, dim=1)
-
         gvlad = torch.add(gvlad, vlad_x)
-        gvlad = F.normalize(gvlad, p=2, dim=1)
-
         gvlad = gvlad.view(-1, vlad_x.shape[1])
         
         # Clear node_features_list to free up memory
@@ -740,11 +736,7 @@ class GraphVLADEmbedRegion(nn.Module):
             node_features_list.append(torch.concat(neighborsFeat[0:self.NB],0))
             del neighborsFeat
             gvlad = self.applyGNN(node_features_list)
-            gvlad = F.normalize(gvlad, p=2, dim=1)
-
             gvlad = torch.add(gvlad,vlad_x)
-            gvlad = F.normalize(gvlad, p=2, dim=1)
-
             gvlad = gvlad.view(-1,vlad_x.shape[1])
             
             # Clear node_features_list to free up memory
