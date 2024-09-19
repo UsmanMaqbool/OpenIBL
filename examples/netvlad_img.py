@@ -33,13 +33,16 @@ from ibl.utils.dist_utils import init_dist, synchronize, convert_sync_bn
 start_epoch = best_recall5 = 0
 
 
-def get_segmentation_model(encoderFile):
+def get_segmentation_espnet(encoderFile):
+    classes = 20
+    p = 2
+    q = 8
+    model = models.create('espnet', classes=classes, p=p, q=q, encoderFile=encoderFile)
+    return model
+
+def get_segmentation_fastscnn(encoderFile):
     model = models.create('fastscnn', num_classes=19)
     model.load_state_dict(torch.load(encoderFile))
-    # classes = 20
-    # p = 2
-    # q = 8
-    # model = models.create('espnet', classes=classes, p=p, q=q, encoderFile=encoderFile)
     return model
 
 def get_data(args, iters):
@@ -121,10 +124,11 @@ def get_model(args):
         elif(args.method=='graphvlad'):
             if (args.rank==0):
                 print('===> Loading segmentation model')
-            segmentation_model = get_segmentation_model(args.fast_scnn)
-            model = models.create('graphvlad', base_model, pool_layer, segmentation_model, NB=5)
-            # segmentation_model = get_segmentation_model(args.esp_encoder)
-            # model = models.create('graphvlad', base_model, pool_layer, segmentation_model)
+            
+            segmentation_espnet_model = get_segmentation_espnet(args.esp_encoder)
+            segmentation_fastscnn_model = get_segmentation_fastscnn(args.fast_scnn)
+            
+            model = models.create('graphvlad', base_model, pool_layer, segmentation_fastscnn_model,segmentation_espnet_model, NB=5)
 
     else:
         model = base_model
@@ -279,7 +283,7 @@ if __name__ == '__main__':
     parser.add_argument('--test-batch-size', type=int, default=32,
                         help="tuple numbers in a batch")
     parser.add_argument('--cache-size', type=int, default=1000)
-    parser.add_argument('-j', '--workers', type=int, default=8)
+    parser.add_argument('-j', '--workers', type=int, default=2)
     parser.add_argument('--height', type=int, default=480, help="input height")
     parser.add_argument('--width', type=int, default=640, help="input width")
     parser.add_argument('--neg-num', type=int, default=10,
@@ -323,4 +327,5 @@ if __name__ == '__main__':
     parser.add_argument('--init-dir', type=str, metavar='PATH',
                         default=osp.join(working_dir, '..', 'logs'))
     parser.add_argument('--fast-scnn', type=str, default='', help='Path to Fast SCNN encoder file')
+    parser.add_argument('--esp-encoder', type=str, default='', help='Path to ESPNet encoder file')
     main()

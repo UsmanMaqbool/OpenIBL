@@ -104,6 +104,8 @@ cityspallete = [
 ]
 
 
+
+
 def save_image(tensor_image, file_name):
     """
     Save a PyTorch tensor as an image file.
@@ -185,6 +187,63 @@ def save_batch_masks(pred_batch, file_name, base_dir='visualization'):
         
         # Save the mask to the corresponding directory
         mask.save(os.path.join(img_dir, file_name))
+        
+def save_batch_masks_esp(pred_batch, file_name, base_dir='visualization'):
+    """
+    Save a batch of masks to image files.
+
+    Args:
+    pred_batch (torch.Tensor): The batch of predictions.
+    base_dir (str): The base directory to save the masks to.
+    """
+    
+    palleteesp = [[128, 64, 128], #roads1
+           [244, 35, 232], #roads2
+           [70, 70, 70], #buildings1
+           [102, 102, 156],
+           [190, 153, 153],
+           [153, 153, 153],
+           [250, 170, 30],
+           [220, 220, 0],
+           [107, 142, 35], #trees1
+           [152, 251, 152], #trees2
+           [70, 130, 180], #sky
+           [220, 20, 60], #buildings2
+           [255, 0, 0],
+           [0, 0, 142], #cars
+           [0, 0, 70],
+           [0, 60, 100],
+           [0, 80, 100],
+           [0, 0, 230],
+           [119, 11, 32],
+           [0, 0, 0]]
+    
+    # Ensure the base directory exists
+    if not os.path.exists(base_dir):
+        os.makedirs(base_dir)
+    
+    # Loop through each prediction in the batch
+    for i in range(pred_batch.size(0)):
+        # Generate the mask for each prediction
+        # mask = get_color_pallete(pred_batch[i].cpu().numpy(), 'citys')
+        # Create a zero mask image
+        mask = np.zeros((pred_batch[i].size(0), pred_batch[i].size(1), 3), dtype=np.uint8)
+        
+        for idx in range(len(palleteesp)): #20
+            [r, g, b] = palleteesp[idx]
+            mask[pred_batch[i].cpu().numpy() == idx] = [b, g, r]
+        
+        # Convert the mask to a PIL image
+        mask = Image.fromarray(mask)
+        
+        
+        # Create a directory for each mask
+        img_dir = os.path.join(base_dir, str(i))
+        if not os.path.exists(img_dir):
+            os.makedirs(img_dir)
+        
+        # Save the mask to the corresponding directory
+        mask.save(os.path.join(img_dir, file_name))        
 
 def save_image_with_heatmap(tensor_image, pre_l2, img_i, file_name='image_with_heatmap.png', patch_idx=None):
     """

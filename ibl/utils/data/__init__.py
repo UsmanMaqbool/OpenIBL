@@ -41,7 +41,7 @@ def get_transformer_test(height, width, tokyo=False):
                         T.Normalize(mean=[0.48501960784313836, 0.4579568627450961, 0.4076039215686255],
                                    std=[0.00392156862745098, 0.00392156862745098, 0.00392156862745098])]
     
-#     return T.Compose(test_transformer)
+    return T.Compose(test_transformer)
 # def get_transformer_test(height, width, tokyo=False):
 #     test_transformer = [T.Resize(max(height,width) if tokyo else (height, width)),
 #                         T.ToTensor(),

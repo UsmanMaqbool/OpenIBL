@@ -29,7 +29,7 @@ import numpy as np
 import torch.nn.init as init
 from torchvision import transforms
 from torchvision.ops import masks_to_boxes
-from .visualize import get_color_pallete, save_batch_images, save_batch_masks, save_image_with_heatmap,     save_x_nodes_patches
+from .visualize import get_color_pallete, save_batch_images, save_batch_masks, save_batch_masks_esp, save_image_with_heatmap,     save_x_nodes_patches
 from PIL import Image
 import matplotlib.pyplot as plt
 import os
@@ -486,7 +486,7 @@ class SelectRegions(nn.Module):
         # Forward pass through fastscnn without gradients
         with torch.no_grad():
             outputs = fastscnn(x)
-        mask = outputs[0].max(1)[1]
+        maskfastscnn = outputs[0].max(1)[1]
 
         if self.visualize:
             # save_image(x[0], 'output-image.png')
@@ -495,7 +495,7 @@ class SelectRegions(nn.Module):
         
         if self.visualize:
             # Assuming `pred_all` is your batch of predictions
-            save_batch_masks(mask, 'stage2-mask-real.png')
+            save_batch_masks(maskfastscnn, 'stage2-mask-fastscnn.png')
         
 
         with torch.no_grad():
@@ -503,19 +503,14 @@ class SelectRegions(nn.Module):
             # works mask = b_out.max(1)[1] 
         # classMap_numpy = output_esp.max(0)[1]
         mask_esp = output_esp.max(1)[1] 
-        classMap_numpy = output_esp.max(1)[1].byte().cpu().data.numpy()
-        classMap_numpy1 = output_esp.max(1)[1].byte().cpu().data
-        classMap_numpy2 = output_esp.max(1)[1].byte()
-        classMap_numpy4 = output_esp.max(1)[1]
-            # Assuming `pred_all` is your batch of predictions
-            # save_batch_masks(classMap_numpy, 'stage2-mask-real-esp-classnmumpy.png')
+
         save_batch_masks(mask_esp, 'stage2-mask-real-esp-mask_esp.png')
-        save_batch_masks(classMap_numpy4, 'stage2-mask-real-esp-mask_esp4.png')
+        # save_batch_masks(classMap_numpy4, 'stage2-mask-real-esp-mask_esp4.png')
         
         rmask_esp = self.relabelesp(mask_esp)
         
         
-        save_batch_images(rmask_esp, 'stage2-mask-real-esp-mask_esp-r.png')
+        save_batch_masks_esp(rmask_esp, 'stage2-mask-real-esp-mask_esp-r.png')
             
         # mask = torch.argmax(outputs[0], 1) 
         for jj in range(len(mask)):  
