@@ -483,38 +483,40 @@ class SelectRegions(nn.Module):
         if sizeW % 2 != 0:
             x = F.pad(input=x, pad=(1, 2), mode="constant", value=0)
 
-        # Forward pass through fastscnn without gradients
-        with torch.no_grad():
-            outputs = fastscnn(x)
-        maskfastscnn = outputs[0].max(1)[1]
 
         if self.visualize:
             # save_image(x[0], 'output-image.png')
             xx = x
             save_batch_images(x)
-        
-        if self.visualize:
-            # Assuming `pred_all` is your batch of predictions
-            save_batch_masks(maskfastscnn, 'stage2-mask-fastscnn.png')
-        
+
+
+
 
         with torch.no_grad():
             output_esp = espnet(x)
-            # works mask = b_out.max(1)[1] 
-        # classMap_numpy = output_esp.max(0)[1]
         mask_esp = output_esp.max(1)[1] 
 
-        save_batch_masks(mask_esp, 'stage2-mask-real-esp-mask_esp.png')
-        # save_batch_masks(classMap_numpy4, 'stage2-mask-real-esp-mask_esp4.png')
+        # Forward pass through fastscnn without gradients
+        with torch.no_grad():
+            outputs = fastscnn(x)
+        mask_fastscnn = outputs[0].max(1)[1]
         
-        rmask_esp = self.relabelesp(mask_esp)
-        
-        
-        save_batch_masks_esp(rmask_esp, 'stage2-mask-real-esp-mask_esp-r.png')
+        if self.visualize:
+            # Assuming `pred_all` is your batch of predictions
+            save_batch_masks_esp(mask_esp, 'stage2-mask-real-esp-mask_esp-r.png')
+            save_batch_masks(mask_fastscnn, 'stage2-mask-fastscnn.png')
+
             
-        # mask = torch.argmax(outputs[0], 1) 
-        for jj in range(len(mask)):  
-            single_label_mask = mask[jj]
+        # rmask_esp = self.relabelesp(mask_esp)
+        pred_all_fastscnn = self.relabel(mask_fastscnn)
+
+        
+        
+        
+        
+        # ESPNET
+        for jj in range(len(mask_esp)):  
+            single_label_mask = mask_esp[jj]
             obj_ids, obj_i = single_label_mask.unique(return_counts=True)
             obj_ids = obj_ids[1:] 
             obj_i = obj_i[1:]
@@ -522,6 +524,24 @@ class SelectRegions(nn.Module):
             boxes_t = masks_to_boxes(masks.to(torch.float32))
             rr_boxes = torch.argsort(torch.argsort(obj_i,descending=True)) 
             boxes = boxes_t/16
+            
+
+        # FastSCNN
+        for img_i in range(N):
+            all_label_mask = pred_all_fastscnn[img_i]
+            labels_all, label_count_all = all_label_mask.unique(return_counts=True)
+            ## remove 255 labels
+            labels_all = labels_all[:-1]
+            label_count_all = label_count_all[:-1]
+
+            mask_t = label_count_all >= 10000
+            labels = labels_all[mask_t]
+
+            # Create masks for each label and convert them to bounding boxes
+            masks = all_label_mask == labels[:, None, None]
+            all_label_mask = rsizet(all_label_mask.unsqueeze(0)).squeeze(0)    
+                        
+            
         _, _, H, W = x.shape
         patch_mask = torch.zeros((H, W)).cuda()
         pool_x, x = base_model(x)   
