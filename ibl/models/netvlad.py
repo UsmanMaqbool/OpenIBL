@@ -573,7 +573,11 @@ class GraphVLAD(nn.Module):
         del neighborsFeat
         
         gvlad = self.applyGNN(node_features_list)
+        gvlad = F.normalize(gvlad, p=2, dim=1)
+
         gvlad = torch.add(gvlad, vlad_x)
+        gvlad = F.normalize(gvlad, p=2, dim=1)
+
         gvlad = gvlad.view(-1, vlad_x.shape[1])
         
         # Clear node_features_list to free up memory
@@ -615,7 +619,9 @@ class GraphVLADPCA(nn.Module):
         del neighborsFeat
         
         gvlad = self.applyGNN(node_features_list)
+        gvlad = F.normalize(gvlad, p=2, dim=1)
         gvlad = torch.add(gvlad, vlad_x)
+        gvlad = F.normalize(gvlad, p=2, dim=1)
         gvlad = gvlad.view(-1, vlad_x.shape[1])
         
         # Clear node_features_list to free up memory
@@ -736,7 +742,11 @@ class GraphVLADEmbedRegion(nn.Module):
             node_features_list.append(torch.concat(neighborsFeat[0:self.NB],0))
             del neighborsFeat
             gvlad = self.applyGNN(node_features_list)
+            gvlad = F.normalize(gvlad, p=2, dim=1)
+
             gvlad = torch.add(gvlad,vlad_x)
+            gvlad = F.normalize(gvlad, p=2, dim=1)
+
             gvlad = gvlad.view(-1,vlad_x.shape[1])
             
             # Clear node_features_list to free up memory
