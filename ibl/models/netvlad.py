@@ -363,6 +363,58 @@ class SelectRegions(nn.Module):
         self.mask = Mask
         self.visualize = False
                    
+    def relabel(self, img):
+        """
+        This function relabels the predicted labels so that cityscape dataset can process
+        :param img: The image array to be relabeled
+        :return: The relabeled image array
+        """
+        ### Road 0 + Sidewalk 1
+        img[img == 1] = 255
+        img[img == 0] = 255
+
+        ### building 2 + wall 3
+        img[img == 2] = 2
+        img[img == 3] = 3
+        
+        ### fence 4
+        img[img == 4] = 255
+        
+
+        ### vegetation 8 + Terrain 9
+        img[img == 9] = 255
+        img[img == 8] = 255
+
+        ### Pole 5 + Traffic Light 6 + Traffic Signal
+        img[img == 7] = 255
+        img[img == 6] = 255
+        img[img == 5] = 255
+        
+        ### Sky 10
+        img[img == 10] = 255
+        
+
+        ## Rider 12 + motorcycle 17 + bicycle 18
+        img[img == 18] = 255
+        img[img == 17] = 255
+        img[img == 12] = 255
+
+
+        # cars 13 + truck 14 + bus 15 + train 16
+        img[img == 16] = 255
+        img[img == 15] = 255
+        img[img == 14] = 255
+        img[img == 13] = 255
+
+        ## Person
+        img[img == 11] = 255
+
+        ### Don't need, make these 255
+        ## Background
+        img[img == 19] = 255
+
+
+        return img                          
     
     def forward(self, x, base_model, fastscnn): 
         
@@ -402,6 +454,12 @@ class SelectRegions(nn.Module):
         if self.visualize:
             # Assuming `pred_all` is your batch of predictions
             save_batch_masks(pred_all, 'stage2-mask-real.png')
+            
+        pred_all = self.relabel(pred_all)
+
+        if self.visualize:
+            # Assuming `pred_all` is your batch of predictions
+            save_batch_masks(pred_all, 'stage3-mask-merge.png')
         
         for img_i in range(N):
             all_label_mask = pred_all[img_i]
@@ -427,7 +485,7 @@ class SelectRegions(nn.Module):
             regions = masks_to_boxes(masks.to(torch.float32))
             boxes = (regions / 16).to(torch.long)
             
-            for i, _ in enumerate(labels[:min(2, len(labels))]):
+            for i, _ in enumerate(labels):
                 x_min, y_min, x_max, y_max = boxes[i]
                 embed_image_c = rsizet(pre_l2[:, y_min:y_max, x_min:x_max])
                 if self.visualize:
@@ -440,7 +498,7 @@ class SelectRegions(nn.Module):
                 if self.visualize:
                     save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=pre_l2, img_i=img_i, file_name='pre_l2.png')
                 bb_x = [
-                    [int(W / 4), int(H / 4), int(3 * W / 4), int(3 * H / 4)],
+                    [int(W / 3), int(H / 3), int(2 * W / 3), int(2 * H / 3)],
                     [0, 0, int(2 * W / 3), H],
                     [int(W / 3), 0, W, H],
                     [0, 0, W, int(2 * H / 3)],
