@@ -21,7 +21,7 @@
 #SBATCH --distribution=cyclic:cyclic
 
 ## To RUN
-# sbatch --j 0921-try4 scripts/train_sfrs_slurm_all.sh graphvlad vgg16 pitts 30k
+# sbatch --j 0921-try4-fusion-new-sfrs scripts/train_sfrs_slurm_all.sh graphvlad vgg16 pitts 30k
 ####################################################################################################
 
 # PYTHON SCRIPT
@@ -65,7 +65,7 @@ FAST_SCNN="/home/m.maqboolbhutta/usman_ws/datasets/official/fast_scnn/fast_scnn_
 ## CONTAINER="singularity exec --nv /path/to/container.sif" (--nv option is to enable gpu)
 module purge
 module load conda/24.3.0 intel/2019.1.144 openmpi/4.0.0
-conda activate openibl3
+conda activate openibl4
 
 # PRINTS
 #=======
@@ -88,7 +88,7 @@ echo "Other nodes: $NODES"
 # ===================================================================================================
 LOSS="sare_ind"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0921-try4/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0921-try4-fusion-new-sfrs/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -158,7 +158,7 @@ done
 #===================================================================================================
 LOSS="sare_joint"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0921-try4/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0921-try4-fusion-new-sfrs/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -229,7 +229,7 @@ done
 
 LOSS="triplet"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0921-try4/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0921-try4-fusion-new-sfrs/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
