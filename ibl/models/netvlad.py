@@ -664,6 +664,7 @@ class GraphVLADEmbedRegion(nn.Module):
         node_features_list = []
         neighborsFeat = []
         pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
+
         for i in range(self.NB+1):
             vlad_x = self.net_vlad(x_nodes[i])
             vlad_x = F.normalize(vlad_x, p=2, dim=2)  
@@ -671,24 +672,23 @@ class GraphVLADEmbedRegion(nn.Module):
             vlad_x = F.normalize(vlad_x, p=2, dim=1)  
             neighborsFeat.append(vlad_x)
         
-        if (not self.training):
-            node_features_list.append(neighborsFeat[self.NB])
-            node_features_list.append(torch.concat(neighborsFeat[0:self.NB],0))
-            del neighborsFeat
+            node_features_list.append(neighborsFeat[self.NB]) ## global
+            node_features_list.append(torch.concat(neighborsFeat[0:self.NB],0)) ##Others
+            # del neighborsFeat
             gvlad = self.applyGNN(node_features_list)
             gvlad = F.normalize(gvlad, p=2, dim=1)
 
             gvlad = torch.add(gvlad,vlad_x)
-            gvlad = F.normalize(gvlad, p=2, dim=1)
-
+            gvlad = F.normalize(gvlad, p=2, dim=1)      
+            # gvlad.shape : torch.Size([12, 32768])
             gvlad = gvlad.view(-1,vlad_x.shape[1])
-            
+        if (not self.training):    
             # Clear node_features_list to free up memory
             del node_features_list
-        
             return pool_x, gvlad
         else:
-            global_local_Feat = [neighborsFeat[5], neighborsFeat[0], neighborsFeat[1], neighborsFeat[2], neighborsFeat[3], neighborsFeat[4]]
+            
+            global_local_Feat = [gvlad] + neighborsFeat[:self.NB]
             del neighborsFeat
             vlad_A = torch.stack(global_local_Feat, dim=1)[0].unsqueeze(0)
             vlad_B = torch.stack(global_local_Feat, dim=1)[1:]
