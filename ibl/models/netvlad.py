@@ -412,7 +412,7 @@ class SelectRegions(nn.Module):
         img[img == 19] = 255
 
 
-        return img                               
+        return img                                    
     
     def forward(self, x, base_model, fastscnn): 
         
@@ -479,11 +479,25 @@ class SelectRegions(nn.Module):
             pre_l2 = x[img_i]
             if self.visualize:
                 save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=pre_l2, img_i=img_i)
+            embed_image = pre_l2
+
+            if self.mask:
+                for i, label in enumerate(labels):
+                    ## Fusing
+                    binary_mask = (all_label_mask == label).float()                    
+                    embed_image = (pre_l2 * binary_mask) + embed_image
+                    if self.visualize:
+                        embed_file_name = f'embed_{i}.png'  # Customize the naming pattern as needed
+                        save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name=embed_file_name)
+                        
+                embed_image = F.normalize(embed_image, p=2, dim=2)    
+                if self.visualize:
+                    embed_file_name = f'embed_normalized{i}.png'  # Customize the naming pattern as needed
+                    save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name=embed_file_name)
             
             regions = masks_to_boxes(masks.to(torch.float32))
             boxes = (regions / 16).to(torch.long)
 
-            embed_image = pre_l2
             
             # sub_nodes.append(embed_image.unsqueeze(0))
             if self.mask:
@@ -496,7 +510,7 @@ class SelectRegions(nn.Module):
                     if bounding_box_area >= 0.75 * image_area:
                         embed_image_c = rsizet(embed_image[:, y_min:y_max, x_min:x_max])
                         if self.visualize:
-                            print("label ", label)
+                            # print("label ", label)
                             embed_file_name = f'embed_appended{label}.png'  # Customize the naming pattern as needed
                             xx_min, yy_min, xx_max, yy_max = regions[i].to(torch.long)
                             save_image_with_heatmap(tensor_image=xx[img_i][:, yy_min:yy_max, xx_min:xx_max], pre_l2=embed_image_c, img_i=img_i, file_name=embed_file_name)
