@@ -493,7 +493,7 @@ class SelectRegions(nn.Module):
                     height = y_max - y_min
                     bounding_box_area = width * height
                     # Check if the bounding box covers at least 75% of the image area
-                    if bounding_box_area >= 0.75 * image_area:
+                    if bounding_box_area >= 0.8 * image_area:
                         embed_image_c = rsizet(embed_image[:, y_min:y_max, x_min:x_max])
                         if self.visualize:
                             print("label ", label)
