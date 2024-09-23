@@ -21,7 +21,7 @@
 #SBATCH --distribution=cyclic:cyclic
 
 ## To RUN
-#  sbatch --j 0903-s2 scripts/leo/test_slurm_all.sh graphvlad vgg16 
+#  sbatch --j 0921 scripts/leo/test_slurm_all.sh graphvlad vgg16 /home/m.maqboolbhutta/usman_ws/models/openibl/0921-try4/vgg16-graphvlad_SFRS-sare_ind-pitts30k-lr0.001-tuple4-21-Sep/checkpoint2_4.pth.tar
 ####################################################################################################
 
 # PYTHON SCRIPT
@@ -89,7 +89,7 @@ do
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    -a ${ARCH} -j 2 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
     --num-clusters ${NUMCLUSTER} -d pitts --scale 250k
@@ -102,7 +102,7 @@ do
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    -a ${ARCH} -j 2 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
     --num-clusters ${NUMCLUSTER} -d pitts --scale 30k
@@ -115,7 +115,7 @@ do
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    -a ${ARCH} -j 2 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
     --num-clusters ${NUMCLUSTER} -d tokyo
