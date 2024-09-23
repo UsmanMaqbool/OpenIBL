@@ -350,7 +350,7 @@ class applyGNN(nn.Module):
         super(applyGNN, self).__init__()
         self.input_dim = 4096 
         self.hidden_dim = [2048,2048]
-        self.num_neighbors_list = [5]
+        self.num_neighbors_list = [6]
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
                   num_neighbors_list=self.num_neighbors_list)
     def forward(self, x):
@@ -499,22 +499,22 @@ class SelectRegions(nn.Module):
             boxes = (regions / 16).to(torch.long)
 
             
-            # sub_nodes.append(embed_image.unsqueeze(0))
-            if self.mask:
-                for i, label in enumerate(labels):
-                    x_min, y_min, x_max, y_max = boxes[i]
-                    width = x_max - x_min
-                    height = y_max - y_min
-                    bounding_box_area = width * height
-                    # Check if the bounding box covers at least 75% of the image area
-                    if bounding_box_area >= 0.75 * image_area:
-                        embed_image_c = rsizet(embed_image[:, y_min:y_max, x_min:x_max])
-                        if self.visualize:
-                            # print("label ", label)
-                            embed_file_name = f'embed_appended{label}.png'  # Customize the naming pattern as needed
-                            xx_min, yy_min, xx_max, yy_max = regions[i].to(torch.long)
-                            save_image_with_heatmap(tensor_image=xx[img_i][:, yy_min:yy_max, xx_min:xx_max], pre_l2=embed_image_c, img_i=img_i, file_name=embed_file_name)
-                        sub_nodes.append(embed_image_c.unsqueeze(0))
+            # # sub_nodes.append(embed_image.unsqueeze(0))
+            # if self.mask:
+            #     for i, label in enumerate(labels):
+            #         x_min, y_min, x_max, y_max = boxes[i]
+            #         width = x_max - x_min
+            #         height = y_max - y_min
+            #         bounding_box_area = width * height
+            #         # Check if the bounding box covers at least 75% of the image area
+            #         if bounding_box_area >= 0.75 * image_area:
+            #             embed_image_c = rsizet(embed_image[:, y_min:y_max, x_min:x_max])
+            #             if self.visualize:
+            #                 # print("label ", label)
+            #                 embed_file_name = f'embed_appended{label}.png'  # Customize the naming pattern as needed
+            #                 xx_min, yy_min, xx_max, yy_max = regions[i].to(torch.long)
+            #                 save_image_with_heatmap(tensor_image=xx[img_i][:, yy_min:yy_max, xx_min:xx_max], pre_l2=embed_image_c, img_i=img_i, file_name=embed_file_name)
+            sub_nodes.append(embed_image.unsqueeze(0))
             
             
             
@@ -522,11 +522,11 @@ class SelectRegions(nn.Module):
                 if self.visualize:
                     save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=pre_l2, img_i=img_i, file_name='pre_l2.png')
                 bb_x = [
-                    [int(W / 8), int(H / 8), int(7 * W / 8), int(7 * H / 8)],
-                    [0, 0, int(3 * W / 4), int(3 * H / 4)],
-                    [int(W / 4), 0, W, int(3 * H / 4)],
-                    [0, int(H / 4), int(3 * W / 4), H],
-                    [int(W / 4), int(H / 4), W, H]
+                    [int(W/4), int(H/4), int(3*W/4), int(3*H/4)],
+                    [0, 0, int(W/3), H],
+                    [0, 0, W, int(H/3)],
+                    [int(2*W/3), 0, W, H],
+                    [0, int(2*H/3), W, H]
                 ]
                 for i in range(len(bb_x) - len(sub_nodes)):
                     x_nodes = embed_image[:, bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]

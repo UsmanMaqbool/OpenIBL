@@ -21,7 +21,7 @@
 #SBATCH --distribution=cyclic:cyclic
 
 ## To RUN
-# sbatch --j 0921-try4-fusion scripts/train_sfrs_slurm_all.sh graphvlad vgg16 pitts 30k
+# sbatch --j 0923-S31 scripts/train_sfrs_slurm_all.sh graphvlad vgg16 pitts 30k
 ####################################################################################################
 
 # PYTHON SCRIPT
@@ -65,7 +65,7 @@ FAST_SCNN="/home/m.maqboolbhutta/usman_ws/datasets/official/fast_scnn/fast_scnn_
 ## CONTAINER="singularity exec --nv /path/to/container.sif" (--nv option is to enable gpu)
 module purge
 module load conda/24.3.0 intel/2019.1.144 openmpi/4.0.0
-conda activate openibl2
+conda activate openibl3
 
 # PRINTS
 #=======
@@ -88,7 +88,7 @@ echo "Other nodes: $NODES"
 # ===================================================================================================
 LOSS="sare_ind"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0921-try4-fusion/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0923-ver1-fastscnn-fusion/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -97,16 +97,17 @@ echo "========================================"
 srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
 python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
   -d ${DATASET} --scale ${SCALE} \
-  -a ${ARCH} --layers ${LAYERS} --syncbn \
+  -a ${ARCH} --layers ${LAYERS} \
   --width 640 --height 480 --tuple-size ${TUMPLESIZE} -j 2 --test-batch-size ${CACHEBS} \
   --neg-num 10  --pos-pool 20 --neg-pool 1000 --pos-num 10 \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} --soft-weight 0.5 \
-  --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 --generations 4 --temperature 0.07 0.07 0.06 0.05 --logs-dir ${FILES} --data-dir ${DATASET_DIR} \
+  --eval-step 1 --epochs 6 --step-size 5 --cache-size 1000 --generations 4 --temperature 0.07 0.07 0.06 0.05 --logs-dir ${FILES} --data-dir ${DATASET_DIR} \
   --init-dir ${INIT_DIR} --fast-scnn=${FAST_SCNN} \
   --method ${METHOD} 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+# FILES="${FILES}/*.tar"
+FILES="${FILES}/checkpoint2_4.pth.tar ${FILES}/checkpoint3_4.pth.tar ${FILES}/checkpoint2_5.pth.tar ${FILES}/checkpoint3_5.pth.tar ${FILES}/model_best.pth.tar"
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
@@ -158,7 +159,7 @@ done
 #===================================================================================================
 LOSS="sare_joint"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0921-try4-fusion/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0923-ver1-fastscnn-fusion/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -167,7 +168,7 @@ echo "========================================"
 srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
 python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
   -d ${DATASET} --scale ${SCALE} \
-  -a ${ARCH} --layers ${LAYERS} --syncbn \
+  -a ${ARCH} --layers ${LAYERS} \
   --width 640 --height 480 --tuple-size ${TUMPLESIZE} -j 2 --test-batch-size ${CACHEBS} \
   --neg-num 10  --pos-pool 20 --neg-pool 1000 --pos-num 10 \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} --soft-weight 0.5 \
@@ -177,7 +178,8 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+# FILES="${FILES}/*.tar"
+FILES="${FILES}/checkpoint2_4.pth.tar ${FILES}/checkpoint3_4.pth.tar ${FILES}/model_best.pth.tar"
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
@@ -229,7 +231,7 @@ done
 
 LOSS="triplet"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0921-try4-fusion/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0923-ver1-fastscnn-fusion/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -238,7 +240,7 @@ echo "========================================"
 srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
 python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
   -d ${DATASET} --scale ${SCALE} \
-  -a ${ARCH} --layers ${LAYERS} --syncbn \
+  -a ${ARCH} --layers ${LAYERS} \
   --width 640 --height 480 --tuple-size ${TUMPLESIZE} -j 2 --test-batch-size ${CACHEBS} \
   --neg-num 10  --pos-pool 20 --neg-pool 1000 --pos-num 10 \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} --soft-weight 0.5 \
@@ -248,7 +250,8 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+# FILES="${FILES}/*.tar"
+FILES="${FILES}/checkpoint2_4.pth.tar ${FILES}/checkpoint3_4.pth.tar ${FILES}/model_best.pth.tar"
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
