@@ -21,7 +21,7 @@
 #SBATCH --distribution=cyclic:cyclic
 
 ## To RUN
-#  sbatch --j 0903-s2 scripts/leo/test_slurm_all.sh graphvlad vgg16 
+#  sbatch --j 0921-try4-fusion scripts/test_slurm_all.sh graphvlad vgg16 /home/m.maqboolbhutta/usman_ws/models/openibl/0921-try4-fusion/vgg16-graphvlad_SFRS-sare_ind-pitts30k-lr0.001-tuple4-22-Sep
 ####################################################################################################
 
 # PYTHON SCRIPT
@@ -47,7 +47,6 @@ CACHEBS=16
 PORT=6010
 
 
-
 INIT_DIR="/home/m.maqboolbhutta/usman_ws/datasets/official/openibl-init"
 FAST_SCNN="/home/m.maqboolbhutta/usman_ws/datasets/official/fast_scnn/fast_scnn_citys.pth"
 DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
@@ -61,7 +60,7 @@ DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
 ## CONTAINER="singularity exec --nv /path/to/container.sif" (--nv option is to enable gpu)
 module purge
 module load conda/24.3.0 intel/2019.1.144 openmpi/4.0.0
-conda activate openibl
+conda activate openibl2
 
 # PRINTS
 #=======
@@ -75,7 +74,7 @@ echo "Other nodes: $NODES"
 
 echo "==========Testing============="
 if [ -d "${FILES}" ]; then
-  FILES="${FILES}/*.tar"
+  FILES="${FILES}/checkpoint2_4.pth.tar ${FILES}/checkpoint3_4.pth.tar ${FILES}/model_best.pth.tar"
 else
   FILES="${FILES}"
 fi
@@ -89,7 +88,7 @@ do
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    -a ${ARCH} -j 2 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
     --num-clusters ${NUMCLUSTER} -d pitts --scale 250k
@@ -102,7 +101,7 @@ do
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    -a ${ARCH} -j 2 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
     --num-clusters ${NUMCLUSTER} -d pitts --scale 30k
@@ -115,7 +114,7 @@ do
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    -a ${ARCH} -j 2 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
     --num-clusters ${NUMCLUSTER} -d tokyo
