@@ -659,16 +659,16 @@ class GraphVLADEmbedRegion(nn.Module):
             vlad_x = F.normalize(vlad_x, p=2, dim=1)  
             neighborsFeat.append(vlad_x)
         
-            node_features_list.append(neighborsFeat[self.NB]) ## global
-            node_features_list.append(torch.concat(neighborsFeat[0:self.NB],0)) ##Others
-            # del neighborsFeat
-            gvlad = self.applyGNN(node_features_list)
-            gvlad = F.normalize(gvlad, p=2, dim=1)
+        node_features_list.append(neighborsFeat[self.NB]) ## global
+        node_features_list.append(torch.concat(neighborsFeat[0:self.NB],0)) ##Others
+        # del neighborsFeat
+        gvlad = self.applyGNN(node_features_list)
+        gvlad = F.normalize(gvlad, p=2, dim=1)
 
-            gvlad = torch.add(gvlad,vlad_x)
-            gvlad = F.normalize(gvlad, p=2, dim=1)      
-            # gvlad.shape : torch.Size([12, 32768])
-            gvlad = gvlad.view(-1,vlad_x.shape[1])
+        gvlad = torch.add(gvlad,vlad_x)
+        gvlad = F.normalize(gvlad, p=2, dim=1)      
+        # gvlad.shape : torch.Size([12, 32768])
+        gvlad = gvlad.view(-1,vlad_x.shape[1])
         if (not self.training):    
             # Clear node_features_list to free up memory
             del node_features_list
