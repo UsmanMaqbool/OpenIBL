@@ -384,12 +384,12 @@ class SelectRegions(nn.Module):
         img[img == 8] = 3
 
         ### Pole 5 + Traffic Light 6 + Traffic Signal 7
-        img[img == 7] = 4
-        img[img == 6] = 4
-        img[img == 5] = 4
+        img[img == 7] = 255
+        img[img == 6] = 255
+        img[img == 5] = 255
         
         ### Sky 10
-        img[img == 10] = 5
+        img[img == 10] = 255
         
 
         ## Rider 12 + motorcycle 17 + bicycle 18
@@ -508,12 +508,13 @@ class SelectRegions(nn.Module):
                 if self.visualize:
                     save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=pre_l2, img_i=img_i, file_name='pre_l2.png')
                 bb_x = [
-                    [int(W / 8), int(H / 8), int(7 * W / 8), int(7 * H / 8)],
-                    [0, 0, int(3 * W / 4), int(3 * H / 4)],
-                    [int(W / 4), 0, W, int(3 * H / 4)],
-                    [0, int(H / 4), int(3 * W / 4), H],
-                    [int(W / 4), int(H / 4), W, H]
+                    [int(W/4), int(H/4), int(3*W/4), int(3*H/4)],
+                    [0, 0, int(W/3), H],
+                    [0, 0, W, int(H/3)],
+                    [int(2*W/3), 0, W, H],
+                    [0, int(2*H/3), W, H]
                 ]
+                
                 for i in range(len(bb_x) - len(sub_nodes)):
                     x_nodes = embed_image[:, bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
                     sub_nodes.append(rsizet(x_nodes.unsqueeze(0)))
