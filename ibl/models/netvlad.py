@@ -363,6 +363,56 @@ class SelectRegions(nn.Module):
         self.mask = Mask
         self.visualize = False
                    
+    def relabel(self, img):
+        """
+        This function relabels the predicted labels so that cityscape dataset can process
+        :param img: The image array to be relabeled
+        :return: The relabeled image array
+        """
+        ### Road 0 + Sidewalk 1
+        img[img == 1] = 1
+        img[img == 0] = 1
+
+        ### building 2 + wall 3 + fence 4
+        img[img == 2] = 2
+        img[img == 3] = 2
+        img[img == 4] = 2
+        
+
+        ### vegetation 8 + Terrain 9
+        img[img == 9] = 3
+        img[img == 8] = 3
+
+        ### Pole 5 + Traffic Light 6 + Traffic Signal 7
+        img[img == 7] = 4
+        img[img == 6] = 4
+        img[img == 5] = 4
+        
+        ### Sky 10
+        img[img == 10] = 255
+        
+
+        ## Rider 12 + motorcycle 17 + bicycle 18
+        img[img == 18] = 255
+        img[img == 17] = 255
+        img[img == 12] = 255
+
+
+        # cars 13 + truck 14 + bus 15 + train 16
+        img[img == 16] = 255
+        img[img == 15] = 255
+        img[img == 14] = 255
+        img[img == 13] = 255
+
+        ## Person
+        img[img == 11] = 255
+
+        ### Don't need, make these 255
+        ## Background
+        img[img == 19] = 255
+
+
+        return img               
     
     def forward(self, x, base_model, fastscnn): 
         
@@ -402,6 +452,13 @@ class SelectRegions(nn.Module):
         if self.visualize:
             # Assuming `pred_all` is your batch of predictions
             save_batch_masks(mask_fastscnn, '2s-mask-real.png')
+        
+        
+        mask_fastscnn = self.relabel(mask_fastscnn)
+
+        if self.visualize:
+            # Assuming `pred_all` is your batch of predictions
+            save_batch_masks(mask_fastscnn, 'stage3-mask-merge.png')
             
         # Calculate the area of the image
         image_area = W * H
@@ -410,6 +467,8 @@ class SelectRegions(nn.Module):
             all_label_mask = mask_fastscnn[img_i]
             labels, _ = all_label_mask.unique(return_counts=True)
 
+            ## remove last / background 255
+            labels =  labels[:-1]
 
             # Create masks for each label and convert them to bounding boxes
             masks = all_label_mask == labels[:, None, None]
@@ -424,23 +483,20 @@ class SelectRegions(nn.Module):
             ### Crop regions
             regions = masks_to_boxes(masks.to(torch.float32))
             boxes = (regions / 16).to(torch.long)
+            embed_image = torch.zeros_like(pre_l2)
             
-            
-            for i, _ in enumerate(labels):
-                x_min, y_min, x_max, y_max = boxes[i]
-                width = x_max - x_min
-                height = y_max - y_min
-                bounding_box_area = width * height
-                # Check if the bounding box covers at least 75% of the image area
-                if bounding_box_area >= 0.5 * image_area:
-                    embed_image_c = rsizet(pre_l2[:, y_min:y_max, x_min:x_max])
-                    if self.visualize:
-                        embed_file_name = f'4embed_{i}.png'  # Customize the naming pattern as needed
-                        save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image_c, img_i=img_i, file_name=embed_file_name)
-                    sub_nodes.append(embed_image_c.unsqueeze(0))
-                    if len(sub_nodes) >= 3:
-                        break
-
+            for i, label in enumerate(labels):
+                binary_mask = (all_label_mask == label).float()                    
+                embed_image = (pre_l2 * binary_mask) + embed_image
+                if self.visualize:
+                    embed_file_name = f'embed_{i}.png'  # Customize the naming pattern as needed
+                    save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name=embed_file_name)
+                
+            embed_image = F.normalize(embed_image, p=2, dim=2)    
+            if self.visualize:
+                embed_file_name = f'embed_normalized{i}.png'  # Customize the naming pattern as needed
+                save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=embed_image, img_i=img_i, file_name=embed_file_name)
+            sub_nodes.append(embed_image.unsqueeze(0))
             if len(sub_nodes) < self.NB:
                 bb_x = [
                     [int(W / 8), int(H / 8), int(7 * W / 8), int(7 * H / 8)],
@@ -464,7 +520,7 @@ class SelectRegions(nn.Module):
         x_nodes = torch.cat((x_nodes, x.unsqueeze(0)))
         
         # Clean up
-        del graph_nodes, sub_nodes, masks, all_label_mask, mask_fastscnn, regions, boxes
+        del graph_nodes, sub_nodes, masks, all_label_mask, mask_fastscnn, regions, boxes, embed_image, pre_l2, outputs, xx
         
         return pool_x, x.size(0), x_nodes
 class GraphVLAD(nn.Module):

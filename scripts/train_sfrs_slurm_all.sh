@@ -21,7 +21,7 @@
 #SBATCH --distribution=cyclic:cyclic
 
 ## To RUN
-# sbatch --j 0924-s1 scripts/train_sfrs_slurm_all.sh graphvlad vgg16 pitts 30k
+# sbatch --j 0924-s2-fusion scripts/train_sfrs_slurm_all.sh graphvlad vgg16 pitts 30k
 ####################################################################################################
 
 # PYTHON SCRIPT
@@ -88,7 +88,7 @@ echo "Other nodes: $NODES"
 # ===================================================================================================
 LOSS="sare_ind"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0924-s1/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0924-s2-fusion/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -106,7 +106,7 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
   --method ${METHOD} 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+FILES=$(ls -r ${FILES}/*.tar)
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
@@ -158,7 +158,7 @@ done
 #===================================================================================================
 LOSS="sare_joint"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0924-s1/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0924-s2-fusion/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -177,7 +177,7 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+FILES=$(ls -r ${FILES}/*.tar)
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
@@ -229,7 +229,7 @@ done
 
 LOSS="triplet"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0924-s1/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0924-s2-fusion/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -248,7 +248,7 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+FILES=$(ls -r ${FILES}/*.tar)
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
