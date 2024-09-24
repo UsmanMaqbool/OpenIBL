@@ -528,14 +528,14 @@ class SelectRegions(nn.Module):
                     [int(2*W/3), 0, W, H],
                     [0, int(2*H/3), W, H]
                 ]
-                for i in range(len(bb_x) - len(sub_nodes)):
+                for i in range(len(bb_x)):
                     x_nodes = embed_image[:, bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
                     sub_nodes.append(rsizet(x_nodes.unsqueeze(0)))
                     if self.visualize:
                         patch_file_name = f'patch_{i}.png'  # Customize the naming pattern as needed
                         # save_image_with_heatmap(tensor_image=xx[img_i][bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2], :], pre_l2=x_nodes, img_i=img_i, file_name=patch_file_name, patch_idx=i)
                         save_image_with_heatmap(tensor_image=xx[img_i][:, bb_x[i][1]*16:bb_x[i][3]*16, bb_x[i][0]*16:bb_x[i][2]*16], pre_l2=x_nodes, img_i=img_i, file_name=patch_file_name)
-
+            # print(len(sub_nodes))
             # Stack the cropped patches and store them in graph_nodes
             aa = torch.stack(sub_nodes, 1)
             graph_nodes[img_i] = aa[0]
