@@ -135,7 +135,7 @@ def save_image(tensor_image, file_name):
 
     # Save the image
     image_pil.save(file_name)
-    
+
 
 def save_batch_images(batch, base_dir='visualization'):
     """
@@ -157,7 +157,7 @@ def save_batch_images(batch, base_dir='visualization'):
             os.makedirs(img_dir)
         
         # Save the image to the corresponding directory
-        save_image(batch[i], os.path.join(img_dir, 's-1-image.png'))
+        save_image(batch[i], os.path.join(img_dir, '1-s-real-image.png'))
 
 def save_batch_masks(pred_batch, file_name, base_dir='visualization'):
     """
@@ -229,7 +229,10 @@ def save_image_with_heatmap(tensor_image, pre_l2, img_i, file_name='image_with_h
     # Resize the heatmap to match the original image size
     heatmap = cv2.resize(mean_activations, (width, height))
 
-    # Convert heatmap to an 8-bit format and apply a color map
+    # Normalize the heatmap to the range [0, 1]
+    # heatmap = cv2.normalize(heatmap, None, 0, 1, cv2.NORM_MINMAX)
+
+   # Convert heatmap to an 8-bit format and apply a color map
     heatmap = np.uint8(255 * heatmap)
     heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_TURBO)
 
@@ -241,15 +244,14 @@ def save_image_with_heatmap(tensor_image, pre_l2, img_i, file_name='image_with_h
 
     ## to store the patches
     H, W, _ = overlayed_img.shape
-    bb_x = [
-        [0, 0, int(2 * W / 3), H], 
-        [int(W / 3), 0, W, H], 
-        [0, 0, W, int(2 * H / 3)], 
-        [0, int(H / 3), W, H], 
-        [int(W / 4), int(H / 4), int(3 * W / 4), int(3 * H / 4)]
-    ]
+    # bb_x = [
+    #     [int(W / 8), int(H / 8), int(7 * W / 8), int(7 * H / 8)],
+    #     [0, 0, int(3 * W / 4), int(3 * H / 4)],
+    #     [int(W / 4), 0, W, int(3 * H / 4)],
+    #     [0, int(H / 4), int(3 * W / 4), H],
+    #     [int(W / 4), int(H / 4), W, H],
+    # ]
 
-    
     if patch_idx == None:
         # Save the resulting image
         directory = f'visualization/{img_i}'
@@ -257,14 +259,14 @@ def save_image_with_heatmap(tensor_image, pre_l2, img_i, file_name='image_with_h
         # Save the resulting image
         cv2.imwrite(full_file_name, overlayed_img)
         print(f"Saved image to {full_file_name}")
-    else:
-        # Save the resulting image
-        directory = f'visualization/{img_i}'
-        full_file_name = os.path.join(directory, file_name)
-        # Save the resulting image
-        cv2.imwrite(full_file_name, overlayed_img[bb_x[patch_idx][1]:bb_x[patch_idx][3], bb_x[patch_idx][0]:bb_x[patch_idx][2], :])        
-        print(f"Saved image to {full_file_name}")
-    
+    # else:
+    #     # Save the resulting image
+    #     directory = f'visualization/{img_i}'
+    #     full_file_name = os.path.join(directory, file_name)
+    #     # Save the resulting image
+    #     cv2.imwrite(full_file_name, overlayed_img[bb_x[patch_idx][1]:bb_x[patch_idx][3], bb_x[patch_idx][0]:bb_x[patch_idx][2], :])        
+    #     print(f"Saved image to {full_file_name}")
+
 def save_x_nodes_patches(x_nodes, img_i, patch_idx):
     """
     Save a single image patch from the x_nodes tensor.
