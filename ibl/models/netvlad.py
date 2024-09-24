@@ -350,7 +350,7 @@ class applyGNN(nn.Module):
         super(applyGNN, self).__init__()
         self.input_dim = 4096 
         self.hidden_dim = [2048,2048]
-        self.num_neighbors_list = [5]
+        self.num_neighbors_list = [6]
         self.graph = GraphSage(input_dim=self.input_dim, hidden_dim=self.hidden_dim,
                   num_neighbors_list=self.num_neighbors_list)
     def forward(self, x):
@@ -370,8 +370,8 @@ class SelectRegions(nn.Module):
         :return: The relabeled image array
         """
         ### Road 0 + Sidewalk 1
-        img[img == 1] = 1
-        img[img == 0] = 1
+        img[img == 1] = 0
+        img[img == 0] = 0
 
         ### building 2 + wall 3 + fence 4
         img[img == 2] = 2
@@ -380,13 +380,13 @@ class SelectRegions(nn.Module):
         
 
         ### vegetation 8 + Terrain 9
-        img[img == 9] = 3
-        img[img == 8] = 3
+        img[img == 9] = 8
+        img[img == 8] = 8
 
         ### Pole 5 + Traffic Light 6 + Traffic Signal 7
-        img[img == 7] = 255
-        img[img == 6] = 255
-        img[img == 5] = 255
+        img[img == 7] = 5
+        img[img == 6] = 5
+        img[img == 5] = 5
         
         ### Sky 10
         img[img == 10] = 255
@@ -412,7 +412,7 @@ class SelectRegions(nn.Module):
         img[img == 19] = 255
 
 
-        return img                               
+        return img                                
     
     def forward(self, x, base_model, fastscnn): 
         
@@ -427,8 +427,8 @@ class SelectRegions(nn.Module):
             x = F.pad(input=x, pad=(1, 2), mode="constant", value=0)
 
         # Forward pass through fastscnn without gradients
-        with torch.no_grad():
-            outputs = fastscnn(x)
+        # with torch.no_grad():
+        #     outputs = fastscnn(x)
 
         if self.visualize:
             # save_image(x[0], 'output-image.png')
@@ -443,85 +443,44 @@ class SelectRegions(nn.Module):
         graph_nodes = torch.zeros(N, self.NB, C, H, W).cuda()
         rsizet = transforms.Resize((H, W))
         
-        # Process the output of fastscnn to get predicted labels
-        pred_all = torch.argmax(outputs[0], 1)
+        # # Process the output of fastscnn to get predicted labels
+        # pred_all = torch.argmax(outputs[0], 1)
         
         if self.visualize:
             # Assuming `pred_all` is your batch of predictions
             save_batch_masks(pred_all, 'stage2-mask-real.png')
         
         
-        pred_all = self.relabel(pred_all)
+        # pred_all = self.relabel(pred_all)
 
         if self.visualize:
             # Assuming `pred_all` is your batch of predictions
             save_batch_masks(pred_all, 'stage3-mask-merge.png')
         
-        # Calculate the area of the image
-        image_area = W * H
+        # # Calculate the area of the image
+        # image_area = W * H
         
     
         for img_i in range(N):
-            all_label_mask = pred_all[img_i]
-            labels_all, label_count_all = all_label_mask.unique(return_counts=True)
-            
-            ## remove last / background 255
-            labels =  labels_all[:-1]
-            
-            
-            # Create masks for each label and convert them to bounding boxes
-            masks = all_label_mask == labels[:, None, None]
-            all_label_mask = rsizet(all_label_mask.unsqueeze(0)).squeeze(0)
-            
-                    
-            
-            sub_nodes = []
-            pre_l2 = x[img_i]
+            embed_image = x[img_i]
+            sub_nodes.append(embed_image.unsqueeze(0))
+                        
             if self.visualize:
-                save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=pre_l2, img_i=img_i)
-            
-            regions = masks_to_boxes(masks.to(torch.float32))
-            boxes = (regions / 16).to(torch.long)
-
-            embed_image = pre_l2
-            
-            # sub_nodes.append(embed_image.unsqueeze(0))
-            if self.mask:
-                for i, label in enumerate(labels):
-                    x_min, y_min, x_max, y_max = boxes[i]
-                    width = x_max - x_min
-                    height = y_max - y_min
-                    bounding_box_area = width * height
-                    # Check if the bounding box covers at least 75% of the image area
-                    if bounding_box_area >= 0.8 * image_area:
-                        embed_image_c = rsizet(embed_image[:, y_min:y_max, x_min:x_max])
-                        if self.visualize:
-                            print("label ", label)
-                            embed_file_name = f'embed_appended{label}.png'  # Customize the naming pattern as needed
-                            xx_min, yy_min, xx_max, yy_max = regions[i].to(torch.long)
-                            save_image_with_heatmap(tensor_image=xx[img_i][:, yy_min:yy_max, xx_min:xx_max], pre_l2=embed_image_c, img_i=img_i, file_name=embed_file_name)
-                        sub_nodes.append(embed_image_c.unsqueeze(0))
-            
-            
-            
-            if len(sub_nodes) < self.NB:
-                if self.visualize:
-                    save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=pre_l2, img_i=img_i, file_name='pre_l2.png')
-                bb_x = [
-                    [int(W/4), int(H/4), int(3*W/4), int(3*H/4)],
-                    [0, 0, int(W/3), H],
-                    [0, 0, W, int(H/3)],
-                    [int(2*W/3), 0, W, H],
-                    [0, int(2*H/3), W, H]
-                ]
+                save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=pre_l2, img_i=img_i, file_name='pre_l2.png')
+            bb_x = [
+                [int(W/4), int(H/4), int(3*W/4), int(3*H/4)],
+                [0, 0, int(W/3), H],
+                [0, 0, W, int(H/3)],
+                [int(2*W/3), 0, W, H],
+                [0, int(2*H/3), W, H]
+            ]
                 
-                for i in range(len(bb_x) - len(sub_nodes)):
-                    x_nodes = embed_image[:, bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
-                    sub_nodes.append(rsizet(x_nodes.unsqueeze(0)))
-                    if self.visualize:
-                        patch_file_name = f'patch_{i}.png'  # Customize the naming pattern as needed
-                        # save_image_with_heatmap(tensor_image=xx[img_i][bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2], :], pre_l2=x_nodes, img_i=img_i, file_name=patch_file_name, patch_idx=i)
-                        save_image_with_heatmap(tensor_image=xx[img_i][:, bb_x[i][1]*16:bb_x[i][3]*16, bb_x[i][0]*16:bb_x[i][2]*16], pre_l2=x_nodes, img_i=img_i, file_name=patch_file_name)
+            for i in range(len(bb_x)):
+                x_nodes = embed_image[:, bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
+                sub_nodes.append(rsizet(x_nodes.unsqueeze(0)))
+                if self.visualize:
+                    patch_file_name = f'patch_{i}.png'  # Customize the naming pattern as needed
+                    save_image_with_heatmap(tensor_image=xx[img_i][:, bb_x[i][1]*16:bb_x[i][3]*16, bb_x[i][0]*16:bb_x[i][2]*16], pre_l2=x_nodes, img_i=img_i, file_name=patch_file_name)
 
             # Stack the cropped patches and store them in graph_nodes
             aa = torch.stack(sub_nodes, 1)
