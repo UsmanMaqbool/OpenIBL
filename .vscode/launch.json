@@ -59,7 +59,45 @@
                 "--method", "graphvlad",
                 "--resume", "/home/leo/usman_ws/models/openibl/0819-4-fastscnn-agg/vgg16-graphvlad-baseline-sare_ind-pitts30k-lr0.001-tuple4-20-Aug/checkpoint0.pth.tar",
             ]
-        }
+        },
+        {
+            "name": "OpenIBL Train SFRS Debug Hipergator",
+            "type": "python",
+            "request": "launch",
+            "program": "/home/m.maqboolbhutta/.conda/envs/openibl/lib/python3.8/site-packages/torch/distributed/launch.py",
+            "console": "integratedTerminal",
+            "args": [
+            "--nproc_per_node=1",
+            "--master_port=6060",
+            "--use_env",
+            "examples/netvlad_img_sfrs.py",
+            "--launcher=pytorch",
+            "-d", "pitts",
+            "--scale", "30k",
+            "-a", "vgg16",
+            "--layers", "conv5",
+            "--syncbn",
+            "--sync-gather",
+            "--width", "640",
+            "--height", "480",
+            "--tuple-size", "1",
+            "-j", "1",
+            "--neg-num", "10",
+            "--test-batch-size", "32",
+            "--margin", "0.1",
+            "--lr", "0.001",
+            "--weight-decay", "0.001",
+            "--loss-type", "triplet",
+            "--eval-step", "1",
+            "--epochs", "5",
+            "--step-size", "5",
+            "--cache-size", "1000",
+            "--data-dir", "/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/",
+            "--init-dir", "/blue/hmedeiros/m.maqboolbhutta/datasets/official/openibl-init",
+            "--fast-scnn", "/home/m.maqboolbhutta/usman_ws/datasets/official/fast_scnn/fast_scnn_citys.pth",
+            "--method", "graphvlad"
+            ]
+        },
     ],
     "compounds": [
         {

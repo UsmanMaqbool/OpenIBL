@@ -361,7 +361,7 @@ class SelectRegions(nn.Module):
         super(SelectRegions, self).__init__()
         self.NB = NB
         self.mask = Mask
-        self.visualize = False
+        self.visualize = True
                    
     
     def forward(self, x, base_model, fastscnn): 
