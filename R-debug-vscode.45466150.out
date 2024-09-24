@@ -1,0 +1,58 @@
+Tue Sep 24 11:52:41 EDT 2024
+/home/m.maqboolbhutta/usman_ws/codes/openibl3
+Host: c0801a-s11
+Other nodes: 
+Tue Sep 24 11:52:41 EDT 2024
+/home/m.maqboolbhutta/usman_ws/codes/openibl3
+*
+* Visual Studio Code Server
+*
+* By using the software, you agree to
+* the Visual Studio Code Server License Terms (https://aka.ms/vscode-server-license) and
+* the Microsoft Privacy Statement (https://privacy.microsoft.com/en-US/privacystatement).
+*
+[2024-09-24 11:52:44] info Using GitHub for authentication, run `code tunnel user login --provider <provider>` option to change this.
+To grant access to the server, please log into https://github.com/login/device and use code 87F9-1E35
+
+Open this link in your browser https://vscode.dev/tunnel/c0709a-s30ufhpc/blue/hmedeiros/m.maqboolbhutta/codes/openibl3
+
+[2024-09-24 11:54:32] info [tunnels::connections::relay_tunnel_host] Opened new client on channel 2
+[2024-09-24 11:54:32] info [russh::server] wrote id
+[2024-09-24 11:54:32] info [russh::server] read other id
+[2024-09-24 11:54:32] info [russh::server] session is running
+[2024-09-24 11:54:32] info [rpc.0] Checking /home/m.maqboolbhutta/.vscode/cli/servers/Stable-38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40/log.txt and /home/m.maqboolbhutta/.vscode/cli/servers/Stable-38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40/pid.txt for a running server...
+[2024-09-24 11:54:33] info [rpc.0] Downloading Visual Studio Code server -> /scratch/local/45466150/.tmpVeb6rD/vscode-server-linux-x64.tar.gz
+[2024-09-24 11:54:40] info [rpc.0] Starting server...
+[2024-09-24 11:54:40] info [rpc.0] Server started
+[2024-09-24 12:00:01] info [rpc.0] Forwarding port 48247 (public=false)
+[2024-09-24 12:00:02] info [rpc.0] Forwarding port 49987 (public=false)
+[2024-09-24 12:00:05] info [rpc.0] Unforwarding port 48247
+[2024-09-24 12:00:06] info [rpc.0] Unforwarding port 49987
+[2024-09-24 12:02:08] info [rpc.0] Forwarding port 34113 (public=false)
+[2024-09-24 12:02:13] info [rpc.0] Forwarding port 43779 (public=false)
+[2024-09-24 12:02:47] info [rpc.0] Unforwarding port 34113
+[2024-09-24 12:02:47] info [rpc.0] Unforwarding port 43779
+[2024-09-24 12:03:06] info [rpc.0] Forwarding port 45271 (public=false)
+[2024-09-24 12:03:07] info [rpc.0] Forwarding port 58177 (public=false)
+[2024-09-24 12:03:16] info [rpc.0] Forwarding port 6060 (public=false)
+[2024-09-24 12:22:20] info [rpc.0] Unforwarding port 45271
+[2024-09-24 12:22:21] info [rpc.0] Unforwarding port 58177
+[2024-09-24 12:22:21] info [rpc.0] Unforwarding port 6060
+[2024-09-24 12:22:25] info [rpc.0] Forwarding port 60579 (public=false)
+[2024-09-24 12:22:26] info [rpc.0] Forwarding port 57101 (public=false)
+[2024-09-24 12:22:30] info [rpc.0] Forwarding port 6060 (public=false)
+[2024-09-24 12:27:54] info [rpc.0] Unforwarding port 60579
+[2024-09-24 12:27:54] info [rpc.0] Unforwarding port 57101
+[2024-09-24 12:27:55] info [rpc.0] Unforwarding port 6060
+[2024-09-24 12:30:46] info [rpc.0] Forwarding port 48985 (public=false)
+[2024-09-24 12:30:47] info [rpc.0] Forwarding port 42777 (public=false)
+[2024-09-24 12:30:47] info [rpc.0] Forwarding port 6060 (public=false)
+[2024-09-24 12:37:14] info [rpc.0] Unforwarding port 48985
+[2024-09-24 12:37:15] info [rpc.0] Unforwarding port 42777
+[2024-09-24 12:37:15] info [rpc.0] Unforwarding port 6060
+[2024-09-24 12:37:19] info [rpc.0] Forwarding port 40535 (public=false)
+[2024-09-24 12:37:20] info [rpc.0] Forwarding port 44641 (public=false)
+[2024-09-24 12:37:24] info [rpc.0] Forwarding port 6060 (public=false)
+[2024-09-24 13:04:37] info [rpc.0] Unforwarding port 40535
+[2024-09-24 13:04:37] info [rpc.0] Unforwarding port 44641
+[2024-09-24 13:04:38] info [rpc.0] Unforwarding port 6060

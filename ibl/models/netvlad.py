@@ -30,6 +30,13 @@ import torch.nn.init as init
 from torchvision import transforms
 from .espnet import *
 from torchvision.ops import masks_to_boxes
+
+
+from .visualize import get_color_pallete, save_batch_images, save_batch_masks, save_image_with_heatmap,     save_x_nodes_patches
+from PIL import Image
+import matplotlib.pyplot as plt
+import os
+
 class NeighborAggregator(nn.Module):
     def __init__(self, input_dim, output_dim,
                  use_bias=False, aggr_method="mean"):
@@ -378,6 +385,7 @@ class applyGNN(nn.Module):
         return gvlad
 class SelectRegions(nn.Module):
     def __init__(self):
+        self.visualize = True
         super(SelectRegions, self).__init__()
     def forward(self, x, base_model, espnet):
         sizeH = x.shape[2]
@@ -389,10 +397,18 @@ class SelectRegions(nn.Module):
 
         with torch.no_grad():
             b_out = espnet(x)
-        # b_out = espnet(x)
 
+        if self.visualize:
+            # save_image(x[0], 'output-image.png')
+            xx = x
+            save_batch_images(x)
 
         mask = b_out.max(1)[1]   
+        
+        if self.visualize:
+            # Assuming `pred_all` is your batch of predictions
+            save_batch_masks(mask, '2s-mask-real.png')
+        
         for jj in range(len(mask)):  
             single_label_mask = mask[jj]
             obj_ids, obj_i = single_label_mask.unique(return_counts=True)
@@ -427,12 +443,18 @@ class SelectRegions(nn.Module):
                         x_min,y_min,x_max,y_max = boxesd[b_idx]
                         c_img = x[Nx][:, y_min:y_max,x_min:x_max]
                         resultant = rsizet(c_img)
+                        if self.visualize:
+                            embed_file_name = f'4embed_{b_idx}.png'  # Customize the naming pattern as needed
+                            save_image_with_heatmap(tensor_image=xx[Nx], pre_l2=resultant, img_i=Nx, file_name=embed_file_name)
                         img_nodes.append(resultant.unsqueeze(0))
                         break                    
             if len(img_nodes) < NB:
                 for i in range(len(bb_x)-len(img_nodes)):
                     x_cropped =  x[Nx][: ,bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
                     img_nodes.append(rsizet(x_cropped.unsqueeze(0)))
+                    if self.visualize:
+                        patch_file_name = f'patch_{i}.png'  # Customize the naming pattern as needed
+                        save_image_with_heatmap(tensor_image=xx[Nx][:, bb_x[i][1]*16:bb_x[i][3]*16, bb_x[i][0]*16:bb_x[i][2]*16], pre_l2=x[Nx], img_i=Nx, file_name=patch_file_name)
             aa = torch.stack(img_nodes,1)
             graph_nodes[Nx] = aa[0]
         x_cropped = graph_nodes.view(NB,N,C,H,W)
