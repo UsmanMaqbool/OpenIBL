@@ -21,7 +21,7 @@
 #SBATCH --distribution=cyclic:cyclic
 
 ## To RUN
-#  sbatch --j 0903-s2 scripts/leo/test_slurm_all.sh graphvlad vgg16 
+#  sbatch --j 0924-s1-test scripts/leo/test_slurm_all.sh graphvlad vgg16 /home/m.maqboolbhutta/usman_ws/models/openibl/0924-s1/vgg16-graphvlad_SFRS-sare_ind-pitts30k-lr0.001-tuple4-24-Sep/
 ####################################################################################################
 
 # PYTHON SCRIPT

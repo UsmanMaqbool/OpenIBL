@@ -65,7 +65,7 @@ FAST_SCNN="/home/m.maqboolbhutta/usman_ws/datasets/official/fast_scnn/fast_scnn_
 ## CONTAINER="singularity exec --nv /path/to/container.sif" (--nv option is to enable gpu)
 module purge
 module load conda/24.3.0 intel/2019.1.144 openmpi/4.0.0
-conda activate openibl3
+conda activate openibl
 
 # PRINTS
 #=======
@@ -106,7 +106,7 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
   --method ${METHOD} 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+FILES=$(ls -r ${FILES}/*.tar)
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
@@ -177,7 +177,7 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+FILES=$(ls -r ${FILES}/*.tar)
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
@@ -248,7 +248,7 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+FILES=$(ls -r ${FILES}/*.tar)
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
