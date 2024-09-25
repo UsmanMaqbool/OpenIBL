@@ -520,7 +520,7 @@ class SelectRegions(nn.Module):
         x_nodes = torch.cat((x_nodes, x.unsqueeze(0)))
         
         # Clean up
-        del graph_nodes, sub_nodes, masks, all_label_mask, mask_fastscnn, regions, boxes, embed_image, pre_l2, outputs, xx
+        del graph_nodes, sub_nodes, masks, all_label_mask, mask_fastscnn, regions, boxes, embed_image, pre_l2, outputs
         
         return pool_x, x.size(0), x_nodes
 class GraphVLAD(nn.Module):
