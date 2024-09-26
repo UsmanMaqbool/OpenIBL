@@ -432,7 +432,7 @@ class SelectRegions(nn.Module):
                 height = y_max - y_min
                 bounding_box_area = width * height
                 # Check if the bounding box covers at least 75% of the image area
-                if bounding_box_area >= 0.5 * image_area:
+                if bounding_box_area >= 0.75 * image_area:
                     embed_image_c = rsizet(pre_l2[:, y_min:y_max, x_min:x_max])
                     if self.visualize:
                         embed_file_name = f'4embed_{i}.png'  # Customize the naming pattern as needed
@@ -443,12 +443,19 @@ class SelectRegions(nn.Module):
 
             if len(sub_nodes) < self.NB:
                 bb_x = [
-                    [int(W / 8), int(H / 8), int(7 * W / 8), int(7 * H / 8)],
-                    [int(W / 6), int(H / 6), int(5 * W / 6), int(5 * H / 6)],
-                    [int(W / 5), int(H / 5), int(4 * W / 5), int(4 * H / 5)],
-                    [int(W / 4), int(H / 4), int(3 * W / 4), int(3 * H / 4)],
-                    [int(W / 3), int(H / 3), int(2 * W / 3), int(2 * H / 3)],
+                    [int(W/4), int(H/4), int(3*W/4), int(3*H/4)],
+                    [0, 0, int(W/3), H],
+                    [0, 0, W, int(H/3)],
+                    [int(2*W/3), 0, W, H],
+                    [0, int(2*H/3), W, H]
                 ]
+                # ]bb_x = [
+                #     [int(W / 8), int(H / 8), int(7 * W / 8), int(7 * H / 8)],
+                #     [int(W / 6), int(H / 6), int(5 * W / 6), int(5 * H / 6)],
+                #     [int(W / 5), int(H / 5), int(4 * W / 5), int(4 * H / 5)],
+                #     [int(W / 4), int(H / 4), int(3 * W / 4), int(3 * H / 4)],
+                #     [int(W / 3), int(H / 3), int(2 * W / 3), int(2 * H / 3)],
+                # ]
                 for i in range(len(bb_x) - len(sub_nodes)):
                     x_nodes = pre_l2[:, bb_x[i][1]:bb_x[i][3], bb_x[i][0]:bb_x[i][2]]
                     sub_nodes.append(rsizet(x_nodes.unsqueeze(0)))
