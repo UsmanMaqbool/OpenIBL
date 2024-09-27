@@ -21,7 +21,7 @@
 #SBATCH --distribution=cyclic:cyclic
 
 ## To RUN
-# sbatch --j 0925-s1 scripts/train_sfrs_slurm_all.sh graphvlad vgg16 pitts 30k
+# sbatch --j 0925-s2 scripts/train_sfrs_slurm_all.sh graphvlad vgg16 pitts 30k
 ####################################################################################################
 
 # PYTHON SCRIPT

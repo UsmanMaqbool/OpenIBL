@@ -432,7 +432,7 @@ class SelectRegions(nn.Module):
                 height = y_max - y_min
                 bounding_box_area = width * height
                 # Check if the bounding box covers at least 75% of the image area
-                if bounding_box_area >= 0.75 * image_area:
+                if bounding_box_area >= 0.5 * image_area:
                     embed_image_c = rsizet(pre_l2[:, y_min:y_max, x_min:x_max])
                     if self.visualize:
                         embed_file_name = f'4embed_{i}.png'  # Customize the naming pattern as needed
