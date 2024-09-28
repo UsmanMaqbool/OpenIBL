@@ -21,7 +21,11 @@
 #SBATCH --distribution=cyclic:cyclic
 
 ## To RUN
+<<<<<<< HEAD
 # sbatch --j 0925-s2 scripts/train_sfrs_slurm_all.sh graphvlad vgg16 pitts 30k
+=======
+# sbatch --j 0924-s1 scripts/train_sfrs_slurm_all.sh graphvlad vgg16 pitts 30k
+>>>>>>> parent of 668e12b (0925-s2)
 ####################################################################################################
 
 # PYTHON SCRIPT

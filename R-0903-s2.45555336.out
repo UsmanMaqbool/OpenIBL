@@ -1,0 +1,89 @@
+Wed Sep 25 15:03:38 EDT 2024
+/home/m.maqboolbhutta/usman_ws/codes/OpenIBL
+/home/m.maqboolbhutta/.conda/envs/openibl/bin/python
+Host: c1103a-s23
+Other nodes: 
+==========Testing=============
+/home/m.maqboolbhutta/usman_ws/models/openibl/0924-s2-fusion/vgg16-graphvlad_SFRS-sare_ind-pitts30k-lr0.001-tuple4-24-Sep/checkpoint3_4.pth.tar
+==============================
+==========################=============
+ Testing /home/m.maqboolbhutta/usman_ws/models/openibl/0924-s2-fusion/vgg16-graphvlad_SFRS-sare_ind-pitts30k-lr0.001-tuple4-24-Sep/checkpoint3_4.pth.tar file on Pitts250k...
+=======================================
+Use GPU: 2 for testing, rank no.2 of world_size 4Use GPU: 3 for testing, rank no.3 of world_size 4Use GPU: 0 for testing, rank no.0 of world_size 4Use GPU: 1 for testing, rank no.1 of world_size 4
+
+
+
+==========
+Args:Namespace(arch='vgg16', data_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/data', dataset='pitts', fast_scnn='/home/m.maqboolbhutta/usman_ws/datasets/official/fast_scnn/fast_scnn_citys.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/home/m.maqboolbhutta/usman_ws/models/openibl/0924-s2-fusion/vgg16-graphvlad_SFRS-sare_ind-pitts30k-lr0.001-tuple4-24-Sep/checkpoint3_4.pth.tar', rr_topk=25, scale='250k', sync_gather=False, tcp_port='5017', test_batch_size=16, vlad=True, width=640, workers=2, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   332  |     7800
+  train_gallery |  3811  |    91464
+  val_query     |   319  |     7608
+  val_gallery   |  3277  |    78648
+  test_query    |   347  |     8280
+  test_gallery  |  3498  |    83952
+===> Loading segmentation model
+=> Loaded checkpoint '/home/m.maqboolbhutta/usman_ws/models/openibl/0924-s2-fusion/vgg16-graphvlad_SFRS-sare_ind-pitts30k-lr0.001-tuple4-24-Sep/checkpoint3_4.pth.tar'
+=> Start epoch 4  best recall5 96.5%
+Evaluate on the test set:
+load PCA parameters...
+Extract Features: [100/130]	Time 0.217 (0.301)	Data 0.000 (0.048)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+load PCA parameters...
+Extract Features: [100/1312]	Time 0.187 (0.246)	Data 0.000 (0.050)	
+Extract Features: [200/1312]	Time 0.197 (0.219)	Data 0.000 (0.025)	
+Extract Features: [300/1312]	Time 0.198 (0.210)	Data 0.000 (0.017)	
+Extract Features: [400/1312]	Time 0.196 (0.206)	Data 0.000 (0.013)	
+Extract Features: [500/1312]	Time 0.199 (0.203)	Data 0.000 (0.010)	
+Extract Features: [600/1312]	Time 0.189 (0.201)	Data 0.000 (0.009)	
+Extract Features: [700/1312]	Time 0.200 (0.200)	Data 0.000 (0.007)	
+Extract Features: [800/1312]	Time 0.198 (0.199)	Data 0.000 (0.007)	
+Extract Features: [900/1312]	Time 0.197 (0.199)	Data 0.000 (0.006)	
+Extract Features: [1000/1312]	Time 0.198 (0.199)	Data 0.000 (0.005)	
+Extract Features: [1100/1312]	Time 0.191 (0.199)	Data 0.000 (0.005)	
+Extract Features: [1200/1312]	Time 0.192 (0.199)	Data 0.000 (0.004)	
+Extract Features: [1300/1312]	Time 0.199 (0.199)	Data 0.000 (0.004)	
+gathering features from rank no.0
+gathering features from rank no.1
+gathering features from rank no.2
+gathering features from rank no.3
+===> Start calculating pairwise distances
+===> Start calculating recalls
+Recall Scores:
+  top-1          90.6%
+  top-5          96.1%
+  top-10         97.4%
+Data has been appended to test_result/recall_results.csv
+==========################=============
+ Done Testing with /home/m.maqboolbhutta/usman_ws/models/openibl/0924-s2-fusion/vgg16-graphvlad_SFRS-sare_ind-pitts30k-lr0.001-tuple4-24-Sep/checkpoint3_4.pth.tar file on Pitts250k...
+=======================================
+==========################=============
+ Testing /home/m.maqboolbhutta/usman_ws/models/openibl/0924-s2-fusion/vgg16-graphvlad_SFRS-sare_ind-pitts30k-lr0.001-tuple4-24-Sep/checkpoint3_4.pth.tar file on Pitts30k...
+=======================================
+Use GPU: 1 for testing, rank no.1 of world_size 4Use GPU: 0 for testing, rank no.0 of world_size 4Use GPU: 3 for testing, rank no.3 of world_size 4Use GPU: 2 for testing, rank no.2 of world_size 4
+
+
+
+==========
+Args:Namespace(arch='vgg16', data_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/data', dataset='pitts', fast_scnn='/home/m.maqboolbhutta/usman_ws/datasets/official/fast_scnn/fast_scnn_citys.pth', features=4096, gpu=0, height=480, lambda_value=0, launcher='pytorch', logs_dir='/blue/hmedeiros/m.maqboolbhutta/codes/OpenIBL/examples/logs', method='graphvlad', ngpus_per_node=4, nowhiten=False, num_clusters=64, print_freq=10, rank=0, reduction=True, rerank=False, resume='/home/m.maqboolbhutta/usman_ws/models/openibl/0924-s2-fusion/vgg16-graphvlad_SFRS-sare_ind-pitts30k-lr0.001-tuple4-24-Sep/checkpoint3_4.pth.tar', rr_topk=25, scale='30k', sync_gather=False, tcp_port='5017', test_batch_size=16, vlad=True, width=640, workers=2, world_size=4)
+==========
+Pittsburgh dataset loaded
+  subset        | # pids | # images
+  ---------------------------------
+  train_query   |   311  |     7320
+  train_gallery |   417  |    10000
+  val_query     |   319  |     7608
+  val_gallery   |   417  |    10000
+  test_query    |   286  |     6816
+  test_gallery  |   417  |    10000
+===> Loading segmentation model
+=> Loaded checkpoint '/home/m.maqboolbhutta/usman_ws/models/openibl/0924-s2-fusion/vgg16-graphvlad_SFRS-sare_ind-pitts30k-lr0.001-tuple4-24-Sep/checkpoint3_4.pth.tar'
+=> Start epoch 4  best recall5 96.5%
+Evaluate on the test set:
+load PCA parameters...
