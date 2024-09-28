@@ -657,38 +657,26 @@ class GraphVLADEmbedRegion(nn.Module):
         pairs = x[:, 1:].reshape(-1,C,H,W) # (B*(1+neg_num))*C*H*W
 
         return self._compute_region_sim(anchors, pairs)
+    
+    def _forward_nodes_train(self, x):
+        B, C, H, W = x.size()
+        x = x.view(self.tuple_size, -1, C, H, W)
+
+        anchors = x[:, 0].unsqueeze(1).contiguous().reshape(-1,C,H,W) # B*C*H*W
+        pairs = x[:, 1:].reshape(-1,C,H,W) # (B*(1+neg_num))*C*H*W
+
+        return self._compute_region_sim(anchors, pairs)
 
     def forward(self, x):
+        pool_x, x = self.base_model(x)
         if (not self.training):
-            node_features_list = []
-            neighborsFeat = []
+            # vlad_x = self.net_vlad(x)
+            # # normalize
+            # vlad_x = F.normalize(vlad_x, p=2, dim=2)  # intra-normalization
+            # vlad_x = vlad_x.view(x.size(0), -1)  # flatten
+            # vlad_x = F.normalize(vlad_x, p=2, dim=1)  # L2 normalize
+            vlad_x = self._forward_nodes_train(x)
+            return pool_x, vlad_x
 
-            pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
-
-
-            for i in range(self.NB+1):
-                vlad_x = self.net_vlad(x_nodes[i])
-                vlad_x = F.normalize(vlad_x, p=2, dim=2)  
-                vlad_x = vlad_x.view(x_size, -1)  
-                vlad_x = F.normalize(vlad_x, p=2, dim=1)  
-                neighborsFeat.append(vlad_x)
-                
-            node_features_list.append(neighborsFeat[self.NB])
-            node_features_list.append(torch.concat(neighborsFeat[0:self.NB],0))
-            del neighborsFeat
-            gvlad = self.applyGNN(node_features_list)
-            gvlad = F.normalize(gvlad, p=2, dim=1)
-
-            gvlad = torch.add(gvlad,vlad_x)
-            gvlad = F.normalize(gvlad, p=2, dim=1)
-
-            gvlad = gvlad.view(-1,vlad_x.shape[1])
-            
-            # Clear node_features_list to free up memory
-            del node_features_list
-        
-            return pool_x, gvlad
-        else:
-            pool_x, x = self.base_model(x)
-            return self._forward_train(x)
+        return self._forward_train(x)
         
