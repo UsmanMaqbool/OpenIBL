@@ -89,10 +89,14 @@ echo "Other nodes: $NODES"
 LOSS="sare_ind"
 DATE=$(date '+%d-%b') 
 <<<<<<< HEAD
+<<<<<<< HEAD
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s2/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 =======
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s14/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 >>>>>>> 8cb89c5 (0929-s1)
+=======
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0929-s2/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+>>>>>>> 3aa7a9c (0929-s2)
 
 echo ${FILES}
 
@@ -110,7 +114,7 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
   --method ${METHOD} 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+FILES=$(ls -r ${FILES}/*.tar)
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
@@ -129,31 +133,31 @@ do
   echo " Done Testing with $RESUME file on Pitts250k..."
   echo "======================================="  
 
-  echo "==========################============="
-  echo " Testing $RESUME file on Pitts30k..."
-  echo "======================================="
-  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-   examples/test.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
-    --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
-    --num-clusters ${NUMCLUSTER} -d pitts --scale 30k
-  echo "==========################============="
-  echo " Done Testing with $RESUME file on Pitts30k..."
-  echo "======================================="  
+  # echo "==========################============="
+  # echo " Testing $RESUME file on Pitts30k..."
+  # echo "======================================="
+  # $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+  #  examples/test.py --launcher pytorch \
+  #   -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+  #   --vlad --reduction --method ${METHOD} \
+  #   --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
+  #   --num-clusters ${NUMCLUSTER} -d pitts --scale 30k
+  # echo "==========################============="
+  # echo " Done Testing with $RESUME file on Pitts30k..."
+  # echo "======================================="  
 
-  echo "==========################============="
-  echo " Testing $RESUME file on Tokyo..."
-  echo "======================================="
-  $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
-   examples/test.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
-    --vlad --reduction --method ${METHOD} \
-    --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
-    --num-clusters ${NUMCLUSTER} -d tokyo
-  echo "==========################============="
-  echo " Done Testing with $RESUME file on Tokyo..."
-  echo "======================================="  
+  # echo "==========################============="
+  # echo " Testing $RESUME file on Tokyo..."
+  # echo "======================================="
+  # $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
+  #  examples/test.py --launcher pytorch \
+  #   -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+  #   --vlad --reduction --method ${METHOD} \
+  #   --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
+  #   --num-clusters ${NUMCLUSTER} -d tokyo
+  # echo "==========################============="
+  # echo " Done Testing with $RESUME file on Tokyo..."
+  # echo "======================================="  
 done
 
 
@@ -163,10 +167,14 @@ done
 LOSS="sare_joint"
 DATE=$(date '+%d-%b') 
 <<<<<<< HEAD
+<<<<<<< HEAD
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s2/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 =======
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s14/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 >>>>>>> 8cb89c5 (0929-s1)
+=======
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0929-s2/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+>>>>>>> 3aa7a9c (0929-s2)
 
 echo ${FILES}
 
@@ -185,7 +193,7 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+FILES=$(ls -r ${FILES}/*.tar)
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
@@ -238,10 +246,14 @@ done
 LOSS="triplet"
 DATE=$(date '+%d-%b') 
 <<<<<<< HEAD
+<<<<<<< HEAD
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s2/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 =======
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s14/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 >>>>>>> 8cb89c5 (0929-s1)
+=======
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0929-s2/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+>>>>>>> 3aa7a9c (0929-s2)
 
 echo ${FILES}
 
@@ -260,7 +272,7 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+FILES=$(ls -r ${FILES}/*.tar)
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES

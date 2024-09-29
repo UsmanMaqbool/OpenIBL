@@ -410,7 +410,7 @@ class SelectRegions(nn.Module):
             labels_all = labels_all[:-1]
             label_count_all = label_count_all[:-1]
 
-            mask_t = (labels_all == 2) | (labels_all == 8)
+            mask_t = ((labels_all == 2) | (labels_all == 8)) & (label_count_all >= 10000)
             labels = labels_all[mask_t]
 
             # Create masks for each label and convert them to bounding boxes
