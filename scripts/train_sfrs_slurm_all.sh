@@ -88,7 +88,11 @@ echo "Other nodes: $NODES"
 # ===================================================================================================
 LOSS="sare_ind"
 DATE=$(date '+%d-%b') 
+<<<<<<< HEAD
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s2/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+=======
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s14/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+>>>>>>> 8cb89c5 (0929-s1)
 
 echo ${FILES}
 
@@ -158,7 +162,11 @@ done
 #===================================================================================================
 LOSS="sare_joint"
 DATE=$(date '+%d-%b') 
+<<<<<<< HEAD
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s2/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+=======
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s14/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+>>>>>>> 8cb89c5 (0929-s1)
 
 echo ${FILES}
 
@@ -229,7 +237,11 @@ done
 
 LOSS="triplet"
 DATE=$(date '+%d-%b') 
+<<<<<<< HEAD
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s2/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+=======
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s14/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+>>>>>>> 8cb89c5 (0929-s1)
 
 echo ${FILES}
 

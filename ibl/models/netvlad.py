@@ -410,7 +410,7 @@ class SelectRegions(nn.Module):
             labels_all = labels_all[:-1]
             label_count_all = label_count_all[:-1]
 
-            mask_t = label_count_all >= 10000
+            mask_t = (labels_all == 2) | (labels_all == 8)
             labels = labels_all[mask_t]
 
             # Create masks for each label and convert them to bounding boxes
@@ -428,15 +428,14 @@ class SelectRegions(nn.Module):
             boxes = (regions / 16).to(torch.long)
             
             for i, label in enumerate(labels):
-                x_min, y_min, x_max, y_max = boxes[i]
-                embed_image_c = rsizet(pre_l2[:, y_min:y_max, x_min:x_max])
-                if self.visualize:
-                    embed_file_name = f'embed_{label}.png'  # Customize the naming pattern as needed
-                    x_min, y_min, x_max, y_max = regions[i].to(torch.long)
-                    save_image_with_heatmap(tensor_image=xx[img_i][:, y_min:y_max, x_min:x_max], pre_l2=embed_image_c, img_i=img_i, file_name=embed_file_name)
-                sub_nodes.append(embed_image_c.unsqueeze(0))
-                if len(sub_nodes) == self.NB:
-                    break    
+                    x_min, y_min, x_max, y_max = boxes[i]
+                    embed_image_c = rsizet(pre_l2[:, y_min:y_max, x_min:x_max])
+                    if self.visualize:
+                        embed_file_name = f'embed_{label}.png'  # Customize the naming pattern as needed
+                        x_min, y_min, x_max, y_max = regions[i].to(torch.long)
+                        save_image_with_heatmap(tensor_image=xx[img_i][:, y_min:y_max, x_min:x_max], pre_l2=embed_image_c, img_i=img_i, file_name=embed_file_name)
+                    sub_nodes.append(embed_image_c.unsqueeze(0))
+  
 
             if len(sub_nodes) < self.NB:
                 if self.visualize:
