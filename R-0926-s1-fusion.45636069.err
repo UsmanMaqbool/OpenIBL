@@ -1,0 +1,399 @@
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+Traceback (most recent call last):
+  File "examples/netvlad_img_sfrs.py", line 333, in <module>
+    main()
+  File "examples/netvlad_img_sfrs.py", line 133, in main
+    main_worker(args)
+  File "examples/netvlad_img_sfrs.py", line 181, in main_worker
+    recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 187, in evaluate
+    features = extract_features(self.model, query_loader, dataset,
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 55, in extract_features
+    outputs = extract_cnn_feature(model, imgs, vlad, gpu=gpu)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 25, in extract_cnn_feature
+    outputs = model(inputs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1040, in forward
+    output = self._run_ddp_forward(*inputs, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1000, in _run_ddp_forward
+    return module_to_run(*inputs[0], **kwargs[0])
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 717, in forward
+    pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 517, in forward
+    graph_nodes[img_i] = torch.stack(sub_nodes, 1).squeeze(0)
+RuntimeError: The expanded size of the tensor (6) must match the existing size (5) at non-singleton dimension 0.  Target sizes: [6, 512, 30, 40].  Tensor sizes: [5, 512, 30, 40]
+Traceback (most recent call last):
+  File "examples/netvlad_img_sfrs.py", line 333, in <module>
+    main()
+  File "examples/netvlad_img_sfrs.py", line 133, in main
+    main_worker(args)
+  File "examples/netvlad_img_sfrs.py", line 181, in main_worker
+    recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 187, in evaluate
+    features = extract_features(self.model, query_loader, dataset,
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 55, in extract_features
+    outputs = extract_cnn_feature(model, imgs, vlad, gpu=gpu)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 25, in extract_cnn_feature
+    outputs = model(inputs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1040, in forward
+    output = self._run_ddp_forward(*inputs, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1000, in _run_ddp_forward
+    return module_to_run(*inputs[0], **kwargs[0])
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 717, in forward
+    pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 517, in forward
+    graph_nodes[img_i] = torch.stack(sub_nodes, 1).squeeze(0)
+RuntimeError: The expanded size of the tensor (6) must match the existing size (5) at non-singleton dimension 0.  Target sizes: [6, 512, 30, 40].  Tensor sizes: [5, 512, 30, 40]
+Traceback (most recent call last):
+  File "examples/netvlad_img_sfrs.py", line 333, in <module>
+    main()
+  File "examples/netvlad_img_sfrs.py", line 133, in main
+    main_worker(args)
+  File "examples/netvlad_img_sfrs.py", line 181, in main_worker
+    recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 187, in evaluate
+    features = extract_features(self.model, query_loader, dataset,
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 55, in extract_features
+    outputs = extract_cnn_feature(model, imgs, vlad, gpu=gpu)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 25, in extract_cnn_feature
+    outputs = model(inputs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1040, in forward
+    output = self._run_ddp_forward(*inputs, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1000, in _run_ddp_forward
+    return module_to_run(*inputs[0], **kwargs[0])
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 717, in forward
+    pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 517, in forward
+    graph_nodes[img_i] = torch.stack(sub_nodes, 1).squeeze(0)
+RuntimeError: The expanded size of the tensor (6) must match the existing size (5) at non-singleton dimension 0.  Target sizes: [6, 512, 30, 40].  Tensor sizes: [5, 512, 30, 40]
+Traceback (most recent call last):
+  File "examples/netvlad_img_sfrs.py", line 333, in <module>
+    main()
+  File "examples/netvlad_img_sfrs.py", line 133, in main
+    main_worker(args)
+  File "examples/netvlad_img_sfrs.py", line 181, in main_worker
+    recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 187, in evaluate
+    features = extract_features(self.model, query_loader, dataset,
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 55, in extract_features
+    outputs = extract_cnn_feature(model, imgs, vlad, gpu=gpu)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 25, in extract_cnn_feature
+    outputs = model(inputs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1040, in forward
+    output = self._run_ddp_forward(*inputs, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1000, in _run_ddp_forward
+    return module_to_run(*inputs[0], **kwargs[0])
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 717, in forward
+    pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 517, in forward
+    graph_nodes[img_i] = torch.stack(sub_nodes, 1).squeeze(0)
+RuntimeError: The expanded size of the tensor (6) must match the existing size (5) at non-singleton dimension 0.  Target sizes: [6, 512, 30, 40].  Tensor sizes: [5, 512, 30, 40]
+srun: error: c0804a-s17: task 0: Exited with exit code 1
+srun: error: c0804a-s17: task 1: Exited with exit code 1
+srun: error: c0804a-s17: task 3: Exited with exit code 1
+srun: error: c0804a-s17: task 2: Exited with exit code 1
+ls: cannot access '/home/m.maqboolbhutta/usman_ws/models/openibl/0926-s1-fusion/vgg16-graphvlad_SFRS-sare_ind-pitts30k-lr0.001-tuple4-26-Sep/*.tar': No such file or directory
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+Traceback (most recent call last):
+  File "examples/netvlad_img_sfrs.py", line 333, in <module>
+    main()
+  File "examples/netvlad_img_sfrs.py", line 133, in main
+    main_worker(args)
+  File "examples/netvlad_img_sfrs.py", line 181, in main_worker
+    recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 187, in evaluate
+    features = extract_features(self.model, query_loader, dataset,
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 55, in extract_features
+    outputs = extract_cnn_feature(model, imgs, vlad, gpu=gpu)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 25, in extract_cnn_feature
+    outputs = model(inputs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1040, in forward
+    output = self._run_ddp_forward(*inputs, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1000, in _run_ddp_forward
+    return module_to_run(*inputs[0], **kwargs[0])
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 717, in forward
+    pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 517, in forward
+    graph_nodes[img_i] = torch.stack(sub_nodes, 1).squeeze(0)
+RuntimeError: The expanded size of the tensor (6) must match the existing size (5) at non-singleton dimension 0.  Target sizes: [6, 512, 30, 40].  Tensor sizes: [5, 512, 30, 40]
+Traceback (most recent call last):
+  File "examples/netvlad_img_sfrs.py", line 333, in <module>
+    main()
+  File "examples/netvlad_img_sfrs.py", line 133, in main
+    main_worker(args)
+  File "examples/netvlad_img_sfrs.py", line 181, in main_worker
+    recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 187, in evaluate
+    features = extract_features(self.model, query_loader, dataset,
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 55, in extract_features
+    outputs = extract_cnn_feature(model, imgs, vlad, gpu=gpu)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 25, in extract_cnn_feature
+    outputs = model(inputs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1040, in forward
+    output = self._run_ddp_forward(*inputs, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1000, in _run_ddp_forward
+    return module_to_run(*inputs[0], **kwargs[0])
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 717, in forward
+    pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 517, in forward
+    graph_nodes[img_i] = torch.stack(sub_nodes, 1).squeeze(0)
+RuntimeError: The expanded size of the tensor (6) must match the existing size (5) at non-singleton dimension 0.  Target sizes: [6, 512, 30, 40].  Tensor sizes: [5, 512, 30, 40]
+Traceback (most recent call last):
+  File "examples/netvlad_img_sfrs.py", line 333, in <module>
+    main()
+  File "examples/netvlad_img_sfrs.py", line 133, in main
+    main_worker(args)
+  File "examples/netvlad_img_sfrs.py", line 181, in main_worker
+    recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 187, in evaluate
+    features = extract_features(self.model, query_loader, dataset,
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 55, in extract_features
+    outputs = extract_cnn_feature(model, imgs, vlad, gpu=gpu)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 25, in extract_cnn_feature
+    outputs = model(inputs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1040, in forward
+    output = self._run_ddp_forward(*inputs, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1000, in _run_ddp_forward
+    return module_to_run(*inputs[0], **kwargs[0])
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 717, in forward
+    pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 517, in forward
+    graph_nodes[img_i] = torch.stack(sub_nodes, 1).squeeze(0)
+RuntimeError: The expanded size of the tensor (6) must match the existing size (5) at non-singleton dimension 0.  Target sizes: [6, 512, 30, 40].  Tensor sizes: [5, 512, 30, 40]
+Traceback (most recent call last):
+  File "examples/netvlad_img_sfrs.py", line 333, in <module>
+    main()
+  File "examples/netvlad_img_sfrs.py", line 133, in main
+    main_worker(args)
+  File "examples/netvlad_img_sfrs.py", line 181, in main_worker
+    recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 187, in evaluate
+    features = extract_features(self.model, query_loader, dataset,
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 55, in extract_features
+    outputs = extract_cnn_feature(model, imgs, vlad, gpu=gpu)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 25, in extract_cnn_feature
+    outputs = model(inputs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1040, in forward
+    output = self._run_ddp_forward(*inputs, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1000, in _run_ddp_forward
+    return module_to_run(*inputs[0], **kwargs[0])
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 717, in forward
+    pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 517, in forward
+    graph_nodes[img_i] = torch.stack(sub_nodes, 1).squeeze(0)
+RuntimeError: The expanded size of the tensor (6) must match the existing size (5) at non-singleton dimension 0.  Target sizes: [6, 512, 30, 40].  Tensor sizes: [5, 512, 30, 40]
+srun: error: c0804a-s17: task 0: Exited with exit code 1
+srun: error: c0804a-s17: task 3: Exited with exit code 1
+srun: error: c0804a-s17: task 1: Exited with exit code 1
+srun: error: c0804a-s17: task 2: Exited with exit code 1
+ls: cannot access '/home/m.maqboolbhutta/usman_ws/models/openibl/0926-s1-fusion/vgg16-graphvlad_SFRS-sare_joint-pitts30k-lr0.001-tuple4-26-Sep/*.tar': No such file or directory
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+Traceback (most recent call last):
+  File "examples/netvlad_img_sfrs.py", line 333, in <module>
+    main()
+  File "examples/netvlad_img_sfrs.py", line 133, in main
+    main_worker(args)
+  File "examples/netvlad_img_sfrs.py", line 181, in main_worker
+    recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 187, in evaluate
+    features = extract_features(self.model, query_loader, dataset,
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 55, in extract_features
+    outputs = extract_cnn_feature(model, imgs, vlad, gpu=gpu)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 25, in extract_cnn_feature
+    outputs = model(inputs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1040, in forward
+    output = self._run_ddp_forward(*inputs, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1000, in _run_ddp_forward
+    return module_to_run(*inputs[0], **kwargs[0])
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 717, in forward
+    pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 517, in forward
+    graph_nodes[img_i] = torch.stack(sub_nodes, 1).squeeze(0)
+RuntimeError: The expanded size of the tensor (6) must match the existing size (5) at non-singleton dimension 0.  Target sizes: [6, 512, 30, 40].  Tensor sizes: [5, 512, 30, 40]
+Traceback (most recent call last):
+  File "examples/netvlad_img_sfrs.py", line 333, in <module>
+    main()
+  File "examples/netvlad_img_sfrs.py", line 133, in main
+    main_worker(args)
+  File "examples/netvlad_img_sfrs.py", line 181, in main_worker
+    recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 187, in evaluate
+    features = extract_features(self.model, query_loader, dataset,
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 55, in extract_features
+    outputs = extract_cnn_feature(model, imgs, vlad, gpu=gpu)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 25, in extract_cnn_feature
+    outputs = model(inputs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1040, in forward
+    output = self._run_ddp_forward(*inputs, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1000, in _run_ddp_forward
+    return module_to_run(*inputs[0], **kwargs[0])
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 717, in forward
+    pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 517, in forward
+    graph_nodes[img_i] = torch.stack(sub_nodes, 1).squeeze(0)
+RuntimeError: The expanded size of the tensor (6) must match the existing size (5) at non-singleton dimension 0.  Target sizes: [6, 512, 30, 40].  Tensor sizes: [5, 512, 30, 40]
+Traceback (most recent call last):
+  File "examples/netvlad_img_sfrs.py", line 333, in <module>
+    main()
+  File "examples/netvlad_img_sfrs.py", line 133, in main
+    main_worker(args)
+  File "examples/netvlad_img_sfrs.py", line 181, in main_worker
+    recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 187, in evaluate
+    features = extract_features(self.model, query_loader, dataset,
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 55, in extract_features
+    outputs = extract_cnn_feature(model, imgs, vlad, gpu=gpu)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 25, in extract_cnn_feature
+    outputs = model(inputs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1040, in forward
+    output = self._run_ddp_forward(*inputs, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1000, in _run_ddp_forward
+    return module_to_run(*inputs[0], **kwargs[0])
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 717, in forward
+    pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 517, in forward
+    graph_nodes[img_i] = torch.stack(sub_nodes, 1).squeeze(0)
+RuntimeError: The expanded size of the tensor (6) must match the existing size (5) at non-singleton dimension 0.  Target sizes: [6, 512, 30, 40].  Tensor sizes: [5, 512, 30, 40]
+Traceback (most recent call last):
+  File "examples/netvlad_img_sfrs.py", line 333, in <module>
+    main()
+  File "examples/netvlad_img_sfrs.py", line 133, in main
+    main_worker(args)
+  File "examples/netvlad_img_sfrs.py", line 181, in main_worker
+    recalls = evaluator.evaluate(val_loader, sorted(list(set(dataset.q_val) | set(dataset.db_val))),
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 187, in evaluate
+    features = extract_features(self.model, query_loader, dataset,
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 55, in extract_features
+    outputs = extract_cnn_feature(model, imgs, vlad, gpu=gpu)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/evaluators.py", line 25, in extract_cnn_feature
+    outputs = model(inputs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1040, in forward
+    output = self._run_ddp_forward(*inputs, **kwargs)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1000, in _run_ddp_forward
+    return module_to_run(*inputs[0], **kwargs[0])
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 717, in forward
+    pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
+  File "/home/m.maqboolbhutta/.conda/envs/openibl3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/blue/hmedeiros/m.maqboolbhutta/codes/openibl2/examples/ibl/models/netvlad.py", line 517, in forward
+    graph_nodes[img_i] = torch.stack(sub_nodes, 1).squeeze(0)
+RuntimeError: The expanded size of the tensor (6) must match the existing size (5) at non-singleton dimension 0.  Target sizes: [6, 512, 30, 40].  Tensor sizes: [5, 512, 30, 40]
+srun: error: c0804a-s17: task 1: Exited with exit code 1
+srun: error: c0804a-s17: task 0: Exited with exit code 1
+srun: error: c0804a-s17: task 3: Exited with exit code 1
+srun: error: c0804a-s17: task 2: Exited with exit code 1
+ls: cannot access '/home/m.maqboolbhutta/usman_ws/models/openibl/0926-s1-fusion/vgg16-graphvlad_SFRS-triplet-pitts30k-lr0.001-tuple4-26-Sep/*.tar': No such file or directory

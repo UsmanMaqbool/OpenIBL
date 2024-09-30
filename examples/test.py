@@ -166,7 +166,7 @@ def get_model(args):
             if (args.rank==0):
                 print('===> Loading segmentation model')
             segmentation_model = get_segmentation_model(args.fast_scnn)
-            model = models.create('graphvlad', base_model, pool_layer, segmentation_model, NB=5)
+            model = models.create('graphvlad', base_model, pool_layer, segmentation_model, NB=6)
     else:
         model = base_model
 
