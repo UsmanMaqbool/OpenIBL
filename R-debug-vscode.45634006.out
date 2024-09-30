@@ -1,0 +1,75 @@
+Thu Sep 26 15:10:27 EDT 2024
+/home/m.maqboolbhutta/usman_ws/codes/openibl3
+Host: c0804a-s11
+Other nodes: 
+Thu Sep 26 15:10:27 EDT 2024
+/home/m.maqboolbhutta/usman_ws/codes/openibl3
+*
+* Visual Studio Code Server
+*
+* By using the software, you agree to
+* the Visual Studio Code Server License Terms (https://aka.ms/vscode-server-license) and
+* the Microsoft Privacy Statement (https://privacy.microsoft.com/en-US/privacystatement).
+*
+[2024-09-26 15:10:29] info Using GitHub for authentication, run `code tunnel user login --provider <provider>` option to change this.
+To grant access to the server, please log into https://github.com/login/device and use code CB91-E728
+
+Open this link in your browser https://vscode.dev/tunnel/c0709a-s30ufhpc/blue/hmedeiros/m.maqboolbhutta/codes/openibl3
+
+[2024-09-26 15:11:01] info [tunnels::connections::relay_tunnel_host] Opened new client on channel 2
+[2024-09-26 15:11:01] info [russh::server] wrote id
+[2024-09-26 15:11:01] info [tunnels::connections::relay_tunnel_host] Opened new client on channel 3
+[2024-09-26 15:11:01] info [russh::server] wrote id
+[2024-09-26 15:11:01] info [tunnels::connections::relay_tunnel_host] Opened new client on channel 4
+[2024-09-26 15:11:01] info [russh::server] wrote id
+[2024-09-26 15:11:01] error [tunnels::connections::relay_tunnel_host] error handshaking session: EOF
+[2024-09-26 15:11:01] error [tunnels::connections::relay_tunnel_host] error handshaking session: EOF
+[2024-09-26 15:11:01] error [tunnels::connections::relay_tunnel_host] error handshaking session: EOF
+[2024-09-26 15:11:14] info [tunnels::connections::relay_tunnel_host] Opened new client on channel 5
+[2024-09-26 15:11:14] info [russh::server] wrote id
+[2024-09-26 15:11:15] info [russh::server] read other id
+[2024-09-26 15:11:15] info [russh::server] session is running
+[2024-09-26 15:11:15] info [rpc.0] Checking /home/m.maqboolbhutta/.vscode/cli/servers/Stable-38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40/log.txt and /home/m.maqboolbhutta/.vscode/cli/servers/Stable-38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40/pid.txt for a running server...
+[2024-09-26 15:11:15] info [rpc.0] Starting server...
+[2024-09-26 15:11:15] info [rpc.0] Server started
+[2024-09-26 15:31:18] info [rpc.0] Forwarding port 51277 (public=false)
+[2024-09-26 15:31:22] info [rpc.0] Forwarding port 52147 (public=false)
+[2024-09-26 15:31:26] info [rpc.0] Forwarding port 6060 (public=false)
+[2024-09-26 15:36:16] info [rpc.0] Unforwarding port 51277
+[2024-09-26 15:36:17] info [rpc.0] Unforwarding port 52147
+[2024-09-26 15:36:17] info [rpc.0] Unforwarding port 6060
+[2024-09-26 15:36:21] info [rpc.0] Forwarding port 58519 (public=false)
+[2024-09-26 15:36:21] info [rpc.0] Forwarding port 47355 (public=false)
+[2024-09-26 15:36:25] info [rpc.0] Forwarding port 6060 (public=false)
+[2024-09-26 15:38:23] info [rpc.0] Unforwarding port 58519
+[2024-09-26 15:38:24] info [rpc.0] Unforwarding port 47355
+[2024-09-26 15:38:24] info [rpc.0] Unforwarding port 6060
+[2024-09-26 15:40:25] info [rpc.0] Forwarding port 35545 (public=false)
+[2024-09-26 15:40:26] info [rpc.0] Forwarding port 40391 (public=false)
+[2024-09-26 15:40:30] info [rpc.0] Forwarding port 6060 (public=false)
+[2024-09-26 15:43:27] info [rpc.0] Unforwarding port 35545
+[2024-09-26 15:43:28] info [rpc.0] Unforwarding port 40391
+[2024-09-26 15:43:28] info [rpc.0] Unforwarding port 6060
+[2024-09-26 15:43:31] info [rpc.0] Forwarding port 50127 (public=false)
+[2024-09-26 15:43:32] info [rpc.0] Forwarding port 34521 (public=false)
+[2024-09-26 15:43:33] info [rpc.0] Forwarding port 49343 (public=false)
+[2024-09-26 15:43:36] info [rpc.0] Unforwarding port 50127
+[2024-09-26 15:43:36] info [rpc.0] Forwarding port 6060 (public=false)
+[2024-09-26 15:46:08] info [rpc.0] Unforwarding port 34521
+[2024-09-26 15:46:08] info [rpc.0] Unforwarding port 49343
+[2024-09-26 15:46:09] info [rpc.0] Unforwarding port 6060
+[2024-09-26 15:48:35] info [rpc.0] Forwarding port 45919 (public=false)
+[2024-09-26 15:48:36] info [rpc.0] Forwarding port 42443 (public=false)
+[2024-09-26 15:48:37] info [rpc.0] Forwarding port 6060 (public=false)
+[2024-09-26 15:52:22] info [rpc.0] Disposed of connection to running server.
+[2024-09-26 20:47:04] info [tunnels::connections::relay_tunnel_host] Opened new client on channel 6
+[2024-09-26 20:47:04] info [russh::server] wrote id
+[2024-09-26 20:47:04] info [russh::server] read other id
+[2024-09-26 20:47:04] info [russh::server] session is running
+[2024-09-26 20:47:05] info [rpc.2] Checking /home/m.maqboolbhutta/.vscode/cli/servers/Stable-38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40/log.txt and /home/m.maqboolbhutta/.vscode/cli/servers/Stable-38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40/pid.txt for a running server...
+[2024-09-26 20:47:05] info [rpc.2] Starting server...
+[2024-09-26 20:47:05] info [rpc.2] Server started
+[2024-09-26 20:55:23] info [rpc.2] Forwarding port 37265 (public=false)
+[2024-09-26 20:55:24] info [rpc.2] Forwarding port 39155 (public=false)
+[2024-09-26 20:55:24] info [rpc.2] Forwarding port 6060 (public=false)
+[2024-09-26 22:27:44] info [rpc.2] Disposed of connection to running server.
