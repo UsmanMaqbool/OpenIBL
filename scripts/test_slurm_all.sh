@@ -21,7 +21,9 @@
 #SBATCH --distribution=cyclic:cyclic
 
 ## To RUN
-#  sbatch --j 0903-s2 scripts/leo/test_slurm_all.sh graphvlad vgg16 
+#  sbatch --j 0930-handcode-test scripts/test_slurm_all.sh graphvlad vgg16 /home/m.maqboolbhutta/usman_ws/models/openibl/0930-handcode-esp/vgg16-graphvlad_SFRS-sare_ind-pitts30k-lr0.001-tuple4-30-Sep
+
+
 ####################################################################################################
 
 # PYTHON SCRIPT
@@ -43,16 +45,13 @@ ARCH="$2"
 FILES="$3"
 NUMCLUSTER=64
 LAYERS=conv5
-CACHEBS=16
+CACHEBS=64
 PORT=6010
 
 
-
-INIT_DIR="/home/m.maqboolbhutta/usman_ws/datasets/official/openibl-init"
-FAST_SCNN="/home/m.maqboolbhutta/usman_ws/datasets/official/fast_scnn/fast_scnn_citys.pth"
+INIT_DIR="/blue/hmedeiros/m.maqboolbhutta/datasets/official/openibl-init"
 DATASET_DIR="/home/m.maqboolbhutta/usman_ws/codes/OpenIBL/examples/data/"
-
-
+FAST_SCNN="/home/m.maqboolbhutta/usman_ws/datasets/official/fast_scnn/fast_scnn_citys.pth"
 
 # LOAD PYTORCH SOFTWARE ENVIRONMENT
 #==================================

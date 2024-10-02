@@ -21,7 +21,7 @@
 #SBATCH --distribution=cyclic:cyclic
 
 ## To RUN
-# sbatch --j 0927-s2 scripts/train_sfrs_slurm_all.sh graphvlad vgg16 pitts 30k
+# sbatch --j 0930-handcode-esp scripts/train_sfrs_slurm_all.sh graphvlad vgg16 pitts 30k
 ####################################################################################################
 
 # PYTHON SCRIPT
@@ -90,6 +90,7 @@ LOSS="sare_ind"
 DATE=$(date '+%d-%b') 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s2/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 =======
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s14/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
@@ -97,6 +98,9 @@ FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s14/${ARCH}-${METHOD}_
 =======
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0929-s2/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 >>>>>>> 3aa7a9c (0929-s2)
+=======
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0930-handcode-esp/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+>>>>>>> 7acb8a0 (did't not worked)
 
 echo ${FILES}
 
@@ -168,6 +172,7 @@ LOSS="sare_joint"
 DATE=$(date '+%d-%b') 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s2/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 =======
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s14/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
@@ -175,6 +180,9 @@ FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s14/${ARCH}-${METHOD}_
 =======
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0929-s2/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 >>>>>>> 3aa7a9c (0929-s2)
+=======
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0930-handcode-esp/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+>>>>>>> 7acb8a0 (did't not worked)
 
 echo ${FILES}
 
@@ -247,6 +255,7 @@ LOSS="triplet"
 DATE=$(date '+%d-%b') 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s2/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 =======
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s14/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
@@ -254,6 +263,9 @@ FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0927-s14/${ARCH}-${METHOD}_
 =======
 FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0929-s2/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 >>>>>>> 3aa7a9c (0929-s2)
+=======
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0930-handcode-esp/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+>>>>>>> 7acb8a0 (did't not worked)
 
 echo ${FILES}
 

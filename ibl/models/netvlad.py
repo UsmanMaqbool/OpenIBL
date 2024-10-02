@@ -379,14 +379,14 @@ class SelectRegions(nn.Module):
         if sizeW % 2 != 0:
             x = F.pad(input=x, pad=(1, 2), mode="constant", value=0)
 
-        # Forward pass through fastscnn without gradients
-        with torch.no_grad():
-            outputs = fastscnn(x)
+        # # Forward pass through fastscnn without gradients
+        # with torch.no_grad():
+        #     outputs = fastscnn(x)
 
         if self.visualize:
             # save_image(x[0], 'output-image.png')
             xx = x
-            save_batch_images(x)
+        #     save_batch_images(x)
         
         # Forward pass through base_model
         pool_x, x = base_model(x)
@@ -395,47 +395,16 @@ class SelectRegions(nn.Module):
         # Initialize graph nodes tensor
         graph_nodes = torch.zeros(N, self.NB, C, H, W).cuda()
         rsizet = transforms.Resize((H, W))
-        
-        # Process the output of fastscnn to get predicted labels
-        pred_all = torch.argmax(outputs[0], 1)
-        
-        if self.visualize:
-            # Assuming `pred_all` is your batch of predictions
-            save_batch_masks(pred_all, 'stage2-mask-real.png')
+       
         
         for img_i in range(N):
-            all_label_mask = pred_all[img_i]
-            labels_all, label_count_all = all_label_mask.unique(return_counts=True)
-            ## remove 255 labels
-            labels_all = labels_all[:-1]
-            label_count_all = label_count_all[:-1]
-
-            mask_t = ((labels_all == 2) | (labels_all == 8)) & (label_count_all >= 10000)
-            labels = labels_all[mask_t]
-
-            # Create masks for each label and convert them to bounding boxes
-            masks = all_label_mask == labels[:, None, None]
-            all_label_mask = rsizet(all_label_mask.unsqueeze(0)).squeeze(0)
 
             sub_nodes = []
             pre_l2 = x[img_i]
-            if self.visualize:
-                save_image_with_heatmap(tensor_image=xx[img_i], pre_l2=pre_l2, img_i=img_i)
 
-           
-            ### Crop regions
-            regions = masks_to_boxes(masks.to(torch.float32))
-            boxes = (regions / 16).to(torch.long)
-            
-            for i, label in enumerate(labels):
-                    x_min, y_min, x_max, y_max = boxes[i]
-                    embed_image_c = rsizet(pre_l2[:, y_min:y_max, x_min:x_max])
-                    if self.visualize:
-                        embed_file_name = f'embed_{label}.png'  # Customize the naming pattern as needed
-                        x_min, y_min, x_max, y_max = regions[i].to(torch.long)
-                        save_image_with_heatmap(tensor_image=xx[img_i][:, y_min:y_max, x_min:x_max], pre_l2=embed_image_c, img_i=img_i, file_name=embed_file_name)
-                    sub_nodes.append(embed_image_c.unsqueeze(0))
-  
+            sub_nodes.append(pre_l2.unsqueeze(0))
+            sub_nodes.append(pre_l2.unsqueeze(0))
+            sub_nodes.append(pre_l2.unsqueeze(0))
 
             if len(sub_nodes) < self.NB:
                 if self.visualize:
@@ -463,7 +432,7 @@ class SelectRegions(nn.Module):
         x_nodes = torch.cat((x_nodes, x.unsqueeze(0)))
         
         # Clean up
-        del graph_nodes, sub_nodes, pred_all, labels_all, label_count_all, masks, all_label_mask
+        del graph_nodes, sub_nodes
         
         return pool_x, x.size(0), x_nodes
 class GraphVLAD(nn.Module):
