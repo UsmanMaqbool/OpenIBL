@@ -13,15 +13,15 @@
 #SBATCH --output=R-%x.%j.out
 #SBATCH --error=R-%x.%j.err
 #SBATCH --nodes=1 
-#SBATCH --gpus-per-node=a100:4   
+#SBATCH --gpus-per-node=a100:4  
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=24    # There are 24 CPU cores on P100 Cedar GPU nodes
+#SBATCH --cpus-per-task=12    # There are 24 CPU cores on P100 Cedar GPU nodes
 #SBATCH --constraint=a100
 #SBATCH --mem-per-cpu=8GB
 #SBATCH --distribution=cyclic:cyclic
 
 ## To RUN
-# sbatch --j 0904-s1 scripts/leo/train_sfrs_slurm_all.sh graphvlad vgg16 pitts 30k
+# sbatch --j 1002-s1 scripts/train_sfrs_slurm_all.sh graphvlad vgg16 pitts 30k
 ####################################################################################################
 
 # PYTHON SCRIPT
@@ -47,8 +47,8 @@ SCALE="$4"
 NUMCLUSTER=64
 LAYERS=conv5
 LR=0.001
-TUMPLESIZE=1
-CACHEBS=16
+TUPLESIZE=1
+TESTBS=16
 NPOCH=5
 PORT=6010
 
@@ -88,7 +88,7 @@ echo "Other nodes: $NODES"
 # ===================================================================================================
 LOSS="sare_ind"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0915-try1/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/1002-try1/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -98,7 +98,7 @@ srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
 python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
   -d ${DATASET} --scale ${SCALE} \
   -a ${ARCH} --layers ${LAYERS} --syncbn \
-  --width 640 --height 480 --tuple-size ${TUMPLESIZE} -j 2 --test-batch-size ${CACHEBS} \
+  --width 640 --height 480 --tuple-size ${TUPLESIZE} -j 2 --test-batch-size ${TESTBS} \
   --neg-num 10  --pos-pool 20 --neg-pool 1000 --pos-num 10 \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} --soft-weight 0.5 \
   --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 --generations 4 --temperature 0.07 0.07 0.06 0.05 --logs-dir ${FILES} --data-dir ${DATASET_DIR} \
@@ -106,7 +106,7 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
   --method ${METHOD} 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+FILES=$(ls -r ${FILES}/*.tar)
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
@@ -117,7 +117,7 @@ do
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    -a ${ARCH} --test-batch-size ${TESTBS} -j 2 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
     --num-clusters ${NUMCLUSTER} -d pitts --scale 250k
@@ -130,7 +130,7 @@ do
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    -a ${ARCH} --test-batch-size ${TESTBS} -j 2 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
     --num-clusters ${NUMCLUSTER} -d pitts --scale 30k
@@ -143,7 +143,7 @@ do
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    -a ${ARCH} --test-batch-size ${TESTBS} -j 2 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
     --num-clusters ${NUMCLUSTER} -d tokyo
@@ -158,7 +158,7 @@ done
 #===================================================================================================
 LOSS="sare_joint"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0915-try1/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/1002-try1/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -168,7 +168,7 @@ srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
 python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
   -d ${DATASET} --scale ${SCALE} \
   -a ${ARCH} --layers ${LAYERS} --syncbn \
-  --width 640 --height 480 --tuple-size ${TUMPLESIZE} -j 2 --test-batch-size ${CACHEBS} \
+  --width 640 --height 480 --tuple-size ${TUPLESIZE} -j 2 --test-batch-size ${TESTBS} \
   --neg-num 10  --pos-pool 20 --neg-pool 1000 --pos-num 10 \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} --soft-weight 0.5 \
   --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 --generations 4 --temperature 0.07 0.07 0.06 0.05 --logs-dir ${FILES} --data-dir ${DATASET_DIR} \
@@ -177,7 +177,7 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+FILES=$(ls -r ${FILES}/*.tar)
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
@@ -188,7 +188,7 @@ do
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    -a ${ARCH} --test-batch-size ${TESTBS} -j 2 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
     --num-clusters ${NUMCLUSTER} -d pitts --scale 250k
@@ -201,7 +201,7 @@ do
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    -a ${ARCH} --test-batch-size ${TESTBS} -j 2 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
     --num-clusters ${NUMCLUSTER} -d pitts --scale 30k
@@ -214,7 +214,7 @@ do
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    -a ${ARCH} --test-batch-size ${TESTBS} -j 2 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
     --num-clusters ${NUMCLUSTER} -d tokyo
@@ -229,7 +229,7 @@ done
 
 LOSS="triplet"
 DATE=$(date '+%d-%b') 
-FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/0915-try1/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
+FILES="/home/m.maqboolbhutta/usman_ws/models/openibl/1002-try1/${ARCH}-${METHOD}_SFRS-${LOSS}-${DATASET}${SCALE}-lr${LR}-tuple${GPUS}-${DATE}"
 
 echo ${FILES}
 
@@ -239,7 +239,7 @@ srun --mpi=pmix_v3 -p=gpu --cpus-per-task=2 -n${GPUS} \
 python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
   -d ${DATASET} --scale ${SCALE} \
   -a ${ARCH} --layers ${LAYERS} --syncbn \
-  --width 640 --height 480 --tuple-size ${TUMPLESIZE} -j 2 --test-batch-size ${CACHEBS} \
+  --width 640 --height 480 --tuple-size ${TUPLESIZE} -j 2 --test-batch-size ${TESTBS} \
   --neg-num 10  --pos-pool 20 --neg-pool 1000 --pos-num 10 \
   --margin 0.1 --lr ${LR} --weight-decay 0.001 --loss-type ${LOSS} --soft-weight 0.5 \
   --eval-step 1 --epochs 5 --step-size 5 --cache-size 1000 --generations 4 --temperature 0.07 0.07 0.06 0.05 --logs-dir ${FILES} --data-dir ${DATASET_DIR} \
@@ -248,7 +248,7 @@ python -u examples/netvlad_img_sfrs.py --launcher slurm --tcp-port ${PORT} \
 
 
 echo "==========Testing============="
-FILES="${FILES}/*.tar"
+FILES=$(ls -r ${FILES}/*.tar)
 echo ${FILES}
 echo "=============================="
 for RESUME in $FILES
@@ -259,7 +259,7 @@ do
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    -a ${ARCH} --test-batch-size ${TESTBS} -j 2 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
     --num-clusters ${NUMCLUSTER} -d pitts --scale 250k
@@ -272,7 +272,7 @@ do
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    -a ${ARCH} --test-batch-size ${TESTBS} -j 2 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
     --num-clusters ${NUMCLUSTER} -d pitts --scale 30k
@@ -285,7 +285,7 @@ do
   echo "======================================="
   $PYTHON -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT --use_env \
    examples/test.py --launcher pytorch \
-    -a ${ARCH} --test-batch-size ${CACHEBS} -j 2 \
+    -a ${ARCH} --test-batch-size ${TESTBS} -j 2 \
     --vlad --reduction --method ${METHOD} \
     --resume ${RESUME}  --fast-scnn=${FAST_SCNN}  \
     --num-clusters ${NUMCLUSTER} -d tokyo
