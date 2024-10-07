@@ -550,22 +550,19 @@ class GraphVLAD(nn.Module):
 
     def forward(self, x):
         node_features_list = []
-        pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
-        
         neighborsFeat = []
-        for i in range(self.NB + 1):
+
+        pool_x, x_size, x_nodes = self.SelectRegions(x, self.base_model, self.fastscnn)
+
+        for i in range(self.NB+1):
             vlad_x = self.net_vlad(x_nodes[i])
             vlad_x = F.normalize(vlad_x, p=2, dim=2)
             vlad_x = vlad_x.view(x_size, -1)
             vlad_x = F.normalize(vlad_x, p=2, dim=1)
             neighborsFeat.append(vlad_x)
-        
         node_features_list.append(neighborsFeat[self.NB])
-        node_features_list.append(torch.cat(neighborsFeat[0:self.NB], 0))
-        
-        # Clear neighborsFeat to free up memory
+        node_features_list.append(torch.concat(neighborsFeat[0:self.NB],0))
         del neighborsFeat
-        
         gvlad = self.applyGNN(node_features_list)
         gvlad = F.normalize(gvlad, p=2, dim=1)
 

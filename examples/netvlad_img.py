@@ -36,10 +36,6 @@ start_epoch = best_recall5 = 0
 def get_segmentation_model(encoderFile):
     model = models.create('fastscnn', num_classes=19)
     model.load_state_dict(torch.load(encoderFile))
-    # classes = 20
-    # p = 2
-    # q = 8
-    # model = models.create('espnet', classes=classes, p=p, q=q, encoderFile=encoderFile)
     return model
 
 def get_data(args, iters):
@@ -116,10 +112,7 @@ def get_model(args):
             if (args.rank==0):
                 print('===> Loading segmentation model')
             segmentation_model = get_segmentation_model(args.fast_scnn)
-            model = models.create('graphvlad', base_model, pool_layer, segmentation_model, NB=5)
-            # segmentation_model = get_segmentation_model(args.esp_encoder)
-            # model = models.create('graphvlad', base_model, pool_layer, segmentation_model)
-
+            model = models.create('graphvlad', base_model, pool_layer, fastscnn=segmentation_model, NB=5)
     else:
         model = base_model
 
